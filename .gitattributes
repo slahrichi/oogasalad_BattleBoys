@@ -1,0 +1,50 @@
+# This will handle all files NOT found below
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# These files are text and should be normalized (Convert crlf => lf)
+*.css           text
+*.df            text
+*.htm           text
+*.html          text
+*.java          text
+*.js            text
+*.json          text
+*.jsp           text
+*.jspf          text
+*.jspx          text
+*.properties    text
+*.sh            text
+*.tld           text
+*.txt           text
+*.tag           text
+*.tagx          text
+*.xml           text
+*.yml           text
+
+# JAR Files And Dependencies
+*.zip 		binary
+*.jar 		binary
+*.dll 		binary
+*.so 		binary
+*.jnilib 	binary
+*.dylib 	binary
+
+# Standard to msysgit
+*.obj  		diff=astextplain
+*.doc	 	diff=astextplain
+*.DOC	 	diff=astextplain
+*.docx 		diff=astextplain
+*.DOCX 		diff=astextplain
+*.dot  		diff=astextplain
+*.DOT  		diff=astextplain
+*.pdf  		diff=astextplain
+*.PDF	 	diff=astextplain
+*.rtf	 	diff=astextplain
+*.RTF	 	diff=astextplain
+
+# Images could be handled by a separate program to show actual differences
+*.gif 		diff=image
+*.jpg 		diff=image
+*.png 		diff=image
+
