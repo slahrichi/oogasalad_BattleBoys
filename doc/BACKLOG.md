@@ -4,9 +4,6 @@
 
 Write at least ten Use Cases per team member that describe specific features each person expects to complete — these will serve as the project's initial Backlog. Focus on features you plan to complete during the first two Sprints (i.e., the project's highest priority features). Note, they can be similar to those given in the assignment specification, but should include more detail specific to your project's goals. It may help to role play or draw a diagram of how your classes collaborate to complete each case.
 
-### Brandon Bae, Edison Ooi, Matthew Knox, Matthew Giglio, Minjun Kwak, Saad Lahrichi, Eric Xie, Prajwal Jagadish, Luka Mdivani
-
-
 ### Brandon Bae
 
 * Use case 1
