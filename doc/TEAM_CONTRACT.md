@@ -7,8 +7,6 @@ Goal: Based on your experience with teams in this course, create your own Team C
 
 In addition to the basic contract from previous projects, here are some guidelines and a typical Open Source project's Code of Conduct to help get you started. As a reminder, here are the individual expectations for course team projects.
 
-### Make sure to each fill out this form once we're done: https://docs.google.com/forms/d/e/1FAIpQLScGhMK0u4T6wkAqOXgN0mY7jhiRAWxC2P2ZUQUZ3RV3QDeQbA/viewform
-
 ## Communication Goals
 * Stick to planned API when possible
     * If API changes are deemed necessary make sure to meet with everyone and discuss changes with all subteams (model, view, controller) so that each member is on the same page for what needs to be changed. 
