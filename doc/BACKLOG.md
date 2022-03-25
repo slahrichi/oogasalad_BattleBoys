@@ -32,16 +32,16 @@ Write at least ten Use Cases per team member that describe specific features eac
 
 ### Matthew Knox
 
-* Use case 1
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1: Play a round where only turns are played
+* Use case 2: Construct CPU players 
+* Use case 3: Construct Real Players
+* Use case 4: Place a ship
+* Use case 5: Move a ship
+* Use case 6: Fire a shot, get gold for hitting
+* Use case 7: move actors (at end of round)
+* Use case 8: Construct real and CPU Players
+* Use case 9: play entire simple round
+* Use case 10: make purchase
 
 ### Matthew Giglio
 
