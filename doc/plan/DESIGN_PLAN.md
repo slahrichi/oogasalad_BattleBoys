@@ -35,10 +35,12 @@ design program).
               a NullPointer exception.
         * Check how customizable of weapons are, and that editing specifications doesn't break their
           effects.
+        * Will have custom WeaponError to make testing and error handling easier.
 * Actor Object(Ship) - *Luka*
     * Check that actor objects move correctly
         * Check that model doesn't crash if a ships' path leads it out of map bounds( the ship should
           stop at the edge)
+    * Will support custom errors to make testing easier. 
 
 ### Team Responsibilities
 
