@@ -62,7 +62,17 @@ Describe at least two specific strategies your team discussed to make your APIs 
 * Test scenario 3
 
 ### Luka Mdivani
+* Check that all different basic weapons work as intended.
+    * Check that edge cases (weapons hitting on the edge of a map,near an island
+      object,interacting with multiple ships at once) work correctly.
+        * a sad option is that if a cluster bomb is aimed at the corner of the map etc, the
+          model should be able to apply the effect to only the cells which exist, and not cause
+          a NullPointer exception.
+* Check how customizable of weapons are, and that editing specifications doesn't break their
+  effects.
+  * Will have custom WeaponError to make testing and error handling easier.
 
-* Test scenario 1
-* Test scenario 2
-* Test scenario 3
+* Check that actor objects move correctly
+    * Check that model doesn't crash if a ships' path leads it out of map bounds( the ship should
+      stop at the edge)
+    * Will support custom errors to make testing easier. 
