@@ -24,23 +24,6 @@ design program).
   default, cluster, scanning and maybe even moving projectiles. For moving projectiles we will also
   let the user define the path of the projectile, as well as define the area of effect of a weapon.
 
-### Testing Plan
-
-* Weapon - *Luka*
-    * Check that all different basic weapons work as intended.
-        * Check that edge cases (weapons hitting on the edge of a map,near an island
-          object,interacting with multiple ships at once) work correctly.
-            * a sad option is that if a cluster bomb is aimed at the corner of the map etc, the
-              model should be able to apply the effect to only the cells which exist, and not cause
-              a NullPointer exception.
-        * Check how customizable of weapons are, and that editing specifications doesn't break their
-          effects.
-        * Will have custom WeaponError to make testing and error handling easier.
-* Actor Object(Ship) - *Luka*
-    * Check that actor objects move correctly
-        * Check that model doesn't crash if a ships' path leads it out of map bounds( the ship should
-          stop at the edge)
-    * Will support custom errors to make testing easier. 
 
 ### Team Responsibilities
 
