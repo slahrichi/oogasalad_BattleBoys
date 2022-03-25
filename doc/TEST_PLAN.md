@@ -27,9 +27,9 @@ Describe at least two specific strategies your team discussed to make your APIs 
 
 ### Matthew Knox
 
-* Test scenario 1
-* Test scenario 2
-* Test scenario 3
+* Test that firing weapons works correctly, even when firing out of bounds
+* Test that placing ships works correctly, even when placing out of bounds
+* Test that turns are played correctly based on input data. 
 
 ### Matthew Giglio
 
