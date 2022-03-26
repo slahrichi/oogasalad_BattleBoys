@@ -45,9 +45,12 @@ Describe at least two specific strategies your team discussed to make your APIs 
 
 ### Saad Lahrichi
 
-* Test scenario 1
-* Test scenario 2
-* Test scenario 3
+* 1. Exception handling: If the user creates an incomplete game, we should either complete it with default values
+or load a game by default, after telling them about the error.
+* 2. Exporting game live: If the user decides to export the game setup after rules have changed during the game,
+ the exported file should have the updated game rules.
+* 3. If the user makes two rules that are contradictory, we should throw an exception and tell them about the error
+
 
 ### Eric Xie
 
