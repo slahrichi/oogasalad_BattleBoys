@@ -1,3 +1,9 @@
+/**
+ * BoardView represents classes which contain a collection of cell views that can be occupied by Pieces
+ * or be clicked on.
+ *
+ * @author Eric Xie, Edison Ooi, Minjun Kwak
+ */
 public interface BoardView {
 
   /**

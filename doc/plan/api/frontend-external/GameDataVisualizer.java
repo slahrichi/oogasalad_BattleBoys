@@ -1,3 +1,9 @@
+/**
+ * GameDataVisualizer represents classes that display metadata about the current game being played,
+ * such as which enemy ships are left, how many shots they have left, or who's turn it is.
+ *
+ * @author Edison Ooi
+ */
 public interface GameDataVisualizer {
 
   /**
@@ -13,6 +19,13 @@ public interface GameDataVisualizer {
    * @param shotsRemaining number of shots the user has left in their turn
    */
   public void setNumShotsRemaining(int shotsRemaining);
+
+  /**
+   * Updates the text that shows the user how much gold they currently have.
+   *
+   * @param Amount of gold the user has
+   */
+  public void setGold(int amountOfGold);
 
   /**
    * Updates the text that shows the user whose turn it currently is.

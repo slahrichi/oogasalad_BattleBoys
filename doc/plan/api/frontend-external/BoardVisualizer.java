@@ -1,3 +1,8 @@
+/**
+ * BoardVisualizer represents classes which display to the user a board that is able to hold Pieces.
+ *
+ * @author Edison Ooi
+ */
 public interface BoardVisualizer {
 
   /**
