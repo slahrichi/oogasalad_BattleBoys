@@ -21,3 +21,10 @@ Uses custom grid sizes, number of players, etc.
 Multiple actors are present: some are ships, some are mines. 
 The winning condition is: destroying all enemy ships AND destroying all non-occupied grid states. 
 The losing condition is destroying a mine. 
+
+### Game 4: VIP Hunt
+Variant of Battleship.
+Player's given ships like regular battleship but there is a special VIP ship that each player is looking to sink first
+VIP ship can move.
+Winning Condition: Hit Enemy's VIP ship
+
