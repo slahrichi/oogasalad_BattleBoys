@@ -106,3 +106,16 @@ public void playTurn() {
     //run some BFS algorithm or random shots
     }
 ```
+# Placing boats between turns
+```java
+#in controller
+if (canMakeMove()) {
+  view.promptPlayerMove();
+    }
+
+#in view
+public void promptPlayerMove(){
+    Piece boat=new Boat(getDimensionFromPlayer());
+    controller.placePiece(boat,getStartFromPlayer(),getEndFromPlayer());
+}
+```
