@@ -37,3 +37,7 @@ versus AI. The AI will have different difficulties.
   also switch to work on that at some point in the project.
 * Matthew - Developing `PlayerAPI` and its specific implementations such as the `HumanPlayer` and
 the `AI` variations. Will also develop controller.
+* Saad - Focus on backend, build with Brandon, Luka, and Prajwal the `Tile` API and its subclasses
+`Island`, `ShipBlock`, `Water`,... As I worked on the parser of the last two projects, I will also
+work on parsing the game file to commands the model can understand, and deliver the results to the controller
+to set up the game.

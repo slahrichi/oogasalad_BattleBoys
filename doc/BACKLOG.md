@@ -73,16 +73,16 @@ they have taken against each player
 
 ### Saad Lahrichi
 
-* Use case 1
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1: The game rules change when a special object is fired
+* Use case 2: The game created is incomplete, and we fill in with default values
+* Use case 3: The user is alerted when they attempt to place a ship in an illegal position (not enough space/other ship existing/..)
+* Use case 4: The user is alerted when they attempt to play an item they do not own 
+* Use case 5: The game rules are changed, and the exported game file accounts for the change
+* Use case 6: The player decides to skip their turn 
+* Use case 7: A player's ships are all sunk and the game is over
+* Use case 8: The player attempts to move a ship to an illegal position (e.g. non-L shape with knight in chess)
+* Use case 9: The player buys an item and their gold decreases by the cost of the item
+* Use case 10: The player is alerted when they attempt to buy an item with insufficient funds
 
 ### Eric Xie
 
