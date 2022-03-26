@@ -17,8 +17,9 @@ public interface PlayerAPI {
     /**
      * Players are able to make purchases from in-game shop, and items are added to their inventory
      * @param amount cost of item
+     * @param item item to be added
      */
-    public void makePurchase(int amount);
+    public void makePurchase(int amount, Item item);
 
 
     /**
