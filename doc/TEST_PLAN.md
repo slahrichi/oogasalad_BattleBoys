@@ -57,9 +57,13 @@ Describe at least two specific strategies your team discussed to make your APIs 
 
 ### Prajwal Jagadish
 
-* Test scenario 1
-* Test scenario 2
-* Test scenario 3
+* Test scenario 1 - Test that when every ship block in a ship collection is destroyed then the ship must know that it no longer is 'alive'
+  * If a shipblocked is healed, that should also be conveyed to the ship collection.
+* Test scenario 2 - Test that the ship builder is able to take in details from the front end and create a json class with respective properties
+  * Should check that the shape is valid by making sure that all sides are connected in some way
+  * If they are not, it should let the user know that the json file they used was not valid and prompt for a new one
+* Test scenario 3 - Test that when special islands are hit, they are able to hit apply special affects to the rest of the model 
+  * If a point multiplier island is hit then it should affect the model point multiplier
 
 ### Luka Mdivani
 * Check that all different basic weapons work as intended.

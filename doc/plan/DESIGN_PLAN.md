@@ -27,7 +27,9 @@ design program).
 versus AI. The AI will have different difficulties.
 * The controller will manage the different `Player` instances and relay communication between the 
 `Player` instances and the view
-
+* The backend model will contain the infomation about the current game state, what ships are in play, 
+  weapon types, shop, and type of every part of the grid. The controller will call methods in the model to
+  update the state of the game accordingly and the model will feed the view so it can display the correct information
 
 ### Team Responsibilities
 
@@ -37,3 +39,7 @@ versus AI. The AI will have different difficulties.
   also switch to work on that at some point in the project.
 * Matthew - Developing `PlayerAPI` and its specific implementations such as the `HumanPlayer` and
 the `AI` variations. Will also develop controller.
+* Prajwal - I am focusing on the backend for the program. I will work on creating the tile occupants class
+  which represents the most basic unit of the board and is implemented and abstracted to create all the special 
+  tiles like a ship block, mine block, island block etc. Depending on what is needed I will either move to the shop model or
+  I will move to the ship builder which will allow users to create custom ships each with different functionalities, and that

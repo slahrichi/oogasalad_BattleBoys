@@ -106,16 +106,16 @@ complete each case.
 
 ### Prajwal Jagadish
 
-* Use case 1
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1: A user clicks a shipblock to destroy it. The shipblock decrements its life counter and if its dead it communicates with its ship
+* Use case 2: A user clicks a mine. That mine should instead hit one random ship on the attacking players side
+* Use case 3: A user trys to place a ship on top of a ship, the model should send an error back up the view to make sure that the ship cannot be placed there 
+* Use case 4: The player decides to heal a ship, the shipblocks must increment in their life counters. 
+* Use case 5: A user hits a point multiplier island then the future amounts of points that player gets should be multplied by that factor
+* Use case 6: The front end sends over a ship construct, the builder creates a json object using those specifications
+* Use case 7: The controller calls the hit() method class in the model which applies the weapon specifications
+* Use case 8: The parser must create a valid starting game state based off initialization files.
+* Use case 9: The player api calls to buy a certain weapon. The shop checks if they have sufficient funds and if so it will subtract and activate that weapon for the player
+* Use case 10: The designer gives a custom weapon certain properties, those properties should be translated into a json class file
 
 ### Luka Mdivani
 
