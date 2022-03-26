@@ -21,9 +21,11 @@ Describe at least two specific strategies your team discussed to make your APIs 
 
 ### Edison Ooi
 
-* Test scenario 1
-* Test scenario 2
-* Test scenario 3
+* Test scenario 1: Test that a user is not allowed to place a piece on top of another piece 
+  during setup phase.
+* Test scenario 2: Test that a user is not allowed to shoot at a cell that contains a ship they 
+  have already sunken.
+* Test scenario 3: Test that a win screen is successfully shown when the user meets a win condition.
 
 ### Matthew Knox
 
