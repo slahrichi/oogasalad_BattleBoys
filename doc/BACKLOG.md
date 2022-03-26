@@ -112,8 +112,26 @@ they have taken against each player
 
 ### Luka Mdivani
 
-* Use case 1
-* Use case 2
+* Use case 1 - user initializes a Moving object
+```java
+    // in grid we initialize an Piece subclass MovingPiece with reflection
+    // in constructor:
+  public interface MovingPiece(){
+  public MovingPice(Coordinate[] movementPath,Coordinate[] shape){
+    this.setPath(movementPath);
+    this.setStatus("Alive");
+    this.initializeShape(shape);
+  } 
+}
+  
+```
+* Use case 2 - a ship is hit
+```java
+    // if the traget grid is is identified as a ship grid in the Grid.java
+    Piece ship = new Piece();
+    
+  
+```
 * Use case 3
 * Use case 4
 * Use case 5

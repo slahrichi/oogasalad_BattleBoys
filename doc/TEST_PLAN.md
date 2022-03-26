@@ -72,7 +72,7 @@ Describe at least two specific strategies your team discussed to make your APIs 
   effects.
   * Will have custom WeaponError to make testing and error handling easier.
 
-* Check that actor objects move correctly
+* Check that piece objects move correctly
     * Check that model doesn't crash if a ships' path leads it out of map bounds( the ship should
       stop at the edge)
     * Will support custom errors to make testing easier. 
