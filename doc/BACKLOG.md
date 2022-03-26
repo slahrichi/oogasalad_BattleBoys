@@ -251,6 +251,7 @@ for(Coordinate effectedCell:ClusterAOE){
 ```
 
 * Use case 9 - create a cluster bomb
+```java
   // in grid we initialize an Weapon subclass ClusterWeapon with reflection
   // in constructor:
   public interface ClusterWeapon() {
@@ -259,4 +260,18 @@ for(Coordinate effectedCell:ClusterAOE){
   this.setAOE(cluesterAOE);
   }
 
-* Use case 10 - 
+
+```
+* Use case 10 - radar weapon is created
+```java
+  // in grid we initialize an Weapon subclass RadarWeapon with reflection
+  // in constructor:
+  public interface RadarWeapon() {
+
+  public RadarWeapon(Coordinate[] clusterAOE) {
+  this.setAOE(cluesterAOE);
+  
+  }
+  
+
+```
