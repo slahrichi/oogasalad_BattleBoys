@@ -27,9 +27,25 @@ design program).
 versus AI. The AI will have different difficulties.
 * The controller will manage the different `Player` instances and relay communication between the 
 `Player` instances and the view
-* The backend model will contain the infomation about the current game state, what ships are in play, 
+* The backend model will contain the information about the current game state, what ships are in play, 
   weapon types, shop, and type of every part of the grid. The controller will call methods in the model to
   update the state of the game accordingly and the model will feed the view so it can display the correct information
+
+#### Frontend
+* The master view class will show the scene that allows users to place their boats on their board. Once
+the confirm button is clicked, the master view class will show the main game screen scene.
+* We plan to have a BoardView abstraction, which creates a board for each player in the game, and these
+boards can be connected to specific model instances for multiple controllers to interact with.
+* An observer-listener pattern will be used to pass information from the view to the controller, 
+making it so the view doesn't need to know about what is going on in the backend, and can
+instead focus on showing the correct UI based on the actions of the controller.
+* The idea of moving boats is open to extension because we provide functionality to place and remove boats
+anywhere on the screen that is legal. This allows the controller to use these view methods
+in whichever way it chooses to achieve the functionality it wants.
+* The idea of shooting shots is open to extension because we provide basic functionality for the player
+to click an enemy board to fire their shot, which means this naturally extends to 
+functionality that allows players to fire multiple shots at multiple different boards, where each board 
+can be seen by switching the currently active BoardView.
 
 ### Team Responsibilities
 
