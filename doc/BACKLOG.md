@@ -45,29 +45,31 @@ Write at least ten Use Cases per team member that describe specific features eac
 
 ### Matthew Giglio
 
-* Use case 1
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1: Build different AI variations (easy, medium, hard)
+* Use case 2: Allow player to move pieces between rounds
+* Use case 3: Use StripeAPI to simulate in game payments
+* Use case 4: Allow two players to play across a server
+* Use case 5: Throw "exception" when player tries to place boat at invalid coordinate
+* Use case 6: Allow player to use certain items (health upgrade, scout, etc) without losing the turn
+* Use case 7: Throw "exception" when player lacks enough money to make payment
+* Use case 8: Remove items from player's inventory after they have used them
+* Use case 9: Remove piece from player's pieces after it has been lost
+* Use case 10: Have AI "invert" strategies from Battleship to Minesweeper
 
 ### Minjun Kwak
 
-* Use case 1
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1 - The user clicks a location on the enemy board to fire a shot
+* Use case 2 - The user clicks a location on their board to place their ship
+* Use case 3 - The user begins building their ship in the ship builder, but then decides to change the
+number of ships they want to place on their board
+* Use case 4 - The user buys a bomb weapon to use for their next shot and fires it to an enemy board
+* Use case 5 - The user scrolls through each of the other players' boards to see the shots
+they have taken against each player
+* Use case 6 - The user fires a shot, but hits a mine
+* Use case 7 - The user fires a shot, but hits a radar
+* Use case 8 - The user destroys all enemy ships and wins the game
+* Use case 9 - The user buys a finder weapon to use for their next shot and fires it to an enemy board
+* Use case 10 - The user clicks the sidebar to see how many ships are left for each of the other players
 
 ### Saad Lahrichi
 

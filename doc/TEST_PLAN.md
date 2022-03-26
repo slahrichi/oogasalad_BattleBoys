@@ -33,9 +33,9 @@ Describe at least two specific strategies your team discussed to make your APIs 
 
 ### Matthew Giglio
 
-* Test scenario 1
-* Test scenario 2
-* Test scenario 3
+* Test that players receive payments upon hits
+* Test that `PlayerAPI` works with different implementations (Liskov with controller and view)
+* Test that controller successfully passes backend "exceptions" to view prompts
 
 ### Minjun Kwak
 

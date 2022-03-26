@@ -23,6 +23,10 @@ design program).
   weapon characteristics and projectile types . The basic projectile classifications will be
   default, cluster, scanning and maybe even moving projectiles. For moving projectiles we will also
   let the user define the path of the projectile, as well as define the area of effect of a weapon.
+* A `PlayerAPI` will be used to define specific implementations of players such as human players 
+versus AI. The AI will have different difficulties.
+* The controller will manage the different `Player` instances and relay communication between the 
+`Player` instances and the view
 
 
 ### Team Responsibilities
@@ -31,3 +35,5 @@ design program).
   implementing ship and weapon abstractions and hierarchies as my first task, I will go on to work
   on anything that is needed as the project goes on. Since I have experience in frontend I might
   also switch to work on that at some point in the project.
+* Matthew - Developing `PlayerAPI` and its specific implementations such as the `HumanPlayer` and
+the `AI` variations. Will also develop controller.
