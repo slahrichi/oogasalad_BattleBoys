@@ -31,3 +31,5 @@ design program).
   implementing ship and weapon abstractions and hierarchies as my first task, I will go on to work
   on anything that is needed as the project goes on. Since I have experience in frontend I might
   also switch to work on that at some point in the project.
+
+####
