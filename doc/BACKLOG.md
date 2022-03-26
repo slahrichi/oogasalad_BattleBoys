@@ -24,16 +24,26 @@ complete each case.
 
 ### Edison Ooi
 
-* Use case 1
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1: User clicks a cell on their shooting board to fire a shot. The result of that shot 
+  is visually displayed to them.
+* Use case 2: User opens the shop, buys a shot upgrade, and then clicks a cell on their shooting 
+  board to fire that buffed shot
+* Use case 3: User fires a shot that hits a boat, and they see their gold balance increase
+* Use case 4: User fires a shot that hits a negative special island, such as a mine, and they 
+  lose the game.
+* Use case 5: User fires a game-winning shot and is visually shown a winning screen.
+* Use case 6: In setup, user tries to place a piece in an invalid location, such as on top of 
+  another piece or outside of the board. They receive a visual pop-up indicating that they 
+  cannot place it there.
+* Use case 7: In building, user indicates that there is a special island where, when hit, limits 
+  the number of boats a player can have to X. All but X boats for each player are instantly 
+  sunk.
+* Use case 8: In building, user customizes their board by specifying the desired 
+  rectangular dimensions and then de-selecting cells that they wish to not include in the board.
+* Use case 9: In building, user customizes their ships by activating cells on a mini-board.
+* Use case 10: In a 1v1 game, user makes their move and is then shown a screen that instructs 
+  them to pass the computer to the opponent, who will have to press a key in order to see 
+  their board.
 
 ### Matthew Knox
 
