@@ -93,7 +93,7 @@ complete each case.
 
 ### Eric Xie
 
-* Use case 1
+* Use case 1 - 
 * Use case 2
 * Use case 3
 * Use case 4
