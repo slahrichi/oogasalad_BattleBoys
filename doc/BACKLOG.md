@@ -103,16 +103,16 @@ complete each case.
 
 ### Eric Xie
 
-* Use case 1 - 
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1 - The user sets up ship pieces in the setup phase and clicks on a spot they want to put the piece on
+* Use case 2 - The user goes into the ShipBuilder, builds a custom ship, and places said custom ship onto the setup board
+* Use case 3 - The user tries to place a ship piece on the setup board but in an invalid spot, causing an error to be displayed
+* Use case 4 - The user enters the parameters into the game engine creator, choosing win conditions and the number of certain abilities
+* Use case 5 - The user enters the shop and spends the points he earned on a special shot (bomb).
+* Use case 6 - The user enters the shop and tries to purchase a bomb, but he doesn't have enough points. This results in a message notifying them that they are lacking points.
+* Use case 7 - The user fires a shot, but misses any targets.
+* Use case 8 - The user fires a shot, but hits a target (ship)
+* Use case 9 - The user fires a shot, but hits a special space (power-up debuff or buff)
+* Use case 10 - The user scrolls through his boards using the buttons under them to check his own board and the shots he has against enemy player(s).
 
 ### Prajwal Jagadish
 
