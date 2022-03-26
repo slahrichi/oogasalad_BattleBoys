@@ -33,9 +33,9 @@ Describe at least two specific strategies your team discussed to make your APIs 
 
 ### Matthew Giglio
 
-* Test scenario 1
-* Test scenario 2
-* Test scenario 3
+* Test that players receive payments upon hits
+* Test that `PlayerAPI` works with different implementations (Liskov with controller and view)
+* Test that controller successfully passes backend "exceptions" to view prompts
 
 ### Minjun Kwak
 
@@ -72,7 +72,7 @@ Describe at least two specific strategies your team discussed to make your APIs 
   effects.
   * Will have custom WeaponError to make testing and error handling easier.
 
-* Check that actor objects move correctly
+* Check that piece objects move correctly
     * Check that model doesn't crash if a ships' path leads it out of map bounds( the ship should
       stop at the edge)
     * Will support custom errors to make testing easier. 

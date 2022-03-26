@@ -45,16 +45,16 @@ Write at least ten Use Cases per team member that describe specific features eac
 
 ### Matthew Giglio
 
-* Use case 1
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1: Build different AI variations (easy, medium, hard)
+* Use case 2: Allow player to move pieces between rounds
+* Use case 3: Use StripeAPI to simulate in game payments
+* Use case 4: Allow two players to play across a server
+* Use case 5: Throw "exception" when player tries to place boat at invalid coordinate
+* Use case 6: Allow player to use certain items (health upgrade, scout, etc) without losing the turn
+* Use case 7: Throw "exception" when player lacks enough money to make payment
+* Use case 8: Remove items from player's inventory after they have used them
+* Use case 9: Remove piece from player's pieces after it has been lost
+* Use case 10: Have AI "invert" strategies from Battleship to Minesweeper
 
 ### Minjun Kwak
 
@@ -112,8 +112,26 @@ they have taken against each player
 
 ### Luka Mdivani
 
-* Use case 1
-* Use case 2
+* Use case 1 - user initializes a Moving object
+```java
+    // in grid we initialize an Piece subclass MovingPiece with reflection
+    // in constructor:
+  public interface MovingPiece(){
+  public MovingPice(Coordinate[] movementPath,Coordinate[] shape){
+    this.setPath(movementPath);
+    this.setStatus("Alive");
+    this.initializeShape(shape);
+  } 
+}
+  
+```
+* Use case 2 - a ship is hit
+```java
+    // if the traget grid is is identified as a ship grid in the Grid.java
+    Piece ship = new Piece();
+    
+  
+```
 * Use case 3
 * Use case 4
 * Use case 5
