@@ -128,15 +128,79 @@ they have taken against each player
 * Use case 2 - a ship is hit
 ```java
     // if the traget grid is is identified as a ship grid in the Grid.java
-    Piece ship = new Piece();
-    
+    Piece shisp = new Piece();
+    ship.registerDamage(Coordinate location);
+    //Inside ship:
+    pubic interface  registerDamage(Coordinate location){
+      occupiedCells.remove(location);
+      checkPieceStatus();
+}
   
 ```
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
+* Use case 3 - a ship is hit and it sinks
+```java
+   
+  public interface checkPieceStatus(){
+  if( occupiedCells.size() == 0 )
+    {
+      setStatus("Dead");
+    }
+  }
+  
+```
+* Use case 4 - a MovingPiece is hit and its movement ability is disabled
+```java
+   
+  public interface checkPieceStatus(){
+  if( occupiedCells.size() == 0 )
+    {
+      setStatus("Dead");
+    }
+  if(!status.equals("damaged")){
+    setStatus("damaged");
+    disableMovementStatus();
+    }
+  }
+  
+```
+* Use case 5 - Piece has to move 
+```java
+// Inside Piece
+public interface updateLocation(){
+  for( Coordinate cell : occupiedCells ){
+    for(Coordinate direction : path) {
+      if(inBounds()){
+      cell.x + path.x;
+      cell.y + path.y;
+      }
+    }
+  }
+}
+
+```
+* Use case 6 - Piece has to move and path leads it out of bounds
+```java
+// Inside Piece
+public interface updateLocation(){
+  if (movementStatus)
+
+  {
+    for (Coordinate cell : occupiedCells) {
+      for (Coordinate direction : path) {
+        if (inBounds()) {
+          cell.x + path.x;
+          cell.y + path.y;
+        } else
+          () {
+          disableMovementStatus();
+        }
+      }
+    }
+  }
+}
+
+```
+* Use case 7 
 * Use case 8
 * Use case 9
 * Use case 10
