@@ -42,6 +42,11 @@ view.setCurrentPlayer("Player 2");
 ```
 ### Player 1 sinks one of Player 2's ships
 ```java
+
+// same code as previous use case, we assume that the model handles whether a ship was truly 
+// sunk or not in their code? also assumes that current grid is player 3's grid, should be linked
+// to player 3's controller
+
 view.displayShotAt(1, 1, true);
 remainingShips.remove(remainingShips.size() - 1);
 dataVisualizer.updateShipsLeft(remainingShips);
@@ -51,17 +56,8 @@ dataVisualizer.setPlayerTurnIndicator("Player2");
 view.setCurrentPlayer("Player2"); // only if their shots reach 0?
 ```
 
-### Player 1 clicks a spot on Player 3's board that was already clicked previously
+### The user opens the shop to buy a weapon
 ```java
 // in the controller
-
-// same code as previous use case, we assume that the model handles whether a ship was truly 
-// sunk or not in their code? also assumes that current grid is player 3's grid, should be linked
-// to player 3's controller
-
-if (!model.isValidShot(int x, int y)) {
-  
-}
-
-
+view.openShop();
 ```
