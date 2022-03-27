@@ -11,16 +11,21 @@ complete each case.
 
 ### Brandon Bae
 
-* Use case 1
-* Use case 2
-* Use case 3
-* Use case 4
-* Use case 5
-* Use case 6
-* Use case 7
-* Use case 8
-* Use case 9
-* Use case 10
+* Use case 1: The current player ends his turn. The controller will check the current win condition
+  and check the current board states to check for a winner/loser
+* Use case 2: Allow designer to combine multiple different win/lose conditions to the game to define rules
+* Use case 3: Add special island type that can add a new win condition to the game when hit
+* Use case 4: Add special island type that can remove a win condition when hit
+* Use case 5: Designer can define a non square/rectangle board shape for player's to place ships on
+* Use case 6: Player decides to shoot at a certain coordinate. BoardModel receives shot's lambda function
+and applies function on received coordinate
+* Use case 7: User fires a sensor/seeker shot at board model's specific coordinate. Use boardmodel's getState()
+method to reveal cells around coordinate
+* Use case 8: User can define a "Destroy X amt of Y" win condition which allows players who destroy a certain amount 
+of a certain type of tile to win.
+* Use case 9: User can define a "Destroy X amt of Y" loss condition which forces players who destroy a certain amount of
+a certain type of tile to win
+* Use case 10: User can define a "X Amount of Time" loss condition which forces players who run out of time in their turn to lose.
 
 ### Edison Ooi
 
