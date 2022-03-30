@@ -40,6 +40,6 @@ public class GameManager {
   }
 
   private boolean canStillPlay() {
-    return playerList.size() == 1;
+    return playerList.size() != 1;
   }
 }
