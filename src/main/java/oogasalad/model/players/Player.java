@@ -1,5 +1,6 @@
 package oogasalad.model.players;
 
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
 
@@ -43,6 +44,9 @@ public interface Player {
     */
     public void addGold(int amount);
 
+    public void strike(Coordinate c);
+
+    public int getHealth();
 
 }
 
