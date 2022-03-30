@@ -1,4 +1,4 @@
-package oogasalad.model;
+package oogasalad.model.players;
 
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
