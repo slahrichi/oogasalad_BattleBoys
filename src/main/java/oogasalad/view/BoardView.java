@@ -1,52 +1,51 @@
 package oogasalad.view;
 
-import java.awt.LayoutManager;
-import java.awt.event.*;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javax.swing.plaf.basic.BasicOptionPaneUI;
-import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonAreaLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javafx.scene.Group;
 
-// board
-public class BoardView {
+import oogasalad.Coordinate;
+import oogasalad.PropertyObservable;
 
-  private CellView[][] boardLayout;
-  private Pane myBoard;
+public class BoardView extends PropertyObservable implements PropertyChangeListener {
+
+  static final double BOARD_WIDTH = 300;
+  static final double BOARD_HEIGHT = 300;
+
+  private CellView[][] myLayout;
+  private Group myBoard;
+  private int myID;
 
   // controller passes some kind of parameter to the
-  public BoardView(int[][] arrayLayout) {
-    setupBoard(arrayLayout);
-
+  public BoardView(ShapeType shape, int[][] arrayLayout, int id) {
+    setupBoard(arrayLayout, shape);
+    myID = id;
   }
 
-  private void setupBoard(int[][] arrayLayout) {
-    myBoard = new FlowPane();
-    for (int row = 0; row < arrayLayout.length; row++) {
-      for(int col = 0; col < arrayLayout[0].length; col++) {
-        if (arrayLayout[row][col] == 1) {
-          boardLayout[row][col] = new CellView(true, row, col);
-        }
-        else{
-          boardLayout[row][col] = new CellView(false, row, col);
-        }
+  private void setupBoard(int[][] arrayLayout, ShapeType shape) {
+    myLayout = new CellView[arrayLayout.length][arrayLayout[0].length];
+    myBoard = new Group();
+    for (int col = 0; col < arrayLayout.length; col++) {
+      for(int row = 0; row < arrayLayout[0].length; row++) {
+        CellView cell = new CellView(shape, col, row, arrayLayout[0].length, arrayLayout.length);
+        cell.addObserver(this);
+        myLayout[col][row] = cell;
       }
     }
   }
 
-  public void addListener(ActionListener listener) {
-    for (CellView[] cellRow : boardLayout) {
-      for (CellView cell : cellRow) {
-        cell.putClientProperty("coords", cell.getCoords());
-        cell.addActionListener(listener);
+  public Group getBoard() {
+    for (int i = 0; i < myLayout.length; i++) {
+      for (int j = 0; j < myLayout[0].length; j++) {
+        myBoard.getChildren().add(myLayout[i][j].getCell());
       }
     }
+    myBoard.setStyle("-fx-border-color: BLUE; -fx-border-width: 2px");
+    return myBoard;
   }
 
-  public void show() {
-    for (int i = 0; i < boardLayout.length; i++) {
-      for (int j = 0; j < boardLayout[0].length; j++) {
-        myBoard.getChildren().add(boardLayout[i][j]);
-      }
-    }
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).x(), ((Coordinate) evt.getNewValue()).y(), myID));
   }
 }

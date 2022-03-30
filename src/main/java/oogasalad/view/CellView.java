@@ -1,34 +1,34 @@
 package oogasalad.view;
 
-import java.awt.Button;
-import java.awt.HeadlessException;
-import java.awt.Point;
-import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
-import javax.swing.JButton;
 import oogasalad.Coordinate;
+import oogasalad.PropertyObservable;
 
-// cell class
-
-public class CellView extends JButton {
+public class CellView extends PropertyObservable {
 
   private boolean isActive;
   private Coordinate myCoords;
-  private Polygon node;
+  private Polygon myShape;
 
-  // some kind of constructor
-  public CellView(boolean status, int x, int y) {
-    isActive = status;
+  // no need for status anymore because listeners are only attached to active cells
+  public CellView(ShapeType shape, int x, int y, int width, int height) {
+//    isActive = status;
     myCoords = new Coordinate(x, y);
+    myShape = new Polygon();
+    myShape.getPoints().addAll(shape.getPoints(x, y, width, height));
+    myShape.setOnMouseClicked(e -> cellClicked());
+  }
 
+  public void cellClicked() {
+    notifyObserver("cellClicked", myCoords);
   }
 
   public Coordinate getCoords() {
     return myCoords;
   }
 
-  public Node getNode() {
-
+  public Polygon getCell() {
+    return myShape;
   }
 
 }
