@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import oogasalad.view.BoardView;
 import oogasalad.view.ShapeType;
+import oogasalad.view.View;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -24,13 +25,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        BorderPane pane = new BorderPane();
-        int[][] arr = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
-        BoardView view = new BoardView(new ShapeType(), arr, 0);
+        View view = new View();
         Controller c = new Controller(view);
-        pane.setCenter(view.getBoard());
-        Scene scene = new Scene(pane, 500, 500, Color.LIGHTGRAY);
-        stage.setScene(scene);
+        stage.setScene(view.getScene());
         stage.show();
 
     }

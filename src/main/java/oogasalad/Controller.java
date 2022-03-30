@@ -3,14 +3,15 @@ package oogasalad;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import oogasalad.view.BoardView;
+import oogasalad.view.View;
 
 public class Controller extends PropertyObservable implements PropertyChangeListener {
 
-  private BoardView myBoard;
+  private View myView;
 
-  public Controller(BoardView board) {
-    myBoard = board;
-    myBoard.addObserver(this);
+  public Controller(View view) {
+    myView = view;
+    myView.addObserver(this);
   }
 
 

@@ -9,8 +9,8 @@ import oogasalad.PropertyObservable;
 
 public class BoardView extends PropertyObservable implements PropertyChangeListener {
 
-  static final double BOARD_WIDTH = 300;
-  static final double BOARD_HEIGHT = 300;
+  static final double BOARD_WIDTH = 200;
+  static final double BOARD_HEIGHT = 200;
 
   private CellView[][] myLayout;
   private Group myBoard;
@@ -27,9 +27,11 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
     myBoard = new Group();
     for (int col = 0; col < arrayLayout.length; col++) {
       for(int row = 0; row < arrayLayout[0].length; row++) {
-        CellView cell = new CellView(shape, col, row, arrayLayout[0].length, arrayLayout.length);
-        cell.addObserver(this);
-        myLayout[col][row] = cell;
+        if (arrayLayout[col][row] == 1) {
+          CellView cell = new CellView(shape, col, row, arrayLayout[0].length, arrayLayout.length);
+          cell.addObserver(this);
+          myLayout[col][row] = cell;
+        }
       }
     }
   }
@@ -37,7 +39,9 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
   public Group getBoard() {
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {
-        myBoard.getChildren().add(myLayout[i][j].getCell());
+        if (myLayout[i][j] != null) {
+          myBoard.getChildren().add(myLayout[i][j].getCell());
+        }
       }
     }
     return myBoard;
