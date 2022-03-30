@@ -1,23 +1,21 @@
 package oogasalad;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import oogasalad.view.BoardView;
 
-public class Controller {
+public class Controller extends PropertyObservable implements PropertyChangeListener {
+
   private BoardView myBoard;
 
-  public Controller() {
-    int[][] arr = new int[][]{{0, 0, 0, 1, 1}, {0, 0, 1, 1, 0}, {0, 1, 1, 0, 0}, {1, 1, 0, 0, 0}, {1, 1, 1, 1, 1}};
-    myBoard = new BoardView(arr);
-    myBoard.addListener(new BoardListener());
-    myBoard.show();
+  public Controller(BoardView board) {
+    myBoard = board;
+    myBoard.addObserver(this);
   }
 
-  class BoardListener implements ActionListener {
-    public void actionPerformed(ActionEvent e) {
-      System.out.println(((JButton)e.getSource()).getClientProperty("coords"));
-    }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    System.out.println("inside controller " + evt);
   }
 }
