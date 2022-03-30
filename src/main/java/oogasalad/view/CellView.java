@@ -20,7 +20,9 @@ public class CellView extends PropertyObservable {
   }
 
   public void cellClicked() {
-    notifyObserver("cellClicked", myCoords);
+    // gets the name of the current method being executed - in this case it is "cellClicked"
+    // may not need if cells are the only thing on the board that can be clicked on
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), myCoords);
   }
 
   public Coordinate getCoords() {

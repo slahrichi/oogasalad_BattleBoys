@@ -40,12 +40,12 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
         myBoard.getChildren().add(myLayout[i][j].getCell());
       }
     }
-    myBoard.setStyle("-fx-border-color: BLUE; -fx-border-width: 2px");
     return myBoard;
   }
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
+//    System.out.println(evt.getPropertyName());
     notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).x(), ((Coordinate) evt.getNewValue()).y(), myID));
   }
 }
