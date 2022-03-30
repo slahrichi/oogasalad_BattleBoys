@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import oogasalad.PropertyObservable;
@@ -39,11 +40,21 @@ public class View extends PropertyObservable implements PropertyChangeListener {
   }
 
   public Scene getScene() {
-    myPane.setTop(myBoards.get(0).getBoard());
-    myPane.setLeft(myBoards.get(1).getBoard());
-    myPane.setCenter(myBoards.get(2).getBoard());
-    myPane.setRight(myBoards.get(3).getBoard());
-    myPane.setBottom(myBoards.get(4).getBoard());
+    Group board0 = myBoards.get(0).getBoard();
+    BorderPane.setAlignment(board0, Pos.CENTER);
+    myPane.setTop(board0);
+    Group board1 = myBoards.get(1).getBoard();
+    BorderPane.setAlignment(board1, Pos.CENTER);
+    myPane.setLeft(board1);
+    Group board2 = myBoards.get(2).getBoard();
+    BorderPane.setAlignment(board2, Pos.CENTER);
+    myPane.setCenter(board2);
+    Group board3 = myBoards.get(3).getBoard();
+    BorderPane.setAlignment(board3, Pos.CENTER);
+    myPane.setRight(board3);
+    Group board4 = myBoards.get(4).getBoard();
+    BorderPane.setAlignment(board4, Pos.CENTER);
+    myPane.setBottom(board4);
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     return myScene;
   }
