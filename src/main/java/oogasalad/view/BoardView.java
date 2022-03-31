@@ -3,7 +3,10 @@ package oogasalad.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javafx.scene.Group;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.PropertyObservable;
 
@@ -13,7 +16,8 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
   static final double BOARD_HEIGHT = 200;
 
   private CellView[][] myLayout;
-  private Pane myBoard;
+  private StackPane myBoard;
+  private Group myBase;
   private int myID;
 
   // controller passes some kind of parameter to the
@@ -24,7 +28,8 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
 
   private void setupBoard(int[][] arrayLayout, ShapeType shape) {
     myLayout = new CellView[arrayLayout.length][arrayLayout[0].length];
-    myBoard = new Pane();
+    myBoard = new StackPane();
+    myBase = new Group();
     initializeCellViews(arrayLayout, shape);
     initializeBoardNodes();
   }
@@ -45,13 +50,14 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {
         if (myLayout[i][j] != null) {
-          myBoard.getChildren().add(myLayout[i][j].getCell());
+          myBase.getChildren().add(myLayout[i][j].getCell());
         }
       }
     }
+    myBoard.getChildren().add(myBase);
   }
 
-  public Pane getBoardPane() {
+  public StackPane getBoardPane() {
     return myBoard;
   }
 
