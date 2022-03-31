@@ -2,7 +2,7 @@ package oogasalad.model.utilities.tiles;
 
 import oogasalad.model.utilities.Coordinate;
 
-public interface Tile {
+public interface Cell {
 
    int hit();
 

@@ -5,23 +5,23 @@ import oogasalad.model.utilities.Piece;
 
 
 
-public class ShipTile implements Tile {
+public class ShipCell implements Cell {
 
   private Coordinate myCoordinate;
   private int myHealthBar;
   private Piece AssignedPiece;
-  private tileStates currentState;
+  private cellStates currentState;
   private int myGoldValue;
 
-  public ShipTile(int x, int y, int health, Piece ship, int goldValue){
+  public ShipCell(int x, int y, int health, Piece ship, int goldValue){
     myCoordinate = new Coordinate(y,x);
     myHealthBar = health;
     AssignedPiece = ship;
-    currentState = tileStates.HEALTHY;
+    currentState = cellStates.HEALTHY;
     myGoldValue = goldValue;
   }
 
-  public ShipTile(int x, int y, Piece ship, int goldValue){
+  public ShipCell(int x, int y, Piece ship, int goldValue){
     this(x,y,1, ship,goldValue);
   }
   @Override
@@ -29,10 +29,10 @@ public class ShipTile implements Tile {
     myHealthBar --;
     if (myHealthBar == 0) {
       AssignedPiece.deadPart(this);
-      currentState = tileStates.SUNKEN;
+      currentState = cellStates.SUNKEN;
       return myGoldValue;
     } else{
-      currentState = tileStates.DAMAGED;
+      currentState = cellStates.DAMAGED;
       return -1;
     }
   }

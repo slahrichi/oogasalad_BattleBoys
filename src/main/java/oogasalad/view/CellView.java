@@ -1,8 +1,8 @@
 package oogasalad.view;
 
 import javafx.scene.shape.Polygon;
-import oogasalad.Coordinate;
 import oogasalad.PropertyObservable;
+import oogasalad.model.utilities.Coordinate;
 
 public class CellView extends PropertyObservable {
 

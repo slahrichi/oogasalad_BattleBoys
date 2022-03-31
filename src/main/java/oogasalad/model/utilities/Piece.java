@@ -1,21 +1,36 @@
 package oogasalad.model.utilities;
 
 import java.util.List;
-import oogasalad.model.utilities.tiles.ShipTile;
-import oogasalad.model.utilities.tiles.Tile;
+import oogasalad.model.utilities.tiles.Cell;
 
-public class Piece {
+public abstract class Piece {
 
-  private List<Tile> cellList;
+  private List<Cell> cellList;
+  private String status;
+  private Board myBoard;
 
-  public Piece(List<Tile> cellList) {
+  public Piece(List<Cell> cellList) {
     this.cellList = cellList;
+    status = "Alive";
+    //myBoard = board;
   }
 
-  public List<Tile> getCellList() {
+  public List<Cell> getCellList() {
     return cellList;
   }
 
-  public void deadPart(ShipTile shipTile) {
+  public abstract void registerDamage(Coordinate hitLocation) ;
+
+  protected boolean checkDeath() {
+    return (cellList.size() == 0);
+  }
+
+  protected String getStatus(){
+    return status;
+  }
+
+  protected void updateStatus(String newStatus){
+    status=newStatus;
   }
 }
+
