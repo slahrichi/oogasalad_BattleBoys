@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import oogasalad.PropertyObservable;
+import oogasalad.model.players.Player;
 
 public class View extends PropertyObservable implements PropertyChangeListener {
 
@@ -25,7 +26,7 @@ public class View extends PropertyObservable implements PropertyChangeListener {
     createBoards(5);
   }
 
-  public Scene createViewFromPlayers() {
+  public Scene createViewFromPlayers(List<Player> playerList) {
     Group board0 = myBoards.get(0).getBoard();
     BorderPane.setAlignment(board0, Pos.CENTER);
     myPane.setTop(board0);

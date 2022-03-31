@@ -25,7 +25,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   public Scene createScene() {
-    return view.createViewFromPlayers();
+    return view.createViewFromPlayers(playerList);
   }
 
   public void playGame() {
