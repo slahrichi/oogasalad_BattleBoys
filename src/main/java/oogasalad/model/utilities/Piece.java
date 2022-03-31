@@ -1,18 +1,21 @@
 package oogasalad.model.utilities;
 
 import java.util.List;
-import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.tiles.ShipTile;
+import oogasalad.model.utilities.tiles.Tile;
 
 public class Piece {
 
-  private List<Cell> cellList;
+  private List<Tile> cellList;
 
-  public Piece(List<Cell> cellList) {
+  public Piece(List<Tile> cellList) {
     this.cellList = cellList;
   }
 
-  public List<Cell> getCellList() {
+  public List<Tile> getCellList() {
     return cellList;
   }
 
+  public void deadPart(ShipTile shipTile) {
+  }
 }

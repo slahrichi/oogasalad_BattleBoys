@@ -3,7 +3,7 @@ package oogasalad.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.tiles.Tile;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
@@ -24,7 +24,7 @@ public class HumanPlayer implements Player {
   }
 
   private void determineHealth() {
-    for (Cell c : myBoard.listPieces()) {
+    for (Tile c : myBoard.listPieces()) {
       if (c != null) {
         myHealth++;
       }
@@ -49,7 +49,7 @@ public class HumanPlayer implements Player {
 
 
   public void placePiece(Piece s) {
-    for (Cell c : s.getCellList()) {
+    for (Tile c : s.getCellList()) {
       myBoard.place(c.getPosition(), c);
     }
   }

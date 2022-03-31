@@ -2,15 +2,15 @@ package oogasalad.model.utilities.tiles;
 
 import oogasalad.model.utilities.Coordinate;
 
-public interface Cell{
+public interface Tile {
 
-   void hit();
+   int hit();
 
    void update();
 
    boolean canCarryObject();
 
-   void updateCoordinates();
+   void updateCoordinates(int x, int y);
 
    Coordinate getCoordinates();
 
