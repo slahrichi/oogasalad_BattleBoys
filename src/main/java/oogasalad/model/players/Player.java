@@ -48,5 +48,6 @@ public interface Player {
 
     public int getHealth();
 
+    public void setupBoard(int rows, int cols);
 }
 
