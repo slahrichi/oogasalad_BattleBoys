@@ -7,6 +7,7 @@ import oogasalad.model.utilities.Cell;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.Cell;
 
 public abstract class GenericPlayer implements Player{
 

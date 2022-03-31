@@ -1,6 +1,7 @@
 package oogasalad.model.utilities;
 
 import java.util.List;
+import oogasalad.model.utilities.tiles.Cell;
 
 public abstract class Piece {
 
@@ -32,3 +33,4 @@ public abstract class Piece {
     status=newStatus;
   }
 }
+

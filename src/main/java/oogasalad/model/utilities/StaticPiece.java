@@ -1,6 +1,7 @@
 package oogasalad.model.utilities;
 
 import java.util.List;
+import oogasalad.model.utilities.tiles.Cell;
 
 public class StaticPiece extends Piece {
   public StaticPiece(List<Cell> cellList){
