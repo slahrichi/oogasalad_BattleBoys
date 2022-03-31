@@ -89,7 +89,7 @@ public class View extends PropertyObservable implements PropertyChangeListener {
     board3.addObserver(this);
     myBoards.add(board3);
 
-    BoardView board4 = new BoardView(new ShapeType(), new int[][]{{1, 1, 1}, {1, 0, 1}, {1, 1, 1}}, 4);
+    BoardView board4 = new BoardView(new ShapeType(), new int[][]{{1, 1, 1, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}}, 4);
     board4.addObserver(this);
     myBoards.add(board4);
   }

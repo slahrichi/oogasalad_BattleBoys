@@ -13,7 +13,7 @@ public class ShapeType {
   public ShapeType() {
 
   }
-  public List<Double> getPoints(double col, double row, double width, double height) {
+  public List<Double> getPoints(double row, double col, double width, double height) {
     // FIXME: refactor to not use default square points
 
     List<Double> points = new ArrayList<>();

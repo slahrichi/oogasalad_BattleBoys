@@ -30,12 +30,12 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void initializeCellViews(int[][] arrayLayout, ShapeType shape) {
-    for (int col = 0; col < arrayLayout.length; col++) {
-      for(int row = 0; row < arrayLayout[0].length; row++) {
-        if (arrayLayout[col][row] == 1) {
-          CellView cell = new CellView(shape, col, row, arrayLayout[0].length, arrayLayout.length);
+    for (int row = 0; row < arrayLayout.length; row++) {
+      for(int col = 0; col < arrayLayout[0].length; col++) {
+        if (arrayLayout[row][col] == 1) {
+          CellView cell = new CellView(shape, row, col, arrayLayout[0].length, arrayLayout.length);
           cell.addObserver(this);
-          myLayout[col][row] = cell;
+          myLayout[row][col] = cell;
         }
       }
     }
@@ -58,6 +58,6 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
 //    System.out.println(evt.getPropertyName());
-    notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
+    notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).getColumn(), ((Coordinate) evt.getNewValue()).getRow(), myID));
   }
 }
