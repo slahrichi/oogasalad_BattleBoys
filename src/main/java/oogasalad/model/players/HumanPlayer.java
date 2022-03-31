@@ -10,7 +10,6 @@ import oogasalad.model.utilities.Piece;
 
 public class HumanPlayer implements Player {
 
-  private int myID;
   private int myHealth;
   private int myCurrency;
   private List<Item> itemList;
@@ -29,10 +28,6 @@ public class HumanPlayer implements Player {
         myHealth++;
       }
     }
-  }
-
-  public int getID() {
-    return myID;
   }
 
   public void playTurn() {
