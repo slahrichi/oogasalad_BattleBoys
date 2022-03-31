@@ -1,26 +1,43 @@
 package oogasalad.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.Scene;
+import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.view.View;
 
-public class GameManager {
+public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
   private Map<Integer, Player> idMap;
+  private View view;
 
   public GameManager(List<Player> playerList) {
+    view = new View();
+    this.view.addObserver(this);
     this.playerList = playerList;
     initialize();
+  }
+
+  public Scene createScene() {
+    return view.createViewFromPlayers();
   }
 
   public void playGame() {
     while (canStillPlay())
     for (Player player : playerList) {
+      promptPlayerToPlayTurn(player.getID());
       player.playTurn();
     }
+  }
+
+  public void promptPlayerToPlayTurn(int player) {
+    view.promptPlayTurn(player);
   }
 
   private void initialize() {
@@ -41,5 +58,10 @@ public class GameManager {
 
   private boolean canStillPlay() {
     return playerList.size() != 1;
+  }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    System.out.println("inside Game Manager" + evt);
   }
 }

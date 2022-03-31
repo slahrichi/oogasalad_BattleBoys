@@ -4,7 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javafx.scene.Group;
 
-import oogasalad.Coordinate;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.PropertyObservable;
 
 public class BoardView extends PropertyObservable implements PropertyChangeListener {
@@ -50,6 +50,6 @@ public class BoardView extends PropertyObservable implements PropertyChangeListe
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
 //    System.out.println(evt.getPropertyName());
-    notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).x(), ((Coordinate) evt.getNewValue()).y(), myID));
+    notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
   }
 }
