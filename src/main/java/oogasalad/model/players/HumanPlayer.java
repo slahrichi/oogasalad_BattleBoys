@@ -3,7 +3,7 @@ package oogasalad.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.Cell;
+import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
