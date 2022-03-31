@@ -3,7 +3,7 @@
  * opponent, whether the shot was a hit, miss, sink, etc.
  *
  * @author Edison Ooi
- */
+
 public interface ShotVisualizer {
 
   /**
@@ -13,7 +13,8 @@ public interface ShotVisualizer {
    * @param x x coordinate of cell
    * @param y y coordinate of cell
    * @param wasHit indicates if the shot was a hit or a miss
-   */
+
   public void displayShotAt(int x, int y, boolean wasHit);
 
 }
+ */

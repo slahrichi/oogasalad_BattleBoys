@@ -25,21 +25,7 @@ public class View extends PropertyObservable implements PropertyChangeListener {
     createBoards(5);
   }
 
-  private void createBoards(int numBoards) {
-    int[][] arrayLayout = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
-    for (int i = 0; i < numBoards-1; i++) {
-      BoardView board = new BoardView(new ShapeType(), arrayLayout, i);
-      board.addObserver(this);
-      myBoards.add(board);
-    }
-    // create the last board with a different array layout
-    BoardView board = new BoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 4);
-    board.addObserver(this);
-    myBoards.add(board);
-
-  }
-
-  public Scene getScene() {
+  public Scene createViewFromPlayers() {
     Group board0 = myBoards.get(0).getBoard();
     BorderPane.setAlignment(board0, Pos.CENTER);
     myPane.setTop(board0);
@@ -57,6 +43,23 @@ public class View extends PropertyObservable implements PropertyChangeListener {
     myPane.setBottom(board4);
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     return myScene;
+  }
+
+  private void createBoards(int numBoards) {
+    int[][] arrayLayout = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+    for (int i = 0; i < numBoards-1; i++) {
+      BoardView board = new BoardView(new ShapeType(), arrayLayout, i);
+      board.addObserver(this);
+      myBoards.add(board);
+    }
+    // create the last board with a different array layout
+    BoardView board = new BoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 4);
+    board.addObserver(this);
+    myBoards.add(board);
+  }
+
+  public void promptPlayTurn(int player) {
+    System.out.println(player);
   }
 
   @Override
