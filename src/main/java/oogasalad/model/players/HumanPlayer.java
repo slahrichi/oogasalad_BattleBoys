@@ -10,6 +10,7 @@ public class HumanPlayer extends GenericPlayer {
   }
 
 
+  //purposefully empty - this is handled by the view
   @Override
   public void playTurn() {
 
