@@ -34,6 +34,7 @@ public class Main extends Application {
         // get number of players along with each player's attributes (starting health,
         // gold, number of ships, board shape) from the PARSER
         // for now just initializing random boards and players to use in game manager
+        /*
         Board board1 = new Board();
         Player human1 = new HumanPlayer(board1);
         Board board2 = new Board();
@@ -42,9 +43,12 @@ public class Main extends Application {
         players.add(human1);
         players.add(human2);
 
+
         GameManager game = new GameManager(players);
         stage.setScene(game.createScene());
         stage.show();
+
+         */
 
     }
 }
