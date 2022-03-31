@@ -31,13 +31,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   public void playGame() {
     while (canStillPlay())
     for (Player player : playerList) {
-      promptPlayerToPlayTurn(player.getID());
+      promptPlayerToPlayTurn();
       player.playTurn();
     }
   }
 
-  public void promptPlayerToPlayTurn(int player) {
-    view.promptPlayTurn(player);
+  public void promptPlayerToPlayTurn() {
+    view.promptPlayTurn();
   }
 
   private void initialize() {
@@ -62,6 +62,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    System.out.println("inside Game Manager" + evt);
+    System.out.println("inside Game Manager " + evt);
   }
 }

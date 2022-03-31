@@ -58,8 +58,8 @@ public class View extends PropertyObservable implements PropertyChangeListener {
     myBoards.add(board);
   }
 
-  public void promptPlayTurn(int player) {
-    System.out.println(player);
+  public void promptPlayTurn() {
+    System.out.println("Please play turn! Maybe we should show a player ID here!");
   }
 
   @Override
