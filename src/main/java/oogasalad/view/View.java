@@ -32,6 +32,7 @@ public class View extends PropertyObservable implements PropertyChangeListener {
     myBoards = new ArrayList<>();
     createBoards(3);
     currentBoardIndex = 0;
+    updateDisplayedBoard();
   }
 
   public Scene createViewFromPlayers() {
