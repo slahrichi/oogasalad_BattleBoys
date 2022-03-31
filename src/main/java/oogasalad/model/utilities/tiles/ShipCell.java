@@ -28,7 +28,8 @@ public class ShipCell implements Cell {
   public int hit() {
     myHealthBar --;
     if (myHealthBar == 0) {
-      AssignedPiece.deadPart(this);
+      // deadPart() doesn't exist
+//      AssignedPiece.deadPart(this);
       currentState = cellStates.SUNKEN;
       return myGoldValue;
     } else{
