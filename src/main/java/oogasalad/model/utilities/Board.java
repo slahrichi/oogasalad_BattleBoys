@@ -10,8 +10,17 @@ public class Board {
 
   private Map<Coordinate, Cell> boardMap;
 
-  public Board() {
+  public Board(int rows, int cols) {
+    initialize(rows, cols);
+  }
+
+  private void initialize(int rows, int cols) {
     boardMap = new HashMap<>();
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        boardMap.put(new Coordinate(i, j), null);
+      }
+    }
   }
 
   public void place(Coordinate coord, Cell c) {

@@ -3,7 +3,6 @@ package oogasalad.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.Cell;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
@@ -17,7 +16,6 @@ public abstract class GenericPlayer implements Player{
   private Board myBoard;
 
   public GenericPlayer(Board board) {
-    myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
     determineHealth();
@@ -34,7 +32,7 @@ public abstract class GenericPlayer implements Player{
   @Override
   public void placePiece(Piece s) {
     for (Cell c : s.getCellList()) {
-      myBoard.place(c.getPosition(), c);
+      myBoard.place(c.getCoordinates(), c);
     }
   }
 
@@ -62,5 +60,9 @@ public abstract class GenericPlayer implements Player{
         myHealth++;
       }
     }
+  }
+
+  public void setupBoard(int rows, int cols) {
+    myBoard = new Board(rows, cols);
   }
 }
