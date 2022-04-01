@@ -1,8 +1,10 @@
 package oogasalad.view;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.view.board.ShapeType;
 
 public class CellView extends PropertyObservable {
 
@@ -15,6 +17,7 @@ public class CellView extends PropertyObservable {
 //    isActive = status;
     myCoords = new Coordinate(x, y);
     myShape = new Polygon();
+    myShape.setFill(Color.BLUE);
     myShape.getPoints().addAll(shape.getPoints(x, y, width, height));
     myShape.setOnMouseClicked(e -> cellClicked());
   }

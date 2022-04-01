@@ -1,16 +1,16 @@
-package oogasalad.view;
+package oogasalad.view.board;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javafx.scene.Group;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.PropertyObservable;
+import oogasalad.view.CellView;
+import oogasalad.view.ShotInfo;
 
-public class BoardView extends PropertyObservable implements PropertyChangeListener {
+public abstract class BoardView extends PropertyObservable implements PropertyChangeListener {
 
   static final double BOARD_WIDTH = 200;
   static final double BOARD_HEIGHT = 200;
