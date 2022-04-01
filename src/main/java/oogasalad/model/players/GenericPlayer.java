@@ -16,6 +16,7 @@ public abstract class GenericPlayer implements Player{
   private Board myBoard;
 
   public GenericPlayer(Board board) {
+    myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
     determineHealth();
@@ -64,5 +65,9 @@ public abstract class GenericPlayer implements Player{
 
   public void setupBoard(int rows, int cols) {
     myBoard = new Board(rows, cols);
+  }
+
+  protected List<Coordinate> getValidCoordinates() {
+    return myBoard.listCoordinates();
   }
 }
