@@ -3,15 +3,24 @@ package oogasalad.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Piece;
+import oogasalad.view.board.BoardView;
+import oogasalad.view.board.EnemyBoardView;
+import oogasalad.view.board.GameBoardView;
+import oogasalad.view.board.SelfBoardView;
+import oogasalad.view.board.ShapeType;
 
-public class View extends PropertyObservable implements PropertyChangeListener {
+public class View extends PropertyObservable implements PropertyChangeListener, BoardVisualizer, ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
@@ -25,7 +34,9 @@ public class View extends PropertyObservable implements PropertyChangeListener {
 
   public View() {
     myPane = new BorderPane();
+    myPane.setId("view-pane");
     myCenterPane = new StackPane();
+    myCenterPane.setId("view-center-pane");
     myPane.setCenter(myCenterPane);
 
     myBoards = new ArrayList<>();
@@ -60,20 +71,20 @@ public class View extends PropertyObservable implements PropertyChangeListener {
   private void createBoards(int numBoards) {
     int[][] arrayLayout = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
     for (int i = 0; i < numBoards-1; i++) {
-      BoardView board = new BoardView(new ShapeType(), arrayLayout, i);
+      GameBoardView board = new EnemyBoardView(new ShapeType(), arrayLayout, i);
       board.addObserver(this);
       myBoards.add(board);
     }
     // create the last board with a different array layout
-    BoardView board2 = new BoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 2);
+    GameBoardView board2 = new EnemyBoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 2);
     board2.addObserver(this);
     myBoards.add(board2);
 
-    BoardView board3 = new BoardView(new ShapeType(), new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 1}}, 3);
+    GameBoardView board3 = new EnemyBoardView(new ShapeType(), new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 1}}, 3);
     board3.addObserver(this);
     myBoards.add(board3);
 
-    BoardView board4 = new BoardView(new ShapeType(), new int[][]{{1, 1, 1}, {1, 0, 1}, {1, 1, 1}}, 4);
+    GameBoardView board4 = new SelfBoardView(new ShapeType(), new int[][]{{1, 1, 1, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}}, 4);
     board4.addObserver(this);
     myBoards.add(board4);
   }
@@ -85,5 +96,62 @@ public class View extends PropertyObservable implements PropertyChangeListener {
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     notifyObserver(evt.getPropertyName(), evt.getNewValue());
+  }
+
+  /**
+   * Places a Piece of a certain type at the specified coordinates
+   * @param coords Coordinates to place Piece at
+   * @param type Type of piece being placed
+   */
+  public void placePiece(Collection<Coordinate> coords, String type) { //TODO: Change type to some enum
+    for(Coordinate coord : coords) {
+      myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(), Color.BLACK);
+    }
+  }
+
+  /**
+   * Removes any Pieces that are at the coordinates contained in coords.
+   * @param coords Coordinates that contain pieces to remove
+   */
+  public void removePiece(Collection<Coordinate> coords) {
+    for(Coordinate coord : coords) {
+      myBoards.get(currentBoardIndex).setColorAt(coord.getColumn(), coord.getRow(), Color.LIGHTBLUE);
+    }
+  }
+
+  @Override
+  public void updateShipsLeft(Collection<Piece> pieces) {
+
+  }
+
+  @Override
+  public void setNumShotsRemaining(int shotsRemaining) {
+
+  }
+
+  @Override
+  public void setGold(int amountOfGold) {
+
+  }
+
+  @Override
+  public void setPlayerTurnIndicator(String playerName) {
+
+  }
+
+  @Override
+  public void openShop() {
+
+  }
+
+  @Override
+  public void closeShop() {
+
+  }
+
+  @Override
+  public void displayShotAt(int x, int y, boolean wasHit) { //TODO: Change wasHit to an enumerated result type
+    Color newColor = wasHit ? Color.RED : Color.YELLOW;
+    myBoards.get(currentBoardIndex).setColorAt(x, y, newColor);
   }
 }
