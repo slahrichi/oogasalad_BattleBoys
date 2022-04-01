@@ -28,8 +28,6 @@ public class SetUpView {
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "stylesheet.css";
 
-
-
   private BorderPane myPane;
   private StackPane myCenterPane;
   private Scene myScene;
@@ -71,16 +69,19 @@ public class SetUpView {
     configBox.getChildren().add(new Label("Test"));
 
 
+
+
   }
 
   private void createCenterPanel(){
+    myCenterPane.setId("boardBox");
+    myPane.setCenter(myCenterPane);
+
     BoardView board = new SetupBoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 1);
     board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
-    myPane.setCenter(myCenterPane);
-    myCenterPane.maxHeight(400);
-    myCenterPane.maxWidth(400);
-    myCenterPane.setId("boardBox");
     myCenterPane.getChildren().add(board.getBoardPane());
+
+
   }
 
 

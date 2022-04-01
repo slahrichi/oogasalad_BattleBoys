@@ -33,11 +33,11 @@ public class Main extends Application {
 //        players.add(human1);
 //        players.add(human2);
 
-//        GameManager game = new GameManager(new ArrayList<Player>());
-//        stage.setScene(game.createScene());
+        GameManager game = new GameManager(new ArrayList<Player>());
+        stage.setScene(game.createScene());
 
-        SetUpView test = new SetUpView();
-        stage.setScene(test.createSetUp());
+//        SetUpView test = new SetUpView();
+//        stage.setScene(test.createSetUp());
 
         stage.show();
     }

@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.view.ShotInfo;
 import oogasalad.view.View;
 
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
@@ -63,5 +64,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     System.out.println("inside Game Manager " + evt);
+    int row = ((ShotInfo)evt.getNewValue()).y();
+    int col = ((ShotInfo)evt.getNewValue()).x();
+//    int row = ((Coordinate)evt.getNewValue()).getRow();
+//    int col = ((Coordinate)evt.getNewValue()).getColumn();
+    view.displayShotAt(row, col, true);
   }
 }
