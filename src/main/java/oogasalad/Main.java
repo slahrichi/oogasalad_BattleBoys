@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import oogasalad.model.GameManager;
 import oogasalad.model.players.Player;
-import oogasalad.view.SetUpView;
 
 /**
  * Feel free to completely change this code or delete it entirely. 

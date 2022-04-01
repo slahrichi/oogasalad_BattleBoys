@@ -34,7 +34,9 @@ public class View extends PropertyObservable implements PropertyChangeListener, 
 
   public View() {
     myPane = new BorderPane();
+    myPane.setId("view-pane");
     myCenterPane = new StackPane();
+    myCenterPane.setId("view-center-pane");
     myPane.setCenter(myCenterPane);
 
     myBoards = new ArrayList<>();

@@ -60,7 +60,9 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private void setupBoard(int[][] arrayLayout, ShapeType shape) {
     myLayout = new CellView[arrayLayout.length][arrayLayout[0].length];
     myBoard = new StackPane();
+    myBoard.setId("board-view");
     myBase = new Group();
+    myBase.setId("board-view-base");
     initializeCellViews(arrayLayout, shape);
     initializeBoardNodes();
   }
@@ -85,6 +87,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {
         if (myLayout[i][j] != null) {
+          myLayout[i][j].getCell().setId("cell-view-"+i+"-"+j+"-"+myID);
           myBase.getChildren().add(myLayout[i][j].getCell());
         }
       }

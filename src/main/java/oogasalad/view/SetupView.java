@@ -1,7 +1,5 @@
 package oogasalad.view;
 
-import java.util.List;
-import java.util.Stack;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -20,7 +18,7 @@ import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
 
-public class SetUpView {
+public class SetupView {
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
@@ -34,7 +32,7 @@ public class SetUpView {
   private HBox titleBox;
   private VBox configBox;
 
-  public SetUpView(){
+  public SetupView(){
 
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
