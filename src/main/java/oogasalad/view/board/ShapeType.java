@@ -1,7 +1,7 @@
-package oogasalad.view;
+package oogasalad.view.board;
 
-import static oogasalad.view.BoardView.BOARD_HEIGHT;
-import static oogasalad.view.BoardView.BOARD_WIDTH;
+import static oogasalad.view.board.BoardView.BOARD_HEIGHT;
+import static oogasalad.view.board.BoardView.BOARD_WIDTH;
 
 import java.util.ArrayList;
 import java.util.List;
