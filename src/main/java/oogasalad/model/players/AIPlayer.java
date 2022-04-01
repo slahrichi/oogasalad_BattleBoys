@@ -1,5 +1,6 @@
 package oogasalad.model.players;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import oogasalad.model.utilities.Board;
@@ -25,9 +26,17 @@ public class AIPlayer extends GenericPlayer{
 
   private List<Player> players;
 
-  public AIPlayer(Board board, List<Player> players) {
+  public AIPlayer(Board board) {
     super(board);
-    this.players = players;
+    players = new ArrayList<>();
+  }
+
+  public void addPlayers(List<Player> allPlayers) {
+    for(Player p: allPlayers) {
+      if(!this.equals(p)) {
+        players.add(p);
+      }
+    }
   }
 
   @Override
