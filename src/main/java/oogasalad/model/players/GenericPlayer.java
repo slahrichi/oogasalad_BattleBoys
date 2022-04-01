@@ -19,7 +19,7 @@ public abstract class GenericPlayer implements Player{
     myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
-    determineHealth();
+    //determineHealth();
   }
 
   @Override
@@ -55,7 +55,8 @@ public abstract class GenericPlayer implements Player{
     return myHealth;
   }
 
-  private void determineHealth() {
+  public void determineHealth() {
+    myHealth = 0;
     for (Cell c : myBoard.listPieces()) {
       if (c != null) {
         myHealth++;
