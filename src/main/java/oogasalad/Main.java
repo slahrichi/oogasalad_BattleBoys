@@ -2,12 +2,10 @@ package oogasalad;
 
 import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Dialog;
 import javafx.stage.Stage;
 import oogasalad.model.GameManager;
 import oogasalad.model.players.Player;
+import oogasalad.view.SetUpView;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -35,9 +33,12 @@ public class Main extends Application {
 //        players.add(human1);
 //        players.add(human2);
 
+//        GameManager game = new GameManager(new ArrayList<Player>());
+//        stage.setScene(game.createScene());
 
-        GameManager game = new GameManager(new ArrayList<Player>());
-        stage.setScene(game.createScene());
+        SetUpView test = new SetUpView();
+        stage.setScene(test.createSetUp());
+
         stage.show();
     }
 }
