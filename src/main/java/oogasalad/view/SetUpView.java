@@ -1,7 +1,5 @@
 package oogasalad.view;
 
-import java.util.List;
-import java.util.Stack;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -16,9 +14,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import oogasalad.view.board.BoardView;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
+import oogasalad.view.panes.LegendPane;
+import oogasalad.view.panes.SetShipPane;
 
 public class SetUpView {
 
@@ -28,13 +28,13 @@ public class SetUpView {
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "stylesheet.css";
 
-
-
   private BorderPane myPane;
   private StackPane myCenterPane;
   private Scene myScene;
   private HBox titleBox;
   private VBox configBox;
+  private LegendPane legendPane;
+  private SetShipPane shipPane;
 
   public SetUpView(){
 
@@ -44,6 +44,8 @@ public class SetUpView {
     myCenterPane = new StackPane();
     titleBox = new HBox();
     configBox = new VBox();
+    legendPane = new LegendPane();
+    shipPane = new SetShipPane(new Coordinate[][]{{new Coordinate(1, 1), new Coordinate(2, 2)}});
 
     createTitlePanel();
     createCenterPanel();
@@ -61,26 +63,29 @@ public class SetUpView {
   private void createTitlePanel(){
     titleBox.setId("titleBox");
     myPane.setTop(titleBox);
-    titleBox.getChildren().add(new Label(SCREEN_TITLE));
-
+    Label titleLabel = new Label(SCREEN_TITLE);
+    titleLabel.setId("titleText");
+    titleBox.getChildren().add(titleLabel);
   }
 
   private void createConfigPanel(){
     configBox.setId("configBox");
     myPane.setRight(configBox);
     configBox.getChildren().add(new Label("Test"));
+    configBox.getChildren().addAll(shipPane.getShipPane(), legendPane.getLegendPane());
 
 
   }
 
   private void createCenterPanel(){
-    BoardView board = new SetupBoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 1);
-    board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
+
     myPane.setCenter(myCenterPane);
-    myCenterPane.maxHeight(400);
-    myCenterPane.maxWidth(400);
     myCenterPane.setId("boardBox");
+
+    SetupBoardView board = new SetupBoardView(new ShapeType(), new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}, 1);
+    board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
     myCenterPane.getChildren().add(board.getBoardPane());
+
   }
 
 
