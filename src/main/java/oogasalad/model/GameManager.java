@@ -66,8 +66,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     System.out.println("inside Game Manager " + evt);
     int row = ((ShotInfo)evt.getNewValue()).y();
     int col = ((ShotInfo)evt.getNewValue()).x();
-//    int row = ((Coordinate)evt.getNewValue()).getRow();
-//    int col = ((Coordinate)evt.getNewValue()).getColumn();
     view.displayShotAt(row, col, true);
   }
 }
