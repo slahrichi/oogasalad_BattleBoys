@@ -14,9 +14,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import oogasalad.view.board.BoardView;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
+import oogasalad.view.panes.LegendPane;
+import oogasalad.view.panes.SetShipPane;
 
 public class SetupView {
 
@@ -31,6 +33,8 @@ public class SetupView {
   private Scene myScene;
   private HBox titleBox;
   private VBox configBox;
+  private LegendPane legendPane;
+  private SetShipPane shipPane;
 
   public SetupView(){
 
@@ -40,6 +44,8 @@ public class SetupView {
     myCenterPane = new StackPane();
     titleBox = new HBox();
     configBox = new VBox();
+    legendPane = new LegendPane();
+    shipPane = new SetShipPane(new Coordinate[][]{{new Coordinate(1, 1), new Coordinate(2, 2)}});
 
     createTitlePanel();
     createCenterPanel();
@@ -57,14 +63,16 @@ public class SetupView {
   private void createTitlePanel(){
     titleBox.setId("titleBox");
     myPane.setTop(titleBox);
-    titleBox.getChildren().add(new Label(SCREEN_TITLE));
-
+    Label titleLabel = new Label(SCREEN_TITLE);
+    titleLabel.setId("titleText");
+    titleBox.getChildren().add(titleLabel);
   }
 
   private void createConfigPanel(){
     configBox.setId("configBox");
     myPane.setRight(configBox);
     configBox.getChildren().add(new Label("Test"));
+    configBox.getChildren().addAll(shipPane.getShipPane(), legendPane.getLegendPane());
 
 
 
@@ -72,13 +80,13 @@ public class SetupView {
   }
 
   private void createCenterPanel(){
-    myCenterPane.setId("boardBox");
-    myPane.setCenter(myCenterPane);
 
-    BoardView board = new SetupBoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 1);
+    myPane.setCenter(myCenterPane);
+    myCenterPane.setId("boardBox");
+
+    SetupBoardView board = new SetupBoardView(new ShapeType(), new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}, 1);
     board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
     myCenterPane.getChildren().add(board.getBoardPane());
-
 
   }
 
