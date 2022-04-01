@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import oogasalad.model.GameManager;
 import oogasalad.model.players.Player;
+import oogasalad.view.SetUpView;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -32,8 +33,12 @@ public class Main extends Application {
 //        players.add(human1);
 //        players.add(human2);
 
-        GameManager game = new GameManager(new ArrayList<Player>());
-        stage.setScene(game.createScene());
+        SetUpView test = new SetUpView();
+        stage.setScene(test.createSetUp());
         stage.show();
+
+//        GameManager game = new GameManager(new ArrayList<Player>());
+//        stage.setScene(game.createScene());
+//        stage.show();
     }
 }

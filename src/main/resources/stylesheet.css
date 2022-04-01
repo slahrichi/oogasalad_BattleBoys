@@ -1,0 +1,21 @@
+.label{
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-font-size: 30pt;
+}
+
+#titleBox{
+  -fx-padding: 10;
+  -fx-max-width: infinity;
+  -fx-alignment: center;
+  -fx-border-color: black;
+}
+
+#configBox {
+  -fx-border-color: BLACK;
+  -fx-padding: 10;
+}
+
+#boardBox {
+  -fx-border-color: BLACK;
+  -fx-padding: 10;
+}
