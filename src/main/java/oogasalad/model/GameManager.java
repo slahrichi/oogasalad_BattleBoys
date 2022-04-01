@@ -69,4 +69,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view.displayShotAt(row, col, true);
 //    view.placePiece(List.of(new Coordinate(row, col), new Coordinate(row + 1, col)), "bruh");
   }
+
+  public List<Player> getPlayerList() {
+    return playerList;
+  }
 }

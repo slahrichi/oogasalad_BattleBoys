@@ -34,4 +34,6 @@ public class Board {
   public List<Cell> listPieces() {
     return new ArrayList<>(boardMap.values());
   }
+
+  public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }
 }

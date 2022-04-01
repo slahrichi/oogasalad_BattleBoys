@@ -33,6 +33,7 @@ public class GameSetup {
       for (Piece piece : list) {
         p.placePiece(piece);
       }
+      p.determineHealth();
     }
   }
 }
