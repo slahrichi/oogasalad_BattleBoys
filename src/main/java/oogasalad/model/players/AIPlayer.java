@@ -26,8 +26,8 @@ public class AIPlayer extends GenericPlayer{
 
   private List<Player> players;
 
-  public AIPlayer(Board board) {
-    super(board);
+  public AIPlayer(Board board, int id) {
+    super(board, id);
     players = new ArrayList<>();
   }
 
