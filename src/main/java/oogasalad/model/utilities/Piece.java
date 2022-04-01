@@ -1,6 +1,8 @@
 package oogasalad.model.utilities;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import oogasalad.model.utilities.tiles.Cell;
 
 public abstract class Piece {
@@ -29,6 +31,10 @@ public abstract class Piece {
     return status;
   }
 
+
+  public Consumer<Map<Coordinate,Cell>> update(){
+    return null;
+  }
   protected void updateStatus(String newStatus){
     status=newStatus;
   }
