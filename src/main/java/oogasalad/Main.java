@@ -34,6 +34,10 @@ public class Main extends Application {
 
         GameManager game = new GameManager(new ArrayList<Player>());
         stage.setScene(game.createScene());
+
+//        SetUpView test = new SetUpView();
+//        stage.setScene(test.createSetUp());
+
         stage.show();
     }
 }
