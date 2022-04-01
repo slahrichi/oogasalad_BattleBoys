@@ -64,4 +64,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   public void propertyChange(PropertyChangeEvent evt) {
     System.out.println("inside Game Manager " + evt);
   }
+
+  public List<Player> getPlayerList() {
+    return playerList;
+  }
 }
