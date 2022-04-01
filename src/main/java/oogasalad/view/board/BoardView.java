@@ -23,22 +23,38 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private StackPane myBoard;
   private Group myBase;
   private int myID;
-  
+
+  // piece type enum
   protected static int INVALID = 0;
   protected static int EMPTY = 1;
-  protected static int SHIP = 2;
-  protected static int SPECIAL = 3;
+  protected static int HEALTHY_SHIP = 2;
+  protected static int DAMAGED_SHIP = 3;
+  protected static int DESTROYED_SHIP = 4;
+  protected static int SPECIAL = 5;
   protected Map<Integer, Paint> mapCellToColor;
+
+  // shot result enum
+  protected static int MISSED = 0;
+  protected static int HIT_PIECE = 1;
+  protected static int HIT_SPECIAL = 2;
+  protected Map<Integer, Paint> mapShotToColor;
 
   // controller passes some kind of parameter to the
   public BoardView(ShapeType shape, int[][] arrayLayout, int id) {
     mapCellToColor = new HashMap<>();
     mapCellToColor.put(INVALID, Color.WHITE);
     mapCellToColor.put(EMPTY, Color.BLUE);
-    mapCellToColor.put(SHIP, Color.BLACK);
+    mapCellToColor.put(HEALTHY_SHIP, Color.BLACK);
+    mapCellToColor.put(DAMAGED_SHIP, Color.ORANGE);
+    mapCellToColor.put(DESTROYED_SHIP, Color.RED);
     mapCellToColor.put(SPECIAL, Color.YELLOW);
-    setupBoard(arrayLayout, shape);
+
+    mapShotToColor = new HashMap<>();
+    mapShotToColor.put(MISSED, Color.WHITE);
+    mapShotToColor.put(HIT_PIECE, Color.RED);
+    mapShotToColor.put(HIT_SPECIAL, Color.YELLOW);
     myID = id;
+    setupBoard(arrayLayout, shape);
   }
 
   private void setupBoard(int[][] arrayLayout, ShapeType shape) {
@@ -83,6 +99,6 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
 //    System.out.println(evt.getPropertyName());
-    notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).getColumn(), ((Coordinate) evt.getNewValue()).getRow(), myID));
+    notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
   }
 }

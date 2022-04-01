@@ -102,7 +102,9 @@ public class View extends PropertyObservable implements PropertyChangeListener, 
    * @param type Type of piece being placed
    */
   public void placePiece(Collection<Coordinate> coords, String type) { //TODO: Change type to some enum
-
+    for(Coordinate coord : coords) {
+      myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(), Color.BLACK);
+    }
   }
 
   /**
@@ -110,7 +112,9 @@ public class View extends PropertyObservable implements PropertyChangeListener, 
    * @param coords Coordinates that contain pieces to remove
    */
   public void removePiece(Collection<Coordinate> coords) {
-
+    for(Coordinate coord : coords) {
+      myBoards.get(currentBoardIndex).setColorAt(coord.getColumn(), coord.getRow(), Color.LIGHTBLUE);
+    }
   }
 
   @Override
@@ -145,6 +149,7 @@ public class View extends PropertyObservable implements PropertyChangeListener, 
 
   @Override
   public void displayShotAt(int x, int y, boolean wasHit) { //TODO: Change wasHit to an enumerated result type
-    myBoards.get(currentBoardIndex).setColorAt(x, y, Color.PINK);
+    Color newColor = wasHit ? Color.RED : Color.YELLOW;
+    myBoards.get(currentBoardIndex).setColorAt(x, y, newColor);
   }
 }
