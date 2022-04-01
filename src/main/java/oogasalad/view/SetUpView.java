@@ -75,6 +75,8 @@ public class SetUpView {
     configBox.getChildren().addAll(shipPane.getShipPane(), legendPane.getLegendPane());
 
 
+
+
   }
 
   private void createCenterPanel(){
