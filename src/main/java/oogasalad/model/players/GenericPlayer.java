@@ -2,6 +2,7 @@ package oogasalad.model.players;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
@@ -70,5 +71,13 @@ public abstract class GenericPlayer implements Player{
 
   protected List<Coordinate> getValidCoordinates() {
     return myBoard.listCoordinates();
+  }
+
+  public int applyWinCondition(Function<PlayerRecord,Integer> lambda) {
+    return lambda.apply(makeRecord());
+  }
+
+  private PlayerRecord makeRecord() {
+    return new PlayerRecord(myHealth, myCurrency, itemList, myBoard);
   }
 }
