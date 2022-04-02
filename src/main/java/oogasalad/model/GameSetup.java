@@ -1,21 +1,26 @@
 package oogasalad.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javafx.stage.Stage;
+import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Piece;
 import oogasalad.view.SetupView;
+import oogasalad.view.ShotInfo;
 
-public class GameSetup {
+public class GameSetup extends PropertyObservable implements PropertyChangeListener {
 
   private SetupView setupView;
   private static final String FILEPATH = "oogasalad.model.players.";
 
   private List<Player> playerList;
+  private int currentPlayerIndex;
   private List<String> playerTypes;
   private Map<Player, List<Piece>> pieceMap;
   private int rows;
@@ -25,6 +30,7 @@ public class GameSetup {
     this.playerList = playerList;
 //    this.pieceMap = pieceMap;
     setupView = new SetupView();
+    setupView.addObserver(this);
 //    initializeGame(rows, cols);
   }
 
@@ -51,6 +57,15 @@ public class GameSetup {
 
   public void show(Stage stage) {
     stage.setScene(setupView.createSetUp());
+  }
+
+  //
+  private void handlePiecePlacement(int x, int y) {
+    // Check if current Piece can be placed in this position on the current Board
+    // If yes, place the Piece there, tell the SetupView to place the piece visually, update the
+    // current Piece and the visual representation of the current Piece being placed, and switch to
+    // the next Player setup if that was the last Piece for them to place
+
   }
 
 //
@@ -101,5 +116,13 @@ public class GameSetup {
     You can call some method from GameSetup to explicitly do so
      */
 
+  }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    System.out.println("ID: " + ((ShotInfo)evt.getNewValue()).ID());
+    int y = ((ShotInfo)evt.getNewValue()).y();
+    int x = ((ShotInfo)evt.getNewValue()).x();
+    handlePiecePlacement(x, y);
   }
 }
