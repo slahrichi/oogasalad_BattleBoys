@@ -1,13 +1,14 @@
 package oogasalad;
 
 import java.io.File;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class FileChooser {
+public class FilePicker {
 
   private static String FILE_CHOOSER_TITLE = "Choose Data File";
 
-  public FileChooser() {
+  public FilePicker() {
 
     FileChooser chooser = new FileChooser();
     chooser.setTitle(FILE_CHOOSER_TITLE);

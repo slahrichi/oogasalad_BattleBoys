@@ -22,7 +22,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view = new View();
     this.view.addObserver(this);
     this.playerList = playerList;
-    initialize(); fuck some bitches yah cool i like it
+    initialize();
   }
 
   public Scene createScene() {

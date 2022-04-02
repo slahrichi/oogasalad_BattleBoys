@@ -9,12 +9,12 @@ public class Game {
 
   private GameSetup setup;
   private Stage myStage;
-  private FileChooser fileChooser;
+  private FilePicker fileChooser;
 
   public Game(Stage stage, List<Player> playerList) {
     myStage = stage;
     setup = new GameSetup(playerList);
-    fileChooser = new FileChooser();
+    fileChooser = new FilePicker();
   }
 
   public void chooseDataFile() {
