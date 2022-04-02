@@ -19,7 +19,7 @@ public class Board {
   private static AtomicInteger nextID = new AtomicInteger();
   private int id;
   //private static final Logger LOG = LogManager.getLogger(Board.class.getName());
-  private static final String RESOURCES_PACKAGE = "data";
+  private static final String RESOURCES_PACKAGE = "/";
   private static final String EXCEPTIONS = "BoardExceptions";
   private static final String WRONG_TOP_LEFT = "wrongTopLeft";
   private static final String WRONG_NEIGHBOR = "wrongNeighbor";
@@ -32,7 +32,7 @@ public class Board {
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
 
-  private void initialize(int rows, int cols) {
+  void initialize(int rows, int cols) {
     boardMap = new HashMap<>();
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
