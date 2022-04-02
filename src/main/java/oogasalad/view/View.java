@@ -3,59 +3,90 @@ package oogasalad.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
+import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Piece;
+import oogasalad.view.board.BoardView;
+import oogasalad.view.board.EnemyBoardView;
+import oogasalad.view.board.GameBoardView;
+import oogasalad.view.board.SelfBoardView;
+import oogasalad.view.board.ShapeType;
 
-public class View extends PropertyObservable implements PropertyChangeListener {
+public class View extends PropertyObservable implements PropertyChangeListener, BoardVisualizer, ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
 
   private List<BoardView> myBoards;
   private BorderPane myPane;
+  private StackPane myCenterPane;
   private Scene myScene;
+
+  private int currentBoardIndex;
 
   public View() {
     myPane = new BorderPane();
+    myPane.setId("view-pane");
+    myCenterPane = new StackPane();
+    myCenterPane.setId("view-center-pane");
+    myPane.setCenter(myCenterPane);
+
     myBoards = new ArrayList<>();
-    createBoards(5);
+    createBoards(3);
+    currentBoardIndex = 0;
+    updateDisplayedBoard();
   }
 
-  public Scene createViewFromPlayers() {
-    Group board0 = myBoards.get(0).getBoard();
-    BorderPane.setAlignment(board0, Pos.CENTER);
-    myPane.setTop(board0);
-    Group board1 = myBoards.get(1).getBoard();
-    BorderPane.setAlignment(board1, Pos.CENTER);
-    myPane.setLeft(board1);
-    Group board2 = myBoards.get(2).getBoard();
-    BorderPane.setAlignment(board2, Pos.CENTER);
-    myPane.setCenter(board2);
-    Group board3 = myBoards.get(3).getBoard();
-    BorderPane.setAlignment(board3, Pos.CENTER);
-    myPane.setRight(board3);
-    Group board4 = myBoards.get(4).getBoard();
-    BorderPane.setAlignment(board4, Pos.CENTER);
-    myPane.setBottom(board4);
+  public Scene createViewFromPlayers(List<Player> playerList) {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
+    myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     return myScene;
+  }
+
+  private void handleKeyInput(KeyCode code) {
+    if(code == KeyCode.LEFT) {
+      currentBoardIndex = (currentBoardIndex + myBoards.size() - 1) % myBoards.size();
+    } else if (code == KeyCode.RIGHT) {
+      currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
+    }
+    System.out.println("Showing board " + currentBoardIndex);
+    updateDisplayedBoard();
+  }
+
+  // Displays the board indicated by the updated value of currentBoardIndex
+  private void updateDisplayedBoard() {
+    StackPane boardToDisplay = myBoards.get(currentBoardIndex).getBoardPane();
+    myCenterPane.getChildren().clear();
+    myCenterPane.getChildren().add(boardToDisplay);
   }
 
   private void createBoards(int numBoards) {
     int[][] arrayLayout = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
     for (int i = 0; i < numBoards-1; i++) {
-      BoardView board = new BoardView(new ShapeType(), arrayLayout, i);
+      GameBoardView board = new EnemyBoardView(new ShapeType(), arrayLayout, i);
       board.addObserver(this);
       myBoards.add(board);
     }
     // create the last board with a different array layout
-    BoardView board = new BoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 4);
-    board.addObserver(this);
-    myBoards.add(board);
+    GameBoardView board2 = new EnemyBoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 2);
+    board2.addObserver(this);
+    myBoards.add(board2);
+
+    GameBoardView board3 = new EnemyBoardView(new ShapeType(), new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 1}}, 3);
+    board3.addObserver(this);
+    myBoards.add(board3);
+
+    GameBoardView board4 = new SelfBoardView(new ShapeType(), new int[][]{{1, 1, 1, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}}, 4);
+    board4.addObserver(this);
+    myBoards.add(board4);
   }
 
   public void promptPlayTurn() {
@@ -65,5 +96,62 @@ public class View extends PropertyObservable implements PropertyChangeListener {
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     notifyObserver(evt.getPropertyName(), evt.getNewValue());
+  }
+
+  /**
+   * Places a Piece of a certain type at the specified coordinates
+   * @param coords Coordinates to place Piece at
+   * @param type Type of piece being placed
+   */
+  public void placePiece(Collection<Coordinate> coords, String type) { //TODO: Change type to some enum
+    for(Coordinate coord : coords) {
+      myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(), Color.BLACK);
+    }
+  }
+
+  /**
+   * Removes any Pieces that are at the coordinates contained in coords.
+   * @param coords Coordinates that contain pieces to remove
+   */
+  public void removePiece(Collection<Coordinate> coords) {
+    for(Coordinate coord : coords) {
+      myBoards.get(currentBoardIndex).setColorAt(coord.getColumn(), coord.getRow(), Color.LIGHTBLUE);
+    }
+  }
+
+  @Override
+  public void updateShipsLeft(Collection<Piece> pieces) {
+
+  }
+
+  @Override
+  public void setNumShotsRemaining(int shotsRemaining) {
+
+  }
+
+  @Override
+  public void setGold(int amountOfGold) {
+
+  }
+
+  @Override
+  public void setPlayerTurnIndicator(String playerName) {
+
+  }
+
+  @Override
+  public void openShop() {
+
+  }
+
+  @Override
+  public void closeShop() {
+
+  }
+
+  @Override
+  public void displayShotAt(int x, int y, boolean wasHit) { //TODO: Change wasHit to an enumerated result type
+    Color newColor = wasHit ? Color.RED : Color.YELLOW;
+    myBoards.get(currentBoardIndex).setColorAt(x, y, newColor);
   }
 }

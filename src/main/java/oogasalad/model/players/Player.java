@@ -50,6 +50,11 @@ public interface Player {
 
     public int getHealth();
 
+
     public int applyWinCondition(Function<PlayerRecord,Integer> lambda);
+
+    public void setupBoard(int rows, int cols);
+
+    public void determineHealth();
 }
 

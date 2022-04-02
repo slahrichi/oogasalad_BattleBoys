@@ -3,10 +3,10 @@ package oogasalad.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.Cell;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.Cell;
 
 public abstract class GenericPlayer implements Player{
 
@@ -19,7 +19,7 @@ public abstract class GenericPlayer implements Player{
     myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
-    determineHealth();
+    //determineHealth();
   }
 
   @Override
@@ -33,7 +33,7 @@ public abstract class GenericPlayer implements Player{
   @Override
   public void placePiece(Piece s) {
     for (Cell c : s.getCellList()) {
-      myBoard.place(c.getPosition(), c);
+      myBoard.place(c.getCoordinates(), c);
     }
   }
 
@@ -55,11 +55,20 @@ public abstract class GenericPlayer implements Player{
     return myHealth;
   }
 
-  private void determineHealth() {
+  public void determineHealth() {
+    myHealth = 0;
     for (Cell c : myBoard.listPieces()) {
       if (c != null) {
         myHealth++;
       }
     }
+  }
+
+  public void setupBoard(int rows, int cols) {
+    myBoard = new Board(rows, cols);
+  }
+
+  protected List<Coordinate> getValidCoordinates() {
+    return myBoard.listCoordinates();
   }
 }
