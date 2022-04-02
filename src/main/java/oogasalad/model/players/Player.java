@@ -1,5 +1,7 @@
 package oogasalad.model.players;
 
+import java.util.function.Function;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
@@ -48,6 +50,11 @@ public interface Player {
 
     public int getHealth();
 
+
+    public int applyWinCondition(Function<PlayerRecord,Integer> lambda);
+
     public void setupBoard(int rows, int cols);
+
+    public void determineHealth();
 }
 
