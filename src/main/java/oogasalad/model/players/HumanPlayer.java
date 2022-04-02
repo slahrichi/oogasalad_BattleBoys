@@ -5,8 +5,8 @@ import oogasalad.model.utilities.Board;
 public class HumanPlayer extends GenericPlayer {
 
 
-  public HumanPlayer(Board board) {
-    super(board);
+  public HumanPlayer(Board board, int id) {
+    super(board, id);
   }
 
 

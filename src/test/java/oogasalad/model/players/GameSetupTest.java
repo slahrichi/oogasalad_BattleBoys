@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameSetupTest {
-
+/*
   private List<Player> playerList;
   private Player p1;
   private Player p2;
@@ -42,6 +42,6 @@ public class GameSetupTest {
     assertEquals(p2.getHealth(), 0);
   }
 
-
+*/
 
 }
