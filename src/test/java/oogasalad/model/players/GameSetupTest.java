@@ -37,7 +37,7 @@ public class GameSetupTest {
         0, null, 0))));
     pieceMap.put(p1, new ArrayList<>(Arrays.asList(piece)));
     pieceMap.put(p2, new ArrayList<>());
-    GameSetup gs = new GameSetup(playerList, pieceMap, 5, 5);
+//    GameSetup gs = new GameSetup(playerList, pieceMap, 5, 5);
     assertEquals(p1.getHealth(), 1);
     assertEquals(p2.getHealth(), 0);
   }

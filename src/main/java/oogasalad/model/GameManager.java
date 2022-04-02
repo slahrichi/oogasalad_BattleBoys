@@ -29,13 +29,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return view.createViewFromPlayers(playerList);
   }
 
-  public void playGame() {
-    while (canStillPlay())
-    for (Player player : playerList) {
-      promptPlayerToPlayTurn();
-      player.playTurn();
-    }
-  }
+//  public void playGame() {
+//    while (canStillPlay())
+//    for (Player player : playerList) {
+//      promptPlayerToPlayTurn();
+//      player.playTurn();
+//    }
+//  }
 
   public void promptPlayerToPlayTurn() {
     view.promptPlayTurn();

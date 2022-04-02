@@ -68,6 +68,10 @@ public class View extends PropertyObservable implements PropertyChangeListener, 
     myCenterPane.getChildren().add(boardToDisplay);
   }
 
+  public void showGame() {
+
+  }
+
   private void createBoards(int numBoards) {
     int[][] arrayLayout = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
     for (int i = 0; i < numBoards-1; i++) {
