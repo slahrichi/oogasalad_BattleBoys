@@ -15,6 +15,9 @@ import oogasalad.model.utilities.tiles.ShipCell;
 public class Board {
 
   private Map<Coordinate, Cell> boardMap;
+  private Map<String, Integer> maxElementsMap;
+  private Map<String, Integer> elementHitMap;
+
   private ResourceBundle exceptions;
   private static AtomicInteger nextID = new AtomicInteger();
   private int id;
@@ -23,6 +26,7 @@ public class Board {
   private static final String EXCEPTIONS = "BoardExceptions";
   private static final String WRONG_TOP_LEFT = "wrongTopLeft";
   private static final String WRONG_NEIGHBOR = "wrongNeighbor";
+
 
 
 
@@ -83,6 +87,11 @@ public class Board {
   public Cell checkCell(Coordinate c) {
     return boardMap.get(c);
   }
+
+  public int getNumHit(String cellType) {
+    return elementHitMap.get(cellType);
+  }
+
 
   public List<Cell> listPieces() {
     return new ArrayList<>(boardMap.values());
