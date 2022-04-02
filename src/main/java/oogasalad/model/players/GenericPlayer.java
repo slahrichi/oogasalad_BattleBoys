@@ -15,8 +15,9 @@ public abstract class GenericPlayer implements Player{
   private int myCurrency;
   private List<Item> itemList;
   private Board myBoard;
+  private int id;
 
-  public GenericPlayer(Board board) {
+  public GenericPlayer(Board board, int id) {
     myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
