@@ -22,20 +22,20 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view = new View();
     this.view.addObserver(this);
     this.playerList = playerList;
-    initialize();
+    initialize(); fuck some bitches yah cool i like it
   }
 
   public Scene createScene() {
     return view.createViewFromPlayers(playerList);
   }
 
-  public void playGame() {
-    while (canStillPlay())
-    for (Player player : playerList) {
-      promptPlayerToPlayTurn();
-      player.playTurn();
-    }
-  }
+//  public void playGame() {
+//    while (canStillPlay())
+//    for (Player player : playerList) {
+//      promptPlayerToPlayTurn();
+//      player.playTurn();
+//    }
+//  }
 
   public void promptPlayerToPlayTurn() {
     view.promptPlayTurn();

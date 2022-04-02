@@ -1,10 +1,14 @@
 package oogasalad;
 
 import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import oogasalad.model.GameManager;
+import oogasalad.model.GameSetup;
+import oogasalad.model.players.HumanPlayer;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Board;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -24,15 +28,20 @@ public class Main extends Application {
         // gold, number of ships, board shape) from the PARSER
         // for now just initializing random boards and players to use in game manager
 
-//        Board board1 = new Board();
-//        Player human1 = new HumanPlayer(board1);
-//        Board board2 = new Board();
-//        Player human2 = new HumanPlayer(board2);
-//        List<Player> players = new ArrayList<>();
-//        players.add(human1);
-//        players.add(human2);
+        Board board1 = new Board(5, 5);
+        Player human1 = new HumanPlayer(board1);
+        Board board2 = new Board(5, 5);
+        Player human2 = new HumanPlayer(board2);
+        List<Player> players = new ArrayList<>();
+        players.add(human1);
+        players.add(human2);
+        // Parse and retrieve List of Player records
+        // Create List of Player objects
 
-        GameManager game = new GameManager(new ArrayList<Player>());
+        Game game = new Game(stage, players);
+        game.createSetup();
+
+        GameManager game = new GameManager(/* player objects */);
         stage.setScene(game.createScene());
 
 //        SetUpView test = new SetUpView();
@@ -40,4 +49,6 @@ public class Main extends Application {
 
         stage.show();
     }
+
+
 }
