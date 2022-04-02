@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Piece;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
@@ -44,6 +45,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private Player currentPlayer;
   private BoardView currentBoardView;
+  private Piece currentPiece;
 
   public SetupView(){
 
@@ -97,6 +99,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     board.addObserver(this);
     board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
     myCenterPane.getChildren().add(board.getBoardPane());
+  }
+
+  public void updateCurrentPiece(Piece piece) {
+    currentPiece = piece;
+    shipPane.updateShownPiece(currentPiece);
   }
 
 
