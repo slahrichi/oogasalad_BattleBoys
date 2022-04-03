@@ -2,6 +2,8 @@ package oogasalad.model.utilities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.ShipCell;
 
@@ -39,6 +41,10 @@ public abstract class Piece {
     return status;
   }
 
+
+  public Consumer<Map<Coordinate,Cell>> update(){
+    return null;
+  }
   protected void updateStatus(String newStatus){
     status=newStatus;
   }
