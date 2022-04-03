@@ -2,9 +2,10 @@ package oogasalad.model.utilities;
 
 import java.util.List;
 import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.tiles.ShipCell;
 
 public class StaticPiece extends Piece {
-  public StaticPiece(List<Cell> cellList){
+  public StaticPiece(List<ShipCell> cellList){
     super(cellList);
   }
 
@@ -13,15 +14,15 @@ public class StaticPiece extends Piece {
 
     // cell.getPosition() doesn't exist
     for (Cell cell : getCellList()) {
-//      if (cell.getPosition().equals(hitLocation)) {
-//        if (getStatus().equals("Alive")) {
-//          updateStatus("Damaged");
-//          getCellList().remove(cell);
-//        }
-//        if (checkDeath()) {
-//          updateStatus("Dead");
-//        }
-//      }
+     if (cell.getCoordinates().getColumn() == hitLocation.getColumn() && cell.getCoordinates().getRow()== hitLocation.getRow()) {
+       if (getHPList().contains(hitLocation)) {
+         updateStatus("Damaged");
+         getHPList().remove(cell.getCoordinates());
+       }
+       if (checkDeath()) {
+         updateStatus("Dead");
+       }
+     }
     }
   }
 

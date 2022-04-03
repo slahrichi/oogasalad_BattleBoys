@@ -18,8 +18,8 @@ public class GameManagerTest {
   void setup() {
     Board b1 = new Board(5, 5);
     Board b2 = new Board(5, 5);
-    p1 = new HumanPlayer(b1);
-    p2 = new AIPlayer(b2);
+    p1 = new HumanPlayer(b1, 0);
+    p2 = new AIPlayer(b2, 1);
   }
 
   @Test

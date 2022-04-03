@@ -23,6 +23,10 @@ public class ShipCell implements Cell {
     myGoldValue = goldValue;
   }
 
+  public ShipCell(Coordinate c, int id){
+
+  }
+
   public ShipCell(int x, int y, Piece ship, int goldValue){
     this(x,y,1, ship,goldValue);
   }
