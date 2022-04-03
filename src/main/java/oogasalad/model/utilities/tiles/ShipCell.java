@@ -1,5 +1,7 @@
 package oogasalad.model.utilities.tiles;
 
+import java.util.List;
+import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 
@@ -24,23 +26,26 @@ public class ShipCell implements Cell {
   public ShipCell(int x, int y, Piece ship, int goldValue){
     this(x,y,1, ship,goldValue);
   }
+
+  public ShipCell(int x, int y){
+    this(x,y, 1, null, 0);
+  }
+
   @Override
   public int hit() {
     myHealthBar --;
     if (myHealthBar == 0) {
-      // deadPart() doesn't exist
-//      AssignedPiece.deadPart(this);
       currentState = cellStates.SUNKEN;
       return myGoldValue;
     } else{
       currentState = cellStates.DAMAGED;
-      return -1;
+      return 0;
     }
   }
 
   @Override
-  public void update() {
-    return;
+  public List<Function> update() {
+    return null;
   }
 
   @Override
@@ -50,8 +55,8 @@ public class ShipCell implements Cell {
 
 
   @Override
-  public void updateCoordinates(int x, int y) {
-    myCoordinate = new Coordinate(y,x);
+  public void updateCoordinates(int row, int col) {
+    myCoordinate = new Coordinate(row,col);
   }
 
   @Override
