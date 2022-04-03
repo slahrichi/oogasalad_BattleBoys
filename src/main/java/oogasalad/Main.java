@@ -29,17 +29,17 @@ public class Main extends Application {
         // for now just initializing random boards and players to use in game manager
 
         Board board1 = new Board(5, 5);
-        Player human1 = new HumanPlayer(board1);
+        Player human1 = new HumanPlayer(board1, 1);
         Board board2 = new Board(5, 5);
-        Player human2 = new HumanPlayer(board2);
+        Player human2 = new HumanPlayer(board2, 2);
         List<Player> players = new ArrayList<>();
         players.add(human1);
         players.add(human2);
         // Parse and retrieve List of Player records
         // Create List of Player objects
 
-//        Game game = new Game(stage, players);
-//        game.createSetup();
+        Game game = new Game(stage);
+        game.showSetup();
 
 //        GameManager game = new GameManager(/* player objects */);
 //        stage.setScene(game.createScene());
@@ -47,9 +47,9 @@ public class Main extends Application {
 //        SetUpView test = new SetUpView();
 //        stage.setScene(test.createSetUp());
 
-        GameManager game = new GameManager(players);
-        stage.setScene(game.createScene());
-        stage.show();
+//        GameManager game = new GameManager(players);
+//        stage.setScene(game.createScene());
+//        stage.show();
     }
 
 

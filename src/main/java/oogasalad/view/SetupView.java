@@ -1,5 +1,6 @@
 package oogasalad.view;
 
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -14,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
@@ -36,7 +38,7 @@ public class SetupView {
   private LegendPane legendPane;
   private SetShipPane shipPane;
 
-  public SetupView(){
+  public SetupView(List<Player> playerList){
 
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));

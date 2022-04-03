@@ -1,5 +1,6 @@
 package oogasalad;
 
+import java.io.File;
 import java.util.List;
 import javafx.stage.Stage;
 import oogasalad.model.GameSetup;
@@ -10,29 +11,22 @@ public class Game {
   private GameSetup setup;
   private Stage myStage;
   private FilePicker fileChooser;
+  private Parser parser;
 
-  public Game(Stage stage, List<Player> playerList) {
+  public Game(Stage stage) {
     myStage = stage;
-    setup = new GameSetup(playerList);
+    parser = new Parser();
     fileChooser = new FilePicker();
+    PlayerData data = parser.parse(chooseDataFile());
+    setup = new GameSetup(data);
   }
 
-  public void chooseDataFile() {
-
-
-
-
+  public File chooseDataFile() {
+    return fileChooser.getFile();
   }
 
-  private void getters(){
-
-  }
-
-  private void setters(){
-
-  }
-
-  public void createSetup() {
-    setup.show(myStage);
+  public void showSetup() {
+    myStage.setScene(setup.createScene());
+    myStage.show();
   }
 }

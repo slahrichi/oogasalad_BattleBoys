@@ -33,7 +33,7 @@ public class Board {
 
   public Board(int rows, int cols) {
     initialize(rows, cols);
-    exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
+//    exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
 
   private void initialize(int rows, int cols) {

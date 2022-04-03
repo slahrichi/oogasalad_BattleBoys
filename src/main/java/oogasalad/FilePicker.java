@@ -8,11 +8,14 @@ public class FilePicker {
 
   private static String FILE_CHOOSER_TITLE = "Choose Data File";
 
+  private FileChooser chooser;
   public FilePicker() {
+    chooser = new FileChooser();
+  }
 
-    FileChooser chooser = new FileChooser();
+  public File getFile() {
     chooser.setTitle(FILE_CHOOSER_TITLE);
     Stage dialogStage = new Stage();
-    File file = chooser.showOpenDialog(dialogStage);
+    return chooser.showOpenDialog(dialogStage);
   }
 }
