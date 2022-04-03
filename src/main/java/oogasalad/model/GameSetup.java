@@ -4,7 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import oogasalad.PlayerData;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
@@ -14,19 +17,21 @@ import oogasalad.view.SetupView;
 public class GameSetup {
 
   private List<String> playerTypes;
-  private Map<Player, List<Piece>> pieceMap;
-  private int rows;
-  private int cols;
+  private int[][] boardSetup;
   private SetupView setupView;
   private List<Player> playerList;
 
   private static final String FILEPATH = "oogasalad.model.players.";
+  private static final String ERROR = "Invalid player type given";
 
   public GameSetup(PlayerData data){
-    this.playerTypes = playerTypes;
+    this.playerTypes = data.players();
+    this.boardSetup = data.board();
+    /*
     this.pieceMap = pieceMap;
     this.rows = rows;
     this.cols = cols;
+     */
 //    this.setupView = new SetupView();
     setupGame();
   }
@@ -41,38 +46,37 @@ public class GameSetup {
   }
 
   private Player createPlayer(String playerType, int id) {
-    Board b = new Board(rows, cols);
+    Board b = new Board(boardSetup);
     Player p = null;
     try {
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class)
           .newInstance(b, id);
-//      placePieces(p, id);
     } catch (ClassNotFoundException e) {
-      //setupView.showError()
+      showError(ERROR);
     } catch (InvocationTargetException e) {
-      //setupView.showError()
+      showError(ERROR);
     } catch (InstantiationException e) {
-      //setupView.showError()
+      showError(ERROR);
     } catch (IllegalAccessException e) {
-      //setupView.showError()
+      showError(ERROR);
     } catch (NoSuchMethodException e) {
-      //setupView.showError()
+      showError(ERROR);
     }
     return p;
   }
 
-
-  private void placePieces(Player p, int id) {
-    List<Piece> pieceList = pieceMap.get(id);
-    //setupView.getPiecesFromSetup();
-    /*
-    This method should take the pieces, render them, and then query the player to place them
-    You can call some method from GameSetup to explicitly do so
-     */
-
-  }
-
   public Scene createScene() {
     return setupView.createSetUp();
+  }
+
+  private void showError(String message) {
+    Alert alert = new Alert(AlertType.ERROR, message);
+    alert.showAndWait();
+    endGame();
+  }
+
+  private void endGame() {
+    Platform.exit();
+    System.exit(0);
   }
 }
