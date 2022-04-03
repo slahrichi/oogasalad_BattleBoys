@@ -16,10 +16,10 @@ public class GameManagerTest {
 
   @BeforeEach
   void setup() {
-    Board b1 = new Board(5, 5);
-    Board b2 = new Board(5, 5);
-    p1 = new HumanPlayer(b1);
-    p2 = new AIPlayer(b2);
+    Board b1 = new Board(new int[][]{{1, 1, 1}, {0, 1, 1}});
+    Board b2 = new Board(new int[][]{{1, 1, 1}, {0, 1, 1}});
+    p1 = new HumanPlayer(b1, 0);
+    p2 = new AIPlayer(b2, 1);
   }
 
   @Test

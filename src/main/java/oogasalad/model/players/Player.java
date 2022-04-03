@@ -1,5 +1,6 @@
 package oogasalad.model.players;
 
+import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
@@ -33,9 +34,11 @@ public interface Player {
      * Players need to place their pieces at the start of the game and might be able to move them
      * during the game, so it is intrinsic to the API for players to be able to place/move pieces
      * @param s piece to be placed
-    */
+     * @param coordinate
+     * @return
+     */
 
-    public void placePiece(Piece s);
+    public boolean placePiece(Piece s, Coordinate coordinate);
 
     /**
      * Players have currency they can spend, and because certain gameplay rewards them with coins,
@@ -47,6 +50,9 @@ public interface Player {
     public void strike(Coordinate c);
 
     public int getHealth();
+
+
+    public int applyWinCondition(Function<PlayerRecord,Integer> lambda);
 
     public void setupBoard(int rows, int cols);
 

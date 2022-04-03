@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -67,6 +68,7 @@ public class ViewTest extends DukeApplicationTest {
 
   @Test
   public void testSetupView() {
-    SetupView view = new SetupView();
+    List<Player> players = new ArrayList<>();
+    SetupView view = new SetupView(players);
   }
 }

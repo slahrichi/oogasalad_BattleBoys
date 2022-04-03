@@ -26,8 +26,8 @@ public class AIPlayer extends GenericPlayer{
 
   private List<Player> players;
 
-  public AIPlayer(Board board) {
-    super(board);
+  public AIPlayer(Board board, int id) {
+    super(board, id);
     players = new ArrayList<>();
   }
 
@@ -44,6 +44,11 @@ public class AIPlayer extends GenericPlayer{
     Player enemy = getRandomPlayer();
     Coordinate location = getRandomCoordinate();
     enemy.strike(location);
+  }
+
+  @Override
+  public void setupBoard(int rows, int cols) {
+
   }
 
   private Player getRandomPlayer() {
