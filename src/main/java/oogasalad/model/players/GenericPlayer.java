@@ -33,10 +33,11 @@ public abstract class GenericPlayer implements Player{
   }
 
   @Override
-  public void placePiece(Piece s) {
+  public boolean placePiece(Piece s, Coordinate coordinate) {
     for (Cell c : s.getCellList()) {
       myBoard.place(c.getCoordinates(), c);
     }
+    return false;
   }
 
   @Override

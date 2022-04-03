@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Piece;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
 import oogasalad.view.panes.LegendPane;
@@ -102,5 +103,15 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void propertyChange(PropertyChangeEvent evt) {
     Info info = (Info) evt.getNewValue();
     notifyObserver("Inside SetupView", info);
+  }
+
+  public void moveToNextPlayer() {
+    
+  }
+
+  public void placePiece(Piece piece) {
+  }
+
+  public void showError() {
   }
 }

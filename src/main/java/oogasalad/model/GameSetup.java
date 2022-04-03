@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.application.Platform;
@@ -14,6 +15,7 @@ import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.view.Info;
 import oogasalad.view.SetupView;
@@ -24,6 +26,9 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private int[][] boardSetup;
   private SetupView setupView;
   private List<Player> playerList;
+  private List<Piece> pieceList;
+  private Map<Integer, Player> idMap;
+  private Map<Player, Integer> placeCounts;
 
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String ERROR = "Invalid player type given";
@@ -31,17 +36,14 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   public GameSetup(PlayerData data){
     this.playerTypes = data.players();
     this.boardSetup = data.board();
-    /*
-    this.pieceMap = pieceMap;
-    this.rows = rows;
-    this.cols = cols;
-     */
-//    this.setupView = new SetupView();
+    this.pieceList = data.pieces();
     setupGame();
   }
 
   private void setupGame() {
     playerList = new ArrayList<>();
+    idMap = new HashMap<>();
+    placeCounts = new HashMap<>();
     int id = 0;
     for (String playerType : playerTypes) {
       playerList.add(createPlayer(playerType, id++));
@@ -56,6 +58,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     try {
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class)
           .newInstance(b, id);
+      idMap.put(id, p);
+      placeCounts.put(p, 0);
     } catch (ClassNotFoundException e) {
       showError(ERROR);
     } catch (InvocationTargetException e) {
@@ -93,5 +97,31 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   public void placePiece(int x, int y, int id) {
     System.out.println("Success");
+    if (canStillPlace(id)) {
+      Player player = idMap.get(id);
+      Piece piece = pieceList.get(placeCounts.get(player));
+      if (player.placePiece(piece, new Coordinate(x, y))) {
+        update(player, piece);
+      }
+      else {
+        setupView.showError();
+      }
+    }
+    else if (!canStillPlace(id) && id == idMap.size() - 1) {
+      notifyObserver("moveToGame", null);
+    }
+    else if (!canStillPlace(id)) {
+      setupView.moveToNextPlayer();
+    }
+  }
+
+  private void update(Player player, Piece piece) {
+    placeCounts.put(player, placeCounts.get(player) + 1);
+    setupView.placePiece(piece);
+  }
+
+  public boolean canStillPlace(int id) {
+    int index = placeCounts.get(idMap.get(id));
+    return index < pieceList.size();
   }
 }
