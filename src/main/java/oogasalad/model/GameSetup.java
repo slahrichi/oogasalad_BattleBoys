@@ -1,5 +1,7 @@
 package oogasalad.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +11,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import oogasalad.PlayerData;
+import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Piece;
+import oogasalad.view.Info;
 import oogasalad.view.SetupView;
 
-public class GameSetup {
+public class GameSetup extends PropertyObservable implements PropertyChangeListener {
 
   private List<String> playerTypes;
   private int[][] boardSetup;
@@ -43,6 +47,7 @@ public class GameSetup {
       playerList.add(createPlayer(playerType, id++));
     }
     setupView = new SetupView(playerList);
+    setupView.addObserver(this);
   }
 
   private Player createPlayer(String playerType, int id) {
@@ -78,5 +83,15 @@ public class GameSetup {
   private void endGame() {
     Platform.exit();
     System.exit(0);
+  }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    Info info = (Info)evt.getNewValue();
+    placePiece(info.x(), info.y(), info.ID());
+  }
+
+  public void placePiece(int x, int y, int id) {
+    System.out.println("Success");
   }
 }

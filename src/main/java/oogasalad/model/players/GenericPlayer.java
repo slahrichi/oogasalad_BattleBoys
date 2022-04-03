@@ -66,8 +66,8 @@ public abstract class GenericPlayer implements Player{
     }
   }
 
-  public void setupBoard(int rows, int cols) {
-    myBoard = new Board(rows, cols);
+  public void setupBoard(int[][] board) {
+    myBoard = new Board(board);
   }
 
   protected List<Coordinate> getValidCoordinates() {

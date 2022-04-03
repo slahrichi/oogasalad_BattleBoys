@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class BoardTest {
-  private Board myBoard = new Board(5,5);
+  private Board myBoard = new Board(new int[][]{{1, 0, 0}});
   Coordinate coord = new Coordinate(1,2);
   Cell cell =  new ShipCell(coord, 1);
   List<Coordinate> relative;

@@ -15,4 +15,9 @@ public class HumanPlayer extends GenericPlayer {
 
   }
 
+  @Override
+  public void setupBoard(int rows, int cols) {
+
+  }
+
 }
