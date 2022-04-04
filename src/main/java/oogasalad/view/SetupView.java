@@ -42,11 +42,14 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private BorderPane myPane;
   private StackPane myCenterPane;
+  private SetupBoardView setupBoard;
   private Scene myScene;
   private HBox titleBox;
   private VBox configBox;
   private LegendPane legendPane;
   private SetShipPane shipPane;
+
+  private String currentPlayerTitle;
 
   // current piece that is being placed
   private List<Coordinate> currentPiece;
@@ -61,6 +64,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     configBox = new VBox();
     legendPane = new LegendPane();
     shipPane = new SetShipPane(new Coordinate[][]{{new Coordinate(1, 1), new Coordinate(2, 2)}});
+
+    currentPlayerTitle = "Player 1: " + SCREEN_TITLE;
 
     createTitlePanel();
     createCenterPanel();
@@ -82,7 +87,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private void createTitlePanel(){
     titleBox.setId("titleBox");
     myPane.setTop(titleBox);
-    Label titleLabel = new Label(SCREEN_TITLE);
+    Label titleLabel = new Label(currentPlayerTitle);
     titleLabel.setId("titleText");
     titleBox.getChildren().add(titleLabel);
   }
@@ -100,10 +105,10 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane.setCenter(myCenterPane);
     myCenterPane.setId("boardBox");
 
-    SetupBoardView board = new SetupBoardView(new ShapeType(), new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}, 1);
-    board.addObserver(this);
-    board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
-    myCenterPane.getChildren().add(board.getBoardPane());
+    setupBoard = new SetupBoardView(new ShapeType(), new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}, 1);
+    setupBoard.addObserver(this);
+    setupBoard.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
+    myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }
 
 
@@ -114,21 +119,25 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void setCurrentPlayerNum(int playerNum) {
-    
+    currentPlayerTitle = "Player " + playerNum + ": " + SCREEN_TITLE;
   }
 
   @Override
   public void placePiece(Collection<Coordinate> coords, String type) {
-
+    for(Coordinate c : coords) {
+      setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.BLACK);
+    }
   }
 
   @Override
   public void removePiece(Collection<Coordinate> coords) {
-
+    for(Coordinate c : coords) {
+      setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.LIGHTBLUE);
+    }
   }
 
   public void clearBoard() {
-
+    setupBoard.clear();
   }
 
   @Override
