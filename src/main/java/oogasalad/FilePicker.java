@@ -1,6 +1,8 @@
 package oogasalad;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -14,8 +16,10 @@ public class FilePicker {
   }
 
   public File getFile() {
+
     chooser.setTitle(FILE_CHOOSER_TITLE);
     Stage dialogStage = new Stage();
     return chooser.showOpenDialog(dialogStage);
+
   }
 }

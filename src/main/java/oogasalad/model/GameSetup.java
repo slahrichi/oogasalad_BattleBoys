@@ -51,7 +51,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     for (String playerType : playerTypes) {
       playerList.add(createPlayer(playerType, id++));
     }
-    setupView = new SetupView(playerList);
+    setupView = new SetupView(boardSetup);
     setupView.setCurrentPlayerNum(currentPlayerIndex + 1);
     setupView.setCurrentPiece(pieceList.get(0).getHPList());
     setupView.addObserver(this);

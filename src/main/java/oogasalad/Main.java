@@ -9,6 +9,7 @@ import oogasalad.model.GameSetup;
 import oogasalad.model.players.HumanPlayer;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
+import oogasalad.view.SetupView;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -38,14 +39,15 @@ public class Main extends Application {
         // Parse and retrieve List of Player records
         // Create List of Player objects
 
-        Game game = new Game(stage);
-        game.showSetup();
+//        Game game = new Game(stage);
+//        game.showSetup();
 
 //        GameManager game = new GameManager(/* player objects */);
 //        stage.setScene(game.createScene());
 
-//        SetUpView test = new SetUpView();
-//        stage.setScene(test.createSetUp());
+        SetupView test = new SetupView(new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}});
+        stage.setScene(test.createSetUp());
+        stage.show();
 
 //        GameManager game = new GameManager(players);
 //        stage.setScene(game.createScene());

@@ -69,6 +69,6 @@ public class ViewTest extends DukeApplicationTest {
   @Test
   public void testSetupView() {
     List<Player> players = new ArrayList<>();
-    SetupView view = new SetupView(players);
+    SetupView view = new SetupView(new int[][]{});
   }
 }

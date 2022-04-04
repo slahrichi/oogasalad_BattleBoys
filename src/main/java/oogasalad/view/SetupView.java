@@ -1,5 +1,6 @@
 package oogasalad.view;
 
+import java.awt.Shape;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -25,8 +26,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
 import oogasalad.view.panes.LegendPane;
@@ -48,10 +51,12 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private LegendPane legendPane;
   private SetShipPane shipPane;
 
+  private BoardView shipBoard;
+
   // current piece that is being placed
   private List<Coordinate> currentPiece;
 
-  public SetupView(List<Player> playerList) {
+  public SetupView(int[][] boardParameter) {
 
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -61,6 +66,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     configBox = new VBox();
     legendPane = new LegendPane();
     shipPane = new SetShipPane(new Coordinate[][]{{new Coordinate(1, 1), new Coordinate(2, 2)}});
+
+    // FIXME: create a new board out of the one that's passed in
+    shipBoard = new SetupBoardView(new ShapeType(), boardParameter, 1);
 
     createTitlePanel();
     createCenterPanel();
@@ -100,10 +108,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane.setCenter(myCenterPane);
     myCenterPane.setId("boardBox");
 
-    SetupBoardView board = new SetupBoardView(new ShapeType(), new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}, 1);
-    board.addObserver(this);
-    board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
-    myCenterPane.getChildren().add(board.getBoardPane());
+
+    shipBoard.addObserver(this);
+    myCenterPane.getChildren().add(shipBoard.getBoardPane());
   }
 
 
