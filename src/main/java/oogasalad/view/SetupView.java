@@ -5,8 +5,12 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -28,7 +32,7 @@ import oogasalad.view.board.ShapeType;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetShipPane;
 
-public class SetupView extends PropertyObservable implements PropertyChangeListener {
+public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer, BoardVisualizer {
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;

@@ -17,6 +17,7 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.view.ErrorDisplayer;
 import oogasalad.view.Info;
 import oogasalad.view.SetupView;
 
@@ -65,32 +66,21 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       idMap.put(id, p);
       placeCounts.put(p, 0);
     } catch (ClassNotFoundException e) {
-      showError(ERROR);
+      setupView.showError(ERROR);
     } catch (InvocationTargetException e) {
-      showError(ERROR);
+      setupView.showError(ERROR);
     } catch (InstantiationException e) {
-      showError(ERROR);
+      setupView.showError(ERROR);
     } catch (IllegalAccessException e) {
-      showError(ERROR);
+      setupView.showError(ERROR);
     } catch (NoSuchMethodException e) {
-      showError(ERROR);
+      setupView.showError(ERROR);
     }
     return p;
   }
 
   public Scene createScene() {
     return setupView.createSetUp();
-  }
-
-  private void showError(String message) {
-    Alert alert = new Alert(AlertType.ERROR, message);
-    alert.showAndWait();
-    endGame();
-  }
-
-  private void endGame() {
-    Platform.exit();
-    System.exit(0);
   }
 
   @Override

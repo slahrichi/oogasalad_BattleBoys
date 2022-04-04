@@ -25,8 +25,8 @@ public class ShipCell implements Cell {
 
   }
 
-  public ShipCell(int x, int y, Piece ship, int goldValue){
-    this(x,y,1, ship,goldValue);
+  public ShipCell(int row, int col, Piece ship, int goldValue){
+    this(row, col,1, ship, goldValue);
   }
   @Override
   public int hit() {
