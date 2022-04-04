@@ -63,6 +63,11 @@ public class ShipCell implements Cell {
     return myCoordinate;
   }
 
+  @Override
+  public int getCellState() {
+    return currentState.ordinal();
+  }
+
   public Piece getAssignedShip(){
     return AssignedPiece;
   }
