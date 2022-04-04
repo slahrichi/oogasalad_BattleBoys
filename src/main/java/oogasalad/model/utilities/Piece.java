@@ -31,10 +31,10 @@ public abstract class Piece {
     }
   }
 
-  public abstract void registerDamage(Coordinate hitLocation) ;
+  public abstract void registerDamage(ShipCell hitLocation) ;
 
   protected boolean checkDeath() {
-    return (cellListHP.size() == 0);
+    return (cellList.size() == 0);
   }
 
   public String getStatus(){
