@@ -1,8 +1,9 @@
 package oogasalad.model.utilities.tiles;
 
+import java.util.List;
+import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
-
 
 
 public class ShipCell implements Cell {
@@ -10,41 +11,48 @@ public class ShipCell implements Cell {
   private Coordinate myCoordinate;
   private int myHealthBar;
   private Piece AssignedPiece;
-  private cellStates currentState;
+  private CellState currentState;
   private int myGoldValue;
+  private int id;
 
   public ShipCell(int x, int y, int health, Piece ship, int goldValue){
     myCoordinate = new Coordinate(y,x);
     myHealthBar = health;
     AssignedPiece = ship;
-    currentState = cellStates.HEALTHY;
+    currentState = CellState.HEALTHY;
     myGoldValue = goldValue;
   }
 
   public ShipCell(Coordinate c, int id){
-
+    myCoordinate = c;
+    this.id = id;
   }
 
   public ShipCell(int x, int y, Piece ship, int goldValue){
     this(x,y,1, ship,goldValue);
   }
+
   @Override
   public int hit() {
     myHealthBar --;
     if (myHealthBar == 0) {
-      // deadPart() doesn't exist
-//      AssignedPiece.deadPart(this);
-      currentState = cellStates.SUNKEN;
+      currentState = CellState.SUNKEN;
+     // AssignedPiece.registerDamage(this);
       return myGoldValue;
-    } else{
-      currentState = cellStates.DAMAGED;
-      return -1;
+    } else {
+      currentState = CellState.DAMAGED;
+      return 0;
     }
   }
 
   @Override
-  public void update() {
-    return;
+  public List<Function> boardUpdate() {
+    return null;
+  }
+
+  @Override
+  public List<Function> playerUpdate() {
+    return null;
   }
 
   @Override
@@ -52,10 +60,9 @@ public class ShipCell implements Cell {
     return false;
   }
 
-
   @Override
-  public void updateCoordinates(int x, int y) {
-    myCoordinate = new Coordinate(y,x);
+  public void updateCoordinates(int row, int col) {
+    myCoordinate = new Coordinate(row,col);
   }
 
   @Override
@@ -66,4 +73,5 @@ public class ShipCell implements Cell {
   public Piece getAssignedShip(){
     return AssignedPiece;
   }
+
 }
