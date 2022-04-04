@@ -64,8 +64,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     System.out.println("ID: " + ((Info)evt.getNewValue()).ID());
-    int row = ((Info)evt.getNewValue()).y();
-    int col = ((Info)evt.getNewValue()).x();
+    int row = ((Info)evt.getNewValue()).row();
+    int col = ((Info)evt.getNewValue()).col();
     view.displayShotAt(row, col, true);
 //    view.placePiece(List.of(new Coordinate(row, col), new Coordinate(row + 1, col)), "bruh");
   }

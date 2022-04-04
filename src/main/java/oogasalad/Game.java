@@ -19,6 +19,7 @@ public class Game {
     fileChooser = new FilePicker();
     PlayerData data = parser.parse(chooseDataFile());
     setup = new GameSetup(data);
+    // GameManager should take in list of players and GameData
   }
 
   public File chooseDataFile() {

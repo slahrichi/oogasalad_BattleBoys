@@ -47,13 +47,13 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private void setupGame() {
     playerList = new ArrayList<>();
-    idMap = new HashMap<>();
-    placeCounts = new HashMap<>();
     int id = 0;
     for (String playerType : playerTypes) {
       playerList.add(createPlayer(playerType, id++));
     }
     setupView = new SetupView(playerList);
+    setupView.setCurrentPlayerNum(currentPlayerIndex + 1);
+    setupView.setCurrentPiece(pieceList.get(0).getHPList());
     setupView.addObserver(this);
   }
 
@@ -63,8 +63,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     try {
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class)
           .newInstance(b, id);
-      idMap.put(id, p);
-      placeCounts.put(p, 0);
     } catch (ClassNotFoundException e) {
       setupView.showError(ERROR);
     } catch (InvocationTargetException e) {
@@ -115,8 +113,16 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     setupView.setCurrentPiece(pieceList.get(currentPieceIndex).getHPList());
   }
 
-  private void update(Player player, Piece piece) {
-    placeCounts.put(player, placeCounts.get(player) + 1);
-    setupView.placePiece(piece);
+  private void update(Piece piece) {
+    setupView.placePiece(piece.getHPList(), "Piece type");
+    currentPieceIndex++;
+
+    if(currentPieceIndex >= pieceList.size()) {
+      moveToNextPlayer();
+      return;
+    }
+
+    // What is HPList?
+    setupView.setCurrentPiece(pieceList.get(currentPieceIndex).getHPList());
   }
 }

@@ -10,7 +10,7 @@ public interface Cell {
 
    boolean canCarryObject();
 
-   void updateCoordinates(int x, int y);
+   void updateCoordinates(int row, int col);
 
    Coordinate getCoordinates();
 

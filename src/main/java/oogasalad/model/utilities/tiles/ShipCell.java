@@ -13,8 +13,8 @@ public class ShipCell implements Cell {
   private cellStates currentState;
   private int myGoldValue;
 
-  public ShipCell(int x, int y, int health, Piece ship, int goldValue){
-    myCoordinate = new Coordinate(y,x);
+  public ShipCell(int row, int col, int health, Piece ship, int goldValue) {
+    myCoordinate = new Coordinate(row, col);
     myHealthBar = health;
     AssignedPiece = ship;
     currentState = cellStates.HEALTHY;
@@ -28,6 +28,7 @@ public class ShipCell implements Cell {
   public ShipCell(int row, int col, Piece ship, int goldValue){
     this(row, col,1, ship, goldValue);
   }
+
   @Override
   public int hit() {
     myHealthBar --;
@@ -54,8 +55,8 @@ public class ShipCell implements Cell {
 
 
   @Override
-  public void updateCoordinates(int x, int y) {
-    myCoordinate = new Coordinate(y,x);
+  public void updateCoordinates(int row, int col) {
+    myCoordinate = new Coordinate(row, col);
   }
 
   @Override

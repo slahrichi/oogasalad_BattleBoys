@@ -48,11 +48,14 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private LegendPane legendPane;
   private SetShipPane shipPane;
 
+  // current piece that is being placed
+  private List<Coordinate> currentPiece;
+
   public SetupView(List<Player> playerList) {
 
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-
+    currentPiece = new ArrayList<>();
     myCenterPane = new StackPane();
     titleBox = new HBox();
     configBox = new VBox();
@@ -70,6 +73,10 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myScene.getStylesheets()
         .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
     return myScene;
+  }
+
+  public void setCurrentPiece(List<Coordinate> nextPiece) {
+    currentPiece = nextPiece;
   }
 
   private void createTitlePanel(){

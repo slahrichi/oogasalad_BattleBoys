@@ -13,12 +13,12 @@ public class CellView extends PropertyObservable {
   private Polygon myShape;
 
   // no need for status anymore because listeners are only attached to active cells
-  public CellView(ShapeType shape, Paint color, int x, int y, int width, int height) {
+  public CellView(ShapeType shape, Paint color, int row, int col, int width, int height) {
 //    isActive = status;
-    myCoords = new Coordinate(x, y);
+    myCoords = new Coordinate(row, col);
     myShape = new Polygon();
     myShape.setFill(color);
-    myShape.getPoints().addAll(shape.getPoints(x, y, width, height));
+    myShape.getPoints().addAll(shape.calculatePoints(row, col, height, width));
     myShape.setOnMouseClicked(e -> cellClicked());
   }
 
