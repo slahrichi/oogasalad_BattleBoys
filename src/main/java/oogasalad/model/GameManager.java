@@ -10,16 +10,16 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.Info;
-import oogasalad.view.View;
+import oogasalad.view.GameView;
 
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
   private Map<Integer, Player> idMap;
-  private View view;
+  private GameView view;
 
   public GameManager(List<Player> playerList) {
-    view = new View();
+    view = new GameView();
     this.view.addObserver(this);
     this.playerList = playerList;
     initialize();

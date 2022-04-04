@@ -20,7 +20,7 @@ import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
 import oogasalad.view.board.ShapeType;
 
-public class View extends PropertyObservable implements PropertyChangeListener, BoardVisualizer, ShopVisualizer, ShotVisualizer, GameDataVisualizer {
+public class GameView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer, ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
@@ -32,7 +32,7 @@ public class View extends PropertyObservable implements PropertyChangeListener, 
 
   private int currentBoardIndex;
 
-  public View() {
+  public GameView() {
     myPane = new BorderPane();
     myPane.setId("view-pane");
     myCenterPane = new StackPane();

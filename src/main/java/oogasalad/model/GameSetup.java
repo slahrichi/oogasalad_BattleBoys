@@ -26,9 +26,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private int[][] boardSetup;
   private SetupView setupView;
   private List<Player> playerList;
+  private int currentPlayerIndex;
   private List<Piece> pieceList;
-  private Map<Integer, Player> idMap;
-  private Map<Player, Integer> placeCounts;
+  private int currentPieceIndex;
+//  private Map<Integer, Player> idMap;
+//  private Map<Player, Integer> placeCounts;
 
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String ERROR = "Invalid player type given";
@@ -37,6 +39,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     this.playerTypes = data.players();
     this.boardSetup = data.board();
     this.pieceList = data.pieces();
+    this.currentPieceIndex = 0;
+    this.currentPlayerIndex = 0;
     setupGame();
   }
 
@@ -91,37 +95,38 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    Info info = (Info)evt.getNewValue();
-    placePiece(info.x(), info.y(), info.ID());
+    Coordinate coords = (Coordinate) evt.getNewValue();
+    placePiece(coords.getColumn(), coords.getRow());
   }
 
-  public void placePiece(int x, int y, int id) {
+  private void placePiece(int row, int col) {
     System.out.println("Success");
-    if (canStillPlace(id)) {
-      Player player = idMap.get(id);
-      Piece piece = pieceList.get(placeCounts.get(player));
-      if (player.placePiece(piece, new Coordinate(x, y))) {
-        update(player, piece);
-      }
-      else {
-        setupView.showError();
-      }
+    Player player = playerList.get(currentPlayerIndex);
+    Piece piece = pieceList.get(currentPieceIndex);
+    if (player.placePiece(piece, new Coordinate(row, col))) {
+      update(piece);
     }
-    else if (!canStillPlace(id) && id == idMap.size() - 1) {
+    else {
+      setupView.showError("Error placing piece at (" + row + "," + col + ")");
+    }
+  }
+
+  private void moveToNextPlayer() {
+    currentPlayerIndex++;
+
+    if(currentPlayerIndex == playerList.size() - 1) {
       notifyObserver("moveToGame", null);
+      return;
     }
-    else if (!canStillPlace(id)) {
-      setupView.moveToNextPlayer();
-    }
+
+    currentPieceIndex = 0;
+    setupView.setCurrentPlayerNum(currentPlayerIndex + 1);
+    setupView.clearBoard();
+    setupView.setCurrentPiece(pieceList.get(currentPieceIndex).getHPList());
   }
 
   private void update(Player player, Piece piece) {
     placeCounts.put(player, placeCounts.get(player) + 1);
     setupView.placePiece(piece);
-  }
-
-  public boolean canStillPlace(int id) {
-    int index = placeCounts.get(idMap.get(id));
-    return index < pieceList.size();
   }
 }

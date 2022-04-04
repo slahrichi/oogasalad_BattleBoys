@@ -2,6 +2,8 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -80,9 +82,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     configBox.getChildren().add(new Label("Test"));
     configBox.getChildren().addAll(shipPane.getShipPane(), legendPane.getLegendPane());
 
-
-
-
   }
 
   private void createCenterPanel(){
@@ -94,24 +93,50 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     board.addObserver(this);
     board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
     myCenterPane.getChildren().add(board.getBoardPane());
-
-
   }
 
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     Info info = (Info) evt.getNewValue();
-    notifyObserver("Inside SetupView", info);
+    notifyObserver("Inside SetupView", new Coordinate(info.row(), info.col()));
   }
 
-  public void moveToNextPlayer() {
+  public void setCurrentPlayerNum(int playerNum) {
     
   }
 
-  public void placePiece(Piece piece) {
+  @Override
+  public void placePiece(Collection<Coordinate> coords, String type) {
+
   }
 
-  public void showError() {
+  @Override
+  public void removePiece(Collection<Coordinate> coords) {
+
+  }
+
+  public void clearBoard() {
+
+  }
+
+  @Override
+  public void showError(String errorMsg) {
+    Alert alert = new Alert(AlertType.ERROR, errorMsg);
+    Node alertNode = alert.getDialogPane();
+    alertNode.setId("alert");
+    alert.showAndWait();
+  }
+
+  @Override
+  public void showErrorAndQuit(String errorMsg) {
+    Alert alert = new Alert(AlertType.ERROR, errorMsg);
+    Node alertNode = alert.getDialogPane();
+    alertNode.setId("alert");
+
+    alert.showAndWait();
+    Platform.exit();
+    System.exit(0);
+
   }
 }
