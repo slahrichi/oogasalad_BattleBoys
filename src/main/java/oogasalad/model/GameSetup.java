@@ -4,125 +4,124 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.stage.Stage;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.view.Info;
 import oogasalad.view.SetupView;
-import oogasalad.view.ShotInfo;
 
 public class GameSetup extends PropertyObservable implements PropertyChangeListener {
 
-  private SetupView setupView;
-  private static final String FILEPATH = "oogasalad.model.players.";
-
-  private List<Player> playerList;
-  private int currentPlayerIndex;
   private List<String> playerTypes;
-  private Map<Player, List<Piece>> pieceMap;
-  private int rows;
-  private int cols;
+  private int[][] boardSetup;
+  private SetupView setupView;
+  private List<Player> playerList;
+  private List<Piece> pieceList;
+  private Map<Integer, Player> idMap;
+  private Map<Player, Integer> placeCounts;
 
-  public GameSetup(List<Player> playerList) {
-    this.playerList = playerList;
-//    this.pieceMap = pieceMap;
-    setupView = new SetupView();
-    setupView.addObserver(this);
-//    initializeGame(rows, cols);
+  private static final String FILEPATH = "oogasalad.model.players.";
+  private static final String ERROR = "Invalid player type given";
+
+  public GameSetup(PlayerData data){
+    this.playerTypes = data.players();
+    this.boardSetup = data.board();
+    this.pieceList = data.pieces();
+    setupGame();
   }
-
-//  private void initializeGame(int rows, int cols) {
-//    setupBoards(rows, cols);
-//    placePieces();
-//  }
-//
-//  private void setupBoards(int rows, int cols) {
-//    for (Player p : playerList) {
-//      p.setupBoard(rows, cols);
-//    }
-//  }
-//
-//  private void placePieces() {
-//    for (Player p : playerList) {
-//      List<Piece> list = pieceMap.get(p);
-//      for (Piece piece : list) {
-//        p.placePiece(piece);
-//      }
-//      p.determineHealth();
-//    }
-//  }
-
-  public void show(Stage stage) {
-    stage.setScene(setupView.createSetUp());
-  }
-
-  //
-  private void handlePiecePlacement(int x, int y) {
-    // Check if current Piece can be placed in this position on the current Board
-    // If yes, place the Piece there, tell the SetupView to place the piece visually, update the
-    // current Piece and the visual representation of the current Piece being placed, and switch to
-    // the next Player setup if that was the last Piece for them to place
-
-  }
-
-//
-//  public GameSetup(List<String> playerTypes, Map<Player, List<Piece>> pieceMap, int rows, int cols){
-//    this.playerTypes = playerTypes;
-//    this.pieceMap = pieceMap;
-//    this.rows = rows;
-//    this.cols = cols;
-//    this.setupView = new SetupView();
-//    setupGame();
-//  }
 
   private void setupGame() {
     playerList = new ArrayList<>();
+    idMap = new HashMap<>();
+    placeCounts = new HashMap<>();
     int id = 0;
     for (String playerType : playerTypes) {
       playerList.add(createPlayer(playerType, id++));
     }
+    setupView = new SetupView(playerList);
+    setupView.addObserver(this);
   }
 
   private Player createPlayer(String playerType, int id) {
-    Board b = new Board(rows, cols);
+    Board b = new Board(boardSetup);
     Player p = null;
     try {
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class)
           .newInstance(b, id);
-      placePieces(p, id);
+      idMap.put(id, p);
+      placeCounts.put(p, 0);
     } catch (ClassNotFoundException e) {
-      //setupView.showError()
+      showError(ERROR);
     } catch (InvocationTargetException e) {
-      //setupView.showError()
+      showError(ERROR);
     } catch (InstantiationException e) {
-      //setupView.showError()
+      showError(ERROR);
     } catch (IllegalAccessException e) {
-      //setupView.showError()
+      showError(ERROR);
     } catch (NoSuchMethodException e) {
-      //setupView.showError()
+      showError(ERROR);
     }
     return p;
   }
 
+  public Scene createScene() {
+    return setupView.createSetUp();
+  }
 
-  private void placePieces(Player p, int id) {
-    List<Piece> pieceList = pieceMap.get(id);
-    //setupView.getPiecesFromSetup();
-    /*
-    This method should take the pieces, render them, and then query the player to place them
-    You can call some method from GameSetup to explicitly do so
-     */
+  private void showError(String message) {
+    Alert alert = new Alert(AlertType.ERROR, message);
+    alert.showAndWait();
+    endGame();
+  }
 
+  private void endGame() {
+    Platform.exit();
+    System.exit(0);
   }
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    System.out.println("ID: " + ((ShotInfo)evt.getNewValue()).ID());
-    int y = ((ShotInfo)evt.getNewValue()).y();
-    int x = ((ShotInfo)evt.getNewValue()).x();
-    handlePiecePlacement(x, y);
+    Info info = (Info)evt.getNewValue();
+    placePiece(info.x(), info.y(), info.ID());
+  }
+
+  public void placePiece(int x, int y, int id) {
+    System.out.println("Success");
+    if (canStillPlace(id)) {
+      Player player = idMap.get(id);
+      Piece piece = pieceList.get(placeCounts.get(player));
+      if (player.placePiece(piece, new Coordinate(x, y))) {
+        update(player, piece);
+      }
+      else {
+        setupView.showError();
+      }
+    }
+    else if (!canStillPlace(id) && id == idMap.size() - 1) {
+      notifyObserver("moveToGame", null);
+    }
+    else if (!canStillPlace(id)) {
+      setupView.moveToNextPlayer();
+    }
+  }
+
+  private void update(Player player, Piece piece) {
+    placeCounts.put(player, placeCounts.get(player) + 1);
+    setupView.placePiece(piece);
+  }
+
+  public boolean canStillPlace(int id) {
+    int index = placeCounts.get(idMap.get(id));
+    return index < pieceList.size();
   }
 }

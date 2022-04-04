@@ -31,18 +31,20 @@ public class Board {
 
 
 
-  public Board(int rows, int cols) {
-    initialize(rows, cols);
-    exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
+  public Board(int[][] boardSetup) {
+    initialize(boardSetup);
+//    exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
 
-  private void initialize(int rows, int cols) {
+  private void initialize(int[][] boardSetup) {
+    /*
     boardMap = new HashMap<>();
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         boardMap.put(new Coordinate(i, j), null);
       }
     }
+     */
   }
 
   /**

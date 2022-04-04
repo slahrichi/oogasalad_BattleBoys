@@ -46,6 +46,11 @@ public class AIPlayer extends GenericPlayer{
     enemy.strike(location);
   }
 
+  @Override
+  public void setupBoard(int rows, int cols) {
+
+  }
+
   private Player getRandomPlayer() {
     Random rand = new Random();
     int randomIndex = rand.nextInt(players.size());

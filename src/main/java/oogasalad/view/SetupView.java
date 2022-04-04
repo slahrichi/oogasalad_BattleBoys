@@ -2,7 +2,7 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Collection;
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -21,13 +21,12 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
-import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetShipPane;
 
-public class SetupView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer {
+public class SetupView extends PropertyObservable implements PropertyChangeListener {
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
@@ -43,11 +42,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private LegendPane legendPane;
   private SetShipPane shipPane;
 
-  private Player currentPlayer;
-  private BoardView currentBoardView;
-  private Piece currentPiece;
-
-  public SetupView(){
+  public SetupView(List<Player> playerList) {
 
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -99,30 +94,24 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     board.addObserver(this);
     board.getBoardPane().setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(0), null)));
     myCenterPane.getChildren().add(board.getBoardPane());
-  }
 
-  public void updateCurrentPiece(Piece piece) {
-    currentPiece = piece;
-    shipPane.updateShownPiece(currentPiece);
+
   }
 
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    notifyObserver(evt.getPropertyName(), evt.getNewValue());
+    Info info = (Info) evt.getNewValue();
+    notifyObserver("Inside SetupView", info);
   }
 
-  @Override
-  public void placePiece(Collection<Coordinate> coords, String type) {
-    for(Coordinate coord : coords) {
-      currentBoardView.setColorAt(coord.getRow(), coord.getColumn(), Color.BLACK);
-    }
+  public void moveToNextPlayer() {
+    
   }
 
-  @Override
-  public void removePiece(Collection<Coordinate> coords) {
-    for(Coordinate coord : coords) {
-      currentBoardView.setColorAt(coord.getColumn(), coord.getRow(), Color.LIGHTBLUE);
-    }
+  public void placePiece(Piece piece) {
+  }
+
+  public void showError() {
   }
 }
