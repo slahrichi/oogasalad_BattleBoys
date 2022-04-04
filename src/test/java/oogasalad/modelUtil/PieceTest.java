@@ -29,7 +29,7 @@ public class PieceTest {
      c2= new ShipCell(0,1,null,0);
     shipShape.add(c1);
     shipShape.add(c2);
-    piece = new StaticPiece(shipShape);
+    piece = new StaticPiece(shipShape,"1");
   }
 
   @Test

@@ -10,13 +10,15 @@ import oogasalad.model.utilities.tiles.ShipCell;
 public abstract class Piece {
 
   private List<ShipCell> cellList;
-  private List<Coordinate> cellListHP=new ArrayList<>();
+  private List<Coordinate> cellListHP = new ArrayList<>();
   private String status;
   private Board myBoard;
+  private String pieceId;
 
-  public Piece(List<ShipCell> cellList) {
+  public Piece(List<ShipCell> cellList, String id) {
     this.cellList = cellList;
     status = "Alive";
+    pieceId = id;
     intializeHPList(cellList);
     //myBoard = board;
   }
@@ -25,32 +27,35 @@ public abstract class Piece {
     return cellList;
   }
 
-  private void intializeHPList(List<ShipCell> shape){
-    for(ShipCell cell : shape){
+  private void intializeHPList(List<ShipCell> shape) {
+    for (ShipCell cell : shape) {
       cellListHP.add(cell.getCoordinates());
     }
   }
 
-  public abstract void registerDamage(ShipCell hitLocation) ;
+  public abstract void registerDamage(ShipCell hitLocation);
 
   protected boolean checkDeath() {
     return (cellList.size() == 0);
   }
 
-  public String getStatus(){
+  public String getStatus() {
     return status;
   }
 
 
-  public Consumer<Map<Coordinate,Cell>> update(){
+  public Consumer<Map<Coordinate, Cell>> update() {
     return null;
   }
-  protected void updateStatus(String newStatus){
-    status=newStatus;
+
+  protected void updateStatus(String newStatus) {
+    status = newStatus;
   }
+
   public List<Coordinate> getHPList() {
     return cellListHP;
   }
 
+  public String getID(){return pieceId;}
 }
 
