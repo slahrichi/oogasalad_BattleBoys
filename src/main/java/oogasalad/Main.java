@@ -39,15 +39,15 @@ public class Main extends Application {
         // Parse and retrieve List of Player records
         // Create List of Player objects
 
-//        Game game = new Game(stage);
-//        game.showSetup();
+        Game game = new Game(stage);
+        game.showSetup();
 
 //        GameManager game = new GameManager(/* player objects */);
 //        stage.setScene(game.createScene());
 
-        SetupView test = new SetupView(new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}});
-        stage.setScene(test.createSetUp());
-        stage.show();
+//        SetupView test = new SetupView(new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}});
+//        stage.setScene(test.createSetUp());
+//        stage.show();
 
 //        GameManager game = new GameManager(players);
 //        stage.setScene(game.createScene());

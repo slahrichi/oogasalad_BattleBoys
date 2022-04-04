@@ -52,9 +52,9 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       playerList.add(createPlayer(playerType, id++));
     }
     setupView = new SetupView(boardSetup);
+    setupView.addObserver(this);
     setupView.setCurrentPlayerNum(currentPlayerIndex + 1);
     setupView.setCurrentPiece(pieceList.get(0).getHPList());
-    setupView.addObserver(this);
   }
 
   private Player createPlayer(String playerType, int id) {
@@ -78,12 +78,15 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   public Scene createScene() {
+    System.out.println("GameSetup pre-alive");
     return setupView.createSetUp();
   }
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
+    System.out.println("Im alive");
     Coordinate coords = (Coordinate) evt.getNewValue();
+    System.out.println("Row: " + coords.getRow() + " Col: " + coords.getColumn());
     placePiece(coords.getColumn(), coords.getRow());
   }
 
