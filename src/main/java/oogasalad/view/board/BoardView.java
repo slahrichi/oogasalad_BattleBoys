@@ -83,6 +83,14 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     myLayout[row][col].getCell().setFill(color);
   }
 
+  public void clear() {
+    for (int i = 0; i < myLayout.length; i++) {
+      for (int j = 0; j < myLayout[0].length; j++) {
+        myLayout[i][j].getCell().setFill(mapCellToColor.get(EMPTY));
+      }
+    }
+  }
+
   private void initializeBoardNodes() {
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {

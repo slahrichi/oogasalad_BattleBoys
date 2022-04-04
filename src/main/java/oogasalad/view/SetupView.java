@@ -1,6 +1,5 @@
 package oogasalad.view;
 
-import java.awt.Shape;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -15,20 +14,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
-import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Piece;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.board.ShapeType;
@@ -45,13 +38,15 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private BorderPane myPane;
   private StackPane myCenterPane;
+  private BoardView setupBoard;
   private Scene myScene;
   private HBox titleBox;
   private VBox configBox;
   private LegendPane legendPane;
   private SetShipPane shipPane;
 
-  private BoardView shipBoard;
+
+  private String currentPlayerTitle;
 
   // current piece that is being placed
   private List<Coordinate> currentPiece;
@@ -68,7 +63,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     shipPane = new SetShipPane(new Coordinate[][]{{new Coordinate(1, 1), new Coordinate(2, 2)}});
 
     // FIXME: create a new board out of the one that's passed in
-    shipBoard = new SetupBoardView(new ShapeType(), boardParameter, 1);
+    setupBoard = new SetupBoardView(new ShapeType(), boardParameter, 1);
+
+    currentPlayerTitle = "Player 1: " + SCREEN_TITLE;
 
     createTitlePanel();
     createCenterPanel();
@@ -90,7 +87,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private void createTitlePanel(){
     titleBox.setId("titleBox");
     myPane.setTop(titleBox);
-    Label titleLabel = new Label(SCREEN_TITLE);
+    Label titleLabel = new Label(currentPlayerTitle);
     titleLabel.setId("titleText");
     titleBox.getChildren().add(titleLabel);
   }
@@ -109,8 +106,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myCenterPane.setId("boardBox");
 
 
-    shipBoard.addObserver(this);
-    myCenterPane.getChildren().add(shipBoard.getBoardPane());
+    setupBoard.addObserver(this);
+    myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }
 
 
@@ -121,21 +118,25 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void setCurrentPlayerNum(int playerNum) {
-    
+    currentPlayerTitle = "Player " + playerNum + ": " + SCREEN_TITLE;
   }
 
   @Override
   public void placePiece(Collection<Coordinate> coords, String type) {
-
+    for(Coordinate c : coords) {
+      setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.BLACK);
+    }
   }
 
   @Override
   public void removePiece(Collection<Coordinate> coords) {
-
+    for(Coordinate c : coords) {
+      setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.LIGHTBLUE);
+    }
   }
 
   public void clearBoard() {
-
+    setupBoard.clear();
   }
 
   @Override
