@@ -26,12 +26,16 @@ public class Board {
   private static final String EXCEPTIONS = "BoardExceptions";
   private static final String WRONG_TOP_LEFT = "wrongTopLeft";
   private static final String WRONG_NEIGHBOR = "wrongNeighbor";
+  private int myRows;
+  private int myCols;
 
 
 
 
 
   public Board(int rows, int cols) {
+    myRows = rows;
+    myCols = cols;
     initialize(rows, cols);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
@@ -98,4 +102,12 @@ public class Board {
   }
 
   public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }
+
+  public int[][] getCurrentBoardState() {
+    int[][] currStateArray = new int[myRows][myCols];
+    for(Coordinate c : boardMap.keySet()) {
+      currStateArray[c.getRow()][c.getColumn()] = boardMap.get(c).getCellState();
+    }
+    return getCurrentBoardState();
+  }
 }

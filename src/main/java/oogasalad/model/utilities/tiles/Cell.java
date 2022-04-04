@@ -14,4 +14,9 @@ public interface Cell {
 
    Coordinate getCoordinates();
 
+   /**
+    * Getter method that returns integer representation of cell's current state
+    * @return integer representation of cell state (ordinal matches up with cellStates enum)
+    */
+   int getCellState();
 }
