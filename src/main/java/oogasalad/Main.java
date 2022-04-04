@@ -28,13 +28,13 @@ public class Main extends Application {
         // gold, number of ships, board shape) from the PARSER
         // for now just initializing random boards and players to use in game manager
 
-        Board board1 = new Board(5, 5);
-        Player human1 = new HumanPlayer(board1);
-        Board board2 = new Board(5, 5);
-        Player human2 = new HumanPlayer(board2);
-        List<Player> players = new ArrayList<>();
-        players.add(human1);
-        players.add(human2);
+//        Board board1 = new Board(5, 5);
+//        Player human1 = new HumanPlayer(board1,1);
+//        Board board2 = new Board(5, 5);
+//        Player human2 = new HumanPlayer(board2,2);
+//        List<Player> players = new ArrayList<>();
+//        players.add(human1);
+//        players.add(human2);
         // Parse and retrieve List of Player records
         // Create List of Player objects
 

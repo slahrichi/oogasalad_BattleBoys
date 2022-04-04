@@ -37,8 +37,9 @@ public class ShipCell implements Cell {
     myHealthBar --;
     if (myHealthBar == 0) {
       currentState = CellState.SUNKEN;
+     // AssignedPiece.registerDamage(this);
       return myGoldValue;
-    } else{
+    } else {
       currentState = CellState.DAMAGED;
       return 0;
     }
