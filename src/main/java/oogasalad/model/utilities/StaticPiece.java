@@ -10,21 +10,18 @@ public class StaticPiece extends Piece {
   }
 
   @Override
-  public void registerDamage(Coordinate hitLocation) {
+  public void registerDamage(ShipCell hitLocation) {
 
-    // cell.getPosition() doesn't exist
-    for (Cell cell : getCellList()) {
-     if (cell.getCoordinates().getColumn() == hitLocation.getColumn() && cell.getCoordinates().getRow()== hitLocation.getRow()) {
-       if (getHPList().contains(hitLocation)) {
+       if (getCellList().contains(hitLocation)) {
          updateStatus("Damaged");
-         getHPList().remove(cell.getCoordinates());
+         getCellList().remove(hitLocation);
        }
        if (checkDeath()) {
          updateStatus("Dead");
        }
      }
-    }
-  }
+
+
 
 
 }
