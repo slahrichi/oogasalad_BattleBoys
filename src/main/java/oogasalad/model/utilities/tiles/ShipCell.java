@@ -6,49 +6,51 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 
 
-
 public class ShipCell implements Cell {
 
   private Coordinate myCoordinate;
   private int myHealthBar;
   private Piece AssignedPiece;
-  private cellStates currentState;
+  private CellState currentState;
   private int myGoldValue;
+  private int id;
 
   public ShipCell(int x, int y, int health, Piece ship, int goldValue){
     myCoordinate = new Coordinate(y,x);
     myHealthBar = health;
     AssignedPiece = ship;
-    currentState = cellStates.HEALTHY;
+    currentState = CellState.HEALTHY;
     myGoldValue = goldValue;
   }
 
   public ShipCell(Coordinate c, int id){
-
+    myCoordinate = c;
+    this.id = id;
   }
 
   public ShipCell(int x, int y, Piece ship, int goldValue){
     this(x,y,1, ship,goldValue);
   }
 
-  public ShipCell(int x, int y){
-    this(x,y, 1, null, 0);
-  }
-
   @Override
   public int hit() {
     myHealthBar --;
     if (myHealthBar == 0) {
-      currentState = cellStates.SUNKEN;
+      currentState = CellState.SUNKEN;
       return myGoldValue;
     } else{
-      currentState = cellStates.DAMAGED;
+      currentState = CellState.DAMAGED;
       return 0;
     }
   }
 
   @Override
-  public List<Function> update() {
+  public List<Function> boardUpdate() {
+    return null;
+  }
+
+  @Override
+  public List<Function> playerUpdate() {
     return null;
   }
 
@@ -56,7 +58,6 @@ public class ShipCell implements Cell {
   public boolean canCarryObject() {
     return false;
   }
-
 
   @Override
   public void updateCoordinates(int row, int col) {
@@ -71,4 +72,5 @@ public class ShipCell implements Cell {
   public Piece getAssignedShip(){
     return AssignedPiece;
   }
+
 }

@@ -3,12 +3,11 @@ package oogasalad.model.utilities.tiles;
 import java.util.List;
 import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Piece;
 
 public class WaterCell implements Cell {
 
   private Coordinate myCoordinate;
-  private cellStates currentState = cellStates.HEALTHY;
+  private CellState currentState = CellState.HEALTHY;
 
   public WaterCell(int row, int col){
     myCoordinate = new Coordinate(row, col);
@@ -24,7 +23,12 @@ public class WaterCell implements Cell {
   }
 
   @Override
-  public List<Function> update() {
+  public List<Function>boardUpdate() {
+    return null;
+  }
+
+  @Override
+  public List<Function>playerUpdate(){
     return null;
   }
 

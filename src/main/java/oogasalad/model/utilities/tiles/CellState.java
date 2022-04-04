@@ -1,5 +1,5 @@
 package oogasalad.model.utilities.tiles;
 
-public enum cellStates {
+public enum CellState {
   HEALTHY, DAMAGED, SUNKEN
 }

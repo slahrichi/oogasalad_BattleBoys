@@ -10,7 +10,10 @@ public interface Cell {
 
    int hit();
 
-   List<Function> update();
+   List<Function> boardUpdate();
+
+   List<Function> playerUpdate();
+
 
    boolean canCarryObject();
 
