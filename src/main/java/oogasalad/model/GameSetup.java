@@ -57,11 +57,12 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private Player createPlayer(String playerType, int id) {
     Board b = new Board(boardSetup);
-    Map<Integer, Board> boardMap = createEnemyMap(b, id);
+    Map<Integer, Board> enemyMap = createEnemyMap(b, id);
     Player p = null;
     try {
-      p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class)
-          .newInstance(b, id);
+      p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class,
+              Map.class)
+          .newInstance(b, id, enemyMap);
     } catch (ClassNotFoundException e) {
       setupView.showError(ERROR);
     } catch (InvocationTargetException e) {

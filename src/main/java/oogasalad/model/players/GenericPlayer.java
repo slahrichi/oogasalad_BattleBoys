@@ -2,6 +2,7 @@ package oogasalad.model.players;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
@@ -14,13 +15,15 @@ public abstract class GenericPlayer implements Player{
   private int myHealth;
   private int myCurrency;
   private List<Item> itemList;
+  private Map<Integer, Board> myEnemyMap;
   private Board myBoard;
   private int id;
 
-  public GenericPlayer(Board board, int id) {
+  public GenericPlayer(Board board, int id, Map<Integer, Board> enemyMap) {
     myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
+    myEnemyMap = enemyMap;
     //determineHealth();
   }
 
