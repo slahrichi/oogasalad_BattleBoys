@@ -1,26 +1,33 @@
 package oogasalad.model.utilities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
 
 public abstract class Piece {
 
   private List<ShipCell> cellList;
   private List<Coordinate> cellListHP = new ArrayList<>();
+  private List<Coordinate> myRelativeCoords;
   private String status;
   private Board myBoard;
   private String pieceId;
 
-  public Piece(List<ShipCell> cellList, String id) {
-    this.cellList = cellList;
+  public Piece(List<Coordinate> relativeCoords, String id) {
     status = "Alive";
     pieceId = id;
-    intializeHPList(cellList);
+    myRelativeCoords = relativeCoords;
     //myBoard = board;
+  }
+
+  // is a setter so maybe change later?
+  public void updateShipCells(List<ShipCell> newShipCells) {
+    cellList = newShipCells;
+    intializeHPList(newShipCells);
   }
 
   public List<ShipCell> getCellList() {
@@ -31,6 +38,10 @@ public abstract class Piece {
     for (ShipCell cell : shape) {
       cellListHP.add(cell.getCoordinates());
     }
+  }
+
+  public Collection<Coordinate> getRelativeCoords() {
+    return myRelativeCoords; //get immutable version
   }
 
   public abstract void registerDamage(ShipCell hitLocation);
@@ -44,7 +55,7 @@ public abstract class Piece {
   }
 
 
-  public Consumer<Map<Coordinate, Cell>> update() {
+  public Consumer<Map<Coordinate, CellInterface>> update() {
     return null;
   }
 

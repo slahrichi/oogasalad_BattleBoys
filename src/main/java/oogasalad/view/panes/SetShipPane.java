@@ -4,6 +4,7 @@ package oogasalad.view.panes;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Piece;
 
 // need to hold the ship list as well as create the ships to display
 
@@ -40,6 +41,10 @@ public class SetShipPane {
     }
     testLabel.setText(sb.toString());
     shipPane.setContent(testLabel);
+  }
+
+  public void updateShownPiece(Piece piece) {
+    // Change ship indicator image
   }
 
   private void createShips(){

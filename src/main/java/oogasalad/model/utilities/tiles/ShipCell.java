@@ -6,7 +6,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 
 
-public class ShipCell implements Cell {
+public class ShipCell implements CellInterface {
 
   private Coordinate myCoordinate;
   private int myHealthBar;
@@ -15,8 +15,13 @@ public class ShipCell implements Cell {
   private int myGoldValue;
   private int id;
 
-  public ShipCell(Coordinate coord, int health, Piece ship, int id, int goldValue){
+
+  public ShipCell(Coordinate coord, int health, Piece ship, int id, int goldValue) {
     myCoordinate = coord;
+  }
+  public ShipCell(int row, int col, int health, Piece ship, int goldValue) {
+    myCoordinate = new Coordinate(row, col);
+
     myHealthBar = health;
     AssignedPiece = ship;
     currentState = CellState.SHIP_HEALTHY;
@@ -31,8 +36,13 @@ public class ShipCell implements Cell {
     this(new Coordinate(row, col), 1, null, id, 100);
   }
 
-  public ShipCell(int row, int col, Piece ship, int id, int goldValue){
+
+  public ShipCell(int row, int col, Piece ship, int id, int goldValue) {
     this(new Coordinate(row, col), 1, null, id, 100);
+  }
+
+  public ShipCell(int row, int col, Piece ship, int goldValue){
+    this(row, col,1, ship, goldValue);
   }
 
   @Override
@@ -65,7 +75,7 @@ public class ShipCell implements Cell {
 
   @Override
   public void updateCoordinates(int row, int col) {
-    myCoordinate = new Coordinate(row,col);
+    myCoordinate = new Coordinate(row, col);
   }
 
   @Override

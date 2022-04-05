@@ -12,7 +12,7 @@ import javafx.scene.paint.Paint;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.PropertyObservable;
 import oogasalad.view.CellView;
-import oogasalad.view.ShotInfo;
+import oogasalad.view.Info;
 
 public abstract class BoardView extends PropertyObservable implements PropertyChangeListener {
 
@@ -83,6 +83,14 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     myLayout[row][col].getCell().setFill(color);
   }
 
+  public void clear() {
+    for (int i = 0; i < myLayout.length; i++) {
+      for (int j = 0; j < myLayout[0].length; j++) {
+        myLayout[i][j].getCell().setFill(mapCellToColor.get(EMPTY));
+      }
+    }
+  }
+
   private void initializeBoardNodes() {
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {
@@ -102,6 +110,6 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
 //    System.out.println(evt.getPropertyName());
-    notifyObserver("boardClicked", new ShotInfo(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
+    notifyObserver("boardClicked", new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
   }
 }

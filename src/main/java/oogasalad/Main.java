@@ -9,6 +9,7 @@ import oogasalad.model.GameSetup;
 import oogasalad.model.players.HumanPlayer;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
+import oogasalad.view.SetupView;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -29,27 +30,30 @@ public class Main extends Application {
         // for now just initializing random boards and players to use in game manager
 
 //        Board board1 = new Board(5, 5);
-//        Player human1 = new HumanPlayer(board1,1);
+
+//        Player human1 = new HumanPlayer(board1, 1);
 //        Board board2 = new Board(5, 5);
-//        Player human2 = new HumanPlayer(board2,2);
+//        Player human2 = new HumanPlayer(board2, 2);
+
 //        List<Player> players = new ArrayList<>();
 //        players.add(human1);
 //        players.add(human2);
         // Parse and retrieve List of Player records
         // Create List of Player objects
 
-//        Game game = new Game(stage, players);
-//        game.createSetup();
+        Game game = new Game(stage);
+        game.showSetup();
 
 //        GameManager game = new GameManager(/* player objects */);
 //        stage.setScene(game.createScene());
 
-//        SetUpView test = new SetUpView();
+//        SetupView test = new SetupView(new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}});
 //        stage.setScene(test.createSetUp());
+//        stage.show();
 
-        GameManager game = new GameManager(players);
-        stage.setScene(game.createScene());
-        stage.show();
+//        GameManager game = new GameManager(players);
+//        stage.setScene(game.createScene());
+//        stage.show();
     }
 
 

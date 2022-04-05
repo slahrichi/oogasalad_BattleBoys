@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 
-public class WaterCell implements Cell {
+public class WaterCell implements CellInterface {
 
   private Coordinate myCoordinate;
   private CellState currentState = CellState.WATER;

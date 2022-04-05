@@ -9,10 +9,14 @@ public class HumanPlayer extends GenericPlayer {
     super(board, id);
   }
 
-
   //purposefully empty - this is handled by the view
   @Override
   public void playTurn() {
+
+  }
+
+  @Override
+  public void setupBoard(int rows, int cols) {
 
   }
 

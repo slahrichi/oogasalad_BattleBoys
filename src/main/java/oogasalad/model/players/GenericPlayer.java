@@ -7,7 +7,7 @@ import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.tiles.CellInterface;
 
 public abstract class GenericPlayer implements Player{
 
@@ -33,10 +33,8 @@ public abstract class GenericPlayer implements Player{
   }
 
   @Override
-  public void placePiece(Piece s) {
-    for (Cell c : s.getCellList()) {
-      myBoard.place(c.getCoordinates(), c);
-    }
+  public boolean placePiece(Piece s, Coordinate coordinate) {
+    return myBoard.putShip(coordinate,s);
   }
 
   @Override
@@ -59,15 +57,15 @@ public abstract class GenericPlayer implements Player{
 
   public void determineHealth() {
     myHealth = 0;
-    for (Cell c : myBoard.listPieces()) {
+    for (CellInterface c : myBoard.listPieces()) {
       if (c != null) {
         myHealth++;
       }
     }
   }
 
-  public void setupBoard(int rows, int cols) {
-    myBoard = new Board(rows, cols);
+  public void setupBoard(int[][] board) {
+    myBoard = new Board(board);
   }
 
   protected List<Coordinate> getValidCoordinates() {

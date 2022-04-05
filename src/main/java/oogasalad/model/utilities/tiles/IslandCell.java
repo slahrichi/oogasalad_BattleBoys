@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 
-public class IslandCell implements Cell{
+public class IslandCell implements CellInterface {
 
   @Override
   public int hit() {

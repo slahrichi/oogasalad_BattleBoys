@@ -1,29 +1,26 @@
 package oogasalad.model.utilities.tiles;
 
-import java.lang.reflect.Array;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 
-public interface Cell {
+public abstract class Cell implements CellInterface {
+  int hit();
 
-   int hit();
+  List<Function> boardUpdate();
 
-   List<Function> boardUpdate();
-
-   List<Function> playerUpdate();
+  List<Function> playerUpdate();
 
 
-   boolean canCarryObject();
+  boolean canCarryObject();
 
-   void updateCoordinates(int row, int col);
+  void updateCoordinates(int row, int col);
 
-   Coordinate getCoordinates();
+  Coordinate getCoordinates();
 
-   /**
-    * Getter method that returns integer representation of cell's current state
-    * @return integer representation of cell state (ordinal matches up with cellStates enum)
-    */
-   int getCellState();
+  /**
+   * Getter method that returns integer representation of cell's current state
+   * @return integer representation of cell state (ordinal matches up with cellStates enum)
+   */
+  int getCellState();
 }

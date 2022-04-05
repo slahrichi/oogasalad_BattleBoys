@@ -9,17 +9,17 @@ import javafx.scene.Scene;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.view.ShotInfo;
-import oogasalad.view.View;
+import oogasalad.view.Info;
+import oogasalad.view.GameView;
 
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
   private Map<Integer, Player> idMap;
-  private View view;
+  private GameView view;
 
   public GameManager(List<Player> playerList) {
-    view = new View();
+    view = new GameView();
     this.view.addObserver(this);
     this.playerList = playerList;
     initialize();
@@ -63,9 +63,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    System.out.println("ID: " + ((ShotInfo)evt.getNewValue()).ID());
-    int row = ((ShotInfo)evt.getNewValue()).y();
-    int col = ((ShotInfo)evt.getNewValue()).x();
+    System.out.println("ID: " + ((Info)evt.getNewValue()).ID());
+    int row = ((Info)evt.getNewValue()).row();
+    int col = ((Info)evt.getNewValue()).col();
     view.displayShotAt(row, col, true);
 //    view.placePiece(List.of(new Coordinate(row, col), new Coordinate(row + 1, col)), "bruh");
   }
