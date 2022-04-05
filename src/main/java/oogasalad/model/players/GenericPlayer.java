@@ -17,14 +17,14 @@ public abstract class GenericPlayer implements Player{
   private List<Item> itemList;
   private Map<Integer, Board> myEnemyMap;
   private Board myBoard;
-  private int id;
+  private int myId;
 
   public GenericPlayer(Board board, int id, Map<Integer, Board> enemyMap) {
     myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
     myEnemyMap = enemyMap;
-    //determineHealth();
+    myId = id;
   }
 
   @Override
@@ -37,7 +37,7 @@ public abstract class GenericPlayer implements Player{
 
   @Override
   public boolean placePiece(Piece s, Coordinate coordinate) {
-    return myBoard.putShip(coordinate,s);
+    return myBoard.placePiece(coordinate,s);
   }
 
   @Override

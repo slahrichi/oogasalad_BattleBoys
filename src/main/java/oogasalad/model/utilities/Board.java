@@ -93,19 +93,29 @@ public class Board {
   /**
    * places a ship on the grid given a topLeft position and coordinates of all Cells making the ship
    * @param topLeft the coordinate of the topLeft Cell of the ship
-   * @param ship Piece to place at coordinate topLeft
+   * @param piece Piece to place at coordinate topLeft
    */
-  public boolean putShip(Coordinate topLeft, Piece ship){
-    for (Coordinate relative : ship.getRelativeCoords()) {
-      if(!canPlaceAt(Coordinate.sum(topLeft,relative))){
+  public boolean placePiece(Coordinate topLeft, Piece piece){
+    if (!hasValidPlacement(topLeft, piece)) {
+      return false;
+    }
+    addPieceCellsToBoard(topLeft, piece);
+    return true;
+  }
+
+  private void addPieceCellsToBoard(Coordinate topLeft, Piece piece) {
+    piece.placeCellsAt(topLeft);
+    myPieces.put(piece.getID(), piece); //can make this observer listener in future
+    for(ShipCell c: piece.getCellList()) {
+      place(c.getCoordinates(), c);
+    }
+  }
+
+  private boolean hasValidPlacement(Coordinate topLeft, Piece piece) {
+    for (Coordinate relative : piece.getRelativeCoords()) {
+      if (!canPlaceAt(Coordinate.sum(topLeft, relative))) {
         return false;
       }
-    }
-
-    ship.placeCellsAt(topLeft);
-    myPieces.put(ship.getID(), ship); //can make this observer listener in future
-    for(ShipCell c: ship.getCellList()) {
-      place(c.getCoordinates(), c);
     }
     return true;
   }

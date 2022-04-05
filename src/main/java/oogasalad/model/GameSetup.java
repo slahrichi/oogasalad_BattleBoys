@@ -32,7 +32,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private int currentPieceIndex;
 
   private static final String FILEPATH = "oogasalad.model.players.";
-  private static final String ERROR = "Invalid player type given";
+  private static final String CONFIG_ERROR = "Invalid player type given";
 
   public GameSetup(PlayerData data){
     this.playerTypes = data.players();
@@ -49,6 +49,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     for (String playerType : playerTypes) {
       playerList.add(createPlayer(playerType, id++));
     }
+    initializeSetupView();
+  }
+
+  private void initializeSetupView() {
     setupView = new SetupView(boardSetup);
     setupView.addObserver(this);
     setupView.setCurrentPlayerNum(currentPlayerIndex + 1);
@@ -64,15 +68,15 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
               Map.class)
           .newInstance(b, id, enemyMap);
     } catch (ClassNotFoundException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     } catch (InvocationTargetException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     } catch (InstantiationException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     } catch (IllegalAccessException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     } catch (NoSuchMethodException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     }
     return p;
   }
