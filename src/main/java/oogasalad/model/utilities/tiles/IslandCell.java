@@ -35,4 +35,9 @@ public class IslandCell implements Cell{
   public Coordinate getCoordinates() {
     return null;
   }
+
+  @Override
+  public int getCellState() {
+    return 0;
+  }
 }

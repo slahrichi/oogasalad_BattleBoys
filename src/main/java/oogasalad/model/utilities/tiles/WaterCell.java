@@ -7,7 +7,7 @@ import oogasalad.model.utilities.Coordinate;
 public class WaterCell implements Cell {
 
   private Coordinate myCoordinate;
-  private CellState currentState = CellState.HEALTHY;
+  private CellState currentState = CellState.WATER;
 
   public WaterCell(int row, int col){
     myCoordinate = new Coordinate(row, col);
@@ -45,5 +45,10 @@ public class WaterCell implements Cell {
   @Override
   public Coordinate getCoordinates() {
     return myCoordinate;
+  }
+
+  @Override
+  public int getCellState() {
+    return 0;
   }
 }

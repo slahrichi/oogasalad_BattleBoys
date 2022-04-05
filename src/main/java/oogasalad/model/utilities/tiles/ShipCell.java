@@ -19,7 +19,7 @@ public class ShipCell implements Cell {
     myCoordinate = coord;
     myHealthBar = health;
     AssignedPiece = ship;
-    currentState = CellState.HEALTHY;
+    currentState = CellState.SHIP_HEALTHY;
     myGoldValue = goldValue;
     this.id = id;
   }
@@ -28,7 +28,7 @@ public class ShipCell implements Cell {
     this(c, 1, null, id, 100);
   }
   public ShipCell(int col, int row, int id){
-    this(new Coordinate(row, col), 1, null, id, 100;
+    this(new Coordinate(row, col), 1, null, id, 100);
   }
 
   public ShipCell(int row, int col, Piece ship, int id, int goldValue){
@@ -39,11 +39,11 @@ public class ShipCell implements Cell {
   public int hit() {
     myHealthBar --;
     if (myHealthBar == 0) {
-      currentState = CellState.SUNKEN;
+      currentState = CellState.SHIP_SUNKEN;
       //AssignedPiece.registerDamage(this);
       return myGoldValue;
     } else {
-      currentState = CellState.DAMAGED;
+      currentState = CellState.SHIP_DAMAGED;
       return 0;
     }
   }
