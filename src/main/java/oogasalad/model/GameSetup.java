@@ -49,7 +49,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     for (String playerType : playerTypes) {
       playerList.add(createPlayer(playerType, id++));
     }
-    initializeSetupView();
+    //initializeSetupView();
+  }
+
+  public List<Player> getPlayerList() {
+    return playerList;
   }
 
   private void initializeSetupView() {
