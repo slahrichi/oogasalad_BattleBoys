@@ -25,11 +25,11 @@ public class PieceTest {
   @BeforeEach
   void setup() {
     List<ShipCell> shipShape = new ArrayList<>() ;
-     c1= new ShipCell(0,0,null,0);
-     c2= new ShipCell(0,1,null,0);
+     c1= new ShipCell(0,null, 0,"0");
+     c2= new ShipCell(0,null,0,"0");
     shipShape.add(c1);
     shipShape.add(c2);
-    piece = new StaticPiece(shipShape,"1");
+    piece = new StaticPiece(shipShape, new ArrayList<>(), "1");
   }
 
   @Test

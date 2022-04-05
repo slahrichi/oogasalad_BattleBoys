@@ -5,8 +5,8 @@ import oogasalad.model.utilities.tiles.ShipCell;
 
 public class StaticPiece extends Piece {
 
-  public StaticPiece(List<ShipCell> cellList, String id) {
-    super(cellList, id);
+  public StaticPiece(List<ShipCell> cellList, List<Coordinate> relativeCoords, String id) {
+    super(cellList, relativeCoords, id);
   }
 
   @Override

@@ -32,16 +32,16 @@ public class Game {
     //playerList.add(dummyPlayer);
 
     List<ShipCell> dummyShipCellList = new ArrayList<>();
-    dummyShipCellList.add(new ShipCell(new Coordinate(0,1), 0));
-    dummyShipCellList.add(new ShipCell(new Coordinate(1,0), 0));
-    dummyShipCellList.add(new ShipCell(new Coordinate(1,1), 0));
-    StaticPiece dummyShip = new StaticPiece(dummyShipCellList);
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(0,1), 0, "0"));
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(1,0), 0, "1"));
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(1,1), 0, "2"));
+    StaticPiece dummyShip = new StaticPiece(dummyShipCellList, new ArrayList<Coordinate>(), "0");
 
     List<ShipCell> dummyShipCellList2 = new ArrayList<>();
-    dummyShipCellList2.add(new ShipCell(new Coordinate(2,2), 0));
-    dummyShipCellList2.add(new ShipCell(new Coordinate(2,3), 0));
-    dummyShipCellList2.add(new ShipCell(new Coordinate(3,2), 0));
-    StaticPiece dummyShip2 = new StaticPiece(dummyShipCellList);
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(2,2), 0, "0"));
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(2,3), 0, "1"));
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(3,2), 0, "2"));
+    StaticPiece dummyShip2 = new StaticPiece(dummyShipCellList, new ArrayList<Coordinate>(), "1");
 
     List<Piece> pieceList = new ArrayList<>();
     pieceList.add(dummyShip);
