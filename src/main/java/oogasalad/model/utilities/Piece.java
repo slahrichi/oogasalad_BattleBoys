@@ -17,18 +17,22 @@ public abstract class Piece {
   private Board myBoard;
   private String pieceId;
 
-  public Piece(List<Coordinate> relativeCoords, String id) {
+  public Piece(List<ShipCell> cells, List<Coordinate> relativeCoords, String id) {
     status = "Alive";
     pieceId = id;
+    cellList = cells;
+    intializeHPList(cellList);
     myRelativeCoords = relativeCoords;
     //myBoard = board;
   }
 
-  // is a setter so maybe change later?
-  public void updateShipCells(List<ShipCell> newShipCells) {
-    cellList = newShipCells;
-    intializeHPList(newShipCells);
+
+  public void placeCellsAt(Coordinate absoluteCoord) {
+    for(ShipCell c: cellList) {
+      c.placeAt(absoluteCoord);
+    }
   }
+
 
   public List<ShipCell> getCellList() {
     return cellList;

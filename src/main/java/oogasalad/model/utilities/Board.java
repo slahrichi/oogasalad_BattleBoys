@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
 //import org.apache.log4j.Logger;
@@ -16,7 +17,7 @@ import oogasalad.model.utilities.tiles.WaterCell;
 public class Board {
 
   private Map<Coordinate, CellInterface> boardMap;
-  private CellInterface[][] boardArray;
+ //private CellInterface[][] boardArray;
   private Map<String, Integer> maxElementsMap;
   private Map<String, Integer> elementHitMap;
   private Map<String, Piece> myPieces;
@@ -44,11 +45,11 @@ public class Board {
 
   void initialize(int[][] boardSetup) {
     boardMap = new HashMap<Coordinate, CellInterface>();
-    boardArray = new CellInterface[boardSetup.length][boardSetup[0].length];
     for (int i = 0; i < boardSetup.length; i++) {
       for (int j = 0; j < boardSetup[0].length; j++) {
-        boardMap.put(new Coordinate(i, j), null); //deprecate map implementation
-        boardArray[i][j] = new WaterCell();
+        if(boardSetup[i][j] == CellState.WATER.ordinal()){
+          boardMap.put(new Coordinate(i, j), new WaterCell(new Coordinate(i,j)));
+        }
       }
     }
   }
@@ -84,7 +85,8 @@ public class Board {
    */
 
   private boolean canPlaceAt(Coordinate c){
-    return !checkCell(c).equals(null); // this is not correct yet
+    return boardMap.containsKey(c) && boardMap.get(c).getCellState()==CellState.WATER.ordinal();
+    //return !checkCell(c).equals(null); // this is not correct yet
   }
 
   /**
@@ -99,14 +101,11 @@ public class Board {
       }
     }
 
-    List<ShipCell> shipCells = new ArrayList<ShipCell>();
-    for (Coordinate relative : ship.getRelativeCoords()) {
-      ShipCell newShipCell = new ShipCell(Coordinate.sum(topLeft,relative));
-      place(Coordinate.sum(topLeft,relative), newShipCell);
-      shipCells.add(newShipCell);
+    ship.placeCellsAt(topLeft);
+    myPieces.put(ship.getID(), ship); //can make this observer listener in future
+    for(ShipCell c: ship.getCellList()) {
+      place(c.getCoordinates(), c);
     }
-
-    ship.updateShipCells(shipCells);
     return true;
   }
 
@@ -115,6 +114,7 @@ public class Board {
     boardMap.put(c, cell);
   }
 
+  //might not be necessary
   public CellInterface checkCell(Coordinate c) {
     return boardMap.get(c);
   }

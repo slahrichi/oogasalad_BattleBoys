@@ -9,6 +9,7 @@ import oogasalad.model.utilities.Piece;
 public class ShipCell implements CellInterface {
 
   private Coordinate myCoordinate;
+  private Coordinate myRelativeCoordinate;
   private int myHealthBar;
   private Piece AssignedPiece;
   private CellState currentState;
@@ -16,6 +17,17 @@ public class ShipCell implements CellInterface {
   private int id;
 
 
+
+  public ShipCell(int health, int goldValue, Coordinate relativeCoordinate, String ID) {
+    myHealthBar = health;
+    myGoldValue = goldValue;
+    myRelativeCoordinate = relativeCoordinate;
+  }
+
+  public void placeAt(Coordinate absoluteCoord) {
+    myCoordinate = Coordinate.sum(absoluteCoord, myRelativeCoordinate);
+  }
+  /*
   public ShipCell(Coordinate coord, int health, Piece ship, int id, int goldValue) {
     myCoordinate = coord;
   }
@@ -44,6 +56,7 @@ public class ShipCell implements CellInterface {
   public ShipCell(int row, int col, Piece ship, int goldValue){
     this(row, col,1, ship, goldValue);
   }
+   */
 
   @Override
   public int hit() {
