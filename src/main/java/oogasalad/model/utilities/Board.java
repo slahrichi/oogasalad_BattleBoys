@@ -32,13 +32,13 @@ public class Board {
 
 
 
-
   public Board(int rows, int cols) {
     myRows = rows;
     myCols = cols;
     initialize(rows, cols);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
+
 
   void initialize(int rows, int cols) {
     boardMap = new HashMap<>();
@@ -54,6 +54,7 @@ public class Board {
    * @param topLeft the coordinate of the topLeft Cell of the ship
    * @param relativeCoords list holding relative Coordinates of the other Cells making the ship
    */
+
   public void putShip(Coordinate topLeft, Collection<Coordinate> relativeCoords){
     try {
       id = nextID.incrementAndGet(); //each new ship (new topLeft) gets a new ID
@@ -80,6 +81,7 @@ public class Board {
    * @param c Coordinate to check
    * @return whether any Cell can be placed at the given Coordinate
    */
+
   private boolean canPlaceAt(Coordinate c){
     return !checkCell(c).equals(null); // this is not correct yet
   }
@@ -96,12 +98,12 @@ public class Board {
     return elementHitMap.get(cellType);
   }
 
-
   public List<Cell> listPieces() {
     return new ArrayList<>(boardMap.values());
   }
 
   public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }
+
 
   public int[][] getCurrentBoardState() {
     int[][] currStateArray = new int[myRows][myCols];
@@ -109,5 +111,10 @@ public class Board {
       currStateArray[c.getRow()][c.getColumn()] = boardMap.get(c).getCellState();
     }
     return getCurrentBoardState();
+  }
+
+  public int hit(Coordinate c) {
+   return boardMap.get(c).hit();
+
   }
 }
