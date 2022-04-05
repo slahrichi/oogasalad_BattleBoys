@@ -7,51 +7,54 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
-import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.model.utilities.tiles.WaterCell;
 //import org.apache.log4j.Logger;
 //import org.apache.log4j.LogManager;
 
 public class Board {
 
-  private Map<Coordinate, Cell> boardMap;
+  private Map<Coordinate, CellInterface> boardMap;
+ //private CellInterface[][] boardArray;
   private Map<String, Integer> maxElementsMap;
   private Map<String, Integer> elementHitMap;
+  private Map<String, Piece> myPieces;
 
   private ResourceBundle exceptions;
   private static AtomicInteger nextID = new AtomicInteger();
   private int id;
   //private static final Logger LOG = LogManager.getLogger(Board.class.getName());
-  private static final String RESOURCES_PACKAGE = "data";
+  private static final String RESOURCES_PACKAGE = "/";
   private static final String EXCEPTIONS = "BoardExceptions";
   private static final String WRONG_TOP_LEFT = "wrongTopLeft";
   private static final String WRONG_NEIGHBOR = "wrongNeighbor";
-
-
+  private int myRows;
+  private int myCols;
 
 
 
   public Board(int[][] boardSetup) {
+    myRows = boardSetup.length;
+    myCols = boardSetup[0].length;
     initialize(boardSetup);
-//    exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
+    exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
 
-  private void initialize(int[][] boardSetup) {
-    /*
-    boardMap = new HashMap<>();
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        boardMap.put(new Coordinate(i, j), null);
+
+  void initialize(int[][] boardSetup) {
+    boardMap = new HashMap<Coordinate, CellInterface>();
+    for (int i = 0; i < boardSetup.length; i++) {
+      for (int j = 0; j < boardSetup[0].length; j++) {
+        if(boardSetup[i][j] == CellState.WATER.ordinal()){
+          boardMap.put(new Coordinate(i, j), new WaterCell(new Coordinate(i,j)));
+        }
       }
     }
-     */
   }
 
-  /**
-   * places a ship on the grid given a topLeft position and coordinates of all Cells making the ship
-   * @param topLeft the coordinate of the topLeft Cell of the ship
-   * @param relativeCoords list holding relative Coordinates of the other Cells making the ship
-   */
+  /*
   public void putShip(Coordinate topLeft, Collection<Coordinate> relativeCoords){
     try {
       id = nextID.incrementAndGet(); //each new ship (new topLeft) gets a new ID
@@ -74,19 +77,45 @@ public class Board {
     }
   }
 
+   */
+
   /**
    * @param c Coordinate to check
    * @return whether any Cell can be placed at the given Coordinate
    */
+
   private boolean canPlaceAt(Coordinate c){
-    return !checkCell(c).equals(null); // this is not correct yet
+    return boardMap.containsKey(c) && boardMap.get(c).getCellState()==CellState.WATER.ordinal();
+    //return !checkCell(c).equals(null); // this is not correct yet
   }
 
-  public void place(Coordinate c, Cell cell) {
+  /**
+   * places a ship on the grid given a topLeft position and coordinates of all Cells making the ship
+   * @param topLeft the coordinate of the topLeft Cell of the ship
+   * @param ship Piece to place at coordinate topLeft
+   */
+  public boolean putShip(Coordinate topLeft, Piece ship){
+    for (Coordinate relative : ship.getRelativeCoords()) {
+      if(!canPlaceAt(Coordinate.sum(topLeft,relative))){
+        return false;
+      }
+    }
+
+    ship.placeCellsAt(topLeft);
+    myPieces.put(ship.getID(), ship); //can make this observer listener in future
+    for(ShipCell c: ship.getCellList()) {
+      place(c.getCoordinates(), c);
+    }
+    return true;
+  }
+
+
+  public void place(Coordinate c, CellInterface cell) {
     boardMap.put(c, cell);
   }
 
-  public Cell checkCell(Coordinate c) {
+  //might not be necessary
+  public CellInterface checkCell(Coordinate c) {
     return boardMap.get(c);
   }
 
@@ -94,10 +123,28 @@ public class Board {
     return elementHitMap.get(cellType);
   }
 
-
-  public List<Cell> listPieces() {
+  public List<CellInterface> listPieces() {
     return new ArrayList<>(boardMap.values());
   }
 
   public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }
+
+  public int[][] getCurrentBoardState() {
+    int[][] currStateArray = new int[myRows][myCols];
+    for(Coordinate c : boardMap.keySet()) {
+      currStateArray[c.getRow()][c.getColumn()] = boardMap.get(c).getCellState();
+    }
+    return getCurrentBoardState();
+  }
+
+  public int hit(Coordinate c) {
+   return boardMap.get(c).hit();
+  }
+
+  public void addPiece(String id, Piece newPiece){
+    myPieces.put(id, newPiece);
+    return;
+  }
+
+
 }

@@ -53,7 +53,6 @@ public class Coordinate {
       return row == that.row && column == that.column;
     }
 
-
     public static Coordinate sum(Coordinate c1, Coordinate c2){
       return new Coordinate(c1.row + c2.row, c2.column+ c2.column);
     }
