@@ -33,19 +33,19 @@ public class Board {
 
 
 
-  public Board(int rows, int cols) {
-    myRows = rows;
-    myCols = cols;
-    initialize(rows, cols);
+  public Board(int[][] boardSetup) {
+    myRows = boardSetup.length;
+    myCols = boardSetup[0].length;
+    initialize(boardSetup);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
 
 
-  void initialize(int rows, int cols) {
+  void initialize(int[][] boardSetup) {
     boardMap = new HashMap<>();
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        boardMap.put(new Coordinate(i, j), null);
+    for (int i = 0; i < boardSetup.length; i++) {
+      for (int j = 0; j < boardSetup[0].length; j++) {
+        boardMap.put(new Coordinate(i, j), null); //initialize with a cell represented by the boardSetup int -> enum
       }
     }
   }
