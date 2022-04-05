@@ -17,7 +17,7 @@ import oogasalad.model.utilities.tiles.WaterCell;
 public class Board {
 
   private Map<Coordinate, CellInterface> boardMap;
- //private CellInterface[][] boardArray;
+  private int[][] myBoardSetup;
   private Map<String, Integer> maxElementsMap;
   private Map<String, Integer> elementHitMap;
   private Map<String, Piece> myPieces;
@@ -36,6 +36,7 @@ public class Board {
 
 
   public Board(int[][] boardSetup) {
+    myBoardSetup = boardSetup;
     myRows = boardSetup.length;
     myCols = boardSetup[0].length;
     initialize(boardSetup);
@@ -144,6 +145,10 @@ public class Board {
   public void addPiece(String id, Piece newPiece){
     myPieces.put(id, newPiece);
     return;
+  }
+
+  public Board copyOf() {
+    return new Board(myBoardSetup);
   }
 
 

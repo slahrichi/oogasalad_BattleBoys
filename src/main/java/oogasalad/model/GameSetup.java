@@ -30,8 +30,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private int currentPlayerIndex;
   private List<Piece> pieceList;
   private int currentPieceIndex;
-//  private Map<Integer, Player> idMap;
-//  private Map<Player, Integer> placeCounts;
 
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String ERROR = "Invalid player type given";
@@ -59,6 +57,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private Player createPlayer(String playerType, int id) {
     Board b = new Board(boardSetup);
+    Map<Integer, Board> boardMap = createEnemyMap(b, id);
     Player p = null;
     try {
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class)
@@ -75,6 +74,15 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       setupView.showError(ERROR);
     }
     return p;
+  }
+
+  private Map<Integer, Board> createEnemyMap(Board b, int id) {
+    Map<Integer, Board> boardMap = new HashMap<>();
+    for (int i = 0; i < playerTypes.size(); i++) {
+      if (i == id) continue;
+      boardMap.put(i, b.copyOf());
+    }
+    return boardMap;
   }
 
   public Scene createScene() {
