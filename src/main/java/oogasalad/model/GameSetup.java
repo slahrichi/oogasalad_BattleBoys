@@ -106,7 +106,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void placePiece(int row, int col) {
     System.out.println("Success");
     Player player = playerList.get(currentPlayerIndex);
-    Piece piece = pieceList.get(currentPieceIndex);
+    Piece piece = pieceList.get(currentPieceIndex).copyOf();
     if (player.placePiece(piece, new Coordinate(row, col))) {
       update(piece);
     }

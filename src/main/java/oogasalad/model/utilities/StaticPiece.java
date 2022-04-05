@@ -21,5 +21,10 @@ public class StaticPiece extends Piece {
     }
   }
 
+  @Override
+  public Piece copyOf() {
+    return new StaticPiece(List.copyOf(getCellList()), List.copyOf(getRelativeCoords()), getID());
+  }
+
 
 }
