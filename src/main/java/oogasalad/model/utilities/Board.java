@@ -17,6 +17,7 @@ public class Board {
   private Map<Coordinate, Cell> boardMap;
   private Map<String, Integer> maxElementsMap;
   private Map<String, Integer> elementHitMap;
+  private Map<String, Piece> myPieces;
 
   private ResourceBundle exceptions;
   private static AtomicInteger nextID = new AtomicInteger();
@@ -104,7 +105,6 @@ public class Board {
 
   public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }
 
-
   public int[][] getCurrentBoardState() {
     int[][] currStateArray = new int[myRows][myCols];
     for(Coordinate c : boardMap.keySet()) {
@@ -117,4 +117,11 @@ public class Board {
    return boardMap.get(c).hit();
 
   }
+
+  public void addPiece(String id, Piece newPiece){
+    myPieces.put(id, newPiece);
+    return;
+  }
+
+
 }

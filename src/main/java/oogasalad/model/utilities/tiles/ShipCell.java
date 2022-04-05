@@ -15,21 +15,24 @@ public class ShipCell implements Cell {
   private int myGoldValue;
   private int id;
 
-  public ShipCell(int x, int y, int health, Piece ship, int goldValue){
-    myCoordinate = new Coordinate(y,x);
+  public ShipCell(Coordinate coord, int health, Piece ship, int id, int goldValue){
+    myCoordinate = coord;
     myHealthBar = health;
     AssignedPiece = ship;
     currentState = CellState.HEALTHY;
     myGoldValue = goldValue;
-  }
-
-  public ShipCell(Coordinate c, int id){
-    myCoordinate = c;
     this.id = id;
   }
 
-  public ShipCell(int x, int y, Piece ship, int goldValue){
-    this(x,y,1, ship,goldValue);
+  public ShipCell(Coordinate c, int id){
+    this(c, 1, null, id, 100);
+  }
+  public ShipCell(int col, int row, int id){
+    this(new Coordinate(row, col), 1, null, id, 100;
+  }
+
+  public ShipCell(int row, int col, Piece ship, int id, int goldValue){
+    this(new Coordinate(row, col), 1, null, id, 100);
   }
 
   @Override
@@ -37,7 +40,7 @@ public class ShipCell implements Cell {
     myHealthBar --;
     if (myHealthBar == 0) {
       currentState = CellState.SUNKEN;
-     // AssignedPiece.registerDamage(this);
+      //AssignedPiece.registerDamage(this);
       return myGoldValue;
     } else {
       currentState = CellState.DAMAGED;

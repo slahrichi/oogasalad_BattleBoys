@@ -19,28 +19,29 @@ import org.junit.jupiter.api.Test;
 public class PieceTest {
 
   Piece piece;
-
+  ShipCell c1;
+  ShipCell c2 ;
 
   @BeforeEach
   void setup() {
     List<ShipCell> shipShape = new ArrayList<>() ;
-    ShipCell c1= new ShipCell(0,0,null,0);
-    ShipCell c2= new ShipCell(0,1,null,0);
+     c1= new ShipCell(0,0,null,0);
+     c2= new ShipCell(0,1,null,0);
     shipShape.add(c1);
     shipShape.add(c2);
-    piece = new StaticPiece(shipShape);
+    piece = new StaticPiece(shipShape,"1");
   }
 
   @Test
   void testBasicDamage() {
-    piece.registerDamage(new Coordinate(0,1));
+    piece.registerDamage(c1);
     assertEquals("Damaged",  piece.getStatus());
   }
 
   @Test
   void testSinkDamage() {
-    piece.registerDamage(new Coordinate(0,1));
-    piece.registerDamage(new Coordinate(0,0));
+    piece.registerDamage(c1);
+    piece.registerDamage(c2);
     assertEquals("Dead",  piece.getStatus());
   }
 
