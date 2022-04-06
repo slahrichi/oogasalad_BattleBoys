@@ -139,8 +139,10 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    Info info = (Info) evt.getNewValue();
-    notifyObserver("boardClicked", new Coordinate(info.row(), info.col()));
+    if (confirm.isDisabled()) {
+      Info info = (Info) evt.getNewValue();
+      notifyObserver("boardClicked", new Coordinate(info.row(), info.col()));
+    }
   }
 
   public void setCurrentPlayerNum() {
