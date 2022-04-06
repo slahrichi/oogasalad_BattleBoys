@@ -69,7 +69,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
           .newInstance(b, id, enemyMap);
     } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
         IllegalAccessException | NoSuchMethodException e) {
-      setupView.showError(CONFIG_ERROR);
+      setupView = new SetupView(boardSetup);
      }
     return p;
   }

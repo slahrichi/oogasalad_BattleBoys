@@ -15,6 +15,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.model.utilities.tiles.WaterCell;
 import oogasalad.view.SetupView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameSetupTest extends DukeApplicationTest {
   private PlayerData pd;
+  private PlayerData badPd;
   private GameSetup gs;
 
   @BeforeEach
@@ -31,6 +33,7 @@ public class GameSetupTest extends DukeApplicationTest {
     int[][] dummyBoard = new int[][]{{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1}};
     List<String> playerTypes = new ArrayList<>(Arrays.asList("HumanPlayer", "HumanPlayer"));
+    List<String> badPlayer = new ArrayList<>(Arrays.asList("HumanPlllayer"));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(1, 0), new Coordinate(1, 1)));
     List<ShipCell> dummyShipCellList = new ArrayList<>();
@@ -41,6 +44,7 @@ public class GameSetupTest extends DukeApplicationTest {
     List<Piece> pieceList = new ArrayList<>();
     pieceList.add(dummyShip);
     pd = new PlayerData(playerTypes, pieceList, dummyBoard);
+    badPd = new PlayerData(badPlayer, pieceList, dummyBoard);
 
   }
 
@@ -62,6 +66,25 @@ public class GameSetupTest extends DukeApplicationTest {
         checkCell(new Coordinate(1, 0)).getClass(), ShipCell.class);
     assertEquals(gs.getPlayerList().get(0).getBoard().
         checkCell(new Coordinate(1, 1)).getClass(), ShipCell.class);
+  }
+
+  @Test
+  void testInvalidInput() {
+    javafxRun(() -> gs = new GameSetup(badPd));
+    assertEquals(gs.getPlayerList().get(0), null);
+  }
+
+  @Test
+  void testInvalidCoordinate() {
+    javafxRun(() -> gs = new GameSetup(pd));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), null, null,
+        new Coordinate(-1, 0))));
+    assertEquals(gs.getPlayerList().get(0).getBoard().
+        checkCell(new Coordinate(0, 1)).getClass(), WaterCell.class);
+    assertEquals(gs.getPlayerList().get(0).getBoard().
+        checkCell(new Coordinate(1, 0)).getClass(), WaterCell.class);
+    assertEquals(gs.getPlayerList().get(0).getBoard().
+        checkCell(new Coordinate(1, 1)).getClass(), WaterCell.class);
   }
 
 }
