@@ -88,7 +88,7 @@ public class Board {
    */
 
   private boolean canPlaceAt(Coordinate c){
-    return boardMap.containsKey(c) && boardMap.get(c).getCellState()==CellState.WATER.ordinal();
+    return boardMap.get(c)!=null && boardMap.get(c).getCellState()==CellState.WATER.ordinal();
     //return !checkCell(c).equals(null); // this is not correct yet
   }
 
