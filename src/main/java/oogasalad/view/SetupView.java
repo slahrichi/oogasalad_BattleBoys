@@ -128,7 +128,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     setCurrentPlayerNum();
     clearBoard();
     confirm.setDisable(true);
-    //notifyObserver("moveToNextPlayer", null);
+    notifyObserver("moveToNextPlayer", null);
   }
 
   private void createCenterPanel(){
@@ -142,7 +142,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void propertyChange(PropertyChangeEvent evt) {
     if (confirm.isDisabled()) {
       Info info = (Info) evt.getNewValue();
-      notifyObserver("boardClicked", new Coordinate(info.row(), info.col()));
+      notifyObserver("placePiece", new Coordinate(info.row(), info.col()));
     }
   }
 

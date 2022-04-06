@@ -3,6 +3,7 @@ package oogasalad.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,26 +90,28 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    //System.out.println("Im alive");
-    Coordinate coords = (Coordinate) evt.getNewValue();
-    //System.out.println("Row: " + coords.getRow() + " Col: " + coords.getColumn());
-    placePiece(coords.getRow(), coords.getColumn());
+    Coordinate c = (Coordinate) evt.getNewValue();
+    try {
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Coordinate.class);
+      m.invoke(this, c);
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
   }
 
-  private void placePiece(int row, int col) {
-    //System.out.println("Success");
+  private void placePiece(Coordinate c) {
     Player player = playerList.get(playerIndex);
     Piece piece = pieceList.get(pieceIndex).copyOf();
-    if (player.placePiece(piece, new Coordinate(row, col))) {
+    if (player.placePiece(piece, new Coordinate(c.getRow(), c.getColumn()))) {
       update(piece);
     }
     else {
-      setupView.showError(String.format(COORD_ERROR, row, col));
+      setupView.showError(String.format(COORD_ERROR, c.getRow(), c.getColumn()));
     }
   }
 
   // add
-  private void moveToNextPlayer() {
+  private void moveToNextPlayer(Coordinate c) {
     playerIndex++;
     if(playerIndex >= playerList.size()) {
       System.out.println("Moving to game");
@@ -116,11 +119,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       return;
     }
     resetElements();
+    System.out.println("Moving to next player");
   }
 
   private void resetElements() {
     pieceIndex = 0;
-    setupView.activateConfirm();
     setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
   }
 
@@ -128,11 +131,12 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     System.out.println(piece.getHPList());
     setupView.placePiece(piece.getHPList(), "Piece type");
     pieceIndex++;
-    if(pieceIndex >= pieceList.size()) {
-      moveToNextPlayer();
-      return;
+    if (pieceIndex != pieceList.size()) {
+      setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
     }
-    setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
+    else {
+      setupView.activateConfirm();
+    }
   }
 
   public SetupView getSetupView() {
