@@ -7,18 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
-import oogasalad.view.ErrorDisplayer;
-import oogasalad.view.Info;
 import oogasalad.view.SetupView;
 
 public class GameSetup extends PropertyObservable implements PropertyChangeListener {
@@ -27,19 +22,20 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private int[][] boardSetup;
   private SetupView setupView;
   private List<Player> playerList;
-  private int currentPlayerIndex;
+  private int playerIndex;
   private List<Piece> pieceList;
-  private int currentPieceIndex;
+  private int pieceIndex;
 
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String CONFIG_ERROR = "Invalid player type given";
+  private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
 
   public GameSetup(PlayerData data){
     this.playerTypes = data.players();
     this.boardSetup = data.board();
     this.pieceList = data.pieces();
-    this.currentPieceIndex = 0;
-    this.currentPlayerIndex = 0;
+    this.pieceIndex = 0;
+    this.playerIndex = 0;
     setupGame();
   }
 
@@ -59,7 +55,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void initializeSetupView() {
     setupView = new SetupView(boardSetup);
     setupView.addObserver(this);
-    setupView.setCurrentPlayerNum(currentPlayerIndex + 1);
+    setupView.setCurrentPlayerNum(playerIndex + 1);
     setupView.setCurrentPiece(pieceList.get(0).getHPList());
   }
 
@@ -71,17 +67,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class,
               Map.class)
           .newInstance(b, id, enemyMap);
-    } catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
+        IllegalAccessException | NoSuchMethodException e) {
       setupView.showError(CONFIG_ERROR);
-    } catch (InvocationTargetException e) {
-      setupView.showError(CONFIG_ERROR);
-    } catch (InstantiationException e) {
-      setupView.showError(CONFIG_ERROR);
-    } catch (IllegalAccessException e) {
-      setupView.showError(CONFIG_ERROR);
-    } catch (NoSuchMethodException e) {
-      setupView.showError(CONFIG_ERROR);
-    }
+     }
     return p;
   }
 
@@ -101,49 +90,47 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    System.out.println("Im alive");
+    //System.out.println("Im alive");
     Coordinate coords = (Coordinate) evt.getNewValue();
-    System.out.println("Row: " + coords.getRow() + " Col: " + coords.getColumn());
+    //System.out.println("Row: " + coords.getRow() + " Col: " + coords.getColumn());
     placePiece(coords.getColumn(), coords.getRow());
   }
 
   private void placePiece(int row, int col) {
-    System.out.println("Success");
-    Player player = playerList.get(currentPlayerIndex);
-    Piece piece = pieceList.get(currentPieceIndex).copyOf();
+    //System.out.println("Success");
+    Player player = playerList.get(playerIndex);
+    Piece piece = pieceList.get(pieceIndex).copyOf();
     if (player.placePiece(piece, new Coordinate(row, col))) {
       update(piece);
     }
     else {
-      setupView.showError("Error placing piece at (" + row + "," + col + ")");
+      setupView.showError(String.format(COORD_ERROR, row, col));
     }
   }
 
   private void moveToNextPlayer() {
-    currentPlayerIndex++;
-
-    if(currentPlayerIndex == playerList.size() - 1) {
+    playerIndex++;
+    if(playerIndex == playerList.size() - 1) {
       notifyObserver("moveToGame", null);
       return;
     }
+    resetElements();
+  }
 
-    currentPieceIndex = 0;
-    setupView.setCurrentPlayerNum(currentPlayerIndex + 1);
+  private void resetElements() {
+    pieceIndex = 0;
+    setupView.setCurrentPlayerNum(playerIndex + 1);
     setupView.clearBoard();
-    setupView.setCurrentPiece(pieceList.get(currentPieceIndex).getHPList());
+    setupView.setCurrentPiece(pieceList.get(pieceIndex).getHPList());
   }
 
   private void update(Piece piece) {
-    System.out.println(piece.getHPList());
     setupView.placePiece(piece.getHPList(), "Piece type");
-    currentPieceIndex++;
-
-    if(currentPieceIndex >= pieceList.size()) {
+    pieceIndex++;
+    if(pieceIndex >= pieceList.size()) {
       moveToNextPlayer();
       return;
     }
-
-    // What is HPList?
-    setupView.setCurrentPiece(pieceList.get(currentPieceIndex).getHPList());
+    setupView.setCurrentPiece(pieceList.get(pieceIndex).getHPList());
   }
 }

@@ -31,12 +31,13 @@ public class Game {
     //Player dummyPlayer = new HumanPlayer(dummyBoard, 1);
     List<Player> playerList = new ArrayList<>();
     //playerList.add(dummyPlayer);
-    List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
-        new Coordinate(1, 0), new Coordinate(1, 1)));
+    List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 0)));
     List<ShipCell> dummyShipCellList = new ArrayList<>();
     dummyShipCellList.add(new ShipCell(1, new Coordinate(0,0), 0, "0"));
+    /*
     dummyShipCellList.add(new ShipCell(1, new Coordinate(0,0), 0, "1"));
     dummyShipCellList.add(new ShipCell(1, new Coordinate(0,0), 0, "2"));
+     */
     StaticPiece dummyShip = new StaticPiece(dummyShipCellList, coordinateList, "0");
 
     /*
