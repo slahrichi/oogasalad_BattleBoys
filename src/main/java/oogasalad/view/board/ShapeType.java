@@ -24,8 +24,8 @@ public class ShapeType {
     int[] yFactor = new int[]{0, 0, 1, 1};
 
     for (int i = 0; i < 4; i++) {
-      points.add(calculateXPos(width, col) + calculateWidth(col) * xFactor[i]);
-      points.add(calculateYPos(height, row) + calculateHeight(row) * yFactor[i]);
+      points.add(calculateXPos(width, col) + calculateWidth(width) * xFactor[i]);
+      points.add(calculateYPos(height, row) + calculateHeight(height) * yFactor[i]);
     }
 
     return points;

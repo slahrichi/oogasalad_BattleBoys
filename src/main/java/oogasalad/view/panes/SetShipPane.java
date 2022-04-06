@@ -29,7 +29,7 @@ public class SetShipPane {
     shipPane.setContent(shipIndicatorView.getBoardPane());
     shipPane.setId("shipPane");
     shipPane.setText("Ships");
-    shipPane.setExpanded(false);
+    shipPane.setExpanded(true);
   }
 
 //  private void setUpShips(){
