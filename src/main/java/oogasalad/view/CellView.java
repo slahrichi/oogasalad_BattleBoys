@@ -18,7 +18,7 @@ public class CellView extends PropertyObservable {
     myCoords = new Coordinate(row, col);
     myShape = new Polygon();
     myShape.setFill(color);
-    myShape.getPoints().addAll(shape.calculatePoints(row, col, height, width));
+    myShape.getPoints().addAll(shape.calculatePoints(row, col, width, height));
     myShape.setOnMouseClicked(e -> cellClicked());
   }
 

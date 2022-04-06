@@ -7,10 +7,12 @@ import java.util.Collection;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -32,11 +34,13 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
-  private static final String SCREEN_TITLE = "Set Up Your Ships";
+  private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "stylesheet.css";
 
   private BorderPane myPane;
+  private Button confirm;
+  private VBox centerBox;
   private StackPane myCenterPane;
   private BoardView setupBoard;
   private Scene myScene;
@@ -44,52 +48,66 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private VBox configBox;
   private LegendPane legendPane;
   private SetShipPane shipPane;
+  private Label title;
 
 
-  private String currentPlayerTitle;
+  private int currentPlayer;
 
   // current piece that is being placed
-  private List<Coordinate> currentPiece;
+  private Collection<Coordinate> currentPiece;
 
-  public SetupView(int[][] boardParameter) {
-
+  public SetupView(int[][] board) {
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     currentPiece = new ArrayList<>();
     myCenterPane = new StackPane();
     titleBox = new HBox();
     configBox = new VBox();
+    centerBox = new VBox();
     legendPane = new LegendPane();
-    shipPane = new SetShipPane(new Coordinate[][]{{new Coordinate(1, 1), new Coordinate(2, 2)}});
+    shipPane = new SetShipPane(50, 50);
 
-    // FIXME: create a new board out of the one that's passed in
-    setupBoard = new SetupBoardView(new ShapeType(), boardParameter, 1);
+    setupBoard = new SetupBoardView(new ShapeType(250, 250), board, 0);
 
-    currentPlayerTitle = "Player 1: " + SCREEN_TITLE;
+    currentPlayer = 1;
+
+    title = new Label("Player " + currentPlayer + SCREEN_TITLE);
+    title.setId("titleText");
 
     createTitlePanel();
+    createConfirm();
     createCenterPanel();
+    createCenterBox();
     createConfigPanel();
-
   }
 
-  public Scene createSetUp(){
+  public void activateConfirm() {
+    confirm.setDisable(false);
+  }
+
+  private void createCenterBox() {
+    centerBox.getChildren().addAll(myCenterPane, confirm);
+    centerBox.setAlignment(Pos.CENTER);
+    centerBox.setSpacing(20);
+    myPane.setCenter(centerBox);
+  }
+
+  public Scene getScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.getStylesheets()
         .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
     return myScene;
   }
 
-  public void setCurrentPiece(List<Coordinate> nextPiece) {
+  public void setCurrentPiece(Collection<Coordinate> nextPiece) {
     currentPiece = nextPiece;
+    shipPane.updateShownPiece(nextPiece);
   }
 
   private void createTitlePanel(){
     titleBox.setId("titleBox");
     myPane.setTop(titleBox);
-    Label titleLabel = new Label(currentPlayerTitle);
-    titleLabel.setId("titleText");
-    titleBox.getChildren().add(titleLabel);
+    titleBox.getChildren().add(title);
   }
 
   private void createConfigPanel(){
@@ -100,26 +118,40 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   }
 
+  private void createConfirm() {
+    confirm = new Button("Confirm");
+    confirm.setDisable(true);
+    confirm.setOnAction(e -> handleConfirm());
+  }
+
+  private void handleConfirm() {
+    setCurrentPlayerNum();
+    clearBoard();
+    confirm.setDisable(true);
+  }
+
   private void createCenterPanel(){
-
-    myPane.setCenter(myCenterPane);
     myCenterPane.setId("boardBox");
-
-
     setupBoard.addObserver(this);
-    myCenterPane.getChildren().add(setupBoard.getBoardPane());
+    myCenterPane.getChildren().addAll(setupBoard.getBoardPane());
   }
 
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     Info info = (Info) evt.getNewValue();
-    System.out.println("SetupView alive");
     notifyObserver("boardClicked", new Coordinate(info.row(), info.col()));
   }
 
-  public void setCurrentPlayerNum(int playerNum) {
-    currentPlayerTitle = "Player " + playerNum + ": " + SCREEN_TITLE;
+  public void setCurrentPlayerNum() {
+    currentPlayer++;
+    updateTitle();
+  }
+
+  private void updateTitle() {
+    titleBox.getChildren().remove(title);
+    title.setText("Player " + currentPlayer + SCREEN_TITLE);
+    titleBox.getChildren().add(title);
   }
 
   @Override

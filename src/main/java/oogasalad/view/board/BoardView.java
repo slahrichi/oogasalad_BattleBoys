@@ -16,9 +16,6 @@ import oogasalad.view.Info;
 
 public abstract class BoardView extends PropertyObservable implements PropertyChangeListener {
 
-  static final double BOARD_WIDTH = 200;
-  static final double BOARD_HEIGHT = 200;
-
   protected CellView[][] myLayout;
   private StackPane myBoard;
   private Group myBase;
@@ -79,7 +76,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     if(!(row < myLayout.length && col < myLayout[0].length)) {
       throw new IllegalArgumentException("Row " + row + " and column " + col + " out of bounds");
     }
-
+    System.out.println(row + " " + col);
     myLayout[row][col].getCell().setFill(color);
   }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 
 public abstract class Piece {
@@ -30,7 +31,6 @@ public abstract class Piece {
       c.placeAt(absoluteCoord);
     }
   }
-
 
   public List<ShipCell> getCellList() {
     return cellList;

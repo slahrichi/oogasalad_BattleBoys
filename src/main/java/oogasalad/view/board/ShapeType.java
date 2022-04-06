@@ -1,8 +1,5 @@
 package oogasalad.view.board;
 
-import static oogasalad.view.board.BoardView.BOARD_HEIGHT;
-import static oogasalad.view.board.BoardView.BOARD_WIDTH;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +7,14 @@ public class ShapeType {
 
   private static final double X_SPACING = 3;
   private static final double Y_SPACING = 3;
-  public ShapeType() {
+  private double myWidth;
+  private double myHeight;
 
+  public ShapeType(double width, double height) {
+    myWidth = width;
+    myHeight = height;
   }
-  public List<Double> calculatePoints(double row, double col, double height, double width) {
+  public List<Double> calculatePoints(double row, double col, double width, double height) {
     // FIXME: refactor to not use default square points
 
     List<Double> points = new ArrayList<>();
@@ -23,19 +24,19 @@ public class ShapeType {
     int[] yFactor = new int[]{0, 0, 1, 1};
 
     for (int i = 0; i < 4; i++) {
-      points.add(calculateXPos(width, col) + calculateWidth(width) * xFactor[i]);
-      points.add(calculateYPos(height, row) + calculateHeight(height) * yFactor[i]);
+      points.add(calculateXPos(width, col) + calculateWidth(col) * xFactor[i]);
+      points.add(calculateYPos(height, row) + calculateHeight(row) * yFactor[i]);
     }
 
     return points;
   }
 
   private double calculateHeight(double height) {
-    return (BOARD_HEIGHT - (height + 1) * Y_SPACING) / height;
+    return (myHeight - (height + 1) * Y_SPACING) / height;
   }
 
   private double calculateWidth(double width) {
-    return (BOARD_WIDTH - (width + 1) * X_SPACING) / width;
+    return (myWidth - (width + 1) * X_SPACING) / width;
   }
 
   private double calculateXPos(double width, double col) {

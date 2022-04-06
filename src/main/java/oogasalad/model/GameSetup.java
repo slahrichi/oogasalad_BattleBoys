@@ -55,8 +55,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void initializeSetupView() {
     setupView = new SetupView(boardSetup);
     setupView.addObserver(this);
-    setupView.setCurrentPlayerNum(playerIndex + 1);
-    setupView.setCurrentPiece(pieceList.get(0).getHPList());
+    setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
   }
 
   private Player createPlayer(String playerType, int id) {
@@ -84,8 +83,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   public Scene createScene() {
-    System.out.println("GameSetup pre-alive");
-    return setupView.createSetUp();
+    return setupView.getScene();
   }
 
   @Override
@@ -93,7 +91,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     //System.out.println("Im alive");
     Coordinate coords = (Coordinate) evt.getNewValue();
     //System.out.println("Row: " + coords.getRow() + " Col: " + coords.getColumn());
-    placePiece(coords.getColumn(), coords.getRow());
+    placePiece(coords.getRow(), coords.getColumn());
   }
 
   private void placePiece(int row, int col) {
@@ -108,9 +106,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     }
   }
 
+  // add
   private void moveToNextPlayer() {
     playerIndex++;
-    if(playerIndex == playerList.size() - 1) {
+    if(playerIndex >= playerList.size()) {
+      System.out.println("Moving to game");
       notifyObserver("moveToGame", null);
       return;
     }
@@ -119,18 +119,18 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private void resetElements() {
     pieceIndex = 0;
-    setupView.setCurrentPlayerNum(playerIndex + 1);
-    setupView.clearBoard();
-    setupView.setCurrentPiece(pieceList.get(pieceIndex).getHPList());
+    setupView.activateConfirm();
+    setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
   }
 
   private void update(Piece piece) {
+    System.out.println(piece.getHPList());
     setupView.placePiece(piece.getHPList(), "Piece type");
     pieceIndex++;
     if(pieceIndex >= pieceList.size()) {
       moveToNextPlayer();
       return;
     }
-    setupView.setCurrentPiece(pieceList.get(pieceIndex).getHPList());
+    setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
   }
 }

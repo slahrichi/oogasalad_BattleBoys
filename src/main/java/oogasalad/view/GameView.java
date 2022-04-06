@@ -45,7 +45,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     updateDisplayedBoard();
   }
 
-  public Scene createViewFromPlayers(List<Player> playerList) {
+  public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     return myScene;
@@ -75,20 +75,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void createBoards(int numBoards) {
     int[][] arrayLayout = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
     for (int i = 0; i < numBoards-1; i++) {
-      GameBoardView board = new EnemyBoardView(new ShapeType(), arrayLayout, i);
+      GameBoardView board = new EnemyBoardView(new ShapeType(250, 250), arrayLayout, i);
       board.addObserver(this);
       myBoards.add(board);
     }
     // create the last board with a different array layout
-    GameBoardView board2 = new EnemyBoardView(new ShapeType(), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 2);
+    GameBoardView board2 = new EnemyBoardView(new ShapeType(250, 250), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 2);
     board2.addObserver(this);
     myBoards.add(board2);
 
-    GameBoardView board3 = new EnemyBoardView(new ShapeType(), new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 1}}, 3);
+    GameBoardView board3 = new EnemyBoardView(new ShapeType(250, 250), new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 1}}, 3);
     board3.addObserver(this);
     myBoards.add(board3);
 
-    GameBoardView board4 = new SelfBoardView(new ShapeType(), new int[][]{{1, 1, 1, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}}, 4);
+    GameBoardView board4 = new SelfBoardView(new ShapeType(250, 250), new int[][]{{1, 1, 1, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}}, 4);
     board4.addObserver(this);
     myBoards.add(board4);
   }
