@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.scene.Scene;
 import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
@@ -132,5 +133,9 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       return;
     }
     setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
+  }
+
+  public SetupView getSetupView() {
+    return setupView;
   }
 }

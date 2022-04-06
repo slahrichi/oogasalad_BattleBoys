@@ -128,6 +128,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     setCurrentPlayerNum();
     clearBoard();
     confirm.setDisable(true);
+    //notifyObserver("moveToNextPlayer", null);
   }
 
   private void createCenterPanel(){
@@ -191,6 +192,5 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     alert.showAndWait();
     Platform.exit();
     System.exit(0);
-
   }
 }
