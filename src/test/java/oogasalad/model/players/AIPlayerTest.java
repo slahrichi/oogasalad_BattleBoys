@@ -24,7 +24,7 @@ class AIPlayerTest {
     allPlayers = new ArrayList<>();
     for(int i = 0; i < 3; i++) {
       Board b = new Board(new int[][]{{1, 1, 1}, {0, 1, 1}});
-      AIPlayer p = new AIPlayer(b, i);
+      AIPlayer p = new AIPlayer(b, i, null);
       allPlayers.add(p);
     }
     // add players to players

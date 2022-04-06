@@ -17,7 +17,7 @@ import oogasalad.model.utilities.tiles.WaterCell;
 public class Board {
 
   private Map<Coordinate, CellInterface> boardMap;
- //private CellInterface[][] boardArray;
+  private int[][] myBoardSetup;
   private Map<String, Integer> maxElementsMap;
   private Map<String, Integer> elementHitMap;
   private Map<String, Piece> myPieces;
@@ -36,8 +36,10 @@ public class Board {
 
 
   public Board(int[][] boardSetup) {
+    myBoardSetup = boardSetup;
     myRows = boardSetup.length;
     myCols = boardSetup[0].length;
+    myPieces = new HashMap<>();
     initialize(boardSetup);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
@@ -92,19 +94,30 @@ public class Board {
   /**
    * places a ship on the grid given a topLeft position and coordinates of all Cells making the ship
    * @param topLeft the coordinate of the topLeft Cell of the ship
-   * @param ship Piece to place at coordinate topLeft
+   * @param piece Piece to place at coordinate topLeft
    */
-  public boolean putShip(Coordinate topLeft, Piece ship){
-    for (Coordinate relative : ship.getRelativeCoords()) {
-      if(!canPlaceAt(Coordinate.sum(topLeft,relative))){
+  public boolean placePiece(Coordinate topLeft, Piece piece){
+    if (!hasValidPlacement(topLeft, piece)) {
+      return false;
+    }
+    addPieceCellsToBoard(topLeft, piece);
+    return true;
+  }
+
+  private void addPieceCellsToBoard(Coordinate topLeft, Piece piece) {
+    piece.placeCellsAt(topLeft);
+    myPieces.put(piece.getID(), piece); //can make this observer listener in future
+    for(ShipCell c: piece.getCellList()) {
+      place(c.getCoordinates(), c);
+    }
+    piece.initializeHPList();
+  }
+
+  private boolean hasValidPlacement(Coordinate topLeft, Piece piece) {
+    for (Coordinate relative : piece.getRelativeCoords()) {
+      if (!canPlaceAt(Coordinate.sum(topLeft, relative))) {
         return false;
       }
-    }
-
-    ship.placeCellsAt(topLeft);
-    myPieces.put(ship.getID(), ship); //can make this observer listener in future
-    for(ShipCell c: ship.getCellList()) {
-      place(c.getCoordinates(), c);
     }
     return true;
   }
@@ -144,6 +157,10 @@ public class Board {
   public void addPiece(String id, Piece newPiece){
     myPieces.put(id, newPiece);
     return;
+  }
+
+  public Board copyOf() {
+    return new Board(myBoardSetup);
   }
 
 

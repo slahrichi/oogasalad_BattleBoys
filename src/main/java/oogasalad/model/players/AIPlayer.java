@@ -2,6 +2,7 @@ package oogasalad.model.players;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
@@ -26,8 +27,8 @@ public class AIPlayer extends GenericPlayer{
 
   private List<Player> players;
 
-  public AIPlayer(Board board, int id) {
-    super(board, id);
+  public AIPlayer(Board board, int id, Map<Integer, Board> enemyMap) {
+    super(board, id, enemyMap);
     players = new ArrayList<>();
   }
 

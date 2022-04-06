@@ -30,11 +30,9 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private int currentPlayerIndex;
   private List<Piece> pieceList;
   private int currentPieceIndex;
-//  private Map<Integer, Player> idMap;
-//  private Map<Player, Integer> placeCounts;
 
   private static final String FILEPATH = "oogasalad.model.players.";
-  private static final String ERROR = "Invalid player type given";
+  private static final String CONFIG_ERROR = "Invalid player type given";
 
   public GameSetup(PlayerData data){
     this.playerTypes = data.players();
@@ -51,6 +49,14 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     for (String playerType : playerTypes) {
       playerList.add(createPlayer(playerType, id++));
     }
+    initializeSetupView();
+  }
+
+  public List<Player> getPlayerList() {
+    return playerList;
+  }
+
+  private void initializeSetupView() {
     setupView = new SetupView(boardSetup);
     setupView.addObserver(this);
     setupView.setCurrentPlayerNum(currentPlayerIndex + 1);
@@ -59,22 +65,33 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private Player createPlayer(String playerType, int id) {
     Board b = new Board(boardSetup);
+    Map<Integer, Board> enemyMap = createEnemyMap(b, id);
     Player p = null;
     try {
-      p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class)
-          .newInstance(b, id);
+      p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class,
+              Map.class)
+          .newInstance(b, id, enemyMap);
     } catch (ClassNotFoundException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     } catch (InvocationTargetException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     } catch (InstantiationException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     } catch (IllegalAccessException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     } catch (NoSuchMethodException e) {
-      setupView.showError(ERROR);
+      setupView.showError(CONFIG_ERROR);
     }
     return p;
+  }
+
+  private Map<Integer, Board> createEnemyMap(Board b, int id) {
+    Map<Integer, Board> boardMap = new HashMap<>();
+    for (int i = 0; i < playerTypes.size(); i++) {
+      if (i == id) continue;
+      boardMap.put(i, b.copyOf());
+    }
+    return boardMap;
   }
 
   public Scene createScene() {
@@ -93,7 +110,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void placePiece(int row, int col) {
     System.out.println("Success");
     Player player = playerList.get(currentPlayerIndex);
-    Piece piece = pieceList.get(currentPieceIndex);
+    Piece piece = pieceList.get(currentPieceIndex).copyOf();
     if (player.placePiece(piece, new Coordinate(row, col))) {
       update(piece);
     }
@@ -117,6 +134,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void update(Piece piece) {
+    System.out.println(piece.getHPList());
     setupView.placePiece(piece.getHPList(), "Piece type");
     currentPieceIndex++;
 

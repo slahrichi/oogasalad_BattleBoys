@@ -14,16 +14,14 @@ public abstract class Piece {
   private List<Coordinate> cellListHP = new ArrayList<>();
   private List<Coordinate> myRelativeCoords;
   private String status;
-  private Board myBoard;
   private String pieceId;
 
   public Piece(List<ShipCell> cells, List<Coordinate> relativeCoords, String id) {
     status = "Alive";
     pieceId = id;
     cellList = cells;
-    intializeHPList(cellList);
+    //intializeHPList(cellList);
     myRelativeCoords = relativeCoords;
-    //myBoard = board;
   }
 
 
@@ -38,8 +36,8 @@ public abstract class Piece {
     return cellList;
   }
 
-  private void intializeHPList(List<ShipCell> shape) {
-    for (ShipCell cell : shape) {
+  public void initializeHPList() {
+    for (ShipCell cell : cellList) {
       cellListHP.add(cell.getCoordinates());
     }
   }
@@ -72,5 +70,8 @@ public abstract class Piece {
   }
 
   public String getID(){return pieceId;}
+
+  public abstract Piece copyOf();
+
 }
 

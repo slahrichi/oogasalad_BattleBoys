@@ -18,7 +18,7 @@ public class ShipCell implements CellInterface {
 
 
 
-  public ShipCell(int health, int goldValue, Coordinate relativeCoordinate, String ID) {
+  public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String ID) {
     myHealthBar = health;
     myGoldValue = goldValue;
     myRelativeCoordinate = relativeCoordinate;

@@ -2,6 +2,7 @@ package oogasalad;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javafx.stage.Stage;
 import oogasalad.model.GameSetup;
@@ -30,22 +31,26 @@ public class Game {
     //Player dummyPlayer = new HumanPlayer(dummyBoard, 1);
     List<Player> playerList = new ArrayList<>();
     //playerList.add(dummyPlayer);
-
+    List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
+        new Coordinate(1, 0), new Coordinate(1, 1)));
     List<ShipCell> dummyShipCellList = new ArrayList<>();
-    dummyShipCellList.add(new ShipCell(new Coordinate(0,1), 0));
-    dummyShipCellList.add(new ShipCell(new Coordinate(1,0), 0));
-    dummyShipCellList.add(new ShipCell(new Coordinate(1,1), 0));
-    StaticPiece dummyShip = new StaticPiece(dummyShipCellList);
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(0,0), 0, "0"));
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(0,0), 0, "1"));
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(0,0), 0, "2"));
+    StaticPiece dummyShip = new StaticPiece(dummyShipCellList, coordinateList, "0");
 
+    /*
     List<ShipCell> dummyShipCellList2 = new ArrayList<>();
-    dummyShipCellList2.add(new ShipCell(new Coordinate(2,2), 0));
-    dummyShipCellList2.add(new ShipCell(new Coordinate(2,3), 0));
-    dummyShipCellList2.add(new ShipCell(new Coordinate(3,2), 0));
-    StaticPiece dummyShip2 = new StaticPiece(dummyShipCellList);
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(2,2), 0, "0"));
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(2,3), 0, "1"));
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(3,2), 0, "2"));
+    StaticPiece dummyShip2 = new StaticPiece(dummyShipCellList, coordinateList, "1");
+
+     */
 
     List<Piece> pieceList = new ArrayList<>();
     pieceList.add(dummyShip);
-    pieceList.add(dummyShip2);
+    //pieceList.add(dummyShip2);
     //PlayerData data = parser.parse(chooseDataFile());
     PlayerData data = new PlayerData(List.of("HumanPlayer", "HumanPlayer"), pieceList, dummyBoard);
     setup = new GameSetup(data);
