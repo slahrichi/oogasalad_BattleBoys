@@ -39,6 +39,7 @@ public class Board {
     myBoardSetup = boardSetup;
     myRows = boardSetup.length;
     myCols = boardSetup[0].length;
+    myPieces = new HashMap<>();
     initialize(boardSetup);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
@@ -109,6 +110,7 @@ public class Board {
     for(ShipCell c: piece.getCellList()) {
       place(c.getCoordinates(), c);
     }
+    piece.initializeHPList();
   }
 
   private boolean hasValidPlacement(Coordinate topLeft, Piece piece) {

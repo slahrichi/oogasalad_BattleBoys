@@ -49,6 +49,6 @@ public class WaterCell implements CellInterface {
 
   @Override
   public int getCellState() {
-    return 0;
+    return 1;
   }
 }

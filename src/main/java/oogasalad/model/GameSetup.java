@@ -49,7 +49,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     for (String playerType : playerTypes) {
       playerList.add(createPlayer(playerType, id++));
     }
-    //initializeSetupView();
+    initializeSetupView();
   }
 
   public List<Player> getPlayerList() {
@@ -134,6 +134,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void update(Piece piece) {
+    System.out.println(piece.getHPList());
     setupView.placePiece(piece.getHPList(), "Piece type");
     currentPieceIndex++;
 
