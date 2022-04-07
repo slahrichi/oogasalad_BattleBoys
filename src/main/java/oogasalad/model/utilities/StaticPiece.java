@@ -8,7 +8,9 @@ public class StaticPiece extends Piece {
   public StaticPiece(List<ShipCell> cellList, List<Coordinate> relativeCoords, String id) {
     super(cellList, relativeCoords, id);
   }
-
+  public StaticPiece(String id){
+    super(id);
+  }
   @Override
   public void registerDamage(ShipCell hitLocation) {
 
