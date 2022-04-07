@@ -3,6 +3,7 @@ package oogasalad.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javafx.scene.Scene;
@@ -11,8 +12,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
+import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.StaticPiece;
+import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -39,7 +43,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPane.setCenter(myCenterPane);
 
     myBoards = new ArrayList<>();
-    createBoards(3);
+    createBoards();
     currentBoardIndex = 0;
     updateDisplayedBoard();
   }
@@ -71,25 +75,86 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   }
 
-  private void createBoards(int numBoards) {
-    int[][] arrayLayout = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
-    for (int i = 0; i < numBoards-1; i++) {
-      GameBoardView board = new EnemyBoardView(new BoardShapeType(250, 250), arrayLayout, i);
-      board.addObserver(this);
-      myBoards.add(board);
+  private void createBoards() {
+    List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
+        new Coordinate(1, 0), new Coordinate(1, 1)));
+    List<ShipCell> dummyShipCellList = new ArrayList<>();
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(0,1), 0, "0"));
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(1,0), 0, "1"));
+    dummyShipCellList.add(new ShipCell(1, new Coordinate(1,1), 0, "2"));
+    StaticPiece dummyShip = new StaticPiece(dummyShipCellList, coordinateList, "0");
+
+    List<Coordinate> coordinateList2 = new ArrayList<>(Arrays.asList(new Coordinate(0, 0),
+        new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(0, 1), new Coordinate(0, 2)));
+    List<ShipCell> dummyShipCellList2 = new ArrayList<>();
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(0,0), 0, "0"));
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(1,0), 0, "1"));
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(1,1), 0, "2"));
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(0,1), 0, "3"));
+    dummyShipCellList2.add(new ShipCell(1, new Coordinate(0,2), 0, "4"));
+    StaticPiece dummyShip2 = new StaticPiece(dummyShipCellList2, coordinateList2, "0");
+
+    List<Coordinate> coordinateList3 = new ArrayList<>(Arrays.asList(new Coordinate(0, 0),
+        new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(2, 0), new Coordinate(3, 0)));
+    List<ShipCell> dummyShipCellList3 = new ArrayList<>();
+    dummyShipCellList3.add(new ShipCell(1, new Coordinate(0,0), 0, "0"));
+    dummyShipCellList3.add(new ShipCell(1, new Coordinate(1,0), 0, "1"));
+    dummyShipCellList3.add(new ShipCell(1, new Coordinate(1,1), 0, "2"));
+    dummyShipCellList3.add(new ShipCell(1, new Coordinate(2,0), 0, "3"));
+    dummyShipCellList3.add(new ShipCell(1, new Coordinate(3,0), 0, "4"));
+    StaticPiece dummyShip3 = new StaticPiece(dummyShipCellList3, coordinateList3, "0");
+
+    List<Coordinate> coordinateList4 = new ArrayList<>(Arrays.asList(new Coordinate(0, 0),
+        new Coordinate(0, 1), new Coordinate(0, 2), new Coordinate(0, 3), new Coordinate(0, 4)));
+    List<ShipCell> dummyShipCellList4 = new ArrayList<>();
+    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0,0), 0, "0"));
+    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0,1), 0, "1"));
+    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0,2), 0, "2"));
+    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0,3), 0, "3"));
+    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0,4), 0, "4"));
+    StaticPiece dummyShip4 = new StaticPiece(dummyShipCellList4, coordinateList4, "0");
+
+    int[][] arrayLayout = new int[8][8];
+    for(int i = 0; i < arrayLayout.length; i++){
+      Arrays.fill(arrayLayout[i], 1);
     }
+
+    // player's own board, no listeners on it
+    SelfBoardView board1 = new SelfBoardView(new BoardShapeType(250, 250), arrayLayout, 1);
+    myBoards.add(board1);
+    board1.setColorAt(1, 1, Color.RED);
+    board1.setColorAt(2, 1, Color.RED);
+    board1.setColorAt(1, 2, Color.RED);
+    board1.setColorAt(1, 3, Color.RED);
+    board1.setColorAt(5, 5, Color.BLACK);
+    board1.setColorAt(5, 6, Color.BLACK);
+    board1.setColorAt(5, 7, Color.BLACK);
+
+
     // create the last board with a different array layout
-    GameBoardView board2 = new EnemyBoardView(new BoardShapeType(250, 250), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 2);
+    GameBoardView board2 = new EnemyBoardView(new BoardShapeType(250, 250), arrayLayout, 2);
     board2.addObserver(this);
     myBoards.add(board2);
+    board2.setColorAt(4,3, Color.YELLOW);
+    board2.setColorAt(6, 3, Color.YELLOW);
+    board2.setColorAt(7, 5, Color.YELLOW);
 
-    GameBoardView board3 = new EnemyBoardView(new BoardShapeType(250, 250), new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 1}}, 3);
+
+    GameBoardView board3 = new EnemyBoardView(new BoardShapeType(250, 250), arrayLayout, 3);
     board3.addObserver(this);
     myBoards.add(board3);
+    board3.setColorAt(2, 2, Color.YELLOW);
+    board3.setColorAt(3, 6, Color.ORANGE);
+    board3.setColorAt(4, 6, Color.ORANGE);
 
-    GameBoardView board4 = new SelfBoardView(new BoardShapeType(250, 250), new int[][]{{1, 1, 1, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}}, 4);
+    GameBoardView board4 = new SelfBoardView(new BoardShapeType(250, 250), arrayLayout, 4);
     board4.addObserver(this);
     myBoards.add(board4);
+    board4.setColorAt(5,3, Color.YELLOW);
+    board4.setColorAt(2,3, Color.YELLOW);
+    board4.setColorAt(7,7, Color.RED);
+    board4.setColorAt(7, 6, Color.RED);
+    board4.setColorAt(6, 7, Color.RED);
   }
 
   public void promptPlayTurn() {
