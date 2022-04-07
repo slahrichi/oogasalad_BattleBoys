@@ -27,16 +27,19 @@ public abstract class Piece {
     //intializeHPList(cellList);
   }
 
-  public Piece(List<ShipCell> cells, String id){
+  public Piece(String id){
     status = "Alive";
     pieceId = id;
+
+  }
+  public void initCellList(List<ShipCell> cells){
     cellList = cells;
     allCells = new ArrayList<>(cellList);
+    myRelativeCoords = new ArrayList<Coordinate>();
     for(ShipCell cell: cellList){
-      myRelativeCoords.add(cell.getCoordinates());
+      myRelativeCoords.add(cell.getRelativeCoordinate());
     }
   }
-
 
   public void placeCellsAt(Coordinate absoluteCoord) {
     for(ShipCell c: cellList) {

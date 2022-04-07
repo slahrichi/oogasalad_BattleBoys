@@ -11,7 +11,7 @@ public class ShipCell implements CellInterface {
   private Coordinate myCoordinate;
   private Coordinate myRelativeCoordinate;
   private int myHealthBar;
-  private Piece myShip;
+  private transient  Piece myShip;
   private CellState currentState;
   private int myGoldValue;
   private int id;
@@ -84,7 +84,9 @@ public class ShipCell implements CellInterface {
   public List<Function> boardUpdate() {
     return null;
   }
-
+  public Coordinate getRelativeCoordinate(){
+    return myRelativeCoordinate;
+  }
   @Override
   public List<Function> playerUpdate() {
     return null;
