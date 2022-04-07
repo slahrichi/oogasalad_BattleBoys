@@ -11,13 +11,21 @@ public class ShipCell implements CellInterface {
   private Coordinate myCoordinate;
   private Coordinate myRelativeCoordinate;
   private int myHealthBar;
-  private Piece AssignedPiece;
+  private transient  Piece myShip;
   private CellState currentState;
   private int myGoldValue;
   private int id;
 
 
-
+// Use this Constructor to create ships in the real game
+  public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, Piece ship) {
+    myHealthBar = health;
+    myGoldValue = goldValue;
+    myRelativeCoordinate = relativeCoordinate;
+    currentState = CellState.SHIP_HEALTHY;
+    myShip = ship;
+  }
+//Use this only for testing purposes
   public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String ID) {
     myHealthBar = health;
     myGoldValue = goldValue;
@@ -64,7 +72,7 @@ public class ShipCell implements CellInterface {
     myHealthBar --;
     if (myHealthBar == 0) {
       currentState = CellState.SHIP_SUNKEN;
-      //AssignedPiece.registerDamage(this);
+      myShip.registerDamage(this);
       return myGoldValue;
     } else {
       currentState = CellState.SHIP_DAMAGED;
@@ -76,7 +84,9 @@ public class ShipCell implements CellInterface {
   public List<Function> boardUpdate() {
     return null;
   }
-
+  public Coordinate getRelativeCoordinate(){
+    return myRelativeCoordinate;
+  }
   @Override
   public List<Function> playerUpdate() {
     return null;
@@ -103,7 +113,7 @@ public class ShipCell implements CellInterface {
   }
 
   public Piece getAssignedShip(){
-    return AssignedPiece;
+    return myShip;
   }
 
 }
