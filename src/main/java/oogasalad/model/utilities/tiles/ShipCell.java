@@ -22,6 +22,7 @@ public class ShipCell implements CellInterface {
     myHealthBar = health;
     myGoldValue = goldValue;
     myRelativeCoordinate = relativeCoordinate;
+    currentState = CellState.SHIP_HEALTHY;
   }
 
   public void placeAt(Coordinate absoluteCoord) {
