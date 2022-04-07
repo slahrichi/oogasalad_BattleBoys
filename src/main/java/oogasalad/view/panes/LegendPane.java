@@ -29,6 +29,7 @@ public class LegendPane {
 
   private void setUpText(){
 
+    legendKey.prefWidth(100);
     legendKey.setText("Test code here. Thinking about putting a color block next to their corresponding key.");
 
   }

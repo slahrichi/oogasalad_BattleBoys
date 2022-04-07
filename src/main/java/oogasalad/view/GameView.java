@@ -11,14 +11,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
-import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
-import oogasalad.view.board.ShapeType;
+import oogasalad.view.board.BoardShapeType;
 
 public class GameView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer, ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
@@ -75,20 +74,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void createBoards(int numBoards) {
     int[][] arrayLayout = new int[][]{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
     for (int i = 0; i < numBoards-1; i++) {
-      GameBoardView board = new EnemyBoardView(new ShapeType(250, 250), arrayLayout, i);
+      GameBoardView board = new EnemyBoardView(new BoardShapeType(250, 250), arrayLayout, i);
       board.addObserver(this);
       myBoards.add(board);
     }
     // create the last board with a different array layout
-    GameBoardView board2 = new EnemyBoardView(new ShapeType(250, 250), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 2);
+    GameBoardView board2 = new EnemyBoardView(new BoardShapeType(250, 250), new int[][]{{0, 1, 0}, {1, 1, 1}, {0, 1, 0}}, 2);
     board2.addObserver(this);
     myBoards.add(board2);
 
-    GameBoardView board3 = new EnemyBoardView(new ShapeType(250, 250), new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 1}}, 3);
+    GameBoardView board3 = new EnemyBoardView(new BoardShapeType(250, 250), new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 1}}, 3);
     board3.addObserver(this);
     myBoards.add(board3);
 
-    GameBoardView board4 = new SelfBoardView(new ShapeType(250, 250), new int[][]{{1, 1, 1, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}}, 4);
+    GameBoardView board4 = new SelfBoardView(new BoardShapeType(250, 250), new int[][]{{1, 1, 1, 1}, {1, 0, 0, 1}, {1, 0, 0, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}}, 4);
     board4.addObserver(this);
     myBoards.add(board4);
   }
