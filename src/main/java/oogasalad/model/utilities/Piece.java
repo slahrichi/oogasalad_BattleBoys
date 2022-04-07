@@ -12,6 +12,7 @@ import oogasalad.model.utilities.tiles.ShipCell;
 public abstract class Piece {
 
   private List<ShipCell> cellList;
+  private List<ShipCell> allCells;
   private List<Coordinate> cellListHP = new ArrayList<>();
   private List<Coordinate> myRelativeCoords;
   private String status;
@@ -21,8 +22,19 @@ public abstract class Piece {
     status = "Alive";
     pieceId = id;
     cellList = cells;
-    //intializeHPList(cellList);
+    allCells = new ArrayList<>(cellList);
     myRelativeCoords = relativeCoords;
+    //intializeHPList(cellList);
+  }
+
+  public Piece(List<ShipCell> cells, String id){
+    status = "Alive";
+    pieceId = id;
+    cellList = cells;
+    allCells = new ArrayList<>(cellList);
+    for(ShipCell cell: cellList){
+      myRelativeCoords.add(cell.getCoordinates());
+    }
   }
 
 
@@ -35,6 +47,7 @@ public abstract class Piece {
   public List<ShipCell> getCellList() {
     return cellList;
   }
+  public List<ShipCell> getAllCells() {return allCells;}
 
   public void initializeHPList() {
     for (ShipCell cell : cellList) {
@@ -55,7 +68,6 @@ public abstract class Piece {
   public String getStatus() {
     return status;
   }
-
 
   public Consumer<Map<Coordinate, CellInterface>> update() {
     return null;

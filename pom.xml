@@ -52,6 +52,12 @@
       <version>jdk-12.0.1+2</version>
       <scope>test</scope>
     </dependency>
+    <!-- uses  gson to translate json file into objects-->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.9.0</version>
+    </dependency>
   </dependencies>
 
   <build>

@@ -111,7 +111,7 @@ public class ShipCell implements CellInterface {
   }
 
   public Piece getAssignedShip(){
-    return AssignedPiece;
+    return myShip;
   }
 
 }
