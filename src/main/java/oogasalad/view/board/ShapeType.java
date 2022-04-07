@@ -3,47 +3,25 @@ package oogasalad.view.board;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShapeType {
+public abstract class ShapeType {
 
-  private static final double X_SPACING = 3;
-  private static final double Y_SPACING = 3;
-  private double myWidth;
-  private double myHeight;
+  protected double myBoardWidth;
+  protected double myBoardHeight;
+  protected static final double X_SPACING = 3;
+  protected static final double Y_SPACING = 3;
 
-  public ShapeType(double width, double height) {
-    myWidth = width;
-    myHeight = height;
-  }
-  public List<Double> calculatePoints(double row, double col, double width, double height) {
-    // FIXME: refactor to not use default square points
+  public ShapeType(double width, double height){
 
-    List<Double> points = new ArrayList<>();
+    myBoardWidth = width;
+    myBoardHeight = height;
 
-    // arrays used as multiplicative factors
-    int[] xFactor = new int[]{0, 1, 1, 0};
-    int[] yFactor = new int[]{0, 0, 1, 1};
-
-    for (int i = 0; i < 4; i++) {
-      points.add(calculateXPos(width, col) + calculateWidth(width) * xFactor[i]);
-      points.add(calculateYPos(height, row) + calculateHeight(height) * yFactor[i]);
-    }
-
-    return points;
   }
 
-  private double calculateHeight(double height) {
-    return (myHeight - (height + 1) * Y_SPACING) / height;
-  }
 
-  private double calculateWidth(double width) {
-    return (myWidth - (width + 1) * X_SPACING) / width;
-  }
+  public abstract List<Double> calculatePoints(double row, double col, double width, double height);
 
-  private double calculateXPos(double width, double col) {
-    return ((col + 1) * X_SPACING) + (col * calculateWidth(width));
-  }
+  protected abstract double calculateXPos(double width, double col);
 
-  private double calculateYPos(double height, double row) {
-    return ((row + 1) * Y_SPACING) + (row * calculateHeight(height));
-  }
+  protected abstract double calculateYPos(double height, double row);
+
 }

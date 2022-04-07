@@ -4,7 +4,7 @@ import oogasalad.view.CellView;
 
 public class SetupBoardView extends BoardView {
 
-  public SetupBoardView(ShapeType shape, int[][] arrayLayout, int id) {
+  public SetupBoardView(BoardShapeType shape, int[][] arrayLayout, int id) {
     super(shape, arrayLayout, id);
   }
 

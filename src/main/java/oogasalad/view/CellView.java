@@ -4,6 +4,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.view.board.BoardShapeType;
 import oogasalad.view.board.ShapeType;
 
 public class CellView extends PropertyObservable {

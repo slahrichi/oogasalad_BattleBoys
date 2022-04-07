@@ -98,6 +98,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   public void propertyChange(PropertyChangeEvent evt) {
     System.out.println("Start game");
     //TODO: Change this to an instance of GameManager
-//    myStage.setScene((new GameView()).createScene());
+    myStage.setScene((new GameView()).createScene());
   }
 }
