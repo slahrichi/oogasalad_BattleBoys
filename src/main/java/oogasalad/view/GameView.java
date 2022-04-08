@@ -6,13 +6,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import oogasalad.PropertyObservable;
-import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
@@ -22,15 +26,20 @@ import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
 import oogasalad.view.board.BoardShapeType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class GameView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer, ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
+  private static final Logger LOG = LogManager.getLogger(GameView.class);
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
 
   private List<BoardView> myBoards;
   private BorderPane myPane;
-  private StackPane myCenterPane;
+  private VBox myCenterPane;
+  private Label currentBoardLabel;
   private Scene myScene;
 
   private int currentBoardIndex;
@@ -38,20 +47,33 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public GameView() {
     myPane = new BorderPane();
     myPane.setId("view-pane");
-    myCenterPane = new StackPane();
-    myCenterPane.setId("view-center-pane");
-    myPane.setCenter(myCenterPane);
 
     myBoards = new ArrayList<>();
-    createBoards();
+
     currentBoardIndex = 0;
-    updateDisplayedBoard();
+    createCenterPane();
   }
 
   public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     return myScene;
+  }
+  
+  private void createCenterPane() {
+    createBoards();
+
+    myCenterPane = new VBox();
+    myCenterPane.setId("view-center-pane");
+    myCenterPane.setSpacing(20);
+    myCenterPane.setAlignment(Pos.CENTER);
+
+    currentBoardLabel = new Label("Your Board");
+    currentBoardLabel.setAlignment(Pos.CENTER);
+    currentBoardLabel.setTextAlignment(TextAlignment.CENTER);
+    currentBoardLabel.setFont(new Font(50));
+    myPane.setCenter(myCenterPane);
+    updateDisplayedBoard();
   }
 
   private void handleKeyInput(KeyCode code) {
@@ -60,15 +82,16 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     } else if (code == KeyCode.RIGHT) {
       currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
     }
-    System.out.println("Showing board " + currentBoardIndex);
+    LOG.info("Showing board " + currentBoardIndex);
     updateDisplayedBoard();
   }
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
     StackPane boardToDisplay = myBoards.get(currentBoardIndex).getBoardPane();
+    currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board" : "Your Shots Against Player " + (currentBoardIndex + 1));
     myCenterPane.getChildren().clear();
-    myCenterPane.getChildren().add(boardToDisplay);
+    myCenterPane.getChildren().addAll(currentBoardLabel, boardToDisplay);
   }
 
   public void showGame() {

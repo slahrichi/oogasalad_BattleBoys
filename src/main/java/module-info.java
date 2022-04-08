@@ -7,7 +7,8 @@ open module oogasalad_app {
     requires javafx.web;
     requires java.desktop;
     requires com.google.gson;
-
+    requires org.apache.logging.log4j;
+    requires java.scripting;
     // allow other classes to access listed packages in your project
     exports oogasalad;
 }
