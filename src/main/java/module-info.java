@@ -11,4 +11,5 @@ open module oogasalad_app {
     requires java.scripting;
     // allow other classes to access listed packages in your project
     exports oogasalad;
+    exports oogasalad.controller;
 }

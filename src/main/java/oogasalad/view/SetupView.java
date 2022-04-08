@@ -22,11 +22,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
-import oogasalad.view.board.BoardShapeType;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetShipPane;
 
@@ -65,9 +63,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     configBox = new VBox();
     centerBox = new VBox();
     legendPane = new LegendPane();
-    shipPane = new SetShipPane(100, 100);
-
-    setupBoard = new SetupBoardView(new BoardShapeType(600, 600), board, 0);
+    shipPane = new SetShipPane(200);
+    setupBoard = new SetupBoardView(500, board, 0);
 
     currentPlayer = 1;
 
@@ -106,8 +103,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void createConfigPanel(){
     configBox.setId("configBox");
+    configBox.setMinWidth(300);
     myPane.setRight(configBox);
-    configBox.getChildren().add(new Label("Test"));
+//    configBox.getChildren().add(new Label("Test"));
     configBox.getChildren().addAll(shipPane.getShipPane(), legendPane.getLegendPane());
 
   }

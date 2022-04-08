@@ -23,11 +23,11 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.view.board.BoardMaker;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
-import oogasalad.view.board.BoardShapeType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -184,12 +184,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     StaticPiece dummyShip4 = new StaticPiece(dummyShipCellList4, coordinateList4, "0");
 
     int[][] arrayLayout = new int[8][8];
-    for(int i = 0; i < arrayLayout.length; i++){
-      Arrays.fill(arrayLayout[i], 1);
+    for (int[] ints : arrayLayout) {
+      Arrays.fill(ints, 1);
     }
 
     // player's own board, no listeners on it
-    SelfBoardView board1 = new SelfBoardView(new BoardShapeType(250, 250), arrayLayout, 1);
+    SelfBoardView board1 = new SelfBoardView(500, arrayLayout, 1);
     myBoards.add(board1);
     board1.setColorAt(1, 1, Color.RED);
     board1.setColorAt(2, 1, Color.RED);
@@ -201,7 +201,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
 
     // create the last board with a different array layout
-    GameBoardView board2 = new EnemyBoardView(new BoardShapeType(250, 250), arrayLayout, 2);
+    GameBoardView board2 = new EnemyBoardView(500, arrayLayout, 2);
     board2.addObserver(this);
     myBoards.add(board2);
     board2.setColorAt(4,3, Color.YELLOW);
@@ -209,14 +209,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     board2.setColorAt(7, 5, Color.YELLOW);
 
 
-    GameBoardView board3 = new EnemyBoardView(new BoardShapeType(250, 250), arrayLayout, 3);
+    GameBoardView board3 = new EnemyBoardView(500, arrayLayout, 3);
     board3.addObserver(this);
     myBoards.add(board3);
     board3.setColorAt(2, 2, Color.YELLOW);
     board3.setColorAt(3, 6, Color.ORANGE);
     board3.setColorAt(4, 6, Color.ORANGE);
 
-    GameBoardView board4 = new SelfBoardView(new BoardShapeType(250, 250), arrayLayout, 4);
+    GameBoardView board4 = new SelfBoardView(500, arrayLayout, 4);
     board4.addObserver(this);
     myBoards.add(board4);
     board4.setColorAt(5,3, Color.YELLOW);
