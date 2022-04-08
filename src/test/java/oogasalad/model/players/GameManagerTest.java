@@ -2,7 +2,7 @@ package oogasalad.model.players;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import oogasalad.model.GameManager;
+import oogasalad.controller.GameManager;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import org.junit.jupiter.api.BeforeEach;

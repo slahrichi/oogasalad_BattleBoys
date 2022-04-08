@@ -1,21 +1,18 @@
 package oogasalad.view;
 
 import oogasalad.view.board.BoardView;
-import oogasalad.view.board.BoardShapeType;
-import oogasalad.view.board.ShapeType;
-import oogasalad.view.board.ShipShapeType;
+import oogasalad.view.board.BoardMaker;
 
 public class ShipIndicatorView extends BoardView {
-  public ShipIndicatorView(ShapeType type, int[][] shipLayout, int id) {
-    super(type, shipLayout, id);
+  public ShipIndicatorView(double size, int[][] shipLayout, int id) {
+    super(size, shipLayout, id);
     //placeShipInView(shipLayout);
   }
 
-  @Override
-  public void initializeCellViews(int[][] arrayLayout, ShapeType shape) {
+  public void initializeCellViews(int[][] arrayLayout) {
     for (int row = 0; row < arrayLayout.length; row++) {
       for (int col = 0; col < arrayLayout[0].length; col++) {
-        CellView cell = new CellView(shape, arrayLayout[row][col] == 0 ? mapCellToColor.get(INVALID) : mapCellToColor.get(HEALTHY_SHIP),
+        CellView cell = new CellView(myBoardMaker, arrayLayout[row][col] == 0 ? mapCellToColor.get(INVALID) : mapCellToColor.get(HEALTHY_SHIP),
             row, col, arrayLayout.length, arrayLayout[0].length);
         myLayout[row][col] = cell;
       }

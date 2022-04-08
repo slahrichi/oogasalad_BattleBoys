@@ -4,22 +4,19 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.view.board.BoardShapeType;
-import oogasalad.view.board.ShapeType;
+import oogasalad.view.board.BoardMaker;
 
 public class CellView extends PropertyObservable {
 
-  private boolean isActive;
   private Coordinate myCoords;
   private Polygon myShape;
 
-  // no need for status anymore because listeners are only attached to active cells
-  public CellView(ShapeType shape, Paint color, int row, int col, int width, int height) {
-//    isActive = status;
+  // pass in list of points to create instead of passing board width and height (number of rows and cols)
+  public CellView(BoardMaker shape, Paint color, int row, int col, int width, int height) {
     myCoords = new Coordinate(row, col);
     myShape = new Polygon();
     myShape.setFill(color);
-    myShape.getPoints().addAll(shape.calculatePoints(row, col, width, height));
+    myShape.getPoints().addAll(shape.calculatePoints(row, col));
     myShape.setOnMouseClicked(e -> cellClicked());
   }
 

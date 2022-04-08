@@ -1,15 +1,8 @@
 package oogasalad;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import oogasalad.model.GameManager;
-import oogasalad.model.GameSetup;
-import oogasalad.model.players.HumanPlayer;
-import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
-import oogasalad.view.SetupView;
+import oogasalad.controller.Game;
 
 /**
  * Feel free to completely change this code or delete it entirely. 

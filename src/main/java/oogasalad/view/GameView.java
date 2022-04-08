@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -22,11 +23,11 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.view.board.BoardMaker;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
-import oogasalad.view.board.BoardShapeType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,6 +46,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private BorderPane myPane;
   private VBox myCenterPane;
   private Label currentBoardLabel;
+  private HBox boardButtonBox;
+  private Button leftButton;
+  private Button rightButton;
+
   private Scene myScene;
 
   private int currentBoardIndex;
@@ -79,37 +84,77 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createCenterPane() {
-    createBoards();
-
     myCenterPane = new VBox();
     myCenterPane.setId("view-center-pane");
     myCenterPane.setSpacing(20);
     myCenterPane.setAlignment(Pos.CENTER);
+    myPane.setCenter(myCenterPane);
 
+    setupBoardLabel();
+
+    createBoards();
+    myCenterPane.getChildren().add(myBoards.get(0).getBoardPane());
+
+    setupBoardButtons();
+  }
+
+  private void setupBoardLabel() {
     currentBoardLabel = new Label("Your Board");
     currentBoardLabel.setAlignment(Pos.CENTER);
     currentBoardLabel.setTextAlignment(TextAlignment.CENTER);
     currentBoardLabel.setFont(new Font(50));
-    myPane.setCenter(myCenterPane);
-    updateDisplayedBoard();
+    myCenterPane.getChildren().add(currentBoardLabel);
+  }
+
+  private void setupBoardButtons() {
+    boardButtonBox = new HBox();
+    boardButtonBox.setSpacing(20);
+    boardButtonBox.setAlignment(Pos.CENTER);
+
+    leftButton = new Button("<-");
+    leftButton.setFont(new Font(25));
+    leftButton.setOnMouseClicked(e -> decrementBoardIndex());
+
+    rightButton = new Button("->");
+    rightButton.setFont(new Font(25));
+    rightButton.setOnMouseClicked(e -> incrementBoardIndex());
+
+    boardButtonBox.getChildren().addAll(leftButton, rightButton);
+    myCenterPane.getChildren().add(boardButtonBox);
   }
 
   private void handleKeyInput(KeyCode code) {
     if(code == KeyCode.LEFT) {
-      currentBoardIndex = (currentBoardIndex + myBoards.size() - 1) % myBoards.size();
+      decrementBoardIndex();
     } else if (code == KeyCode.RIGHT) {
-      currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
+      incrementBoardIndex();
     }
-    LOG.info("Showing board " + currentBoardIndex);
+  }
+
+  // Decrements currentBoardIndex and updates the shown board
+  private void decrementBoardIndex() {
+    int prev = currentBoardIndex;
+    currentBoardIndex = (currentBoardIndex + myBoards.size() - 1) % myBoards.size();
+    updateDisplayedBoard();
+  }
+
+  // Increments currentBoardIndex and updates the shown board
+  private void incrementBoardIndex() {
+    int prev = currentBoardIndex;
+    currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
     updateDisplayedBoard();
   }
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
-    StackPane boardToDisplay = myBoards.get(currentBoardIndex).getBoardPane();
     currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board" : "Your Shots Against Player " + (currentBoardIndex + 1));
+    refreshCenterPane();
+    LOG.info("Showing board " + currentBoardIndex);
+  }
+
+  private void refreshCenterPane() {
     myCenterPane.getChildren().clear();
-    myCenterPane.getChildren().addAll(currentBoardLabel, boardToDisplay);
+    myCenterPane.getChildren().addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox);
   }
 
   public void showGame() {
@@ -156,12 +201,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     StaticPiece dummyShip4 = new StaticPiece(dummyShipCellList4, coordinateList4, "0");
 
     int[][] arrayLayout = new int[8][8];
-    for(int i = 0; i < arrayLayout.length; i++){
-      Arrays.fill(arrayLayout[i], 1);
+    for (int[] ints : arrayLayout) {
+      Arrays.fill(ints, 1);
     }
 
     // player's own board, no listeners on it
-    SelfBoardView board1 = new SelfBoardView(new BoardShapeType(250, 250), arrayLayout, 1);
+    SelfBoardView board1 = new SelfBoardView(500, arrayLayout, 1);
     myBoards.add(board1);
     board1.setColorAt(1, 1, Color.RED);
     board1.setColorAt(2, 1, Color.RED);
@@ -173,7 +218,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
 
     // create the last board with a different array layout
-    GameBoardView board2 = new EnemyBoardView(new BoardShapeType(250, 250), arrayLayout, 2);
+    GameBoardView board2 = new EnemyBoardView(500, arrayLayout, 2);
     board2.addObserver(this);
     myBoards.add(board2);
     board2.setColorAt(4,3, Color.YELLOW);
@@ -181,14 +226,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     board2.setColorAt(7, 5, Color.YELLOW);
 
 
-    GameBoardView board3 = new EnemyBoardView(new BoardShapeType(250, 250), arrayLayout, 3);
+    GameBoardView board3 = new EnemyBoardView(500, arrayLayout, 3);
     board3.addObserver(this);
     myBoards.add(board3);
     board3.setColorAt(2, 2, Color.YELLOW);
     board3.setColorAt(3, 6, Color.ORANGE);
     board3.setColorAt(4, 6, Color.ORANGE);
 
-    GameBoardView board4 = new SelfBoardView(new BoardShapeType(250, 250), arrayLayout, 4);
+    GameBoardView board4 = new SelfBoardView(500, arrayLayout, 4);
     board4.addObserver(this);
     myBoards.add(board4);
     board4.setColorAt(5,3, Color.YELLOW);
