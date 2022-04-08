@@ -1,14 +1,12 @@
 package oogasalad.view.panes;
 
-
+import java.util.Arrays;
 import java.util.Collection;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.VBox;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.ShipIndicatorView;
-import oogasalad.view.board.BoardShapeType;
-import oogasalad.view.board.ShipShapeType;
 
 // need to hold the ship list as well as create the ships to display
 
@@ -17,19 +15,19 @@ public class SetShipPane {
   private TitledPane shipPane;
   private ShipIndicatorView shipIndicatorView;
   private boolean lastPiecePlaced = false;
+  private double myShipSize;
 
-
-  public SetShipPane(double width, double height){
-
+  public SetShipPane(double size){
+    myShipSize = size;
     shipPane = new TitledPane();
-    shipIndicatorView = new ShipIndicatorView(new ShipShapeType(width, height), new int[][]{{1}}, 0);
+    shipIndicatorView = new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0);
     setUpPane();
   }
 
 
   private void setUpPane(){
     shipPane.setContent(shipIndicatorView.getBoardPane());
-    shipPane.setPrefSize(200, 200);
+    shipPane.setPrefSize(300, 300);
     shipPane.setId("shipPane");
     shipPane.setText("Ships");
     shipPane.setExpanded(true);
@@ -47,14 +45,15 @@ public class SetShipPane {
 
   public void updateShownPiece(Collection<Coordinate> relativeCoords) {
     // Change ship indicator image
-    shipPane.setContent(new ShipIndicatorView(new ShipShapeType(50, 50), getArrayRepresentation(relativeCoords), 0).getBoardPane());
+    System.out.println(relativeCoords);
+    shipPane.setContent(new ShipIndicatorView(myShipSize, getArrayRepresentation(relativeCoords), 0).getBoardPane());
   }
 
   public void showListCompletion(){
     shipPane.setContent(new Label("All ships placed."));
   }
 
-  private int[][] getArrayRepresentation(Collection<Coordinate> relativeCoords) {
+  private CellState[][] getArrayRepresentation(Collection<Coordinate> relativeCoords) {
     int numRows = 0;
     int numCols = 0;
 
@@ -63,10 +62,16 @@ public class SetShipPane {
       numCols = Math.max(numCols, c.getColumn() + 1);
     }
 
-    int[][] arrayRepresentation = new int[numRows][numCols];
+    CellState[][] arrayRepresentation = new CellState[numRows][numCols];
+
+    for(int i = 0; i < arrayRepresentation.length; i++) {
+      for (int j = 0; j < arrayRepresentation[0].length; j++) {
+        arrayRepresentation[i][j] = CellState.NOT_DEFINED;
+      }
+    }
 
     for(Coordinate c : relativeCoords) {
-      arrayRepresentation[c.getRow()][c.getColumn()] = 1;
+      arrayRepresentation[c.getRow()][c.getColumn()] = CellState.SHIP_HEALTHY;
     }
 
     return arrayRepresentation;

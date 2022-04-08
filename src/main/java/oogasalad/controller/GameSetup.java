@@ -1,4 +1,4 @@
-package oogasalad.model;
+package oogasalad.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -16,12 +16,13 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
 
 public class GameSetup extends PropertyObservable implements PropertyChangeListener {
 
   private List<String> playerTypes;
-  private int[][] boardSetup;
+  private CellState[][] boardSetup;
   private SetupView setupView;
   private List<Player> playerList;
   private int playerIndex;
@@ -110,7 +111,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     }
   }
 
-  // add
   private void moveToNextPlayer(Coordinate c) {
     playerIndex++;
     if(playerIndex >= playerList.size()) {

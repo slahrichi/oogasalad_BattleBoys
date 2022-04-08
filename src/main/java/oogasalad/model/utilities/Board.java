@@ -1,15 +1,13 @@
 package oogasalad.model.utilities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
-import oogasalad.model.utilities.tiles.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
 //import org.apache.log4j.Logger;
@@ -18,7 +16,7 @@ import oogasalad.model.utilities.tiles.WaterCell;
 public class Board {
 
   private Map<Coordinate, CellInterface> boardMap;
-  private int[][] myBoardSetup;
+  private CellState[][] myBoardSetup;
   private Map<String, Integer> maxElementsMap;
   private Map<String, Integer> elementHitMap;
   private Map<String, Piece> myPieces;
@@ -36,7 +34,7 @@ public class Board {
 
 
 
-  public Board(int[][] boardSetup) {
+  public Board(CellState[][] boardSetup) {
     myBoardSetup = boardSetup;
     myRows = boardSetup.length;
     myCols = boardSetup[0].length;
@@ -46,11 +44,11 @@ public class Board {
   }
 
 
-  void initialize(int[][] boardSetup) {
+  void initialize(CellState[][] boardSetup) {
     boardMap = new HashMap<Coordinate, CellInterface>();
     for (int i = 0; i < boardSetup.length; i++) {
       for (int j = 0; j < boardSetup[0].length; j++) {
-        if(boardSetup[i][j] == CellState.WATER.ordinal()){
+        if(boardSetup[i][j] == CellState.WATER){
           boardMap.put(new Coordinate(i, j), new WaterCell(new Coordinate(i,j)));
         }
       }

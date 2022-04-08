@@ -10,8 +10,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
-import oogasalad.model.GameManager;
+import oogasalad.controller.GameManager;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -69,6 +70,6 @@ public class ViewTest extends DukeApplicationTest {
   @Test
   public void testSetupView() {
     List<Player> players = new ArrayList<>();
-    SetupView view = new SetupView(new int[][]{});
+    SetupView view = new SetupView(new CellState[][]{});
   }
 }

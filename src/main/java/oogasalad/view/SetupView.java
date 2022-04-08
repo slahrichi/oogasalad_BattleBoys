@@ -22,11 +22,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
-import oogasalad.view.board.BoardShapeType;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetShipPane;
 
@@ -36,7 +35,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final double SCREEN_HEIGHT = 800;
   private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "stylesheet.css";
+  private static final String STYLESHEET = "setupStylesheet.css";
 
   private BorderPane myPane;
   private Button confirm;
@@ -56,7 +55,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   // current piece that is being placed
   private Collection<Coordinate> currentPiece;
 
-  public SetupView(int[][] board) {
+  public SetupView(CellState[][] board) {
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     currentPiece = new ArrayList<>();
@@ -65,9 +64,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     configBox = new VBox();
     centerBox = new VBox();
     legendPane = new LegendPane();
-    shipPane = new SetShipPane(100, 100);
-
-    setupBoard = new SetupBoardView(new BoardShapeType(600, 600), board, 0);
+    shipPane = new SetShipPane(200);
+    setupBoard = new SetupBoardView(500, board, 0);
 
     currentPlayer = 1;
 
@@ -106,8 +104,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void createConfigPanel(){
     configBox.setId("configBox");
+    configBox.setMinWidth(300);
     myPane.setRight(configBox);
-    configBox.getChildren().add(new Label("Test"));
+//    configBox.getChildren().add(new Label("Test"));
     configBox.getChildren().addAll(shipPane.getShipPane(), legendPane.getLegendPane());
 
   }

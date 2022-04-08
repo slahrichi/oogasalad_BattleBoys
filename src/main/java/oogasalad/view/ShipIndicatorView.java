@@ -1,21 +1,27 @@
 package oogasalad.view;
 
+import javafx.scene.paint.Color;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardView;
-import oogasalad.view.board.BoardShapeType;
-import oogasalad.view.board.ShapeType;
-import oogasalad.view.board.ShipShapeType;
 
 public class ShipIndicatorView extends BoardView {
-  public ShipIndicatorView(ShapeType type, int[][] shipLayout, int id) {
-    super(type, shipLayout, id);
+  public ShipIndicatorView(double size, CellState[][] shipLayout, int id) {
+    super(size, shipLayout, id);
+//    for (int i = 0 ; i < shipLayout.length; i++) {
+//      for (int j = 0; j < shipLayout[0].length; j++) {
+//        System.out.println(shipLayout[i][j].name());
+//      }
+//    }
     //placeShipInView(shipLayout);
   }
 
-  @Override
-  public void initializeCellViews(int[][] arrayLayout, ShapeType shape) {
+  public void initializeCellViews(CellState[][] arrayLayout) {
     for (int row = 0; row < arrayLayout.length; row++) {
       for (int col = 0; col < arrayLayout[0].length; col++) {
-        CellView cell = new CellView(shape, arrayLayout[row][col] == 0 ? mapCellToColor.get(INVALID) : mapCellToColor.get(HEALTHY_SHIP),
+        System.out.println(arrayLayout[row][col].name());
+        CellView cell = new CellView(myBoardMaker, arrayLayout[row][col] == CellState.NOT_DEFINED ? Color.valueOf(
+            myCellStateResources.getString(FILL_PREFIX+CellState.NOT_DEFINED.name())) : Color.valueOf(
+            myCellStateResources.getString(FILL_PREFIX+CellState.SHIP_HEALTHY.name())),
             row, col, arrayLayout.length, arrayLayout[0].length);
         myLayout[row][col] = cell;
       }

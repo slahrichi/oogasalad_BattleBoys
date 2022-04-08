@@ -1,4 +1,4 @@
-package oogasalad.model;
+package oogasalad.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

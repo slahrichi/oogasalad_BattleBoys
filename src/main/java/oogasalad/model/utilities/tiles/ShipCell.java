@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 
 public class ShipCell implements CellInterface {
