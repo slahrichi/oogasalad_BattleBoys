@@ -17,7 +17,6 @@ public class ShipIndicatorView extends BoardView {
       for (int col = 0; col < arrayLayout[0].length; col++) {
         CellView cell = new CellView(shape, arrayLayout[row][col] == 0 ? mapCellToColor.get(INVALID) : mapCellToColor.get(HEALTHY_SHIP),
             row, col, arrayLayout.length, arrayLayout[0].length);
-        System.out.println(arrayLayout.length + " " + arrayLayout[0].length);
         myLayout[row][col] = cell;
       }
     }

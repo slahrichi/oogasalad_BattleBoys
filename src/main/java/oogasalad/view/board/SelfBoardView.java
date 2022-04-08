@@ -12,16 +12,16 @@ public class SelfBoardView extends GameBoardView {
     for (int row = 0; row < arrayLayout.length; row++) {
       for (int col = 0; col < arrayLayout[0].length; col++) {
         if (arrayLayout[row][col] == EMPTY) {
-          CellView cell = new CellView(shape, mapCellToColor.get(EMPTY), col, row, arrayLayout[0].length,
-              arrayLayout.length);
+          CellView cell = new CellView(shape, mapCellToColor.get(EMPTY), row, col, arrayLayout.length,
+              arrayLayout[0].length);
           myLayout[row][col] = cell;
         } else if (arrayLayout[row][col] == HEALTHY_SHIP) {
-          CellView cell = new CellView(shape, mapCellToColor.get(HEALTHY_SHIP), col, row, arrayLayout[0].length,
-              arrayLayout.length);
+          CellView cell = new CellView(shape, mapCellToColor.get(HEALTHY_SHIP), row, col, arrayLayout.length,
+              arrayLayout[0].length);
           myLayout[row][col] = cell;
         } else if (arrayLayout[row][col] == SPECIAL) {
-          CellView cell = new CellView(shape, mapCellToColor.get(SPECIAL), col, row, arrayLayout[0].length,
-              arrayLayout.length);
+          CellView cell = new CellView(shape, mapCellToColor.get(SPECIAL), col, row, arrayLayout.length,
+              arrayLayout[0].length);
           myLayout[row][col] = cell;
         }
       }
