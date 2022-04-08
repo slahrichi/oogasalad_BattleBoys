@@ -1,4 +1,4 @@
-package oogasalad.model;
+package oogasalad.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -110,7 +110,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     }
   }
 
-  // add
   private void moveToNextPlayer(Coordinate c) {
     playerIndex++;
     if(playerIndex >= playerList.size()) {
