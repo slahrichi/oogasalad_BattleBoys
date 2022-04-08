@@ -7,8 +7,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
@@ -27,7 +29,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
+  private static final String DEFAULT_RESOURCE_PACKAGE = "/";
+  private static final String STYLESHEET = "setupStylesheet.css";
 
+  private HBox myTitle;
+  private Label titleName;
   private List<BoardView> myBoards;
   private BorderPane myPane;
   private StackPane myCenterPane;
@@ -36,11 +42,13 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private int currentBoardIndex;
 
   public GameView() {
+
     myPane = new BorderPane();
     myPane.setId("view-pane");
     myCenterPane = new StackPane();
     myCenterPane.setId("view-center-pane");
     myPane.setCenter(myCenterPane);
+    createTitle();
 
     myBoards = new ArrayList<>();
     createBoards();
@@ -48,9 +56,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     updateDisplayedBoard();
   }
 
+  private void createTitle() {
+    myTitle = new HBox();
+    myTitle.setId("titleBox");
+    titleName = new Label("OOGASalad Battleship");
+    myTitle.getChildren().add(titleName);
+    titleName.setId("titleText");
+    myPane.setTop(myTitle);
+  }
+
   public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+    myScene.getStylesheets()
+        .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
     return myScene;
   }
 

@@ -22,7 +22,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
@@ -36,7 +35,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final double SCREEN_HEIGHT = 800;
   private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "stylesheet.css";
+  private static final String STYLESHEET = "setupStylesheet.css";
 
   private BorderPane myPane;
   private Button confirm;
