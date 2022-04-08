@@ -8,9 +8,11 @@ import java.util.Collection;
 import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -40,6 +42,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private BorderPane myPane;
   private VBox myCenterPane;
   private Label currentBoardLabel;
+  private HBox boardButtonBox;
+  private Button leftButton;
+  private Button rightButton;
+
   private Scene myScene;
 
   private int currentBoardIndex;
@@ -61,37 +67,77 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
   
   private void createCenterPane() {
-    createBoards();
-
     myCenterPane = new VBox();
     myCenterPane.setId("view-center-pane");
     myCenterPane.setSpacing(20);
     myCenterPane.setAlignment(Pos.CENTER);
+    myPane.setCenter(myCenterPane);
 
+    setupBoardLabel();
+
+    createBoards();
+    myCenterPane.getChildren().add(myBoards.get(0).getBoardPane());
+
+    setupBoardButtons();
+  }
+
+  private void setupBoardLabel() {
     currentBoardLabel = new Label("Your Board");
     currentBoardLabel.setAlignment(Pos.CENTER);
     currentBoardLabel.setTextAlignment(TextAlignment.CENTER);
     currentBoardLabel.setFont(new Font(50));
-    myPane.setCenter(myCenterPane);
-    updateDisplayedBoard();
+    myCenterPane.getChildren().add(currentBoardLabel);
+  }
+
+  private void setupBoardButtons() {
+    boardButtonBox = new HBox();
+    boardButtonBox.setSpacing(20);
+    boardButtonBox.setAlignment(Pos.CENTER);
+
+    leftButton = new Button("<-");
+    leftButton.setFont(new Font(25));
+    leftButton.setOnMouseClicked(e -> decrementBoardIndex());
+
+    rightButton = new Button("->");
+    rightButton.setFont(new Font(25));
+    rightButton.setOnMouseClicked(e -> incrementBoardIndex());
+
+    boardButtonBox.getChildren().addAll(leftButton, rightButton);
+    myCenterPane.getChildren().add(boardButtonBox);
   }
 
   private void handleKeyInput(KeyCode code) {
     if(code == KeyCode.LEFT) {
-      currentBoardIndex = (currentBoardIndex + myBoards.size() - 1) % myBoards.size();
+      decrementBoardIndex();
     } else if (code == KeyCode.RIGHT) {
-      currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
+      incrementBoardIndex();
     }
-    LOG.info("Showing board " + currentBoardIndex);
+  }
+
+  // Decrements currentBoardIndex and updates the shown board
+  private void decrementBoardIndex() {
+    int prev = currentBoardIndex;
+    currentBoardIndex = (currentBoardIndex + myBoards.size() - 1) % myBoards.size();
+    updateDisplayedBoard();
+  }
+
+  // Increments currentBoardIndex and updates the shown board
+  private void incrementBoardIndex() {
+    int prev = currentBoardIndex;
+    currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
     updateDisplayedBoard();
   }
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
-    StackPane boardToDisplay = myBoards.get(currentBoardIndex).getBoardPane();
     currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board" : "Your Shots Against Player " + (currentBoardIndex + 1));
+    refreshCenterPane();
+    LOG.info("Showing board " + currentBoardIndex);
+  }
+
+  private void refreshCenterPane() {
     myCenterPane.getChildren().clear();
-    myCenterPane.getChildren().addAll(currentBoardLabel, boardToDisplay);
+    myCenterPane.getChildren().addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox);
   }
 
   public void showGame() {
