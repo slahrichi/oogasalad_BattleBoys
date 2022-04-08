@@ -156,7 +156,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   @Override
-  public void placePiece(Collection<Coordinate> coords, String type) {
+  public void placePiece(Collection<Coordinate> coords, CellState type) {
     for(Coordinate c : coords) {
       setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.BLACK);
     }

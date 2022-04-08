@@ -128,7 +128,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void update(Piece piece) {
-    setupView.placePiece(piece.getHPList(), "Piece type");
+    setupView.placePiece(piece.getHPList(), CellState.SHIP_HEALTHY);
     pieceIndex++;
     if (pieceIndex != pieceList.size()) {
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());

@@ -28,21 +28,6 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   protected ResourceBundle myMarkerResources;
   protected static String FILL_PREFIX = "FillColor_";
 
-  // piece type enum
-  protected static int INVALID = 0;
-  protected static int EMPTY = 1;
-  protected static int HEALTHY_SHIP = 2;
-  protected static int DAMAGED_SHIP = 3;
-  protected static int DESTROYED_SHIP = 4;
-  protected static int SPECIAL = 5;
-  protected Map<Integer, Paint> mapCellToColor;
-
-  // shot result enum
-  protected static int MISSED = 0;
-  protected static int HIT_PIECE = 1;
-  protected static int HIT_SPECIAL = 2;
-  protected Map<Integer, Paint> mapShotToColor;
-
   // controller passes some kind of parameter to the
   public BoardView(double size, CellState[][] arrayLayout, int id) {
     myBoardMaker = new BoardMaker(size, arrayLayout.length, arrayLayout[0].length);
