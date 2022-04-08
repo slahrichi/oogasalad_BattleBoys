@@ -18,3 +18,26 @@ Describe your plan for how to manage and prioritize the project, including a rou
   - `Mine.java`
 - 75% unit test coverage for backend, and 50% for frontend
 
+
+#### By Saturday 4/10
+- `GameManager` fully implemented
+- Parsing capabilities fully working and interacting with `GameSetup`
+- Ensure that `Player.strike()` effectively works for `HumanPlayer`
+- Complete `GameView` for game between `HumanPlayers`, adding transition scene from player to
+player
+- With all these things working together, 2+ players should be able to play each other in battleship
+- Test coverage for all previously written code ( 75% unit test coverage for backend, and 50% for 
+frontend)
+
+#### By Wednesday 4/13
+- Add front end features for light/dark theme
+- Make sure that interaction between `GameSetup` and `SetupView` allows for players to move ships
+before clicking "Confirm"
+- UI for setting up game (labels with text fields) should be able to handle requested `Player` types,
+various `Cell` shapes, and number of boats should be ready
+  - UI should be able to save these features in config files
+- Work on `BoatBuilder`, `GridBuilder`, and `WeaponBuilder` features should be underway
+- Backend should have developed some different `Weapon` types and be able to integrate them with
+config files and frontend
+- Development of AI players should be started and/or nearly complete
+
