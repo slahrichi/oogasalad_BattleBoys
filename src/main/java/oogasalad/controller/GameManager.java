@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.enums.Marker;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 
@@ -66,8 +67,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     System.out.println("ID: " + ((Info)evt.getNewValue()).ID());
     int row = ((Info)evt.getNewValue()).row();
     int col = ((Info)evt.getNewValue()).col();
-    view.displayShotAt(row, col, true);
-//    view.placePiece(List.of(new Coordinate(row, col), new Coordinate(row + 1, col)), "bruh");
+    view.displayShotAt(row, col, Marker.HIT_SHIP);
   }
 
   public List<Player> getPlayerList() {

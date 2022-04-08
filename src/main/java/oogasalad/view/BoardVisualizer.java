@@ -2,6 +2,7 @@ package oogasalad.view;
 
 import java.util.Collection;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public interface BoardVisualizer {
 
@@ -10,7 +11,7 @@ public interface BoardVisualizer {
    * @param coords Coordinates to place Piece at
    * @param type Type of piece being placed
    */
-  void placePiece(Collection<Coordinate> coords, String type);
+  void placePiece(Collection<Coordinate> coords, CellState type);
 
   /**
    * Removes any Pieces that are at the coordinates contained in coords.
