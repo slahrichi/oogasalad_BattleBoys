@@ -23,6 +23,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardMaker;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
@@ -200,9 +201,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     dummyShipCellList4.add(new ShipCell(1, new Coordinate(0,4), 0, "4"));
     StaticPiece dummyShip4 = new StaticPiece(dummyShipCellList4, coordinateList4, "0");
 
-    int[][] arrayLayout = new int[8][8];
-    for (int[] ints : arrayLayout) {
-      Arrays.fill(ints, 1);
+    CellState[][] arrayLayout = new CellState[8][8];
+    for (CellState[] ints : arrayLayout) {
+      Arrays.fill(ints, CellState.WATER);
     }
 
     // player's own board, no listeners on it

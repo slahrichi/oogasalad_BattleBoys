@@ -6,6 +6,7 @@ import java.util.List;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +23,15 @@ class AIPlayerTest {
   void setup() {
     // setup player
     allPlayers = new ArrayList<>();
+    int[][] board = new int[][]{{1, 1, 1}, {0, 1, 1}};
+    CellState[][] cellBoard = new CellState[board.length][board[0].length];
+    for (int i = 0; i < cellBoard.length; i++) {
+      for (int j = 0; j < cellBoard[0].length; j++) {
+        cellBoard[i][j] = CellState.values()[board[i][j]];
+      }
+    }
     for(int i = 0; i < 3; i++) {
-      Board b = new Board(new int[][]{{1, 1, 1}, {0, 1, 1}});
+      Board b = new Board(cellBoard);
       AIPlayer p = new AIPlayer(b, i, null);
       allPlayers.add(p);
     }

@@ -9,6 +9,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public abstract class GenericPlayer implements Player{
 
@@ -67,7 +68,7 @@ public abstract class GenericPlayer implements Player{
     }
   }
 
-  public void setupBoard(int[][] board) {
+  public void setupBoard(CellState[][] board) {
     myBoard = new Board(board);
   }
 

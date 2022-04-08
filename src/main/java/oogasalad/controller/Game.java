@@ -17,6 +17,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.GameView;
 
 public class Game extends PropertyObservable implements PropertyChangeListener {
@@ -32,7 +33,8 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     parser = new Parser();
     fileChooser = new FilePicker();
 
-    int[][] dummyBoard = new int[][]{{1,1,1,1,1,1},{1,1,1,1,1,1},{1,1,1,1,1,1}};
+    CellState[][] dummyBoard = new CellState[][]{{CellState.WATER,CellState.WATER,CellState.NOT_DEFINED,CellState.WATER},{CellState.WATER,CellState.WATER,CellState.WATER,CellState.NOT_DEFINED},{CellState.NOT_DEFINED,CellState.WATER,CellState.WATER,CellState.NOT_DEFINED}};
+
 
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(1, 0), new Coordinate(1, 1)));
