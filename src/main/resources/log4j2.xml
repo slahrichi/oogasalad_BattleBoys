@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+  <Appenders>
+    <Console name="console" target="SYSTEM_OUT">
+      <!-- for details about these options: https://logging.apache.org/log4j/2.x/manual/layouts.html#PatternLayout -->
+      <PatternLayout>
+        <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</Pattern>
+      </PatternLayout>
+    </Console>
+    <File name="file" fileName="log/app.log" immediateFlush="true" append="true">
+      <!-- consider using a rolling file instead to avoid super long log files -->
+      <!-- https://logging.apache.org/log4j/2.x/manual/appenders.html#RollingFileAppender -->
+      <PatternLayout>
+        <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+      </PatternLayout>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Root level="all">
+      <AppenderRef ref="console" level="debug" />
+      <!--            <AppenderRef ref="file" level="all" /> -->
+    </Root>
+  </Loggers>
+</Configuration>

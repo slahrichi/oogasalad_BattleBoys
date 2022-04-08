@@ -77,8 +77,8 @@ public class GameSetupTest extends DukeApplicationTest {
   @Test
   void testInvalidCoordinate() {
     javafxRun(() -> gs = new GameSetup(pd));
-    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), null, null,
-        new Coordinate(-1, 0))));
+    assertThrows(NullPointerException.class, () -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), null, null,
+        new Coordinate(-1, 0)))) ;
     assertEquals(gs.getPlayerList().get(0).getBoard().
         checkCell(new Coordinate(0, 1)).getClass(), WaterCell.class);
     assertEquals(gs.getPlayerList().get(0).getBoard().

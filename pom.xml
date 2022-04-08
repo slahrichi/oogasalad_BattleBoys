@@ -13,6 +13,12 @@
   </properties>
 
   <dependencies>
+    <!-- use logging instead of println to report important information -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.17.1</version>
+    </dependency>
     <!-- use the latest version of OpenJFX that fixes Mac ARM bug -->
     <dependency>
       <groupId>org.openjfx</groupId>
@@ -51,6 +57,12 @@
       <artifactId>openjfx-monocle</artifactId>
       <version>jdk-12.0.1+2</version>
       <scope>test</scope>
+    </dependency>
+    <!-- uses  gson to translate json file into objects-->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.9.0</version>
     </dependency>
   </dependencies>
 
