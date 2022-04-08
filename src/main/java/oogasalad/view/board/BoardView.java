@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.Group;
+import javafx.scene.control.Cell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -85,7 +86,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   public void clear() {
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {
-        myLayout[i][j].getCell().setFill(mapCellToColor.get(EMPTY));
+        myLayout[i][j].getCell().setFill(Color.valueOf(myCellStateResources.getString(FILL_PREFIX+CellState.WATER.name())));
       }
     }
   }

@@ -108,22 +108,22 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void handleKeyInput(KeyCode code) {
     if(code == KeyCode.LEFT) {
+      System.out.println("Left pressed");
       decrementBoardIndex();
     } else if (code == KeyCode.RIGHT) {
+      System.out.println("Right pressed");
       incrementBoardIndex();
     }
   }
 
   // Decrements currentBoardIndex and updates the shown board
   private void decrementBoardIndex() {
-    int prev = currentBoardIndex;
     currentBoardIndex = (currentBoardIndex + myBoards.size() - 1) % myBoards.size();
     updateDisplayedBoard();
   }
 
   // Increments currentBoardIndex and updates the shown board
   private void incrementBoardIndex() {
-    int prev = currentBoardIndex;
     currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
     updateDisplayedBoard();
   }

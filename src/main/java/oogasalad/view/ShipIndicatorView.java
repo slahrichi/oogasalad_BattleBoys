@@ -1,7 +1,6 @@
 package oogasalad.view;
 
 import oogasalad.view.board.BoardView;
-import oogasalad.view.board.BoardMaker;
 
 public class ShipIndicatorView extends BoardView {
   public ShipIndicatorView(double size, int[][] shipLayout, int id) {
