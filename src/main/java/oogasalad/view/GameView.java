@@ -6,12 +6,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -28,6 +32,7 @@ import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
+import oogasalad.view.panels.TitlePanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,8 +45,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "setupStylesheet.css";
 
-  private HBox myTitle;
-  private Label titleName;
+  private TitlePanel myTitle;
   private List<BoardView> myBoards;
   private BorderPane myPane;
   private VBox myCenterPane;
@@ -49,6 +53,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private HBox boardButtonBox;
   private Button leftButton;
   private Button rightButton;
+  private VBox mySidePane;
 
   private Scene myScene;
 
@@ -57,23 +62,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public GameView() {
 
     myPane = new BorderPane();
+    myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     myPane.setId("view-pane");
-    createTitle();
 
     myBoards = new ArrayList<>();
 
     currentBoardIndex = 0;
     createCenterPane();
+    createConfigPanel();
+    createTitlePanel();
   }
 
-  private void createTitle() {
-    myTitle = new HBox();
-    myTitle.setId("titleBox");
-    titleName = new Label("OOGASalad Battleship");
-    myTitle.getChildren().add(titleName);
-    titleName.setId("titleText");
-    myPane.setTop(myTitle);
-  }
 
   public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -96,6 +95,19 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myCenterPane.getChildren().add(myBoards.get(0).getBoardPane());
 
     setupBoardButtons();
+  }
+
+  private void createConfigPanel(){
+    mySidePane = new VBox();
+    mySidePane.setId("configBox");
+    Label placeholder = new Label("Config panel here.");
+    mySidePane.getChildren().addAll(placeholder);
+    myPane.setRight(mySidePane);
+  }
+
+  private void createTitlePanel(){
+    myTitle = new TitlePanel("Player 1's Turn");
+    myPane.setTop(myTitle);
   }
 
   private void setupBoardLabel() {
@@ -245,6 +257,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void promptPlayTurn() {
     System.out.println("Please play turn! Maybe we should show a player ID here!");
+  }
+
+  private void updateTitle() {
+    myTitle.changeTitle("Player X's turn");
   }
 
   @Override

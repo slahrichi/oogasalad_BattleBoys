@@ -9,27 +9,25 @@ import oogasalad.view.ShipIndicatorView;
 
 // need to hold the ship list as well as create the ships to display
 
-public class SetShipPane {
+public class SetShipPane extends TitledPane{
 
-  private TitledPane shipPane;
   private ShipIndicatorView shipIndicatorView;
   private boolean lastPiecePlaced = false;
   private double myShipSize;
 
   public SetShipPane(double size){
     myShipSize = size;
-    shipPane = new TitledPane();
     shipIndicatorView = new ShipIndicatorView(myShipSize, new int[][]{{1}}, 0);
     setUpPane();
   }
 
 
   private void setUpPane(){
-    shipPane.setContent(shipIndicatorView.getBoardPane());
-    shipPane.setPrefSize(300, 300);
-    shipPane.setId("shipPane");
-    shipPane.setText("Ships");
-    shipPane.setExpanded(true);
+    this.setContent(shipIndicatorView.getBoardPane());
+    this.setPrefSize(300, 300);
+    this.setId("shipPane");
+    this.setText("Ships");
+    this.setExpanded(true);
   }
 
 //  private void setUpShips(){
@@ -44,11 +42,11 @@ public class SetShipPane {
 
   public void updateShownPiece(Collection<Coordinate> relativeCoords) {
     // Change ship indicator image
-    shipPane.setContent(new ShipIndicatorView(myShipSize, getArrayRepresentation(relativeCoords), 0).getBoardPane());
+    this.setContent(new ShipIndicatorView(myShipSize, getArrayRepresentation(relativeCoords), 0).getBoardPane());
   }
 
   public void showListCompletion(){
-    shipPane.setContent(new Label("All ships placed."));
+    this.setContent(new Label("All ships placed."));
   }
 
   private int[][] getArrayRepresentation(Collection<Coordinate> relativeCoords) {
@@ -69,8 +67,5 @@ public class SetShipPane {
     return arrayRepresentation;
   }
 
-  public TitledPane getShipPane(){
-    return shipPane;
-  }
 
 }
