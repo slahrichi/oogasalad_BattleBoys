@@ -4,26 +4,16 @@ import oogasalad.view.CellView;
 
 public class SelfBoardView extends GameBoardView {
 
-  public SelfBoardView(ShapeType shape, int[][] arrayLayout, int id) {
-    super(shape, arrayLayout, id);
+  public SelfBoardView(double size, int[][] arrayLayout, int id) {
+    super(size, arrayLayout, id);
   }
 
-  public void initializeCellViews(int[][] arrayLayout, ShapeType shape) {
+  public void initializeCellViews(int[][] arrayLayout) {
     for (int row = 0; row < arrayLayout.length; row++) {
       for (int col = 0; col < arrayLayout[0].length; col++) {
-        if (arrayLayout[row][col] == EMPTY) {
-          CellView cell = new CellView(shape, mapCellToColor.get(EMPTY), row, col, arrayLayout.length,
+        CellView cell = new CellView(myBoardMaker, arrayLayout[row][col] == HEALTHY_SHIP ? mapCellToColor.get(HEALTHY_SHIP) : arrayLayout[row][col] == SPECIAL ? mapCellToColor.get(SPECIAL) : mapCellToColor.get(EMPTY), row, col, arrayLayout.length,
               arrayLayout[0].length);
-          myLayout[row][col] = cell;
-        } else if (arrayLayout[row][col] == HEALTHY_SHIP) {
-          CellView cell = new CellView(shape, mapCellToColor.get(HEALTHY_SHIP), row, col, arrayLayout.length,
-              arrayLayout[0].length);
-          myLayout[row][col] = cell;
-        } else if (arrayLayout[row][col] == SPECIAL) {
-          CellView cell = new CellView(shape, mapCellToColor.get(SPECIAL), col, row, arrayLayout.length,
-              arrayLayout[0].length);
-          myLayout[row][col] = cell;
-        }
+        myLayout[row][col] = cell;
       }
     }
   }

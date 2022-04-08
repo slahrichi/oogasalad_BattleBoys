@@ -20,6 +20,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private StackPane myBoard;
   private Group myBase;
   private int myID;
+  protected BoardMaker myBoardMaker;
 
   // piece type enum
   protected static int INVALID = 0;
@@ -37,7 +38,9 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   protected Map<Integer, Paint> mapShotToColor;
 
   // controller passes some kind of parameter to the
-  public BoardView(ShapeType shape, int[][] arrayLayout, int id) {
+  public BoardView(double size, int[][] arrayLayout, int id) {
+    myBoardMaker = new BoardMaker(size, arrayLayout.length, arrayLayout[0].length);
+
     mapCellToColor = new HashMap<>();
     mapCellToColor.put(INVALID, Color.WHITE);
     mapCellToColor.put(EMPTY, Color.BLUE);
@@ -51,20 +54,20 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     mapShotToColor.put(HIT_PIECE, Color.RED);
     mapShotToColor.put(HIT_SPECIAL, Color.YELLOW);
     myID = id;
-    setupBoard(arrayLayout, shape);
+    setupBoard(arrayLayout);
   }
 
-  private void setupBoard(int[][] arrayLayout, ShapeType shape) {
+  private void setupBoard(int[][] arrayLayout) {
     myLayout = new CellView[arrayLayout.length][arrayLayout[0].length];
     myBoard = new StackPane();
     myBoard.setId("board-view");
     myBase = new Group();
     myBase.setId("board-view-base");
-    initializeCellViews(arrayLayout, shape);
+    initializeCellViews(arrayLayout);
     initializeBoardNodes();
   }
 
-  public abstract void initializeCellViews(int[][] arrayLayout, ShapeType shape);
+  public abstract void initializeCellViews(int[][] arrayLayout);
 
   /**
    * Changes the color of a cell on the BoardView.
