@@ -76,7 +76,6 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     if(!(row < myLayout.length && col < myLayout[0].length)) {
       throw new IllegalArgumentException("Row " + row + " and column " + col + " out of bounds");
     }
-    System.out.println(row + " " + col);
     myLayout[row][col].getCell().setFill(color);
   }
 

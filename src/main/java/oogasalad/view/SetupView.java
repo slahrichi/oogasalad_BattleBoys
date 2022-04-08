@@ -77,7 +77,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     createTitlePanel();
     createConfirm();
     createCenterPanel();
-    createCenterBox();
     createConfigPanel();
   }
 
@@ -86,13 +85,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void displayCompletion() {shipPane.showListCompletion();}
-
-  private void createCenterBox() {
-    centerBox.getChildren().addAll(myCenterPane, confirm);
-    centerBox.setAlignment(Pos.CENTER);
-    centerBox.setSpacing(20);
-    myPane.setCenter(centerBox);
-  }
 
   public Scene getScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -134,6 +126,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void createCenterPanel(){
+    centerBox.getChildren().addAll(myCenterPane, confirm);
+    centerBox.setAlignment(Pos.CENTER);
+    centerBox.setSpacing(20);
+    myPane.setCenter(centerBox);
+
     myCenterPane.setId("boardBox");
     setupBoard.addObserver(this);
     myCenterPane.getChildren().addAll(setupBoard.getBoardPane());
