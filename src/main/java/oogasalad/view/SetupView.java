@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.panels.TitlePanel;
@@ -58,8 +59,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   // current piece that is being placed
   private Collection<Coordinate> currentPiece;
 
-  public SetupView(int[][] board) {
-
+  public SetupView(CellState[][] board) {
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -161,7 +161,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   @Override
-  public void placePiece(Collection<Coordinate> coords, String type) {
+  public void placePiece(Collection<Coordinate> coords, CellState type) {
     for(Coordinate c : coords) {
       setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.BLACK);
     }

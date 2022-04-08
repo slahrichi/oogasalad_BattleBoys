@@ -5,12 +5,15 @@ import java.beans.PropertyChangeListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javafx.scene.Group;
+import javafx.scene.control.Cell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.PropertyObservable;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.CellView;
 import oogasalad.view.Info;
 
@@ -21,43 +24,21 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private Group myBase;
   private int myID;
   protected BoardMaker myBoardMaker;
-
-  // piece type enum
-  protected static int INVALID = 0;
-  protected static int EMPTY = 1;
-  protected static int HEALTHY_SHIP = 2;
-  protected static int DAMAGED_SHIP = 3;
-  protected static int DESTROYED_SHIP = 4;
-  protected static int SPECIAL = 5;
-  protected Map<Integer, Paint> mapCellToColor;
-
-  // shot result enum
-  protected static int MISSED = 0;
-  protected static int HIT_PIECE = 1;
-  protected static int HIT_SPECIAL = 2;
-  protected Map<Integer, Paint> mapShotToColor;
+  protected ResourceBundle myCellStateResources;
+  protected ResourceBundle myMarkerResources;
+  protected static String FILL_PREFIX = "FillColor_";
 
   // controller passes some kind of parameter to the
-  public BoardView(double size, int[][] arrayLayout, int id) {
+  public BoardView(double size, CellState[][] arrayLayout, int id) {
     myBoardMaker = new BoardMaker(size, arrayLayout.length, arrayLayout[0].length);
+    myCellStateResources = ResourceBundle.getBundle("/CellState");
+    myMarkerResources = ResourceBundle.getBundle("/Markers");
 
-    mapCellToColor = new HashMap<>();
-    mapCellToColor.put(INVALID, Color.WHITE);
-    mapCellToColor.put(EMPTY, Color.BLUE);
-    mapCellToColor.put(HEALTHY_SHIP, Color.BLACK);
-    mapCellToColor.put(DAMAGED_SHIP, Color.ORANGE);
-    mapCellToColor.put(DESTROYED_SHIP, Color.RED);
-    mapCellToColor.put(SPECIAL, Color.YELLOW);
-
-    mapShotToColor = new HashMap<>();
-    mapShotToColor.put(MISSED, Color.WHITE);
-    mapShotToColor.put(HIT_PIECE, Color.RED);
-    mapShotToColor.put(HIT_SPECIAL, Color.YELLOW);
     myID = id;
     setupBoard(arrayLayout);
   }
 
-  private void setupBoard(int[][] arrayLayout) {
+  private void setupBoard(CellState[][] arrayLayout) {
     myLayout = new CellView[arrayLayout.length][arrayLayout[0].length];
     myBoard = new StackPane();
     myBoard.setId("board-view");
@@ -67,7 +48,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     initializeBoardNodes();
   }
 
-  public abstract void initializeCellViews(int[][] arrayLayout);
+  public abstract void initializeCellViews(CellState[][] arrayLayout);
 
   /**
    * Changes the color of a cell on the BoardView.
@@ -85,7 +66,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   public void clear() {
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {
-        myLayout[i][j].getCell().setFill(mapCellToColor.get(EMPTY));
+        myLayout[i][j].getCell().setFill(Color.valueOf(myCellStateResources.getString(FILL_PREFIX+CellState.WATER.name())));
       }
     }
   }

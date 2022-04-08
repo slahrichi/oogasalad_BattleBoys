@@ -16,12 +16,13 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
 
 public class GameSetup extends PropertyObservable implements PropertyChangeListener {
 
   private List<String> playerTypes;
-  private int[][] boardSetup;
+  private CellState[][] boardSetup;
   private SetupView setupView;
   private List<Player> playerList;
   private int playerIndex;
@@ -127,7 +128,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void update(Piece piece) {
-    setupView.placePiece(piece.getHPList(), "Piece type");
+    setupView.placePiece(piece.getHPList(), CellState.SHIP_HEALTHY);
     pieceIndex++;
     if (pieceIndex != pieceList.size()) {
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());

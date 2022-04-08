@@ -1,5 +1,7 @@
 package oogasalad.view;
 
+import oogasalad.model.utilities.tiles.enums.Marker;
+
 /**
  * This interface represents classes that show the user the result of their attempted shot at an
  * opponent, whether the shot was a hit, miss, sink, etc.
@@ -15,8 +17,8 @@ public interface ShotVisualizer {
    * turn red.
    * @param x x coordinate of cell
    * @param y y coordinate of cell
-   * @param wasHit indicates if the shot was a hit or a miss
+   * @param result indicates if the shot was a hit or a miss
    */
-  public void displayShotAt(int x, int y, boolean wasHit);
+  void displayShotAt(int x, int y, Marker result);
 
 }

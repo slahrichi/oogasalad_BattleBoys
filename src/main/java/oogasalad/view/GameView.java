@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javafx.geometry.Insets;
+import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,7 +18,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -27,7 +27,8 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.view.board.BoardMaker;
+import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.Marker;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -46,6 +47,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String STYLESHEET = "setupStylesheet.css";
 
   private TitlePanel myTitle;
+  private ResourceBundle myCellStateResources;
+  private ResourceBundle myMarkerResources;
+  private static final String FILL_PREFIX = "FillColor_";
+
+  private Label titleName;
   private List<BoardView> myBoards;
   private BorderPane myPane;
   private VBox myCenterPane;
@@ -54,12 +60,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button leftButton;
   private Button rightButton;
   private VBox mySidePane;
-
   private Scene myScene;
 
   private int currentBoardIndex;
 
   public GameView() {
+
+    myCellStateResources = ResourceBundle.getBundle("/CellState");
+    myMarkerResources = ResourceBundle.getBundle("/Markers");
 
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -137,22 +145,22 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void handleKeyInput(KeyCode code) {
     if(code == KeyCode.LEFT) {
+      System.out.println("Left pressed");
       decrementBoardIndex();
     } else if (code == KeyCode.RIGHT) {
+      System.out.println("Right pressed");
       incrementBoardIndex();
     }
   }
 
   // Decrements currentBoardIndex and updates the shown board
   private void decrementBoardIndex() {
-    int prev = currentBoardIndex;
     currentBoardIndex = (currentBoardIndex + myBoards.size() - 1) % myBoards.size();
     updateDisplayedBoard();
   }
 
   // Increments currentBoardIndex and updates the shown board
   private void incrementBoardIndex() {
-    int prev = currentBoardIndex;
     currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
     updateDisplayedBoard();
   }
@@ -212,9 +220,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     dummyShipCellList4.add(new ShipCell(1, new Coordinate(0,4), 0, "4"));
     StaticPiece dummyShip4 = new StaticPiece(dummyShipCellList4, coordinateList4, "0");
 
-    int[][] arrayLayout = new int[8][8];
-    for (int[] ints : arrayLayout) {
-      Arrays.fill(ints, 1);
+    CellState[][] arrayLayout = new CellState[8][8];
+    for (CellState[] ints : arrayLayout) {
+      Arrays.fill(ints, CellState.WATER);
     }
 
     // player's own board, no listeners on it
@@ -273,7 +281,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    * @param coords Coordinates to place Piece at
    * @param type Type of piece being placed
    */
-  public void placePiece(Collection<Coordinate> coords, String type) { //TODO: Change type to some enum
+  public void placePiece(Collection<Coordinate> coords, CellState type) { //TODO: Change type to some enum
     for(Coordinate coord : coords) {
       myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(), Color.BLACK);
     }
@@ -320,8 +328,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   @Override
-  public void displayShotAt(int x, int y, boolean wasHit) { //TODO: Change wasHit to an enumerated result type
-    Color newColor = wasHit ? Color.RED : Color.YELLOW;
-    myBoards.get(currentBoardIndex).setColorAt(x, y, newColor);
+  public void displayShotAt(int x, int y, Marker result) {
+    myBoards.get(currentBoardIndex).setColorAt(x, y, Color.valueOf(myMarkerResources.getString(FILL_PREFIX + result.name())));
   }
 }

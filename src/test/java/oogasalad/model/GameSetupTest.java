@@ -12,6 +12,7 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -27,6 +28,12 @@ public class GameSetupTest extends DukeApplicationTest {
   void setup() {
     int[][] dummyBoard = new int[][]{{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1}};
+    CellState[][] cellBoard = new CellState[dummyBoard.length][dummyBoard[0].length];
+    for (int i = 0; i < cellBoard.length; i++) {
+      for (int j = 0; j < cellBoard[0].length; j++) {
+        cellBoard[i][j] = CellState.of(dummyBoard[i][j]);
+      }
+    }
     List<String> playerTypes = new ArrayList<>(Arrays.asList("HumanPlayer", "HumanPlayer"));
     List<String> badPlayer = new ArrayList<>(Arrays.asList("HumanPlllayer"));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
@@ -38,8 +45,8 @@ public class GameSetupTest extends DukeApplicationTest {
     StaticPiece dummyShip = new StaticPiece(dummyShipCellList, coordinateList, "0");
     List<Piece> pieceList = new ArrayList<>();
     pieceList.add(dummyShip);
-    pd = new PlayerData(playerTypes, pieceList, dummyBoard);
-    badPd = new PlayerData(badPlayer, pieceList, dummyBoard);
+    pd = new PlayerData(playerTypes, pieceList, cellBoard);
+    badPd = new PlayerData(badPlayer, pieceList, cellBoard);
 
   }
 
