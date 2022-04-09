@@ -28,6 +28,9 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private FilePicker fileChooser;
   private Parser parser;
 
+  //TODO: Remove this variable, it's for testing only
+  private List<Piece> pieceList = new ArrayList<>();
+
   public Game(Stage stage) {
     myStage = stage;
     parser = new Parser();
@@ -82,7 +85,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 //    StaticPiece dummyShip4 = new StaticPiece(dummyShipCellList4, coordinateList4, "0");
 
 
-    List<Piece> pieceList = new ArrayList<>();
+
     pieceList.add(dummyShip);
     pieceList.add(dummyShip2);
 //    pieceList.add(dummyShip3);
@@ -107,6 +110,8 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   public void propertyChange(PropertyChangeEvent evt) {
     System.out.println("Start game");
     //TODO: Change this to an instance of GameManager
-    myStage.setScene((new GameView()).createScene());
+    GameView gameView = new GameView();
+    myStage.setScene(gameView.createScene());
+    gameView.updateShipsLeft(pieceList);
   }
 }
