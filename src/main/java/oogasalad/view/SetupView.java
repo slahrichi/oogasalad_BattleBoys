@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -90,7 +91,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   public void setCurrentPiece(Collection<Coordinate> nextPiece) {
     currentPiece = nextPiece;
-    shipPane.updateShownPiece(nextPiece);
+    shipPane.updateShownPieces(List.of(nextPiece));
   }
 
   private void createConfigPanel(){
@@ -100,6 +101,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     configBox = new VBox();
     legendPane = new LegendPane();
     shipPane = new SetShipPane(200);
+    shipPane.setText("Current Ship");
 
     configBox.setId("configBox");
     configBox.setMinWidth(300);
