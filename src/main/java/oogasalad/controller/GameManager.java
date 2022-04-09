@@ -82,10 +82,38 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int row = ((Info)evt.getNewValue()).row();
     int col = ((Info)evt.getNewValue()).col();
     if (makeShot(new Coordinate(row, col), id)) {
-      view.displayShotAt(row, col, Marker.HIT_SHIP);
-      numShots++;
+      updateConditions(row, col, id);
     };
 
+  }
+
+  private void updateConditions(int row, int col, int id) {
+    view.displayShotAt(row, col, Marker.HIT_SHIP);
+    numShots++;
+    checkIfPlayerHasBeenEliminated(id);
+    checkIfGameOver();
+    checkIfMoveToNextToPlayer();
+  }
+
+  private void checkIfGameOver() {
+    if (!canStillPlay()) {
+      //endGame
+    }
+  }
+
+  private void checkIfMoveToNextToPlayer() {
+    if (numShots == allowedShots) {
+      playerIndex = (playerIndex + 1) % playerList.size();
+      numShots = 0;
+    }
+  }
+
+  private void checkIfPlayerHasBeenEliminated(int id) {
+    Player player = idMap.get(id);
+    if (player.getHealth() == 0) {
+      idMap.remove(id);
+      playerList.remove(player);
+    }
   }
 
   public List<Player> getPlayerList() {
@@ -98,6 +126,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (enemy.canBeStruck(c)) {
       CellState result = null;
       currentPlayer.updateEnemyBoard(c, id, result);
+      return true;
     }
     return false;
   }
