@@ -381,4 +381,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myBoards.get(currentBoardIndex)
         .setColorAt(x, y, Color.valueOf(myMarkerResources.getString(FILL_PREFIX + result.name())));
   }
+
+  public void moveToNextPlayer(List<CellState[][]> list) {
+
+  }
 }

@@ -6,17 +6,14 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javafx.stage.Stage;
 import oogasalad.FilePicker;
 import oogasalad.GameData;
 import oogasalad.Parser;
-import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
-import oogasalad.controller.GameManager;
-import oogasalad.controller.GameSetup;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
@@ -137,7 +134,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   }
 
   private Map<Integer, Board> createEnemyMap(Board b, int id) {
-    Map<Integer, Board> boardMap = new HashMap<>();
+    Map<Integer, Board> boardMap = new TreeMap<>();
     for (int i = 0; i < stringPlayers.size(); i++) {
       if (i == id) continue;
       boardMap.put(i, b.copyOf());
