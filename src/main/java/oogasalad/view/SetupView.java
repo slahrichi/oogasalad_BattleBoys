@@ -27,7 +27,7 @@ import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.panes.LegendPane;
-import oogasalad.view.panes.SetShipPane;
+import oogasalad.view.panes.SetPiecePane;
 
 public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer, BoardVisualizer {
 
@@ -47,7 +47,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private TitlePanel myTitle;
   private VBox configBox;
   private LegendPane legendPane;
-  private SetShipPane shipPane;
+  private SetPiecePane shipPane;
 
 
 
@@ -96,7 +96,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
     configBox = new VBox();
     legendPane = new LegendPane();
-    shipPane = new SetShipPane(20);
+    shipPane = new SetPiecePane(20);
     shipPane.setText("Current Ship");
 
     configBox.setId("configBox");

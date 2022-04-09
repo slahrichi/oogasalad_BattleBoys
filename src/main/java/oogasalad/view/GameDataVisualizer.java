@@ -1,6 +1,7 @@
 package oogasalad.view;
 
 import java.util.Collection;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 
 /**
@@ -16,7 +17,7 @@ public interface GameDataVisualizer {
    *
    * @param pieces Piece objects owned by the opponent that are still alive.
    */
-  public void updateShipsLeft(Collection<Piece> pieces);
+  public void updatePiecesLeft(Collection<Collection<Coordinate>> pieces);
 
   /**
    * Updates the text that shows the user how many shots they have left in their turn.

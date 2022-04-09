@@ -148,6 +148,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     //TODO: Change this to an instance of GameManager
     GameManager manager = new GameManager(data);
     myStage.setScene(manager.createScene());
-    manager.updateShipsLeft(pieceList);
+//    manager.updateShipsLeft(pieceList);
   }
 }
