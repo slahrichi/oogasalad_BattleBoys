@@ -3,11 +3,11 @@ package oogasalad.controller;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.Scene;
-import javafx.scene.control.Cell;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
@@ -31,13 +31,30 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int size;
 
   public GameManager(GameData data) {
-    view = new GameView(data);
-    this.view.addObserver(this);
     initialize(data);
+    List<CellState[][]> boards = createFirstPlayerBoards(data);
+    Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
+    view = new GameView(boards);
+    view.initializePiecesLeft(coords);
+    this.view.addObserver(this);
   }
 
-  public void updateShipsLeft(List<Piece> pieceList) {
-    view.updateShipsLeft(pieceList);
+  private List<CellState[][]> createFirstPlayerBoards(GameData data) {
+    List<CellState[][]> boards = new ArrayList<>();
+    Player firstPlayer = data.players().get(0);
+    boards.add(firstPlayer.getBoard().getCurrentBoardState());
+    for (int i = 0; i < firstPlayer.getEnemyMap().size(); i++) {
+      boards.add(data.board());
+    }
+    return boards;
+  }
+
+  private Collection<Collection<Coordinate>> createInitialPieces(List<Piece> pieces) {
+    Collection<Collection<Coordinate>> pieceCoords = new ArrayList<>();
+    for (Piece piece : pieces) {
+      pieceCoords.add(piece.getRelativeCoords());
+    }
+    return pieceCoords;
   }
 
   public Scene createScene() {
@@ -92,6 +109,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void updateConditions(int row, int col, int id) {
     view.displayShotAt(row, col, Marker.HIT_SHIP);
+//    view.updatePiecesLeft(idMap.get(id).getBoard().listPieces());
     numShots++;
     checkIfPlayerHasBeenEliminated(id);
     checkIfGameOver();
@@ -113,12 +131,14 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void checkIfPlayerHasBeenEliminated(int id) {
-    Player player = idMap.get(id);
-    if (player.getHealth() == 0) {
-      idMap.remove(id);
-      playerList.remove(player);
-      size = playerList.size();
-    }
+    //CANT USE YET BECAUSE getHealth() always returns 0
+
+//    Player player = idMap.get(id);
+//    if (player.getHealth() == 0) {
+//      idMap.remove(id);
+//      playerList.remove(player);
+//      size = playerList.size();
+//    }
   }
 
   public List<Player> getPlayerList() {
@@ -129,7 +149,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (enemy.canBeStruck(c)) {
-      CellState result = null; //get result from model people
+      Marker result = Marker.HIT_SHIP; //get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
       return true;
     }
@@ -137,13 +157,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void sendUpdatedBoardsToView() {
-    List<CellState[][]> list = new ArrayList<>();
+    List<CellState[][]> boardList = new ArrayList<>();
+    List<Integer> idList = new ArrayList<>();
     Player currentPlayer = playerList.get(playerIndex);
-    list.add(currentPlayer.getBoard().getCurrentBoardState());
+    boardList.add(currentPlayer.getBoard().getCurrentBoardState());
+    idList.add(currentPlayer.getID());
     for (int id : currentPlayer.getEnemyMap().keySet()) {
       Board b = currentPlayer.getEnemyMap().get(id);
-      list.add(b.getCurrentBoardState());
+      boardList.add(b.getCurrentBoardState());
+      idList.add(id);
     }
-    view.moveToNextPlayer(list);
+    view.moveToNextPlayer(boardList, idList);
   }
 }
