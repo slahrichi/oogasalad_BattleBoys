@@ -84,6 +84,10 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     return myBoard;
   }
 
+  public int getID() {
+    return myID;
+  }
+
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
 //    System.out.println(evt.getPropertyName());
