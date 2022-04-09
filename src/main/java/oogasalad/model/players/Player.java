@@ -60,5 +60,7 @@ public interface Player {
     public void determineHealth();
 
     public Board getBoard();
+
+    public int getID();
 }
 

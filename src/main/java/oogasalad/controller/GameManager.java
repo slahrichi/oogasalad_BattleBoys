@@ -18,14 +18,18 @@ import oogasalad.view.GameView;
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
-  private Map<Integer, Player> idMap;
+  //private Map<Integer, Player> idMap;
   private GameView view;
+  //current player, separate from ID
+  private int playerIndex;
+  private int numShots;
+  private int allowedShots;
+  private int size;
 
   public GameManager(GameData data) {
     view = new GameView(data);
     this.view.addObserver(this);
-    this.playerList = data.players();
-    initialize();
+    initialize(data);
   }
 
   public void updateShipsLeft(List<Piece> pieceList) {
@@ -48,20 +52,24 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view.promptPlayTurn();
   }
 
-  private void initialize() {
-    idMap = new HashMap<>();
-    int id = 0;
-    for (Player p : playerList) {
-      idMap.put(id++, p);
-    }
+
+  private void initialize(GameData data) {
+     this.playerList = data.players();
+     playerIndex = 0;
+     size = playerList.size();
+     numShots = 0;
+     allowedShots = 3;
   }
 
+
   public void executeMove(int id, Coordinate c) {
+    /*
     Player enemy = idMap.get(id);
     enemy.strike(c);
     if (enemy.getHealth() == 0) {
       playerList.remove(enemy);
     }
+     */
   }
 
   private boolean canStillPlay() {
@@ -71,12 +79,22 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     System.out.println("ID: " + ((Info)evt.getNewValue()).ID());
+    int id = ((Info)evt.getNewValue()).ID();
     int row = ((Info)evt.getNewValue()).row();
     int col = ((Info)evt.getNewValue()).col();
-    view.displayShotAt(row, col, Marker.HIT_SHIP);
+    if (makeShot(new Coordinate(row, col), id)) {
+      view.displayShotAt(row, col, Marker.HIT_SHIP);
+      numShots++;
+    };
+
   }
 
   public List<Player> getPlayerList() {
     return playerList;
   }
+
+  private boolean makeShot(Coordinate c, int id) {
+    return true;
+  }
+
 }

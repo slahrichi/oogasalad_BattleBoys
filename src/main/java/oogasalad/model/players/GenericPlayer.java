@@ -87,4 +87,8 @@ public abstract class GenericPlayer implements Player{
   public Board getBoard() {
     return myBoard;
   }
+
+  public int getID() {
+    return myId;
+  }
 }
