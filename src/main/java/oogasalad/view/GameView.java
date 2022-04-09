@@ -106,6 +106,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void createRightPane() {
     shopButton = new Button("Open Shop");
     shopButton.setFont(new Font(15));
+    shopButton.setOnMouseClicked(e -> openShop());
 
     shipsRemainingPane = new SetShipPane(100);
     shipsRemainingPane.getShipPane().setText("Ships Remaining");
@@ -346,7 +347,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   @Override
   public void openShop() {
-
+    System.out.println("Shop Opened");
   }
 
   @Override
