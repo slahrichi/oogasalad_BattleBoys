@@ -10,8 +10,8 @@ import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
-//import org.apache.log4j.Logger;
-//import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Board {
 
@@ -86,7 +86,7 @@ public class Board {
    */
 
   private boolean canPlaceAt(Coordinate c){
-    return boardMap.get(c)!=null && boardMap.get(c).getCellState()==CellState.WATER.ordinal();
+    return boardMap.get(c)!=null && boardMap.get(c).getCellState()==CellState.WATER;
     //return !checkCell(c).equals(null); // this is not correct yet
   }
 
@@ -141,12 +141,12 @@ public class Board {
 
   public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }
 
-  public int[][] getCurrentBoardState() {
-    int[][] currStateArray = new int[myRows][myCols];
+  public CellState[][] getCurrentBoardState() {
+    CellState[][] currStateArray = new CellState[myRows][myCols];
     for(Coordinate c : boardMap.keySet()) {
       currStateArray[c.getRow()][c.getColumn()] = boardMap.get(c).getCellState();
     }
-    return getCurrentBoardState();
+    return currStateArray;
   }
 
   public int hit(Coordinate c) {

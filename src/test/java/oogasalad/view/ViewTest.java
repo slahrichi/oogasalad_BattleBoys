@@ -10,8 +10,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
+import oogasalad.GameData;
 import oogasalad.controller.GameManager;
+import oogasalad.model.players.AIPlayer;
+import oogasalad.model.players.HumanPlayer;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Board;
+import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +31,9 @@ public class ViewTest extends DukeApplicationTest {
   private final PrintStream originalErr = System.err;
 
   private Polygon myCell0;
+  private CellState[][] cellBoard;
+  private Player p1;
+  private Player p2;
 
   @BeforeEach
   public void setUpStreams() {
@@ -39,10 +47,25 @@ public class ViewTest extends DukeApplicationTest {
     System.setErr(originalErr);
   }
 
+  @BeforeEach
+  void setup() {
+    int[][] board = new int[][]{{1, 1, 1}, {0, 1, 1}};
+    cellBoard = new CellState[board.length][board[0].length];
+    for (int i = 0; i < cellBoard.length; i++) {
+      for (int j = 0; j < cellBoard[0].length; j++) {
+        cellBoard[i][j] = CellState.WATER;
+      }
+    }
+    Board b1 = new Board(cellBoard);
+    Board b2 = new Board(cellBoard);
+    p1 = new HumanPlayer(b1, 0, null);
+    p2 = new AIPlayer(b2, 1, null);
+  }
+
   @Override
   public void start (Stage stage) {
     // create application and add scene for testing to given stage
-    GameManager game = new GameManager(new ArrayList<Player>());
+    GameManager game = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>()));
     stage.setScene(game.createScene());
     stage.show();
 

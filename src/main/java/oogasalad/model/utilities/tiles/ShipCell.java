@@ -109,8 +109,8 @@ public class ShipCell implements CellInterface {
   }
 
   @Override
-  public int getCellState() {
-    return currentState.ordinal();
+  public CellState getCellState() {
+    return currentState;
   }
 
   public Piece getAssignedShip(){

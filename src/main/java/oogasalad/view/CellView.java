@@ -1,5 +1,6 @@
 package oogasalad.view;
 
+import java.util.List;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polygon;
 import oogasalad.PropertyObservable;
@@ -12,11 +13,11 @@ public class CellView extends PropertyObservable {
   private Polygon myShape;
 
   // pass in list of points to create instead of passing board width and height (number of rows and cols)
-  public CellView(BoardMaker shape, Paint color, int row, int col, int width, int height) {
+  public CellView(List<Double> points, Paint color, int row, int col) {
     myCoords = new Coordinate(row, col);
     myShape = new Polygon();
     myShape.setFill(color);
-    myShape.getPoints().addAll(shape.calculatePoints(row, col));
+    myShape.getPoints().addAll(points);
     myShape.setOnMouseClicked(e -> cellClicked());
   }
 

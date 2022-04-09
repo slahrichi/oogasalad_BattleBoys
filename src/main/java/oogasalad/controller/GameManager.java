@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.Scene;
+import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.Marker;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
@@ -19,11 +21,15 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private Map<Integer, Player> idMap;
   private GameView view;
 
-  public GameManager(List<Player> playerList) {
-    view = new GameView();
+  public GameManager(GameData data) {
+    view = new GameView(data);
     this.view.addObserver(this);
-    this.playerList = playerList;
+    this.playerList = data.players();
     initialize();
+  }
+
+  public void updateShipsLeft(List<Piece> pieceList) {
+    view.updateShipsLeft(pieceList);
   }
 
   public Scene createScene() {

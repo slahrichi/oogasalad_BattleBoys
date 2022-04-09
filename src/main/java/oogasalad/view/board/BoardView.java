@@ -3,11 +3,8 @@ package oogasalad.view.board;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.scene.Group;
-import javafx.scene.control.Cell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -30,7 +27,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
 
   // controller passes some kind of parameter to the
   public BoardView(double size, CellState[][] arrayLayout, int id) {
-    myBoardMaker = new BoardMaker(size, arrayLayout.length, arrayLayout[0].length);
+    myBoardMaker = new BoardMaker(size);
     myCellStateResources = ResourceBundle.getBundle("/CellState");
     myMarkerResources = ResourceBundle.getBundle("/Markers");
 
