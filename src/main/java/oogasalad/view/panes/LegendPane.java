@@ -4,14 +4,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.text.Text;
 
-public class LegendPane {
+public class LegendPane extends TitledPane{
 
-  private TitledPane legendPane;
   private Label legendKey;
 
   public LegendPane(){
 
-    legendPane = new TitledPane();
     legendKey = new Label();
     setUpPane();
     setUpText();
@@ -20,10 +18,10 @@ public class LegendPane {
 
   private void setUpPane(){
 
-    legendPane.setId("legendPane");
-    legendPane.setText("Legend Key");
-    legendPane.setContent(legendKey);
-    legendPane.setExpanded(false);
+    this.setId("legendPane");
+    this.setText("Legend Key");
+    this.setContent(legendKey);
+    this.setExpanded(false);
 
   }
 
@@ -34,9 +32,6 @@ public class LegendPane {
 
   }
 
-  public TitledPane getLegendPane(){
-    return legendPane;
-  }
 
 
 

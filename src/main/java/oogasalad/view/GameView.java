@@ -6,13 +6,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import javafx.geometry.Insets;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -31,6 +35,7 @@ import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetShipPane;
+import oogasalad.view.panels.TitlePanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,11 +49,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "setupStylesheet.css";
 
+  private TitlePanel myTitle;
   private ResourceBundle myCellStateResources;
   private ResourceBundle myMarkerResources;
   private static final String FILL_PREFIX = "FillColor_";
 
-  private HBox myTitle;
   private Label titleName;
   private List<BoardView> myBoards;
   private BorderPane myPane;
@@ -76,24 +81,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myMarkerResources = ResourceBundle.getBundle("/Markers");
 
     myPane = new BorderPane();
+    myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     myPane.setId("view-pane");
-    createTitle();
 
     myBoards = new ArrayList<>();
 
     currentBoardIndex = 0;
     createCenterPane();
     createRightPane();
+    createTitlePanel();
   }
 
-  private void createTitle() {
-    myTitle = new HBox();
-    myTitle.setId("titleBox");
-    titleName = new Label("OOGASalad Battleship");
-    myTitle.getChildren().add(titleName);
-    titleName.setId("titleText");
-    myPane.setTop(myTitle);
-  }
 
   public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -109,7 +107,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     shopButton.setOnMouseClicked(e -> openShop());
 
     shipsRemainingPane = new SetShipPane(100);
-    shipsRemainingPane.getShipPane().setText("Ships Remaining");
+    shipsRemainingPane.setText("Ships Remaining");
     legendPane = new LegendPane();
     shotsRemainingLabel = new Label("Shots Remaining: 0");
     shotsRemainingLabel.setFont(new Font(25));
@@ -119,7 +117,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     goldLabel.setFont(new Font(25));
 
     myRightPane = new VBox(shotsRemainingLabel, healthLabel, goldLabel, shopButton,
-        shipsRemainingPane.getShipPane(), legendPane.getLegendPane());
+        shipsRemainingPane, legendPane);
     myRightPane.setSpacing(20);
     myRightPane.setAlignment(Pos.CENTER);
     myRightPane.setMaxWidth(300);
@@ -139,6 +137,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myCenterPane.getChildren().add(myBoards.get(0).getBoardPane());
 
     setupBoardButtons();
+  }
+
+  private void createTitlePanel(){
+    myTitle = new TitlePanel("Player 1's Turn");
+    myPane.setTop(myTitle);
   }
 
   private void setupBoardLabel() {
@@ -261,6 +264,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     board1.setColorAt(5, 6, Color.BLACK);
     board1.setColorAt(5, 7, Color.BLACK);
 
+
     // create the last board with a different array layout
     GameBoardView board2 = new EnemyBoardView(500, arrayLayout, 2);
     board2.addObserver(this);
@@ -268,6 +272,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     board2.setColorAt(4, 3, Color.YELLOW);
     board2.setColorAt(6, 3, Color.YELLOW);
     board2.setColorAt(7, 5, Color.YELLOW);
+
 
     GameBoardView board3 = new EnemyBoardView(500, arrayLayout, 3);
     board3.addObserver(this);
@@ -288,6 +293,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void promptPlayTurn() {
     System.out.println("Please play turn! Maybe we should show a player ID here!");
+  }
+
+  private void updateTitle() {
+    myTitle.changeTitle("Player X's turn");
   }
 
   @Override

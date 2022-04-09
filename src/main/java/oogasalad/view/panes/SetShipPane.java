@@ -1,6 +1,7 @@
 package oogasalad.view.panes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javafx.geometry.Pos;
@@ -13,9 +14,8 @@ import oogasalad.view.ShipIndicatorView;
 
 // need to hold the ship list as well as create the ships to display
 
-public class SetShipPane {
+public class SetShipPane extends TitledPane {
 
-  private TitledPane shipPane;
   private List<ShipIndicatorView> shipViews;
   private VBox shipIndicatorsBox;
   private boolean lastPiecePlaced = false;
@@ -23,7 +23,6 @@ public class SetShipPane {
 
   public SetShipPane(double size){
     myShipSize = size;
-    shipPane = new TitledPane();
     shipViews = new ArrayList<>();
     shipIndicatorsBox = new VBox();
     shipIndicatorsBox.setAlignment(Pos.CENTER);
@@ -37,10 +36,11 @@ public class SetShipPane {
     for(ShipIndicatorView view : shipViews) {
       shipIndicatorsBox.getChildren().add(view.getBoardPane());
     }
-    shipPane.setContent(shipIndicatorsBox);
-    shipPane.setPrefSize(300, 300);
-    shipPane.setId("shipPane");
-    shipPane.setExpanded(true);
+    setContent(shipIndicatorsBox);
+    setPrefWidth(300);
+
+    setId("shipPane");
+    setExpanded(true);
   }
 
   public void updateShownPieces(List<Collection<Coordinate>> relativeCoords) {
@@ -53,7 +53,7 @@ public class SetShipPane {
   }
 
   public void showListCompletion(){
-    shipPane.setContent(new Label("All ships placed."));
+    this.setContent(new Label("All ships placed."));
   }
 
   private CellState[][] getArrayRepresentation(Collection<Coordinate> relativeCoords) {
@@ -80,8 +80,5 @@ public class SetShipPane {
     return arrayRepresentation;
   }
 
-  public TitledPane getShipPane(){
-    return shipPane;
-  }
 
 }

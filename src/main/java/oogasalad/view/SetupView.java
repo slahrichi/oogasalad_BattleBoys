@@ -14,6 +14,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -27,6 +29,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
+import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetShipPane;
 
@@ -38,17 +41,18 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "setupStylesheet.css";
 
+
   private BorderPane myPane;
   private Button confirm;
   private VBox centerBox;
   private StackPane myCenterPane;
   private BoardView setupBoard;
   private Scene myScene;
-  private HBox titleBox;
+  private TitlePanel myTitle;
   private VBox configBox;
   private LegendPane legendPane;
   private SetShipPane shipPane;
-  private Label title;
+
 
 
   private int currentPlayer;
@@ -59,24 +63,17 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public SetupView(CellState[][] board) {
     myPane = new BorderPane();
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-    currentPiece = new ArrayList<>();
-    myCenterPane = new StackPane();
-    titleBox = new HBox();
-    configBox = new VBox();
-    centerBox = new VBox();
-    legendPane = new LegendPane();
-    shipPane = new SetShipPane(200);
-    setupBoard = new SetupBoardView(500, board, 0);
 
+    currentPiece = new ArrayList<>();
+    setupBoard = new SetupBoardView(500, board, 0);
     currentPlayer = 1;
 
-    title = new Label("Player " + currentPlayer + SCREEN_TITLE);
-    title.setId("titleText");
 
     createTitlePanel();
-    createConfirm();
+    createConfirmButton();
     createCenterPanel();
     createConfigPanel();
+
   }
 
   public void activateConfirm() {
@@ -97,23 +94,23 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     shipPane.updateShownPieces(List.of(nextPiece));
   }
 
-  private void createTitlePanel(){
-    titleBox.setId("titleBox");
-    myPane.setTop(titleBox);
-    titleBox.getChildren().add(title);
-  }
-
   private void createConfigPanel(){
+
+    // FIXME: Move magic numbers to private static / resourcebundle
+
+    configBox = new VBox();
+    legendPane = new LegendPane();
+    shipPane = new SetShipPane(200);
+    shipPane.setText("Current Ship");
+
     configBox.setId("configBox");
     configBox.setMinWidth(300);
     myPane.setRight(configBox);
-//    configBox.getChildren().add(new Label("Test"));
-    shipPane.getShipPane().setText("Current Piece");
-    configBox.getChildren().addAll(shipPane.getShipPane(), legendPane.getLegendPane());
+    configBox.getChildren().addAll(shipPane, legendPane);
 
   }
 
-  private void createConfirm() {
+  private void createConfirmButton() {
     confirm = new Button("Confirm");
     confirm.setDisable(true);
     confirm.setOnAction(e -> handleConfirm());
@@ -127,6 +124,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void createCenterPanel(){
+    myCenterPane = new StackPane();
+    centerBox = new VBox();
+
     centerBox.getChildren().addAll(myCenterPane, confirm);
     centerBox.setAlignment(Pos.CENTER);
     centerBox.setSpacing(20);
@@ -135,6 +135,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myCenterPane.setId("boardBox");
     setupBoard.addObserver(this);
     myCenterPane.getChildren().addAll(setupBoard.getBoardPane());
+  }
+
+  private void createTitlePanel(){
+    myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
+    myPane.setTop(myTitle);
   }
 
 
@@ -146,15 +151,15 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     }
   }
 
+  // FIXME: Make it so that we take player number from the player's list
+
   public void setCurrentPlayerNum() {
     currentPlayer++;
     updateTitle();
   }
 
   private void updateTitle() {
-    titleBox.getChildren().remove(title);
-    title.setText("Player " + currentPlayer + SCREEN_TITLE);
-    titleBox.getChildren().add(title);
+    myTitle.changeTitle("Player " + currentPlayer + SCREEN_TITLE);
   }
 
   @Override
