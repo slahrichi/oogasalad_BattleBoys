@@ -11,6 +11,7 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.enums.Marker;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
@@ -18,7 +19,7 @@ import oogasalad.view.GameView;
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
-  //private Map<Integer, Player> idMap;
+  private Map<Integer, Player> idMap;
   private GameView view;
   //current player, separate from ID
   private int playerIndex;
@@ -59,18 +60,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
      size = playerList.size();
      numShots = 0;
      allowedShots = 3;
+     createIDMap();
   }
 
-
-  public void executeMove(int id, Coordinate c) {
-    /*
-    Player enemy = idMap.get(id);
-    enemy.strike(c);
-    if (enemy.getHealth() == 0) {
-      playerList.remove(enemy);
+  private void createIDMap() {
+    idMap = new HashMap<>();
+    for (Player player : playerList) {
+      idMap.put(player.getID(), player);
     }
-     */
   }
+
 
   private boolean canStillPlay() {
     return playerList.size() != 1;
@@ -94,7 +93,12 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private boolean makeShot(Coordinate c, int id) {
-    return true;
+    Player currentPlayer = playerList.get(playerIndex);
+    Player enemy = idMap.get(id);
+    if (enemy.canBeStruck(c)) {
+      CellState result = null;
+    }
+    return false;
   }
 
 }

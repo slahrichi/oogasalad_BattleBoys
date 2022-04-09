@@ -52,4 +52,9 @@ public class WaterCell implements CellInterface {
   public CellState getCellState() {
     return currentState;
   }
+
+  @Override
+  public int getHealth() {
+    return 1;
+  }
 }

@@ -42,4 +42,9 @@ public class IslandCell implements CellInterface {
   public CellState getCellState() {
     return null;
   }
+
+  @Override
+  public int getHealth() {
+    return 1;
+  }
 }

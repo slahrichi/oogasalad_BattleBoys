@@ -91,4 +91,9 @@ public abstract class GenericPlayer implements Player{
   public int getID() {
     return myId;
   }
+
+  @Override
+  public boolean canBeStruck(Coordinate c) {
+    return myBoard.canBeStruck(c);
+  }
 }

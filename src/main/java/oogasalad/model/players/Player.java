@@ -62,5 +62,7 @@ public interface Player {
     public Board getBoard();
 
     public int getID();
+
+    boolean canBeStruck(Coordinate c);
 }
 

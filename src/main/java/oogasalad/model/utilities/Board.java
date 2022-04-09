@@ -162,5 +162,9 @@ public class Board {
     return new Board(myBoardSetup);
   }
 
+  public boolean canBeStruck(Coordinate c) {
+    return boardMap.get(c).getHealth() != 0;
+  }
+
 
 }
