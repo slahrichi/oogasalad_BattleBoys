@@ -16,8 +16,11 @@ public class SetupBoardView extends BoardView {
       for (int col = 0; col < arrayLayout[0].length; col++) {
         List<Double> points = myBoardMaker.calculatePoints(row, col);
         CellView cell = new CellView(points, Color.valueOf(
-            myCellStateResources.getString(FILL_PREFIX + arrayLayout[row][col].name())), row, col);
-        cell.addObserver(this);
+            myCellStateResources.getString(FILL_PREFIX + arrayLayout[row][col].name())), row,
+            col);
+        if (arrayLayout[row][col] == CellState.WATER) {
+          cell.addObserver(this);
+        }
         myLayout[row][col] = cell;
       }
     }
