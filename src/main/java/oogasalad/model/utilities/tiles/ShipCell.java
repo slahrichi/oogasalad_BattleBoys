@@ -113,6 +113,11 @@ public class ShipCell implements CellInterface {
     return currentState;
   }
 
+  @Override
+  public int getHealth() {
+    return myHealthBar;
+  }
+
   public Piece getAssignedShip(){
     return myShip;
   }

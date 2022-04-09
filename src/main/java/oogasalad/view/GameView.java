@@ -9,7 +9,10 @@ import java.util.List;
 import javafx.geometry.Insets;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -324,6 +327,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
   }
 
+  public void moveToNextPlayer() {
+
+  }
+
+  public void endGame() {
+
+  }
+
   @Override
   public void updateShipsLeft(Collection<Piece> pieces) {
     List<Collection<Coordinate>> pieceCoords = new ArrayList<>();
@@ -358,9 +369,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   }
 
+  public void showError(String errorMsg) {
+    Alert alert = new Alert(AlertType.ERROR, errorMsg);
+    Node alertNode = alert.getDialogPane();
+    alertNode.setId("alert");
+    alert.showAndWait();
+  }
+
   @Override
   public void displayShotAt(int x, int y, Marker result) {
     myBoards.get(currentBoardIndex)
         .setColorAt(x, y, Color.valueOf(myMarkerResources.getString(FILL_PREFIX + result.name())));
+  }
+
+  public void moveToNextPlayer(List<CellState[][]> list) {
+
   }
 }

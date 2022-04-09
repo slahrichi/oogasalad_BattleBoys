@@ -5,7 +5,17 @@ import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
-public class IslandCell implements CellInterface {
+public class MarkerCell implements CellInterface {
+
+  private CellState myCellState;
+  private int myHealth;
+  private Coordinate myCoordinates;
+
+  public MarkerCell(CellState state, Coordinate c) {
+    myCellState = state;
+    myCoordinates = c;
+    myHealth = 0;
+  }
 
   @Override
   public int hit() {
@@ -22,7 +32,6 @@ public class IslandCell implements CellInterface {
     return null;
   }
 
-
   @Override
   public boolean canCarryObject() {
     return false;
@@ -35,16 +44,16 @@ public class IslandCell implements CellInterface {
 
   @Override
   public Coordinate getCoordinates() {
-    return null;
+    return myCoordinates;
   }
 
   @Override
   public CellState getCellState() {
-    return null;
+    return myCellState;
   }
 
   @Override
   public int getHealth() {
-    return 1;
+    return myHealth;
   }
 }

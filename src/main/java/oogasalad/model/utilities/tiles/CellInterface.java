@@ -25,4 +25,6 @@ public interface CellInterface {
     * @return integer representation of cell state (ordinal matches up with cellStates enum)
     */
    CellState getCellState();
+
+   public int getHealth();
 }
