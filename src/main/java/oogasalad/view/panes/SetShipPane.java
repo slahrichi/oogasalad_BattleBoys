@@ -1,9 +1,10 @@
 package oogasalad.view.panes;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.VBox;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.ShipIndicatorView;
@@ -13,40 +14,34 @@ import oogasalad.view.ShipIndicatorView;
 public class SetShipPane {
 
   private TitledPane shipPane;
-  private ShipIndicatorView shipIndicatorView;
+  private List<ShipIndicatorView> shipViews;
+  private VBox shipIndicatorsBox;
   private boolean lastPiecePlaced = false;
   private double myShipSize;
 
   public SetShipPane(double size){
     myShipSize = size;
     shipPane = new TitledPane();
-    shipIndicatorView = new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0);
+    shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
     setUpPane();
   }
 
 
   private void setUpPane(){
-    shipPane.setContent(shipIndicatorView.getBoardPane());
+    shipIndicatorsBox.getChildren().addAll(shipIndicatorsBox);
+    shipPane.setContent(shipIndicatorsBox);
     shipPane.setPrefSize(300, 300);
     shipPane.setId("shipPane");
-    shipPane.setText("Ships");
     shipPane.setExpanded(true);
   }
 
-//  private void setUpShips(){
-//    StringBuilder sb = new StringBuilder();
-//    Label testLabel = new Label();
-//    for(Coordinate[] coord : shipList){
-//      sb.append(coord.toString() + "\n");
-//    }
-//    testLabel.setText(sb.toString());
-//    shipPane.setContent(testLabel);
-//  }
-
-  public void updateShownPiece(Collection<Coordinate> relativeCoords) {
+  public void updateShownPieces(List<Collection<Coordinate>> relativeCoords) {
     // Change ship indicator image
-    System.out.println(relativeCoords);
-    shipPane.setContent(new ShipIndicatorView(myShipSize, getArrayRepresentation(relativeCoords), 0).getBoardPane());
+    shipIndicatorsBox.getChildren().clear();
+
+    for(Collection<Coordinate> coords : relativeCoords) {
+      shipIndicatorsBox.getChildren().add(new ShipIndicatorView(myShipSize, getArrayRepresentation(coords), 0).getBoardPane());
+    }
   }
 
   public void showListCompletion(){
