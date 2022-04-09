@@ -5,13 +5,11 @@ import java.util.List;
 
 public class BoardMaker {
 
-  protected double myBoardSize;
-  private double myMaxLength;
+  protected double myCellSize;
   protected static final double SPACING = 3;
 
-  public BoardMaker(double size, double numRows, double numCols) {
-    myBoardSize = size;
-    myMaxLength = Math.max(numRows, numCols);
+  public BoardMaker(double size) {
+    myCellSize = size;
   }
 
   public List<Double> calculatePoints(double row, double col) {
@@ -21,17 +19,13 @@ public class BoardMaker {
     int[] yFactor = new int[]{0, 0, 1, 1};
 
     for (int i = 0; i < 4; i++) {
-      points.add(calculatePos(col) + calculateSize() * xFactor[i]);
-      points.add(calculatePos(row) + calculateSize() * yFactor[i]);
+      points.add(calculatePos(col) + myCellSize * xFactor[i]);
+      points.add(calculatePos(row) + myCellSize* yFactor[i]);
     }
     return points;
   }
 
-  private double calculateSize() {
-    return (myBoardSize - (myMaxLength - 1) * SPACING) / myMaxLength;
-  }
-
   private double calculatePos(double index) {
-    return (index * SPACING) + (index * calculateSize());
+    return (index * SPACING) + (index * myCellSize);
   }
 }
