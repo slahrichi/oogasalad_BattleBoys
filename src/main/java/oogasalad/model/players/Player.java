@@ -1,5 +1,6 @@
 package oogasalad.model.players;
 
+import java.util.Map;
 import java.util.function.Function;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
@@ -65,5 +66,7 @@ public interface Player {
     public int getID();
 
     boolean canBeStruck(Coordinate c);
+
+    Map<Integer, Board> getEnemyMap();
 }
 

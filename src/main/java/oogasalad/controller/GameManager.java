@@ -2,13 +2,16 @@ package oogasalad.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.Scene;
+import javafx.scene.control.Cell;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -59,7 +62,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
      playerIndex = 0;
      size = playerList.size();
      numShots = 0;
-     allowedShots = 3;
+     allowedShots = 1;
      createIDMap();
   }
 
@@ -105,6 +108,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (numShots == allowedShots) {
       playerIndex = (playerIndex + 1) % playerList.size();
       numShots = 0;
+      sendUpdatedBoardsToView();
     }
   }
 
@@ -113,6 +117,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (player.getHealth() == 0) {
       idMap.remove(id);
       playerList.remove(player);
+      size = playerList.size();
     }
   }
 
@@ -124,11 +129,21 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (enemy.canBeStruck(c)) {
-      CellState result = null;
+      CellState result = null; //get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
       return true;
     }
     return false;
   }
 
+  private void sendUpdatedBoardsToView() {
+    List<CellState[][]> list = new ArrayList<>();
+    Player currentPlayer = playerList.get(playerIndex);
+    list.add(currentPlayer.getBoard().getCurrentBoardState());
+    for (int id : currentPlayer.getEnemyMap().keySet()) {
+      Board b = currentPlayer.getEnemyMap().get(id);
+      list.add(b.getCurrentBoardState());
+    }
+    view.moveToNextPlayer(list);
+  }
 }

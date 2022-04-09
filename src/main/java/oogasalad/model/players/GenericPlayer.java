@@ -94,4 +94,8 @@ public abstract class GenericPlayer implements Player{
   public boolean canBeStruck(Coordinate c) {
     return myBoard.canBeStruck(c);
   }
+
+  public Map<Integer, Board> getEnemyMap() {
+    return myEnemyMap;
+  }
 }
