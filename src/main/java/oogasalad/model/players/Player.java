@@ -5,6 +5,7 @@ import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 /**
  * Whether an AI or an actual player, participants in a game have fundamental moves they can make.
@@ -48,7 +49,7 @@ public interface Player {
     */
     public void addGold(int amount);
 
-    public void strike(Coordinate c);
+    public void updateEnemyBoard(Coordinate c, int id, CellState state);
 
     public int getHealth();
 

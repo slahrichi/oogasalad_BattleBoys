@@ -97,6 +97,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player enemy = idMap.get(id);
     if (enemy.canBeStruck(c)) {
       CellState result = null;
+      currentPlayer.updateEnemyBoard(c, id, result);
     }
     return false;
   }

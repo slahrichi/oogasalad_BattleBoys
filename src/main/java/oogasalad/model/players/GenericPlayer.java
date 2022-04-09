@@ -9,6 +9,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.MarkerCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 public abstract class GenericPlayer implements Player{
@@ -47,11 +48,8 @@ public abstract class GenericPlayer implements Player{
   }
 
   @Override
-  public void strike(Coordinate c) {
-    if (myBoard.checkCell(c) != null) {
-      myBoard.place(c, null);
-      myHealth--;
-    }
+  public void updateEnemyBoard(Coordinate c, int id, CellState state) {
+    myEnemyMap.get(id).place(c, new MarkerCell(state, c));
   }
 
   @Override
