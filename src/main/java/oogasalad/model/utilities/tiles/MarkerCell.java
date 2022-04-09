@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.Marker;
 
 public class MarkerCell implements CellInterface {
 
-  private CellState myCellState;
+  private Marker myCellState;
   private int myHealth;
   private Coordinate myCoordinates;
 
-  public MarkerCell(CellState state, Coordinate c) {
+  public MarkerCell(Marker state, Coordinate c) {
     myCellState = state;
     myCoordinates = c;
     myHealth = 0;
@@ -49,7 +50,8 @@ public class MarkerCell implements CellInterface {
 
   @Override
   public CellState getCellState() {
-    return myCellState;
+    return null;
+//    return myCellState;
   }
 
   @Override
