@@ -13,14 +13,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -65,7 +61,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
     currentPiece = new ArrayList<>();
-    setupBoard = new SetupBoardView(500, board, 0);
+    setupBoard = new SetupBoardView(50, board, 0);
     currentPlayer = 1;
 
 
@@ -100,7 +96,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
     configBox = new VBox();
     legendPane = new LegendPane();
-    shipPane = new SetShipPane(200);
+    shipPane = new SetShipPane(20);
     shipPane.setText("Current Ship");
 
     configBox.setId("configBox");

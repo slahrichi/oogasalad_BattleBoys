@@ -7,6 +7,7 @@ import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -27,29 +28,28 @@ public class SetShipPane extends TitledPane {
     shipIndicatorsBox = new VBox();
     shipIndicatorsBox.setAlignment(Pos.CENTER);
     shipIndicatorsBox.setSpacing(20);
-    shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
+//    shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
     setUpPane();
   }
 
 
   private void setUpPane(){
-    for(ShipIndicatorView view : shipViews) {
-      shipIndicatorsBox.getChildren().add(view.getBoardPane());
-    }
+//    for(ShipIndicatorView view : shipViews) {
+//      shipIndicatorsBox.getChildren().add(view.getBoardPane());
+//    }
     setContent(shipIndicatorsBox);
     setPrefWidth(300);
-
     setId("shipPane");
     setExpanded(true);
   }
 
-  public void updateShownPieces(List<Collection<Coordinate>> relativeCoords) {
+  public void updateShownPieces(Collection<Collection<Coordinate>> relativeCoords) {
     // Change ship indicator image
     shipIndicatorsBox.getChildren().clear();
-
-    for(Collection<Coordinate> coords : relativeCoords) {
+    for (Collection<Coordinate> coords : relativeCoords) {
       shipIndicatorsBox.getChildren().add(new ShipIndicatorView(myShipSize, getArrayRepresentation(coords), 0).getBoardPane());
     }
+    setContent(shipIndicatorsBox);
   }
 
   public void showListCompletion(){

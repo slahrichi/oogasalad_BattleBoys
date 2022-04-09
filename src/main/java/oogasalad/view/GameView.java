@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
@@ -72,11 +73,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Label goldLabel;
 
   private Scene myScene;
+  private GameData myData;
 
   private int currentBoardIndex;
 
-  public GameView() {
-
+  public GameView(GameData data) {
+    myData = data;
     myCellStateResources = ResourceBundle.getBundle("/CellState");
     myMarkerResources = ResourceBundle.getBundle("/Markers");
 
@@ -106,7 +108,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     shopButton.setFont(new Font(15));
     shopButton.setOnMouseClicked(e -> openShop());
 
-    shipsRemainingPane = new SetShipPane(100);
+    shipsRemainingPane = new SetShipPane(20);
     shipsRemainingPane.setText("Ships Remaining");
     legendPane = new LegendPane();
     shotsRemainingLabel = new Label("Shots Remaining: 0");
@@ -254,19 +256,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
 
     // player's own board, no listeners on it
-    SelfBoardView board1 = new SelfBoardView(500, arrayLayout, 1);
+    SelfBoardView board1 = new SelfBoardView(50, myData.players().get(0).getBoard()
+        .getCurrentBoardState(), 1);
     myBoards.add(board1);
-    board1.setColorAt(1, 1, Color.RED);
-    board1.setColorAt(2, 1, Color.RED);
-    board1.setColorAt(1, 2, Color.RED);
-    board1.setColorAt(1, 3, Color.RED);
-    board1.setColorAt(5, 5, Color.BLACK);
-    board1.setColorAt(5, 6, Color.BLACK);
-    board1.setColorAt(5, 7, Color.BLACK);
 
-
-    // create the last board with a different array layout
-    GameBoardView board2 = new EnemyBoardView(500, arrayLayout, 2);
+    GameBoardView board2 = new EnemyBoardView(50, arrayLayout, 2);
     board2.addObserver(this);
     myBoards.add(board2);
     board2.setColorAt(4, 3, Color.YELLOW);
@@ -274,14 +268,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     board2.setColorAt(7, 5, Color.YELLOW);
 
 
-    GameBoardView board3 = new EnemyBoardView(500, arrayLayout, 3);
+    GameBoardView board3 = new EnemyBoardView(50, arrayLayout, 3);
     board3.addObserver(this);
     myBoards.add(board3);
     board3.setColorAt(2, 2, Color.YELLOW);
     board3.setColorAt(3, 6, Color.ORANGE);
     board3.setColorAt(4, 6, Color.ORANGE);
 
-    GameBoardView board4 = new SelfBoardView(500, arrayLayout, 4);
+    GameBoardView board4 = new EnemyBoardView(50, arrayLayout, 4);
     board4.addObserver(this);
     myBoards.add(board4);
     board4.setColorAt(5, 3, Color.YELLOW);
