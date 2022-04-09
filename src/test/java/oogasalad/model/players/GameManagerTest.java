@@ -36,7 +36,7 @@ public class GameManagerTest {
   @Test
   void testGameManager() {
     GameManager gm = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>()));
-    gm.executeMove(1, new Coordinate(0, 0));
+//    gm.executeMove(1, new Coordinate(0, 0));
     assertEquals(gm.getPlayerList().get(0), p1);
   }
 
