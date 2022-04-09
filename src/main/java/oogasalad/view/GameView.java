@@ -108,6 +108,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     shopButton.setFont(new Font(15));
 
     shipsRemainingPane = new SetShipPane(100);
+    shipsRemainingPane.getShipPane().setText("Ships Remaining");
     legendPane = new LegendPane();
     shotsRemainingLabel = new Label("Shots Remaining: 0");
     shotsRemainingLabel.setFont(new Font(25));

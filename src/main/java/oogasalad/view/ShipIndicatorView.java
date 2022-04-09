@@ -15,7 +15,7 @@ public class ShipIndicatorView extends BoardView {
     for (int row = 0; row < arrayLayout.length; row++) {
       for (int col = 0; col < arrayLayout[0].length; col++) {
         CellView cell = new CellView(myBoardMaker, Color.valueOf(
-            FILL_PREFIX + myCellStateResources.getString(arrayLayout[row][col].name())),
+            myCellStateResources.getString(FILL_PREFIX + arrayLayout[row][col].name())),
             row, col, arrayLayout.length, arrayLayout[0].length);
         myLayout[row][col] = cell;
       }

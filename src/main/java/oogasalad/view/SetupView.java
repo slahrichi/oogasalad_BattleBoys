@@ -108,6 +108,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     configBox.setMinWidth(300);
     myPane.setRight(configBox);
 //    configBox.getChildren().add(new Label("Test"));
+    shipPane.getShipPane().setText("Current Piece");
     configBox.getChildren().addAll(shipPane.getShipPane(), legendPane.getLegendPane());
 
   }

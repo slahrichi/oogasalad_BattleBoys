@@ -1,7 +1,9 @@
 package oogasalad.view.panes;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
@@ -22,13 +24,18 @@ public class SetShipPane {
   public SetShipPane(double size){
     myShipSize = size;
     shipPane = new TitledPane();
+    shipViews = new ArrayList<>();
+    shipIndicatorsBox = new VBox();
+    shipIndicatorsBox.setAlignment(Pos.CENTER);
     shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
     setUpPane();
   }
 
 
   private void setUpPane(){
-    shipIndicatorsBox.getChildren().addAll(shipIndicatorsBox);
+    for(ShipIndicatorView view : shipViews) {
+      shipIndicatorsBox.getChildren().add(view.getBoardPane());
+    }
     shipPane.setContent(shipIndicatorsBox);
     shipPane.setPrefSize(300, 300);
     shipPane.setId("shipPane");
