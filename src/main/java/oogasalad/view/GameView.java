@@ -29,6 +29,8 @@ import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
+import oogasalad.view.panes.LegendPane;
+import oogasalad.view.panes.SetShipPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,6 +57,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button leftButton;
   private Button rightButton;
 
+  private VBox myRightPane;
+  private Button shopButton;
+  private SetShipPane shipsRemainingPane;
+  private LegendPane legendPane;
+  private Label shotsRemainingLabel;
+  private Label healthLabel;
+  private Label goldLabel;
+
   private Scene myScene;
 
   private int currentBoardIndex;
@@ -72,6 +82,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     currentBoardIndex = 0;
     createCenterPane();
+    createRightPane();
   }
 
   private void createTitle() {
@@ -89,6 +100,26 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myScene.getStylesheets()
         .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
     return myScene;
+  }
+
+  public void createRightPane() {
+    shopButton = new Button("Open Shop");
+    shopButton.setFont(new Font(15));
+
+    shipsRemainingPane = new SetShipPane(100);
+    legendPane = new LegendPane();
+    shotsRemainingLabel = new Label("Shots Remaining: 0");
+    shotsRemainingLabel.setFont(new Font(25));
+    healthLabel = new Label("Health: 0");
+    healthLabel.setFont(new Font(25));
+    goldLabel = new Label("Gold: 0");
+    goldLabel.setFont(new Font(25));
+
+    myRightPane = new VBox(shotsRemainingLabel, healthLabel, goldLabel, shopButton, shipsRemainingPane.getShipPane(), legendPane.getLegendPane());
+    myRightPane.setSpacing(20);
+    myRightPane.setAlignment(Pos.CENTER);
+    myRightPane.setMaxWidth(300);
+    myPane.setRight(myRightPane);
   }
 
   private void createCenterPane() {
@@ -288,12 +319,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   @Override
   public void setNumShotsRemaining(int shotsRemaining) {
-
+    shotsRemainingLabel.setText("Shots Remaining: " + shotsRemaining);
   }
 
   @Override
   public void setGold(int amountOfGold) {
-
+    goldLabel.setText("Gold: " + amountOfGold);
   }
 
   @Override
