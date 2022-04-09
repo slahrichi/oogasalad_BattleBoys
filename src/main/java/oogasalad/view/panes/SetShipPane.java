@@ -27,6 +27,7 @@ public class SetShipPane {
     shipViews = new ArrayList<>();
     shipIndicatorsBox = new VBox();
     shipIndicatorsBox.setAlignment(Pos.CENTER);
+    shipIndicatorsBox.setSpacing(20);
     shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
     setUpPane();
   }
