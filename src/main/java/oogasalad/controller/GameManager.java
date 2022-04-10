@@ -110,17 +110,27 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int row = ((Info)evt.getNewValue()).row();
     int col = ((Info)evt.getNewValue()).col();
     if (makeShot(new Coordinate(row, col), id)) {
-      updateConditions(row, col, id);
+      updateConditions(id);
     };
 
   }
 
-  private void updateConditions(int row, int col, int id) {
-    view.updatePiecesLeft(idMap.get(id).getBoard().listPieces());
+  private void updateConditions(int id) {
+    List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
+    Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
+    view.updatePiecesLeft(coords);
     numShots++;
     checkIfPlayerHasBeenEliminated(id);
     checkIfGameOver();
     checkIfMoveToNextToPlayer();
+  }
+
+  private Collection<Collection<Coordinate>> convertPiecesToCoords(List<Piece> piecesLeft) {
+    Collection<Collection<Coordinate>> coords = new ArrayList<>();
+    for (Piece piece : piecesLeft) {
+      coords.add(piece.getRelativeCoords());
+    }
+    return coords;
   }
 
   private void checkIfGameOver() {

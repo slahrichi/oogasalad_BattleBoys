@@ -275,9 +275,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   @Override
   public void updatePiecesLeft(Collection<Collection<Coordinate>> pieceCoords) {
-//    for (Piece piece : pieces) {
-//      pieceCoords.add(piece.getRelativeCoords());
-//    }
     piecesRemainingPane.updateShownPieces(pieceCoords);
   }
 

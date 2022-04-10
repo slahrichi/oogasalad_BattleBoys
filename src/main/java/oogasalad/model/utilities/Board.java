@@ -18,7 +18,6 @@ public class Board {
   private Map<Coordinate, CellInterface> boardMap;
   private CellState[][] myBoardSetup;
   private Map<String, Piece> myPieces;
-
   private ResourceBundle exceptions;
   private static AtomicInteger nextID = new AtomicInteger();
   private int id;
@@ -103,8 +102,8 @@ public class Board {
     boardMap.put(c, cell);
   }
 
-  public List<CellInterface> listPieces() {
-    return new ArrayList<>(boardMap.values());
+  public List<Piece> listPieces() {
+    return new ArrayList<>(myPieces.values());
   }
 
   public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }

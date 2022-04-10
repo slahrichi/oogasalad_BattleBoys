@@ -102,7 +102,7 @@ public abstract class Piece {
     while(itr.hasNext()) {
       ShipCell currCell = itr.next();
       if(currCell.getCellState()== CellState.SHIP_SUNKEN) {
-        cellList.remove(currCell);
+        itr.remove();
         cellListHP.remove(currCell.getCoordinates());
       }
     }
