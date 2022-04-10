@@ -148,7 +148,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-      CellState result = CellState.SHIP_DAMAGED; //get result from model people
+      CellState result = enemy.getBoard().hit(c); //get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
       return true;
     }

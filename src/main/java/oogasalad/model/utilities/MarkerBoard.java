@@ -7,7 +7,12 @@ public class MarkerBoard {
   private CellState[][] myMarkerArray;
 
   public MarkerBoard(CellState[][] cellStates) {
-    myMarkerArray = cellStates;
+    myMarkerArray = new CellState[cellStates.length][cellStates[0].length];
+    for(int i = 0 ; i< myMarkerArray.length; i++) {
+      for(int j = 0; j< myMarkerArray[0].length; j++) {
+        myMarkerArray[i][j] = cellStates[i][j];
+      }
+    }
   }
 
   public void placeMarker(Coordinate coord, CellState marker) {
