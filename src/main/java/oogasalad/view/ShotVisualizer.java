@@ -1,7 +1,7 @@
 package oogasalad.view;
 
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.tiles.enums.Marker;
+
 
 /**
  * This interface represents classes that show the user the result of their attempted shot at an
