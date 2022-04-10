@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
