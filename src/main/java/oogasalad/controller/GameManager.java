@@ -14,6 +14,8 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.WinConditions.WinCondition;
+import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
@@ -21,6 +23,7 @@ import oogasalad.view.GameView;
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
+  private List<WinCondition> winConditionsList;
   private Map<Integer, Player> idMap;
   private GameView view;
   //current player, separate from ID
@@ -35,6 +38,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
     view = new GameView(boards);
     view.initializePiecesLeft(coords);
+    winConditionsList = data.winConditions();
     this.view.addObserver(this);
   }
 
@@ -169,9 +173,30 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       CellState result = enemy.getBoard().hit(c);//get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
+      applyWinConditions();
       return true;
     }
     return false;
+  }
+
+  public void applyWinConditions() {
+    for(WinCondition w: winConditionsList) {
+      for(int key: idMap.keySet()) {
+        Player currPlayer = idMap.get(key);
+        WinState currPlayerWinState = w.updateWinner(currPlayer);
+        if(currPlayerWinState.equals(WinState.LOSE)) {
+          playerList.remove(currPlayer);
+          idMap.remove(key);
+        }
+        else if(currPlayerWinState.equals(WinState.WIN)) {
+          System.out.format("Player %d wins!", key);
+        }
+      }
+    }
+
+    if(playerList.size()==1) {
+      //remaining player wins;
+    }
   }
 
   private void sendUpdatedBoardsToView() {
