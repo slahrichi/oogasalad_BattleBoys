@@ -1,5 +1,5 @@
 package oogasalad.model.utilities.WinConditions;
 
-public enum WinConditionState {
+public enum WinState {
   NEUTRAL, WIN, LOSE
 }
