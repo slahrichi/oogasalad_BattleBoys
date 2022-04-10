@@ -16,7 +16,7 @@ public class MarkerBoard {
 
   public boolean canPlaceAt(Coordinate coord) {
     CellState coordState = myMarkerArray[coord.getRow()][coord.getColumn()];
-    return coordState==CellState.WATER_HIT || coordState == CellState.ISLAND_SUNK || coordState == CellState.SHIP_SUNKEN;
+    return coordState != CellState.WATER_HIT && coordState != CellState.ISLAND_SUNK && coordState != CellState.SHIP_SUNKEN;
   }
 
   public MarkerBoard copyOf() {

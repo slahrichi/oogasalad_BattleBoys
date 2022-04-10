@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.MarkerBoard;
 
 /**
  * This class demonstrates a simple AI Player.
@@ -27,7 +28,7 @@ public class AIPlayer extends GenericPlayer{
 
   private List<Player> players;
 
-  public AIPlayer(Board board, int id, Map<Integer, Board> enemyMap) {
+  public AIPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
     super(board, id, enemyMap);
     players = new ArrayList<>();
   }

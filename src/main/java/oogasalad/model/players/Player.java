@@ -5,6 +5,7 @@ import java.util.function.Function;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
+import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.enums.Marker;
@@ -51,7 +52,7 @@ public interface Player {
     */
     public void addGold(int amount);
 
-    public void updateEnemyBoard(Coordinate c, int id, Marker state);
+    public void updateEnemyBoard(Coordinate c, int id, CellState state);
 
     public int getHealth();
 
@@ -68,6 +69,6 @@ public interface Player {
 
     boolean canBeStruck(Coordinate c);
 
-    Map<Integer, Board> getEnemyMap();
+    Map<Integer, MarkerBoard> getEnemyMap();
 }
 

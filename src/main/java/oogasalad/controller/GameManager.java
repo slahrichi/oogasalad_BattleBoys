@@ -11,11 +11,10 @@ import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.tiles.enums.Marker;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 
@@ -108,7 +107,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void updateConditions(int row, int col, int id) {
-    view.displayShotAt(row, col, Marker.HIT_SHIP);
+    view.displayShotAt(row, col, CellState.SHIP_DAMAGED);
 //    view.updatePiecesLeft(idMap.get(id).getBoard().listPieces());
     numShots++;
     checkIfPlayerHasBeenEliminated(id);
@@ -148,8 +147,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private boolean makeShot(Coordinate c, int id) {
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
-    if (enemy.canBeStruck(c)) {
-      Marker result = Marker.HIT_SHIP; //get result from model people
+    if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
+      CellState result = CellState.SHIP_DAMAGED; //get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
       return true;
     }
@@ -163,8 +162,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     boardList.add(currentPlayer.getBoard().getCurrentBoardState());
     idList.add(currentPlayer.getID());
     for (int id : currentPlayer.getEnemyMap().keySet()) {
-      Board b = currentPlayer.getEnemyMap().get(id);
-      boardList.add(b.getCurrentBoardState());
+      MarkerBoard board = currentPlayer.getEnemyMap().get(id);
+      boardList.add(board.getMarkerBoard());
       idList.add(id);
     }
     view.moveToNextPlayer(boardList, idList);

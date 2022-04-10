@@ -31,8 +31,8 @@ import oogasalad.view.panes.SetPiecePane;
 
 public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer, BoardVisualizer {
 
-  private static final double SCREEN_WIDTH = 1200;
-  private static final double SCREEN_HEIGHT = 800;
+  private static final double SCREEN_WIDTH = 900;
+  private static final double SCREEN_HEIGHT = 600;
   private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "setupStylesheet.css";
@@ -48,6 +48,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private VBox configBox;
   private LegendPane legendPane;
   private SetPiecePane shipPane;
+  private CellState[][] myCellBoard;
 
 
 
@@ -61,7 +62,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
     currentPiece = new ArrayList<>();
-    setupBoard = new SetupBoardView(50, board, 0);
+    myCellBoard = board;
+    setupBoard = new SetupBoardView(50, myCellBoard, 0);
     currentPlayer = 1;
 
 
@@ -173,7 +175,10 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void clearBoard() {
-    setupBoard.clear();
+    myCenterPane.getChildren().remove(setupBoard.getBoardPane());
+    setupBoard = new SetupBoardView(50, myCellBoard, 0);
+    setupBoard.addObserver(this);
+    myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }
 
   @Override
