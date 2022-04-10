@@ -61,8 +61,8 @@ public abstract class GenericPlayer implements Player{
 
   public void determineHealth() {
     myHealth = 0;
-    for (CellInterface c : myBoard.listPieces()) {
-      if (c != null) {
+    for (Piece p : myBoard.listPieces()) {
+      if (p != null) {
         myHealth++;
       }
     }
