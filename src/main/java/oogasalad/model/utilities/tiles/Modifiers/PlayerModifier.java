@@ -16,5 +16,6 @@ public abstract class PlayerModifier implements Modifiers {
   }
   @Override
   public abstract String toString();
+  public void setMyConsumer(PlayerConsumer mod){ myConsumer = mod;}
 }
 
