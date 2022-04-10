@@ -219,19 +219,18 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     List<Integer> idList = new ArrayList<>();
     List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
     Player currentPlayer = playerList.get(playerIndex);
-    boardList.add(currentPlayer.getBoard().getCurrentBoardState());
-    idList.add(currentPlayer.getID());
-    pieceList.add(convertPiecesToCoords(currentPlayer.getBoard().listPieces()));
+    addToBoardElements(currentPlayer.getBoard().getCurrentBoardState(), currentPlayer.getID(),
+        currentPlayer, boardList, idList, pieceList);
     Map<Integer, MarkerBoard> enemyMap = currentPlayer.getEnemyMap();
     for (int id : currentPlayer.getEnemyMap().keySet()) {
-      addToBoardElements(enemyMap.get(id), id, idMap.get(id), boardList, idList, pieceList);
+      addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList, pieceList);
     }
     view.moveToNextPlayer(boardList, idList, pieceList);
   }
 
-  private void addToBoardElements(MarkerBoard board, int id, Player player, List<CellState[][]> boardList,
-      List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
-    boardList.add(board.getBoard());
+  private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
+      boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
+    boardList.add(board);
     idList.add(id);
     pieceList.add(convertPiecesToCoords(player.getBoard().listPieces()));
   }
