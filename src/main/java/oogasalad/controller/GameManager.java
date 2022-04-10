@@ -116,7 +116,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void updateConditions(int row, int col, int id) {
-    view.displayShotAt(row, col, CellState.SHIP_DAMAGED);
 //    view.updatePiecesLeft(idMap.get(id).getBoard().listPieces());
     numShots++;
     checkIfPlayerHasBeenEliminated(id);
@@ -159,6 +158,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
       CellState result = enemy.getBoard().hit(c);//get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
+      view.displayShotAt(c.getRow(), c.getColumn(), result);
       return true;
     }
     return false;

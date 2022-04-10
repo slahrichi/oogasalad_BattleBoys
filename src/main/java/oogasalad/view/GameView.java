@@ -319,7 +319,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList) {
-
+    switchPlayerMessage("Player "+(idList.get(0)+1));
     myBoards.clear();
     currentBoardIndex = 0;
     CellState[][] firstBoard = boardList.get(currentBoardIndex);
