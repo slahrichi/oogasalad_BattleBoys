@@ -43,8 +43,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
   private static final Logger LOG = LogManager.getLogger(GameView.class);
-  private static final double SCREEN_WIDTH = 1400;
-  private static final double SCREEN_HEIGHT = 900;
+  private static final double SCREEN_WIDTH = 1200;
+  private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "mainStylesheet.css";
 
@@ -319,6 +319,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList) {
+
     myBoards.clear();
     currentBoardIndex = 0;
     CellState[][] firstBoard = boardList.get(currentBoardIndex);
