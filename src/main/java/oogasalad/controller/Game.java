@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import oogasalad.FilePicker;
 import oogasalad.GameData;
 import oogasalad.Parser;
+import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
