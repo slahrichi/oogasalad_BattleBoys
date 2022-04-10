@@ -1,35 +1,57 @@
 package oogasalad;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+
 public class Parser {
 
-  private List<String> stringPlayers;
-  private static final String FILEPATH = "oogasalad.model.players.";
 
   public Parser() {
-    stringPlayers = new ArrayList<>();
-    PlayerData s = parse(new File("src/main/resources/ExampleDataFile.properties"));
   }
 
-  public PlayerData parse(File file) {
-    List<String> players = new ArrayList<>();
-    List<Piece> pieces = new ArrayList<>();
-    Properties props = new Properties();
+  public void saveData(PlayerData data, String pathToNewFile) {
+    //TODO: implement this
+  }
 
+  public void savePieces(List<Piece> data, String pathToNewFile) {
+    Gson gson = new GsonBuilder().setPrettyPrinting().
+        registerTypeHierarchyAdapter(Piece.class, new GSONSerialization()).
+        create();
+
+    String json = gson.toJson(data);
+
+    File myNewFile = new File(pathToNewFile);
+    try {
+      if (myNewFile.createNewFile()) { //new file created
+        FileWriter myWriter = new FileWriter(myNewFile);
+        myWriter.write(json);
+        myWriter.close();
+      } else { //file already exists, maybe prompt to make sure you want to delete this
+        System.out.println("Encountered else block in saveData in Parser.saveData");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public PlayerData parse(String pathToFile) {
+    File file = new File(pathToFile);
+    Properties props = new Properties();
     try {
       InputStream is = new FileInputStream(file);
       props.load(is);
@@ -37,31 +59,45 @@ public class Parser {
     }
     catch(IOException e) {
       System.out.println("Bad file");
+      return null;
       //TODO: throw some type of error
     }
 
-    makePlayers(props, players);
-    CellState[][] cellBoard = makeboard(props);
-
-    String piecesFileLocation = "PiecesFileLocation";
-    String piecesFile = props.getProperty(piecesFileLocation);
+    List<String> players = makePlayers(props);
+    CellState[][] cellBoard = makeBoard(props);
+    List<Piece> pieces = makePieces(props);
 
     return new PlayerData(players, pieces, cellBoard);
 
   }
 
-  private void makePlayers(Properties props, List<String> players) {
+  private List<Piece> makePieces(Properties props) {
+    String piecesFileLocation = "PiecesFileLocation";
+    String piecesFile = props.getProperty(piecesFileLocation);
+    Gson gson = new GsonBuilder().registerTypeAdapter(Piece.class, new GSONSerialization()).create();
+
+    Type listOfMyClassObject = new TypeToken<ArrayList<Piece>>() {}.getType();
+    List<Piece> ret = null;
+    try {
+      ret = gson.fromJson(new FileReader(piecesFile), listOfMyClassObject);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return ret;
+  }
+
+  private List<String> makePlayers(Properties props) {
+    List<String> players = new ArrayList<>();
     int numPlayers = Integer.parseInt(props.getProperty("NumPlayers"));
-    System.out.printf("There are %d players\n", numPlayers);
     for(int i = 0; i < numPlayers; i++) {
       String playerString = "Player" + (i+1);
       String playerType = props.getProperty(playerString);
-      System.out.printf("Type of player is %s\n", playerType);
       players.add(playerType);
     }
+    return players;
   }
 
-  private CellState[][] makeboard(Properties props) {
+  private CellState[][] makeBoard(Properties props) {
     String boardFileLocation = "board";
     String[] boardData = props.getProperty(boardFileLocation).split(";");
 
@@ -80,7 +116,6 @@ public class Parser {
     for (int i = 0; i < intBoard.length; i++) {
       for (int j = 0; j < intBoard[0].length; j++) {
         cellBoard[i][j] = CellState.values()[intBoard[i][j]];
-        System.out.println(cellBoard[i][j]);
       }
     }
 
