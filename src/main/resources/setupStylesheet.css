@@ -3,6 +3,11 @@
   -fx-font-size: 14pt;
 }
 
+.button{
+  -fx-font-size: 12pt;
+}
+
+
 #titleText{
   -fx-padding: 10;
   -fx-font-size: 30pt;
@@ -27,3 +32,12 @@
 #boardBox {
   -fx-padding: 10;
 }
+
+#shipBox {
+  -fx-pref-height: 200;
+}
+
+#shipLabel {
+  -fx-alignment: center;
+}
+
