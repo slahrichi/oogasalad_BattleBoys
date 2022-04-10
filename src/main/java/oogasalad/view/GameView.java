@@ -9,7 +9,10 @@ import java.util.List;
 import javafx.geometry.Insets;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -48,14 +51,13 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "setupStylesheet.css";
+  private static final String STYLESHEET = "mainStylesheet.css";
 
   private TitlePanel myTitle;
   private ResourceBundle myCellStateResources;
   private ResourceBundle myMarkerResources;
   private static final String FILL_PREFIX = "FillColor_";
 
-  private Label titleName;
   private List<BoardView> myBoards;
   private BorderPane myPane;
   private VBox myCenterPane;
@@ -83,7 +85,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myMarkerResources = ResourceBundle.getBundle("/Markers");
 
     myPane = new BorderPane();
-    myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+    myPane.setBackground(
+        new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     myPane.setId("view-pane");
 
     myBoards = new ArrayList<>();
@@ -120,9 +123,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     myRightPane = new VBox(shotsRemainingLabel, healthLabel, goldLabel, shopButton,
         shipsRemainingPane, legendPane);
+    myRightPane.setId("configBox");
     myRightPane.setSpacing(20);
     myRightPane.setAlignment(Pos.CENTER);
-    myRightPane.setMaxWidth(300);
+    myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
   }
 
@@ -141,7 +145,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     setupBoardButtons();
   }
 
-  private void createTitlePanel(){
+  private void createTitlePanel() {
     myTitle = new TitlePanel("Player 1's Turn");
     myPane.setTop(myTitle);
   }
@@ -150,7 +154,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     currentBoardLabel = new Label("Your Board");
     currentBoardLabel.setAlignment(Pos.CENTER);
     currentBoardLabel.setTextAlignment(TextAlignment.CENTER);
-    currentBoardLabel.setFont(new Font(50));
     myCenterPane.getChildren().add(currentBoardLabel);
   }
 
@@ -191,6 +194,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void incrementBoardIndex() {
     currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
     updateDisplayedBoard();
+    switchPlayerMessage("Player 2");
   }
 
   // Displays the board indicated by the updated value of currentBoardIndex
@@ -267,7 +271,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     board2.setColorAt(6, 3, Color.YELLOW);
     board2.setColorAt(7, 5, Color.YELLOW);
 
-
     GameBoardView board3 = new EnemyBoardView(50, arrayLayout, 3);
     board3.addObserver(this);
     myBoards.add(board3);
@@ -291,6 +294,18 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void updateTitle() {
     myTitle.changeTitle("Player X's turn");
+  }
+
+  public void switchPlayerMessage(String nextPlayer) {
+
+    Alert alert = new Alert(AlertType.INFORMATION,
+        "Pass the computer to the next player: " + nextPlayer + ". Proceed when the "
+            + "next player is ready.");
+    Node alertNode = alert.getDialogPane();
+    alertNode.setId("switchAlert");
+    alert.showAndWait();
+
+
   }
 
   @Override
