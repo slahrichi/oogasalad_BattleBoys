@@ -14,8 +14,8 @@ public abstract class WinCondition implements WinConditionInterface {
    * to update their win state
    * @param player Player to apply the WinCondition's win lambda to
    */
-  public void updateWinner(Player player) {
-      player.applyWinCondition(getWinLambda());
+  public WinState updateWinner(Player player) {
+      return player.applyWinCondition(getWinLambda());
   }
 
   /**

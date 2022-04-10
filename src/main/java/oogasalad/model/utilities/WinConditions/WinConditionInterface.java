@@ -19,7 +19,7 @@ public interface WinConditionInterface {
    * to update their win state
    * @param player Player to apply the WinCondition's win lambda to
    */
-  public void updateWinner(Player player);
+  public WinState updateWinner(Player player);
 
   /**
    * This method is used to get the functional lambda that defines how the WinCondition determines if a Player wins or not
