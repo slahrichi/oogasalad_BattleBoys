@@ -69,16 +69,16 @@ public class ShipCell implements CellInterface {
    */
 
   @Override
-  public int hit() {
+  public CellState hit() {
     myHealthBar --;
     if (myHealthBar == 0) {
       currentState = CellState.SHIP_SUNKEN;
-      myShip.registerDamage(this);
-      return myGoldValue;
+      //myShip.registerDamage(this);
     } else {
       currentState = CellState.SHIP_DAMAGED;
-      return 0;
+
     }
+    return currentState;
   }
 
   @Override

@@ -19,8 +19,8 @@ public class WaterCell implements CellInterface {
   }
 
   @Override
-  public int hit() {
-    return 0;
+  public CellState hit() {
+    return CellState.WATER;
   }
 
   @Override

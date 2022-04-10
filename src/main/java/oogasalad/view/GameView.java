@@ -27,7 +27,7 @@ import javafx.scene.text.TextAlignment;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.tiles.enums.Marker;
+
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
