@@ -217,80 +217,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox);
   }
 
-  private void createBoards() {
-//    List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
-//        new Coordinate(1, 0), new Coordinate(1, 1)));
-//    List<ShipCell> dummyShipCellList = new ArrayList<>();
-//    dummyShipCellList.add(new ShipCell(1, new Coordinate(0, 1), 0, "0"));
-//    dummyShipCellList.add(new ShipCell(1, new Coordinate(1, 0), 0, "1"));
-//    dummyShipCellList.add(new ShipCell(1, new Coordinate(1, 1), 0, "2"));
-//    StaticPiece dummyShip = new StaticPiece(dummyShipCellList, coordinateList, "0");
-//
-//    List<Coordinate> coordinateList2 = new ArrayList<>(Arrays.asList(new Coordinate(0, 0),
-//        new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(0, 1), new Coordinate(0, 2)));
-//    List<ShipCell> dummyShipCellList2 = new ArrayList<>();
-//    dummyShipCellList2.add(new ShipCell(1, new Coordinate(0, 0), 0, "0"));
-//    dummyShipCellList2.add(new ShipCell(1, new Coordinate(1, 0), 0, "1"));
-//    dummyShipCellList2.add(new ShipCell(1, new Coordinate(1, 1), 0, "2"));
-//    dummyShipCellList2.add(new ShipCell(1, new Coordinate(0, 1), 0, "3"));
-//    dummyShipCellList2.add(new ShipCell(1, new Coordinate(0, 2), 0, "4"));
-//    StaticPiece dummyShip2 = new StaticPiece(dummyShipCellList2, coordinateList2, "0");
-//
-//    List<Coordinate> coordinateList3 = new ArrayList<>(Arrays.asList(new Coordinate(0, 0),
-//        new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(2, 0), new Coordinate(3, 0)));
-//    List<ShipCell> dummyShipCellList3 = new ArrayList<>();
-//    dummyShipCellList3.add(new ShipCell(1, new Coordinate(0, 0), 0, "0"));
-//    dummyShipCellList3.add(new ShipCell(1, new Coordinate(1, 0), 0, "1"));
-//    dummyShipCellList3.add(new ShipCell(1, new Coordinate(1, 1), 0, "2"));
-//    dummyShipCellList3.add(new ShipCell(1, new Coordinate(2, 0), 0, "3"));
-//    dummyShipCellList3.add(new ShipCell(1, new Coordinate(3, 0), 0, "4"));
-//    StaticPiece dummyShip3 = new StaticPiece(dummyShipCellList3, coordinateList3, "0");
-//
-//    List<Coordinate> coordinateList4 = new ArrayList<>(Arrays.asList(new Coordinate(0, 0),
-//        new Coordinate(0, 1), new Coordinate(0, 2), new Coordinate(0, 3), new Coordinate(0, 4)));
-//    List<ShipCell> dummyShipCellList4 = new ArrayList<>();
-//    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0, 0), 0, "0"));
-//    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0, 1), 0, "1"));
-//    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0, 2), 0, "2"));
-//    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0, 3), 0, "3"));
-//    dummyShipCellList4.add(new ShipCell(1, new Coordinate(0, 4), 0, "4"));
-//    StaticPiece dummyShip4 = new StaticPiece(dummyShipCellList4, coordinateList4, "0");
-
-//    CellState[][] arrayLayout = new CellState[8][8];
-//    for (CellState[] ints : arrayLayout) {
-//      Arrays.fill(ints, CellState.WATER);
-//    }
-//
-//    // player's own board, no listeners on it
-//    SelfBoardView board1 = new SelfBoardView(50, myData.players().get(0).getBoard()
-//        .getCurrentBoardState(), 1);
-//    myBoards.add(board1);
-//
-//    GameBoardView board2 = new EnemyBoardView(50, arrayLayout, 2);
-//    board2.addObserver(this);
-//    myBoards.add(board2);
-//    board2.setColorAt(4, 3, Color.YELLOW);
-//    board2.setColorAt(6, 3, Color.YELLOW);
-//    board2.setColorAt(7, 5, Color.YELLOW);
-//
-//
-//    GameBoardView board3 = new EnemyBoardView(50, arrayLayout, 3);
-//    board3.addObserver(this);
-//    myBoards.add(board3);
-//    board3.setColorAt(2, 2, Color.YELLOW);
-//    board3.setColorAt(3, 6, Color.ORANGE);
-//    board3.setColorAt(4, 6, Color.ORANGE);
-//
-//    GameBoardView board4 = new EnemyBoardView(50, arrayLayout, 4);
-//    board4.addObserver(this);
-//    myBoards.add(board4);
-//    board4.setColorAt(5, 3, Color.YELLOW);
-//    board4.setColorAt(2, 3, Color.YELLOW);
-//    board4.setColorAt(7, 7, Color.RED);
-//    board4.setColorAt(7, 6, Color.RED);
-//    board4.setColorAt(6, 7, Color.RED);
-  }
-
   public void promptPlayTurn() {
     System.out.println("Please play turn! Maybe we should show a player ID here!");
   }
@@ -381,12 +307,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList) {
-    CellState[][] board = boardList.get(1);
-    for (int i = 0; i < board.length; i++) {
-      for (int j = 0; j < board[0].length; j++) {
-        System.out.println("row: "+i+" col: " +j+" "+board[i][j].name());
-      }
-    }
     myBoards.clear();
     currentBoardIndex = 0;
     CellState[][] firstBoard = boardList.get(currentBoardIndex);
