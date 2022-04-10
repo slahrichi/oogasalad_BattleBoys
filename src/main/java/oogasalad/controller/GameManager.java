@@ -155,11 +155,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private boolean makeShot(Coordinate c, int id) {
     Player currentPlayer = playerList.get(playerIndex);
-    System.out.println("Current Player: " + currentPlayer.getID());
-    System.out.println("Shot at :" + id);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-      CellState result = enemy.getBoard().hit(c); //get result from model people
+      CellState result = enemy.getBoard().hit(c);//get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
       return true;
     }
