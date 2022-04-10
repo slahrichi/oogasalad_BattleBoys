@@ -17,8 +17,6 @@ public class Board {
 
   private Map<Coordinate, CellInterface> boardMap;
   private CellState[][] myBoardSetup;
-  private Map<String, Integer> maxElementsMap;
-  private Map<String, Integer> elementHitMap;
   private Map<String, Piece> myPieces;
 
   private ResourceBundle exceptions;
@@ -32,6 +30,7 @@ public class Board {
   private int myRows;
   private int myCols;
   private int myCurrTurnGold;
+  private int myNumShipsSunk;
 
 
 
@@ -41,6 +40,7 @@ public class Board {
     myCols = boardSetup[0].length;
     myPieces = new HashMap<>();
     myCurrTurnGold = 0;
+    myNumShipsSunk = 0;
     initialize(boardSetup);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
@@ -103,11 +103,6 @@ public class Board {
     boardMap.put(c, cell);
   }
 
-
-  public int getNumHit(String cellType) {
-    return elementHitMap.get(cellType);
-  }
-
   public List<CellInterface> listPieces() {
     return new ArrayList<>(boardMap.values());
   }
@@ -130,8 +125,18 @@ public class Board {
   }
 
   public CellState hit(Coordinate c) {
-
+    int numStartPieces = myPieces.keySet().size();
     CellState hitState = boardMap.get(c).hit();
+
+    for(String key: myPieces.keySet()) {
+      Piece currPiece = myPieces.get(key);
+      currPiece.updateShipHP();
+      if(currPiece.checkDeath()) {
+        myPieces.remove(key);
+      }
+    }
+
+    myNumShipsSunk = numStartPieces-myPieces.keySet().size();
     return hitState;
   }
 
@@ -140,8 +145,8 @@ public class Board {
     return;
   }
 
-  public Board copyOf() {
-    return new Board(myBoardSetup);
+  public int getNumPiecesSunk() {
+    return myNumShipsSunk;
   }
 
   public boolean canBeStruck(Coordinate c) {

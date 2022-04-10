@@ -9,6 +9,8 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.WinConditions.WinCondition;
+import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -74,7 +76,7 @@ public abstract class GenericPlayer implements Player{
     return myBoard.listCoordinates();
   }
 
-  public int applyWinCondition(Function<PlayerRecord,Integer> lambda) {
+  public WinState applyWinCondition(Function<PlayerRecord, WinState> lambda) {
     return lambda.apply(makeRecord());
   }
 
