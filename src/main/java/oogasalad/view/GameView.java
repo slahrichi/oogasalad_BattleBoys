@@ -43,8 +43,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
   private static final Logger LOG = LogManager.getLogger(GameView.class);
-  private static final double SCREEN_WIDTH = 1200;
-  private static final double SCREEN_HEIGHT = 800;
+  private static final double SCREEN_WIDTH = 900;
+  private static final double SCREEN_HEIGHT = 600;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "mainStylesheet.css";
 
