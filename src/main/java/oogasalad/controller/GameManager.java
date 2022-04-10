@@ -43,9 +43,19 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player firstPlayer = data.players().get(0);
     boards.add(firstPlayer.getBoard().getCurrentBoardState());
     for (int i = 0; i < firstPlayer.getEnemyMap().size(); i++) {
-      boards.add(data.board());
+      boards.add(makeCopy(data.board()));
     }
     return boards;
+  }
+
+  private CellState[][] makeCopy(CellState[][] board) {
+    CellState[][] cellBoard = new CellState[board.length][board[0].length];
+    for (int i = 0; i < board.length; i++) {
+      for (int j = 0; j < board[0].length; j++) {
+        cellBoard[i][j] = board[i][j];
+      }
+    }
+    return cellBoard;
   }
 
   private Collection<Collection<Coordinate>> createInitialPieces(List<Piece> pieces) {
@@ -96,7 +106,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    System.out.println("ID: " + ((Info)evt.getNewValue()).ID());
     int id = ((Info)evt.getNewValue()).ID();
     int row = ((Info)evt.getNewValue()).row();
     int col = ((Info)evt.getNewValue()).col();
@@ -107,7 +116,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void updateConditions(int row, int col, int id) {
-    view.displayShotAt(row, col, CellState.SHIP_DAMAGED);
 //    view.updatePiecesLeft(idMap.get(id).getBoard().listPieces());
     numShots++;
     checkIfPlayerHasBeenEliminated(id);
@@ -148,8 +156,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-      CellState result = enemy.getBoard().hit(c); //get result from model people
+      CellState result = enemy.getBoard().hit(c);//get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
+      view.displayShotAt(c.getRow(), c.getColumn(), result);
       return true;
     }
     return false;
