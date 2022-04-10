@@ -1,13 +1,11 @@
 package oogasalad.view.panes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -15,14 +13,14 @@ import oogasalad.view.ShipIndicatorView;
 
 // need to hold the ship list as well as create the ships to display
 
-public class SetShipPane extends TitledPane {
+public class SetPiecePane extends TitledPane {
 
   private List<ShipIndicatorView> shipViews;
   private VBox shipIndicatorsBox;
   private boolean lastPiecePlaced = false;
   private double myShipSize;
 
-  public SetShipPane(double size){
+  public SetPiecePane(double size){
     myShipSize = size;
     shipViews = new ArrayList<>();
     shipIndicatorsBox = new VBox();

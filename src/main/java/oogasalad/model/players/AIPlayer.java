@@ -44,7 +44,7 @@ public class AIPlayer extends GenericPlayer{
   public void playTurn() {
     Player enemy = getRandomPlayer();
     Coordinate location = getRandomCoordinate();
-    enemy.strike(location);
+//    enemy.strike(location);
   }
 
   @Override
