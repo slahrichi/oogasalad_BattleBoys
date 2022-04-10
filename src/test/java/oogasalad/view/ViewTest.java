@@ -65,9 +65,9 @@ public class ViewTest extends DukeApplicationTest {
   @Override
   public void start (Stage stage) {
     // create application and add scene for testing to given stage
-    GameManager game = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>()));
-    stage.setScene(game.createScene());
-    stage.show();
+//    GameManager game = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>()));
+//    stage.setScene(game.createScene());
+//    stage.show();
 
     myCell0 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-0").query();
   }
