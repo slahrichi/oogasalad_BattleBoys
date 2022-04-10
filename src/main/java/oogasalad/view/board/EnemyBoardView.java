@@ -15,7 +15,7 @@ public class EnemyBoardView extends GameBoardView {
     for (int row = 0; row < arrayLayout.length; row++) {
       for (int col = 0; col < arrayLayout[0].length; col++) {
         if (arrayLayout[row][col] == CellState.WATER) {
-          String cellColor = myCellStateResources.getString(FILL_PREFIX+CellState.WATER.name());
+          String cellColor = myMarkerResources.getString(FILL_PREFIX+CellState.WATER.name());
           List<Double> points = myBoardMaker.calculatePoints(row, col);
           CellView cell = new CellView(points, Color.valueOf(cellColor), row, col);
           cell.addObserver(this);

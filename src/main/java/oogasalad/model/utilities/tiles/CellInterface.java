@@ -7,7 +7,7 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 
 public interface CellInterface {
 
-   int hit();
+   CellState hit();
 
    List<Function> boardUpdate();
 
@@ -25,4 +25,6 @@ public interface CellInterface {
     * @return integer representation of cell state (ordinal matches up with cellStates enum)
     */
    CellState getCellState();
+
+   public int getHealth();
 }

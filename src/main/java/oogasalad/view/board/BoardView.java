@@ -60,13 +60,14 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     myLayout[row][col].getCell().setFill(color);
   }
 
-  public void clear() {
-    for (int i = 0; i < myLayout.length; i++) {
-      for (int j = 0; j < myLayout[0].length; j++) {
-        myLayout[i][j].getCell().setFill(Color.valueOf(myCellStateResources.getString(FILL_PREFIX+CellState.WATER.name())));
-      }
-    }
-  }
+//  public void clear() {
+//    for (int i = 0; i < myLayout.length; i++) {
+//      for (int j = 0; j < myLayout[0].length; j++) {
+//        if (myLayout[i][j].
+//        myLayout[i][j].getCell().setFill(Color.valueOf(myCellStateResources.getString(FILL_PREFIX+CellState.WATER.name())));
+//      }
+//    }
+//  }
 
   private void initializeBoardNodes() {
     for (int i = 0; i < myLayout.length; i++) {
@@ -82,6 +83,10 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
 
   public StackPane getBoardPane() {
     return myBoard;
+  }
+
+  public int getID() {
+    return myID;
   }
 
   @Override

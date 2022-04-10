@@ -8,8 +8,8 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 public class IslandCell implements CellInterface {
 
   @Override
-  public int hit() {
-    return 0;
+  public CellState hit() {
+    return CellState.ISLAND_HEALTHY;
   }
 
   @Override
@@ -41,5 +41,10 @@ public class IslandCell implements CellInterface {
   @Override
   public CellState getCellState() {
     return null;
+  }
+
+  @Override
+  public int getHealth() {
+    return 1;
   }
 }

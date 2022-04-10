@@ -13,14 +13,14 @@ import oogasalad.view.ShipIndicatorView;
 
 // need to hold the ship list as well as create the ships to display
 
-public class SetShipPane extends TitledPane {
+public class SetPiecePane extends TitledPane {
 
   private List<ShipIndicatorView> shipViews;
   private VBox shipIndicatorsBox;
   private boolean lastPiecePlaced = false;
   private double myShipSize;
 
-  public SetShipPane(double size) {
+  public SetPiecePane(double size) {
     myShipSize = size;
     shipViews = new ArrayList<>();
     shipIndicatorsBox = new VBox();

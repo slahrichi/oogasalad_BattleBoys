@@ -7,6 +7,7 @@ import java.util.function.Function;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
+import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -16,11 +17,11 @@ public abstract class GenericPlayer implements Player{
   private int myHealth;
   private int myCurrency;
   private List<Item> itemList;
-  private Map<Integer, Board> myEnemyMap;
+  private Map<Integer, MarkerBoard> myEnemyMap;
   private Board myBoard;
   private int myId;
 
-  public GenericPlayer(Board board, int id, Map<Integer, Board> enemyMap) {
+  public GenericPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
@@ -47,11 +48,8 @@ public abstract class GenericPlayer implements Player{
   }
 
   @Override
-  public void strike(Coordinate c) {
-    if (myBoard.checkCell(c) != null) {
-      myBoard.place(c, null);
-      myHealth--;
-    }
+  public void updateEnemyBoard(Coordinate c, int id, CellState state) {
+    myEnemyMap.get(id).placeMarker(c, state);
   }
 
   @Override
@@ -86,5 +84,18 @@ public abstract class GenericPlayer implements Player{
 
   public Board getBoard() {
     return myBoard;
+  }
+
+  public int getID() {
+    return myId;
+  }
+
+  @Override
+  public boolean canBeStruck(Coordinate c) {
+    return myBoard.canBeStruck(c);
+  }
+
+  public Map<Integer, MarkerBoard> getEnemyMap() {
+    return myEnemyMap;
   }
 }
