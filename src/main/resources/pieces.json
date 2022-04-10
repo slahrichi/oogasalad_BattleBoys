@@ -1,0 +1,222 @@
+[
+  {
+    "type": "oogasalad.model.utilities.StaticPiece",
+    "properties": {
+      "cellList": [
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 1
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 1,
+            "column": 0
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 1,
+            "column": 1
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        }
+      ],
+      "allCells": [
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 1
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 1,
+            "column": 0
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 1,
+            "column": 1
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        }
+      ],
+      "cellListHP": [],
+      "myRelativeCoords": [
+        {
+          "row": 0,
+          "column": 1
+        },
+        {
+          "row": 1,
+          "column": 0
+        },
+        {
+          "row": 1,
+          "column": 1
+        }
+      ],
+      "status": "Alive",
+      "pieceId": "0"
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.StaticPiece",
+    "properties": {
+      "cellList": [
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 0
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 1,
+            "column": 0
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 1,
+            "column": 1
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 1
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 2
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        }
+      ],
+      "allCells": [
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 0
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 1,
+            "column": 0
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 1,
+            "column": 1
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 1
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 2
+          },
+          "myHealthBar": 1,
+          "currentState": "SHIP_HEALTHY",
+          "myGoldValue": 0,
+          "id": 0
+        }
+      ],
+      "cellListHP": [],
+      "myRelativeCoords": [
+        {
+          "row": 0,
+          "column": 0
+        },
+        {
+          "row": 1,
+          "column": 0
+        },
+        {
+          "row": 1,
+          "column": 1
+        },
+        {
+          "row": 0,
+          "column": 1
+        },
+        {
+          "row": 0,
+          "column": 2
+        }
+      ],
+      "status": "Alive",
+      "pieceId": "0"
+    }
+  }
+]
