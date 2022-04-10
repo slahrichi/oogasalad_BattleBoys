@@ -43,8 +43,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
   private static final Logger LOG = LogManager.getLogger(GameView.class);
-  private static final double SCREEN_WIDTH = 900;
-  private static final double SCREEN_HEIGHT = 600;
+  private static final double SCREEN_WIDTH = 1200;
+  private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "mainStylesheet.css";
 
@@ -53,7 +53,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private ResourceBundle myMarkerResources;
   private static final String FILL_PREFIX = "FillColor_";
 
-  private Label titleName;
   private List<BoardView> myBoards;
   private List<Collection<Collection<Coordinate>>> myPiecesLeft;
   private BorderPane myPane;
@@ -80,7 +79,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myMarkerResources = ResourceBundle.getBundle("/Markers");
 
     myPane = new BorderPane();
-    myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+    myPane.setBackground(
+        new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     myPane.setId("view-pane");
 
     myBoards = new ArrayList<>();
@@ -132,10 +132,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     myRightPane = new VBox(shotsRemainingLabel, healthLabel, goldLabel, shopButton,
         piecesRemainingPane, legendPane);
+    myRightPane.setId("configBox");
     myRightPane.setSpacing(20);
     myRightPane.setAlignment(Pos.CENTER);
     myRightPane.setMinWidth(300);
-    myRightPane.setId("configBox");
     myPane.setRight(myRightPane);
   }
 
@@ -150,7 +150,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     setupBoardButtons();
   }
 
-  private void createTitlePanel(){
+  private void createTitlePanel() {
     myTitle = new TitlePanel("Player 1's Turn");
     myPane.setTop(myTitle);
   }
@@ -223,6 +223,18 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void updateTitle(int playerID) {
     myTitle.changeTitle("Player " + (playerID+1) + "'s turn");
+  }
+
+  public void switchPlayerMessage(String nextPlayer) {
+
+    Alert alert = new Alert(AlertType.INFORMATION,
+        "Pass the computer to the next player: " + nextPlayer + ". Proceed when the "
+            + "next player is ready.");
+    Node alertNode = alert.getDialogPane();
+    alertNode.setId("switchAlert");
+    alert.showAndWait();
+
+
   }
 
   @Override
@@ -307,6 +319,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList) {
+
     myBoards.clear();
     currentBoardIndex = 0;
     CellState[][] firstBoard = boardList.get(currentBoardIndex);

@@ -29,10 +29,11 @@ import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 
-public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer, BoardVisualizer {
+public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer,
+    BoardVisualizer {
 
-  private static final double SCREEN_WIDTH = 900;
-  private static final double SCREEN_HEIGHT = 600;
+  private static final double SCREEN_WIDTH = 1200;
+  private static final double SCREEN_HEIGHT = 800;
   private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "setupStylesheet.css";
@@ -51,7 +52,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private CellState[][] myCellBoard;
 
 
-
   private int currentPlayer;
 
   // current piece that is being placed
@@ -59,13 +59,13 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   public SetupView(CellState[][] board) {
     myPane = new BorderPane();
-    myPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+    myPane.setBackground(
+        new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
     currentPiece = new ArrayList<>();
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     currentPlayer = 1;
-
 
     createTitlePanel();
     createConfirmButton();
@@ -78,7 +78,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     confirm.setDisable(false);
   }
 
-  public void displayCompletion() {shipPane.showListCompletion();}
+  public void displayCompletion() {
+    shipPane.showListCompletion();
+  }
 
   public Scene getScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -92,7 +94,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     shipPane.updateShownPieces(List.of(nextPiece));
   }
 
-  private void createConfigPanel(){
+  private void createConfigPanel() {
 
     // FIXME: Move magic numbers to private static / resourcebundle
 
@@ -110,6 +112,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void createConfirmButton() {
     confirm = new Button("Confirm");
+    confirm.setPrefHeight(40);
+    confirm.setPrefWidth(80);
     confirm.setDisable(true);
     confirm.setOnAction(e -> handleConfirm());
   }
@@ -121,7 +125,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     notifyObserver("moveToNextPlayer", null);
   }
 
-  private void createCenterPanel(){
+  private void createCenterPanel() {
     myCenterPane = new StackPane();
     centerBox = new VBox();
 
@@ -135,7 +139,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myCenterPane.getChildren().addAll(setupBoard.getBoardPane());
   }
 
-  private void createTitlePanel(){
+  private void createTitlePanel() {
     myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
     myPane.setTop(myTitle);
   }
@@ -162,14 +166,14 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   @Override
   public void placePiece(Collection<Coordinate> coords, CellState type) {
-    for(Coordinate c : coords) {
+    for (Coordinate c : coords) {
       setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.BLACK);
     }
   }
 
   @Override
   public void removePiece(Collection<Coordinate> coords) {
-    for(Coordinate c : coords) {
+    for (Coordinate c : coords) {
       setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.LIGHTBLUE);
     }
   }

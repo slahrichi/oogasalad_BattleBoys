@@ -20,10 +20,18 @@ public abstract class Piece {
   public Piece(List<ShipCell> cells, List<Coordinate> relativeCoords, String id) {
     status = "Alive";
     pieceId = id;
-    cellList = cells;
+    cellList = createNewCellListInstance(cells);
     allCells = new ArrayList<>(cellList);
     myRelativeCoords = relativeCoords;
     //intializeHPList(cellList);
+  }
+
+  private List<ShipCell> createNewCellListInstance(List<ShipCell> cells) {
+    List<ShipCell> newCellList = new ArrayList<ShipCell>();
+    for(ShipCell c: cells) {
+      newCellList.add(new ShipCell(c));
+    }
+    return newCellList;
   }
 
   public Piece(String id){
