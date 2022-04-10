@@ -200,7 +200,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void incrementBoardIndex() {
     currentBoardIndex = (currentBoardIndex + myBoards.size() + 1) % myBoards.size();
     updateDisplayedBoard();
-    switchPlayerMessage("Player 2");
   }
 
   // Displays the board indicated by the updated value of currentBoardIndex
