@@ -97,7 +97,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         },
         {
           "myRelativeCoordinate": {
@@ -107,7 +107,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         },
         {
           "myRelativeCoordinate": {
@@ -117,7 +117,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         },
         {
           "myRelativeCoordinate": {
@@ -127,7 +127,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         },
         {
           "myRelativeCoordinate": {
@@ -137,7 +137,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         }
       ],
       "allCells": [
@@ -149,7 +149,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         },
         {
           "myRelativeCoordinate": {
@@ -159,7 +159,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         },
         {
           "myRelativeCoordinate": {
@@ -169,7 +169,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         },
         {
           "myRelativeCoordinate": {
@@ -179,7 +179,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         },
         {
           "myRelativeCoordinate": {
@@ -189,7 +189,7 @@
           "myHealthBar": 1,
           "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
-          "id": 0
+          "id": 1
         }
       ],
       "cellListHP": [],
@@ -216,7 +216,7 @@
         }
       ],
       "status": "Alive",
-      "pieceId": "0"
+      "pieceId": "1"
     }
   }
 ]
