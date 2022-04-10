@@ -375,7 +375,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   @Override
-  public void displayShotAt(int x, int y, Marker result) {
+  public void displayShotAt(int x, int y, CellState result) {
     myBoards.get(currentBoardIndex)
         .setColorAt(x, y, Color.valueOf(myMarkerResources.getString(FILL_PREFIX + result.name())));
   }

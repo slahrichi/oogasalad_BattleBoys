@@ -5,18 +5,14 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javafx.scene.Scene;
 import oogasalad.GameData;
-import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
 
@@ -99,7 +95,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void update(Piece piece) {
-    setupView.placePiece(piece.getHPList(), CellState.SHIP_HEALTHY);
+    List<Coordinate> coords = new ArrayList<>();
+    for (ShipCell cell : piece.getCellList()) {
+      coords.add(cell.getCoordinates());
+    }
+    setupView.placePiece(coords, CellState.SHIP_HEALTHY);
     pieceIndex++;
     if (pieceIndex != pieceList.size()) {
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());

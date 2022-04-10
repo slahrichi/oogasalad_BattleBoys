@@ -146,6 +146,13 @@ public class Board {
     for(Coordinate c : boardMap.keySet()) {
       currStateArray[c.getRow()][c.getColumn()] = boardMap.get(c).getCellState();
     }
+    for (int i = 0; i < currStateArray.length; i++) {
+      for (int j = 0; j < currStateArray[0].length; j++) {
+        if (currStateArray[i][j] == null) {
+          currStateArray[i][j] = CellState.NOT_DEFINED;
+        }
+      }
+    }
     return currStateArray;
   }
 

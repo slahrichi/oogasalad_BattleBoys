@@ -17,6 +17,7 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;

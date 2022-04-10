@@ -1,5 +1,6 @@
 package oogasalad.view;
 
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.enums.Marker;
 
 /**
@@ -19,6 +20,6 @@ public interface ShotVisualizer {
    * @param y y coordinate of cell
    * @param result indicates if the shot was a hit or a miss
    */
-  void displayShotAt(int x, int y, Marker result);
+  void displayShotAt(int x, int y, CellState result);
 
 }
