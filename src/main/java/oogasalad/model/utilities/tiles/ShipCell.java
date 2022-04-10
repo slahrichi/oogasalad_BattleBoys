@@ -1,7 +1,7 @@
 package oogasalad.model.utilities.tiles;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -90,15 +90,13 @@ public class ShipCell implements CellInterface {
   }
 
   @Override
-  public List<Function> boardUpdate() {
+  public List<Consumer> update() {
     return null;
   }
+
+
   public Coordinate getRelativeCoordinate(){
     return myRelativeCoordinate;
-  }
-  @Override
-  public List<Function> playerUpdate() {
-    return null;
   }
 
   @Override
