@@ -7,6 +7,7 @@ import oogasalad.controller.GameManager;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,9 +36,9 @@ public class GameManagerTest {
 
   @Test
   void testGameManager() {
-//    GameManager gm = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>()));
+    GameManager gm = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>(), new ArrayList<WinCondition>()));
 //    gm.executeMove(1, new Coordinate(0, 0));
-//    assertEquals(gm.getPlayerList().get(0), p1);
+    assertEquals(gm.getPlayerList().get(0), p1);
   }
 
 }

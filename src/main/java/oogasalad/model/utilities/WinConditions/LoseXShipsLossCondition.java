@@ -19,7 +19,8 @@ public class LoseXShipsLossCondition extends WinCondition{
     return (PlayerRecord playerInfo) -> {
       int boardState = 0;
       Board playerBoard = playerInfo.myBoard();
-      if(playerBoard.getNumPiecesSunk()==myNumToSink){
+      System.out.println("NumPieces Sunk = " + playerBoard.getNumPiecesSunk());
+      if(playerBoard.getNumPiecesSunk()>=myNumToSink){
         return WinState.LOSE; //change this to whatever enum value represents "Win"
       }
       return WinState.NEUTRAL; //change this to whatever enum value represents "neutral" state (not win or loss)

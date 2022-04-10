@@ -5,8 +5,10 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
@@ -120,12 +122,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void updateConditions(int id) {
-    List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
-    Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
-    view.updatePiecesLeft(coords);
+    applyWinConditions();
+    if(idMap.containsKey(id)){
+      List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
+      Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
+      view.updatePiecesLeft(coords);
+    }
     numShots++;
-    checkIfPlayerHasBeenEliminated(id);
-    checkIfGameOver();
     checkIfMoveToNextToPlayer();
   }
 
@@ -173,7 +176,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       CellState result = enemy.getBoard().hit(c);//get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
-      applyWinConditions();
+      //applyWinConditions();
       return true;
     }
     return false;
@@ -181,12 +184,19 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   public void applyWinConditions() {
     for(WinCondition w: winConditionsList) {
-      for(int key: idMap.keySet()) {
+      Set<Integer> ogKeyset = new HashSet<Integer>(idMap.keySet());
+      for(int key: ogKeyset) {
         Player currPlayer = idMap.get(key);
         WinState currPlayerWinState = w.updateWinner(currPlayer);
+        System.out.format("Player %d's WinState %s\n", key, currPlayerWinState);
         if(currPlayerWinState.equals(WinState.LOSE)) {
+          System.out.println("player "+ key + "lost");
           playerList.remove(currPlayer);
           idMap.remove(key);
+          for(Player p: playerList) {
+            p.getEnemyMap().remove(key);
+          }
+          //show dead player
         }
         else if(currPlayerWinState.equals(WinState.WIN)) {
           System.out.format("Player %d wins!", key);

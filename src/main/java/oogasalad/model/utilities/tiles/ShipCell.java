@@ -79,7 +79,7 @@ public class ShipCell implements CellInterface {
   @Override
   public CellState hit() {
     myHealthBar --;
-    if (myHealthBar == 0) {
+    if (myHealthBar <= 0) {
       currentState = CellState.SHIP_SUNKEN;
       //myShip.registerDamage(this);
     } else {

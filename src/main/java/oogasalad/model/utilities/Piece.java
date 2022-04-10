@@ -74,6 +74,7 @@ public abstract class Piece {
   public abstract void registerDamage(ShipCell hitLocation);
 
   protected boolean checkDeath() {
+    System.out.println("Ship's hp is " + cellList.size());
     return (cellList.size() == 0);
   }
 
