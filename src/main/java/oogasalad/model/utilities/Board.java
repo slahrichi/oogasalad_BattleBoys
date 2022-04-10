@@ -104,7 +104,7 @@ public class Board {
   }
 
 
-  public void place(Coordinate c, CellInterface cell) {
+  private void place(Coordinate c, CellInterface cell) {
     boardMap.put(c, cell);
   }
 
@@ -146,10 +146,12 @@ public class Board {
     return hitState;
   }
 
+  /*
   public void addPiece(String id, Piece newPiece){
     myPieces.put(id, newPiece);
     return;
   }
+   */
 
   public int getNumPiecesSunk() {
     return myNumShipsSunk;
@@ -169,7 +171,7 @@ public class Board {
         }
       }
     }
-  return  retModifers;
+  return retModifers;
   }
 
 
