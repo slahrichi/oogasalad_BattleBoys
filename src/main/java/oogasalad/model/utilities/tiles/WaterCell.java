@@ -1,8 +1,9 @@
 package oogasalad.model.utilities.tiles;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class WaterCell implements CellInterface {
@@ -18,18 +19,14 @@ public class WaterCell implements CellInterface {
     myCoordinate = coord;
   }
 
+
   @Override
   public CellState hit() {
     return CellState.WATER_HIT;
   }
 
   @Override
-  public List<Function>boardUpdate() {
-    return null;
-  }
-
-  @Override
-  public List<Function>playerUpdate(){
+  public List<Modifiers> update() {
     return null;
   }
 
@@ -46,6 +43,11 @@ public class WaterCell implements CellInterface {
   @Override
   public Coordinate getCoordinates() {
     return myCoordinate;
+  }
+
+  @Override
+  public void addModifier(Modifiers myMod) {
+    return;
   }
 
   @Override

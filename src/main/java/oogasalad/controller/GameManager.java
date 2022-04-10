@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
@@ -176,6 +177,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
     if(playerList.size()==1) {
       moveToWinGame(playerList.get(0));
+      //remaining player wins;
+      System.out.println("Game is over one player left");
     }
   }
 
