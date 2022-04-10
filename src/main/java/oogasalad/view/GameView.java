@@ -205,6 +205,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
+    System.out.println("Current board index: "+currentBoardIndex);
     currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board"
         : "Your Shots Against Player " + (myBoards.get(currentBoardIndex).getID() + 1));
     refreshCenterPane();
@@ -270,8 +271,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
   }
 
-  public void endGame() {
+  public void displayWinningMessage(int id) {
+    LOG.info("Player "+(id+1)+" Won!");
+  }
 
+  public void displayLosingMessage(int id) {
+    LOG.info("Player "+(id+1)+" Lost!");
   }
 
   @Override
@@ -321,7 +326,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
     switchPlayerMessage("Player "+(idList.get(0)+1));
     myBoards.clear();
-    myPiecesLeft.clear();
+    myPiecesLeft = pieceList;
     currentBoardIndex = 0;
     CellState[][] firstBoard = boardList.get(currentBoardIndex);
     int firstID = idList.get(currentBoardIndex);
@@ -333,6 +338,5 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
     updateTitle(firstID);
     updateDisplayedBoard();
-    myPiecesLeft = pieceList;
   }
 }
