@@ -15,7 +15,6 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.tiles.enums.Marker;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 

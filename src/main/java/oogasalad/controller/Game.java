@@ -5,7 +5,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,14 +16,9 @@ import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.StaticPiece;
-import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.view.GameView;
-import oogasalad.view.SetupView;
 
 public class Game extends PropertyObservable implements PropertyChangeListener {
 
@@ -47,7 +41,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     fileChooser = new FilePicker();
     PlayerData playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
 
-
     stringPlayers = playerData.players();
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();
@@ -60,6 +53,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.NOT_DEFINED,CellState.NOT_DEFINED,CellState.WATER}};
+
 
 
     List<Player> players = new ArrayList<>();
