@@ -45,17 +45,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();
 
-    CellState[][] dummyBoard = new CellState[][]{{CellState.WATER,CellState.WATER,CellState.NOT_DEFINED,CellState.NOT_DEFINED,CellState.WATER,CellState.WATER,CellState.WATER, CellState.WATER},
-        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
-        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
-        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
-        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
-        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
-        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
-        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.NOT_DEFINED,CellState.NOT_DEFINED,CellState.WATER}};
-
-
-
     List<Player> players = new ArrayList<>();
     for (int i = 0; i < stringPlayers.size(); i++) {
       players.add(createPlayer(stringPlayers.get(i), notSoDummyBoard, i));
