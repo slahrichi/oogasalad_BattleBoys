@@ -8,7 +8,6 @@ import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.tiles.enums.Marker;
 
 /**
  * Whether an AI or an actual player, participants in a game have fundamental moves they can make.
