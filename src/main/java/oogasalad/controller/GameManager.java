@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
@@ -59,16 +58,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return boards;
   }
 
-//  private CellState[][] makeCopy(CellState[][] board) {
-//    CellState[][] cellBoard = new CellState[board.length][board[0].length];
-//    for (int i = 0; i < board.length; i++) {
-//      for (int j = 0; j < board[0].length; j++) {
-//        cellBoard[i][j] = board[i][j];
-//      }
-//    }
-//    return cellBoard;
-//  }
-
   private Collection<Collection<Coordinate>> createInitialPieces(List<Piece> pieces) {
     Collection<Collection<Coordinate>> pieceCoords = new ArrayList<>();
     for (Piece piece : pieces) {
@@ -80,12 +69,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   public Scene createScene() {
     return view.createScene();
   }
-
-  /*
-  public void promptPlayerToPlayTurn() {
-    view.promptPlayTurn();
-  }
-   */
 
 
   private void initialize(GameData data) {
@@ -106,10 +89,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
 
-  private boolean canStillPlay() {
-    return playerList.size() != 1;
-  }
-
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     int id = ((Info)evt.getNewValue()).ID();
@@ -117,8 +96,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int col = ((Info)evt.getNewValue()).col();
     if (makeShot(new Coordinate(row, col), id)) {
       updateConditions(id);
-    };
-
+    }
   }
 
   private void updateConditions(int id) {
@@ -141,12 +119,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return coords;
   }
 
-  private void checkIfGameOver() {
-    if (!canStillPlay()) {
-      //endGame
-    }
-  }
-
   private void checkIfMoveToNextToPlayer() {
     if (numShots == allowedShots) {
       playerIndex = (playerIndex + 1) % playerList.size();
@@ -163,7 +135,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-      CellState result = enemy.getBoard().hit(c);//get result from model people
+      CellState result = enemy.getBoard().hit(c);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
       return true;
