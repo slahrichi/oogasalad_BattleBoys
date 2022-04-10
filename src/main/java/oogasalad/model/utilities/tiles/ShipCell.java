@@ -1,9 +1,11 @@
 package oogasalad.model.utilities.tiles;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 
@@ -16,6 +18,8 @@ public class ShipCell implements CellInterface {
   private CellState currentState;
   private int myGoldValue;
   private int id;
+  private ArrayList<Modifiers> myModifiers = new ArrayList<>();
+
 
 
 // Use this Constructor to create ships in the real game
@@ -45,43 +49,13 @@ public class ShipCell implements CellInterface {
   public void placeAt(Coordinate absoluteCoord) {
     myCoordinate = Coordinate.sum(absoluteCoord, myRelativeCoordinate);
   }
-  /*
-  public ShipCell(Coordinate coord, int health, Piece ship, int id, int goldValue) {
-    myCoordinate = coord;
-  }
-  public ShipCell(int row, int col, int health, Piece ship, int goldValue) {
-    myCoordinate = new Coordinate(row, col);
-
-    myHealthBar = health;
-    AssignedPiece = ship;
-    currentState = CellState.SHIP_HEALTHY;
-    myGoldValue = goldValue;
-    this.id = id;
-  }
-
-  public ShipCell(Coordinate c, int id){
-    this(c, 1, null, id, 100);
-  }
-  public ShipCell(int col, int row, int id){
-    this(new Coordinate(row, col), 1, null, id, 100);
-  }
-
-
-  public ShipCell(int row, int col, Piece ship, int id, int goldValue) {
-    this(new Coordinate(row, col), 1, null, id, 100);
-  }
-
-  public ShipCell(int row, int col, Piece ship, int goldValue){
-    this(row, col,1, ship, goldValue);
-  }
-   */
 
   @Override
   public CellState hit() {
     myHealthBar --;
     if (myHealthBar <= 0) {
       currentState = CellState.SHIP_SUNKEN;
-      //myShip.registerDamage(this);
+      myShip.registerDamage(this);
     } else {
       currentState = CellState.SHIP_DAMAGED;
 
@@ -89,16 +63,33 @@ public class ShipCell implements CellInterface {
     return currentState;
   }
 
+
+
   @Override
-  public List<Function> boardUpdate() {
-    return null;
+  public void addModifier(Modifiers myMod){myModifiers.add(myMod);}
+
+  @Override
+  public List<Modifiers> update() {
+
+    ArrayList<Modifiers> returnMods = new ArrayList<>();
+    for(Modifiers mod: myModifiers){
+      if(mod.checkConditions(this)) returnMods.add(mod);
+    }
+    for(Modifiers currMod: returnMods){
+      if(currMod.getClass().getSimpleName().equals("CellModifier")){
+        try {
+          currMod.modifierFunction().accept(this);
+          returnMods.remove(currMod);
+        }catch(Exception e){
+        }
+      }
+    }
+    return returnMods;
+
   }
+
   public Coordinate getRelativeCoordinate(){
     return myRelativeCoordinate;
-  }
-  @Override
-  public List<Function> playerUpdate() {
-    return null;
   }
 
   @Override
@@ -115,6 +106,8 @@ public class ShipCell implements CellInterface {
   public Coordinate getCoordinates() {
     return myCoordinate;
   }
+
+
 
   @Override
   public CellState getCellState() {
