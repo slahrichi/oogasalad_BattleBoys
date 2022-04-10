@@ -18,6 +18,8 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
+import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class Game extends PropertyObservable implements PropertyChangeListener {
@@ -49,7 +51,13 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     for (int i = 0; i < stringPlayers.size(); i++) {
       players.add(createPlayer(stringPlayers.get(i), notSoDummyBoard, i));
     }
-    data = new GameData(players, notSoDummyBoard, pieceList);
+
+    //testing win condition code
+    List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
+    dummyWinConditions.add(new LoseXShipsLossCondition(1));
+
+
+    data = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions);
     setup = new GameSetup(data);
     setup.addObserver(this);
     // GameManager should take in list of players and GameData
