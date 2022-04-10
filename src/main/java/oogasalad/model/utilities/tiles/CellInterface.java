@@ -7,7 +7,7 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 
 public interface CellInterface {
 
-   int hit();
+   CellState hit();
 
    List<Function> boardUpdate();
 

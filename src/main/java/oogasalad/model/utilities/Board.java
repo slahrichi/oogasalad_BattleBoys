@@ -31,6 +31,7 @@ public class Board {
   private static final String WRONG_NEIGHBOR = "wrongNeighbor";
   private int myRows;
   private int myCols;
+  private int myCurrTurnGold;
 
 
 
@@ -39,12 +40,13 @@ public class Board {
     myRows = boardSetup.length;
     myCols = boardSetup[0].length;
     myPieces = new HashMap<>();
+    myCurrTurnGold = 0;
     initialize(boardSetup);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
 
 
-  void initialize(CellState[][] boardSetup) {
+  private void initialize(CellState[][] boardSetup) {
     boardMap = new HashMap<Coordinate, CellInterface>();
     for (int i = 0; i < boardSetup.length; i++) {
       for (int j = 0; j < boardSetup[0].length; j++) {
@@ -54,31 +56,6 @@ public class Board {
       }
     }
   }
-
-  /*
-  public void putShip(Coordinate topLeft, Collection<Coordinate> relativeCoords){
-    try {
-      id = nextID.incrementAndGet(); //each new ship (new topLeft) gets a new ID
-      place(topLeft, new ShipCell(topLeft, id));
-    }
-    catch (Exception e) {
-      System.out.println(exceptions.getString(WRONG_TOP_LEFT));
-      //LOG.error(exceptions.getString(WRONG_TOP_LEFT));
-    }
-    for (Coordinate neighbor : relativeCoords) {
-      Coordinate actualCoords = Coordinate.sum(topLeft, neighbor);
-      if (canPlaceAt(actualCoords)){
-        place(actualCoords, new ShipCell(actualCoords, id));
-      }
-      else{
-        System.out.println(exceptions.getString(WRONG_NEIGHBOR));
-        break;
-        //LOG.error(exceptions.getString(WRONG_NEIGHBOR));
-      }
-    }
-  }
-
-   */
 
   /**
    * @param c Coordinate to check
@@ -126,10 +103,6 @@ public class Board {
     boardMap.put(c, cell);
   }
 
-  //might not be necessary
-  public CellInterface checkCell(Coordinate c) {
-    return boardMap.get(c);
-  }
 
   public int getNumHit(String cellType) {
     return elementHitMap.get(cellType);
@@ -156,8 +129,10 @@ public class Board {
     return currStateArray;
   }
 
-  public int hit(Coordinate c) {
-   return boardMap.get(c).hit();
+  public CellState hit(Coordinate c) {
+
+    CellState hitState = boardMap.get(c).hit();
+    return hitState;
   }
 
   public void addPiece(String id, Piece newPiece){
