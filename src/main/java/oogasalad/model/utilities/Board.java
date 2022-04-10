@@ -125,9 +125,18 @@ public class Board {
   }
 
   public CellState hit(Coordinate c) {
-    int numStartPieces = myPieces.size();
+    int numStartPieces = myPieces.keySet().size();
     CellState hitState = boardMap.get(c).hit();
-    myNumShipsSunk = numStartPieces-myPieces.size();
+
+    for(String key: myPieces.keySet()) {
+      Piece currPiece = myPieces.get(key);
+      currPiece.updateShipHP();
+      if(currPiece.checkDeath()) {
+        myPieces.remove(key);
+      }
+    }
+
+    myNumShipsSunk = numStartPieces-myPieces.keySet().size();
     return hitState;
   }
 
