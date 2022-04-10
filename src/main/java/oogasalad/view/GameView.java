@@ -96,6 +96,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     for (int i = 0; i < myBoards.size(); i++) {
       myPiecesLeft.add(piecesLeft);
     }
+    updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
   }
 
   private void initializeFirstPlayerBoards(List<CellState[][]> boards) {

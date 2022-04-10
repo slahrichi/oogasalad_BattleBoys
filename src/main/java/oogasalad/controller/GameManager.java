@@ -116,7 +116,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void updateConditions(int row, int col, int id) {
-//    view.updatePiecesLeft(idMap.get(id).getBoard().listPieces());
+    view.updatePiecesLeft(idMap.get(id).getBoard().listPieces());
     numShots++;
     checkIfPlayerHasBeenEliminated(id);
     checkIfGameOver();
