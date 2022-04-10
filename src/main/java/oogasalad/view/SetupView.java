@@ -32,8 +32,8 @@ import oogasalad.view.panes.SetPiecePane;
 public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer,
     BoardVisualizer {
 
-  private static final double SCREEN_WIDTH = 900;
-  private static final double SCREEN_HEIGHT = 600;
+  private static final double SCREEN_WIDTH = 1400;
+  private static final double SCREEN_HEIGHT = 900;
   private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "setupStylesheet.css";
