@@ -2,19 +2,23 @@ package oogasalad.model.utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
+import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Board {
 
+  private static final Logger LOG = LogManager.getLogger(GameView.class);
   private Map<Coordinate, CellInterface> boardMap;
   private CellState[][] myBoardSetup;
   private Map<String, Piece> myPieces;
@@ -82,6 +86,7 @@ public class Board {
   private void addPieceCellsToBoard(Coordinate topLeft, Piece piece) {
     piece.placeCellsAt(topLeft);
     myPieces.put(piece.getID(), piece); //can make this observer listener in future
+    System.out.println("Added piece " + piece.getID() + " to board");
     for(ShipCell c: piece.getCellList()) {
       place(c.getCoordinates(), c);
     }
@@ -127,7 +132,8 @@ public class Board {
     int numStartPieces = myPieces.keySet().size();
     CellState hitState = boardMap.get(c).hit();
 
-    for(String key: myPieces.keySet()) {
+    Set<String> ogKeySet = new HashSet<String>(myPieces.keySet());
+    for(String key: ogKeySet) {
       Piece currPiece = myPieces.get(key);
       currPiece.updateShipHP();
       if(currPiece.checkDeath()) {
@@ -135,7 +141,7 @@ public class Board {
       }
     }
 
-    myNumShipsSunk = numStartPieces-myPieces.keySet().size();
+    myNumShipsSunk += numStartPieces-myPieces.keySet().size();
     return hitState;
   }
 
