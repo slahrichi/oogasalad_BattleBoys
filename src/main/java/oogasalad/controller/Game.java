@@ -18,6 +18,7 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
@@ -46,9 +47,20 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     fileChooser = new FilePicker();
     PlayerData playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
 
+
     stringPlayers = playerData.players();
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();
+
+    CellState[][] dummyBoard = new CellState[][]{{CellState.WATER,CellState.WATER,CellState.NOT_DEFINED,CellState.NOT_DEFINED,CellState.WATER,CellState.WATER,CellState.WATER, CellState.WATER},
+        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
+        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
+        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
+        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
+        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
+        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
+        {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.NOT_DEFINED,CellState.NOT_DEFINED,CellState.WATER}};
+
 
     List<Player> players = new ArrayList<>();
     for (int i = 0; i < stringPlayers.size(); i++) {
@@ -71,7 +83,8 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
   private Player createPlayer(String playerType, CellState[][] board, int id) {
     Board b = new Board(board);
-    Map<Integer, Board> enemyMap = createEnemyMap(b, id);
+    MarkerBoard mb = new MarkerBoard(board);
+    Map<Integer, MarkerBoard> enemyMap = createEnemyMap(mb, id);
     Player p = null;
     try {
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class,
@@ -83,11 +96,11 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     return p;
   }
 
-  private Map<Integer, Board> createEnemyMap(Board b, int id) {
-    Map<Integer, Board> boardMap = new TreeMap<>();
+  private Map<Integer, MarkerBoard> createEnemyMap(MarkerBoard mb, int id) {
+    Map<Integer, MarkerBoard> boardMap = new TreeMap<>();
     for (int i = 0; i < stringPlayers.size(); i++) {
       if (i == id) continue;
-      boardMap.put(i, b.copyOf());
+      boardMap.put(i, mb.copyOf());
     }
     return boardMap;
   }
