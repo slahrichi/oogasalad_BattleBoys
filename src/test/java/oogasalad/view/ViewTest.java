@@ -69,7 +69,6 @@ public class ViewTest extends DukeApplicationTest {
     GameManager game = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>(), new ArrayList<WinCondition>()));
     stage.setScene(game.createScene());
     stage.show();
-
     myCell0 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-0").query();
   }
 

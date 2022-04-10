@@ -183,10 +183,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void handleKeyInput(KeyCode code) {
     if (code == KeyCode.LEFT) {
-      System.out.println("Left pressed");
+      LOG.info("Left pressed");
       decrementBoardIndex();
     } else if (code == KeyCode.RIGHT) {
-      System.out.println("Right pressed");
+      LOG.info("Right pressed");
       incrementBoardIndex();
     }
   }
@@ -209,6 +209,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         : "Your Shots Against Player " + (myBoards.get(currentBoardIndex).getID() + 1));
     refreshCenterPane();
     updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
+    LOG.info("Current board index: "+currentBoardIndex);
     LOG.info("Showing board " + (myBoards.get(currentBoardIndex).getID()+1));
   }
 
@@ -275,6 +276,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   @Override
   public void updatePiecesLeft(Collection<Collection<Coordinate>> pieceCoords) {
+    myPiecesLeft.set(currentBoardIndex, pieceCoords);
     piecesRemainingPane.updateShownPieces(pieceCoords);
   }
 
@@ -316,9 +318,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         .setColorAt(x, y, Color.valueOf(myMarkerResources.getString(FILL_PREFIX + result.name())));
   }
 
-  public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList) {
+  public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
     switchPlayerMessage("Player "+(idList.get(0)+1));
     myBoards.clear();
+    myPiecesLeft.clear();
     currentBoardIndex = 0;
     CellState[][] firstBoard = boardList.get(currentBoardIndex);
     int firstID = idList.get(currentBoardIndex);
@@ -330,5 +333,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
     updateTitle(firstID);
     updateDisplayedBoard();
+    myPiecesLeft = pieceList;
   }
 }

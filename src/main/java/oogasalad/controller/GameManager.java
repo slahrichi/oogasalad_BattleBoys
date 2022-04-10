@@ -212,14 +212,17 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void sendUpdatedBoardsToView() {
     List<CellState[][]> boardList = new ArrayList<>();
     List<Integer> idList = new ArrayList<>();
+    List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
     Player currentPlayer = playerList.get(playerIndex);
     boardList.add(currentPlayer.getBoard().getCurrentBoardState());
     idList.add(currentPlayer.getID());
+    pieceList.add(convertPiecesToCoords(currentPlayer.getBoard().listPieces()));
     for (int id : currentPlayer.getEnemyMap().keySet()) {
       MarkerBoard board = currentPlayer.getEnemyMap().get(id);
       boardList.add(board.getMarkerBoard());
       idList.add(id);
+      pieceList.add(convertPiecesToCoords(idMap.get(id).getBoard().listPieces()));
     }
-    view.moveToNextPlayer(boardList, idList);
+    view.moveToNextPlayer(boardList, idList, pieceList);
   }
 }
