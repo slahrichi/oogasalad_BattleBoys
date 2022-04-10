@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
@@ -156,6 +157,19 @@ public class Board {
 
   public boolean canBeStruck(Coordinate c) {
     return boardMap.get(c).getHealth() != 0;
+  }
+
+  public List<Modifiers> update(){
+    ArrayList<Modifiers> retModifers = new ArrayList<>();
+    for(CellInterface cell: boardMap.values()){
+      ArrayList<Modifiers> cellMods = (ArrayList<Modifiers>) cell.update();
+      for(Modifiers mod: cellMods){
+        if(mod.getClass().getSimpleName().equals("BoardModifier")){
+          mod.modifierFunction().accept(this);
+        }
+      }
+    }
+  return  retModifers;
   }
 
 
