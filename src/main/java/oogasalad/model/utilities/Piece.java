@@ -109,5 +109,15 @@ public abstract class Piece {
     }
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if(o == null) return false;
+    if(o == this) return true;
+    if(!(o instanceof Piece)) return false;
+    Piece other = (Piece)o;
+    //just need to check cellList
+    return this.cellList.equals(other.cellList);
+  }
+
 }
 
