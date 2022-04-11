@@ -1,4 +1,4 @@
-package oogasalad;
+package oogasalad.model.parsing;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,11 +23,9 @@ public class GSONHelper implements
 
     JsonObject result = new JsonObject();
     result.add("type", new JsonPrimitive(src.getClass().getName()));
+
     Gson gson = new GsonBuilder().create();
     JsonElement jelement = gson.toJsonTree(src);
-    //String myResult = gson.toJson(src);
-    //JsonObject o = JsonParser.parseString(myResult).getAsJsonObject();
-    //JsonElement jelement = new JsonParser().parse(String.valueOf(o));
     result.add("properties", jelement);
 
     return result;
@@ -35,7 +33,7 @@ public class GSONHelper implements
   }
 
   @Override
-  public Object deserialize(JsonElement json, Type typeOfT,
+  public Piece deserialize(JsonElement json, Type typeOfT,
       JsonDeserializationContext context) throws JsonParseException {
 
     JsonObject jsonObject = json.getAsJsonObject();
