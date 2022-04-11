@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import oogasalad.PlayerData;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -30,11 +31,23 @@ public class Parser {
   private final String PROPERTIES_PLAYER_LIST = "Players";
   private final String PROPERTIES_PIECES_FILE = "PiecesFile";
   private final String PROPERTIES_BOARD_FILE = "BoardFile";
-  private final List REQUIRED_ARGS = List.of(PROPERTIES_PLAYER_LIST, PROPERTIES_PIECES_FILE, PROPERTIES_BOARD_FILE);
+  private final List<String> REQUIRED_ARGS = List.of(PROPERTIES_PLAYER_LIST, PROPERTIES_PIECES_FILE, PROPERTIES_BOARD_FILE);
+  private final String MISSING_ARG = "missingArg";
   private final String DOT = ".";
   private final String PROPERTIES_EXTENSION = "properties";
+  private final String JSON_EXTENSION = "json";
+  private final List<String> jsonPaths = List.of("PiecesFile", "BoardFile");
+  private Properties exceptionMessageProperties;
 
   public void save(PlayerData data, String pathToNewFile)  {
+    exceptionMessageProperties = new Properties();
+
+    try {
+      InputStream is = new FileInputStream("src/main/resources/ParserExceptions.properties");
+      exceptionMessageProperties.load(is);
+      is.close();
+    } catch (IOException ignored) {
+    }
     File file = new File(pathToNewFile);
     Properties props = new Properties();
     savePlayers(props, data.players());
@@ -54,17 +67,35 @@ public class Parser {
   }
 
 
-  public boolean checkExtension(String pathToFile, String expectedExtension){
-    return pathToFile.substring(pathToFile.lastIndexOf(DOT)+1).equals(expectedExtension);
+  /**
+   * @param pathToFile
+   * @param expectedExtension
+   * @throws Exception
+   */
+  public void checkExtension(String pathToFile, String expectedExtension) throws ParserException {
+    String passedFileExtension = pathToFile.substring(pathToFile.lastIndexOf(DOT) + 1);
+    if (!passedFileExtension.equals(expectedExtension)) {
+        throw new ParserException(exceptionMessageProperties.getProperty(expectedExtension).formatted(passedFileExtension));
+      }
   }
+
+  private void checkProperties(String pathToFile, Properties props) throws ParserException {
+    for (String key: REQUIRED_ARGS){
+      if(props.getProperty(key) == null) {
+        throw new ParserException(exceptionMessageProperties.getProperty(MISSING_ARG).formatted(key));
+      }
+    }
+  }
+
+  
+  // add method to check if saving works fine (e.g. the player's saved data is not null)
   /**
    *
    * @param pathToFile properties file
    * @return a parser Player Data
    * @throws FileNotFoundException
    */
-  public PlayerData parse(String pathToFile) throws FileNotFoundException {
-    checkExtension(pathToFile, PROPERTIES_EXTENSION);
+  public PlayerData parse(String pathToFile){
     File file = new File(pathToFile);
     Properties props = new Properties();
     try {
@@ -73,10 +104,22 @@ public class Parser {
       is.close();
     } catch (IOException e) {
       if (e instanceof FileNotFoundException) {
-        throw (FileNotFoundException) e;
+        //throw (FileNotFoundException) e;
       }
       e.printStackTrace();
     }
+
+    try {
+      checkExtension(pathToFile, PROPERTIES_EXTENSION);
+      checkProperties(pathToFile, props);
+      for (String path:jsonPaths) {
+        checkExtension(props.getProperty(path), JSON_EXTENSION);
+      }
+    }
+    catch(Exception e){
+      return null;
+    }
+
 
 
 
