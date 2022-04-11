@@ -30,7 +30,7 @@ public class Parser {
 
   public void savePieces(List<Piece> data, String pathToNewFile) {
     Gson gson = new GsonBuilder().setPrettyPrinting().
-        registerTypeHierarchyAdapter(Piece.class, new GSONSerialization()).
+        registerTypeHierarchyAdapter(Piece.class, new GSONHelper()).
         create();
 
     String json = gson.toJson(data);
@@ -74,7 +74,7 @@ public class Parser {
   private List<Piece> makePieces(Properties props) {
     String piecesFileLocation = "PiecesFileLocation";
     String piecesFile = props.getProperty(piecesFileLocation);
-    Gson gson = new GsonBuilder().registerTypeAdapter(Piece.class, new GSONSerialization()).create();
+    Gson gson = new GsonBuilder().registerTypeAdapter(Piece.class, new GSONHelper()).create();
 
     Type listOfMyClassObject = new TypeToken<ArrayList<Piece>>() {}.getType();
     List<Piece> ret = null;

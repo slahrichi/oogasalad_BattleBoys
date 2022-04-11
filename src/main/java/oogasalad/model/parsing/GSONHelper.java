@@ -14,7 +14,7 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import oogasalad.model.utilities.Piece;
 
-public class GSONSerialization implements
+public class GSONHelper implements
     JsonSerializer<Piece>, JsonDeserializer<Piece> {
 
   @Override
@@ -24,9 +24,10 @@ public class GSONSerialization implements
     JsonObject result = new JsonObject();
     result.add("type", new JsonPrimitive(src.getClass().getName()));
     Gson gson = new GsonBuilder().create();
-    String myResult = gson.toJson(src);
-    JsonObject o = JsonParser.parseString(myResult).getAsJsonObject();
-    JsonElement jelement = new JsonParser().parse(String.valueOf(o));
+    JsonElement jelement = gson.toJsonTree(src);
+    //String myResult = gson.toJson(src);
+    //JsonObject o = JsonParser.parseString(myResult).getAsJsonObject();
+    //JsonElement jelement = new JsonParser().parse(String.valueOf(o));
     result.add("properties", jelement);
 
     return result;
@@ -34,7 +35,7 @@ public class GSONSerialization implements
   }
 
   @Override
-  public Piece deserialize(JsonElement json, Type typeOfT,
+  public Object deserialize(JsonElement json, Type typeOfT,
       JsonDeserializationContext context) throws JsonParseException {
 
     JsonObject jsonObject = json.getAsJsonObject();
