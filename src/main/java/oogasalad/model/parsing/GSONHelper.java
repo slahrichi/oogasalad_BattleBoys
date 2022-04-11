@@ -7,18 +7,16 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import oogasalad.model.utilities.Piece;
 
-public class GSONHelper implements
-    JsonSerializer<Piece>, JsonDeserializer<Piece> {
+public class GSONHelper<T> implements
+    JsonSerializer<T>, JsonDeserializer<T> {
 
   @Override
-  public JsonElement serialize(Piece src, Type type,
+  public JsonElement serialize(T src, Type type,
       JsonSerializationContext context) {
 
     JsonObject result = new JsonObject();
@@ -33,7 +31,7 @@ public class GSONHelper implements
   }
 
   @Override
-  public Piece deserialize(JsonElement json, Type typeOfT,
+  public T deserialize(JsonElement json, Type typeOfT,
       JsonDeserializationContext context) throws JsonParseException {
 
     JsonObject jsonObject = json.getAsJsonObject();
