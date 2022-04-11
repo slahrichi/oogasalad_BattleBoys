@@ -6,13 +6,14 @@ import java.util.function.Consumer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 public class BoardSetUpStage {
 
@@ -40,6 +41,7 @@ public class BoardSetUpStage {
     height = DEFAULT_DIMENSION;
     cl.add(Color.BLUE);
     cl.add(Color.GRAY);
+    cl.add(Color.RED);
 
     widthChange= i->setWidth(i);
     heightChange=i->setHeight(i);
@@ -49,7 +51,7 @@ public class BoardSetUpStage {
     initializeBlankMap();
     drawGrid();
     myPane.setTop(makeInfoInput());
-    myPane.setRight( new ColorPicker());
+    myPane.setRight( displayColorChoice());
   }
 
   private void setWidth(int newWidth){
@@ -159,6 +161,23 @@ public class BoardSetUpStage {
     });
 
     return newCell;
+  }
+
+  private VBox displayColorChoice(){
+    VBox result = new VBox();
+    for(Color c : cl){
+      result.getChildren().add(new HBox(new Text("test"),  createColorOptionRectangle(c) ));
+
+    }
+
+    return  result;
+  }
+
+  private Rectangle createColorOptionRectangle(Color c){
+    Rectangle result = new Rectangle(50,25);
+    result.setFill(c);
+    result.setOnMouseClicked(e->{selectedType=cl.indexOf(c);});
+    return  result;
   }
 
 
