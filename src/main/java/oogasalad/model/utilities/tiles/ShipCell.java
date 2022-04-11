@@ -123,4 +123,19 @@ public class ShipCell implements CellInterface {
     return myShip;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if(o == null) return false;
+    if(o == this) return true;
+    if(!(o instanceof ShipCell)) return false;
+    ShipCell other = (ShipCell)o;
+    //just need to check myCoordinate, currentState, and myModifiers
+    if(!(myCoordinate == null & other.myCoordinate == null))
+      if(!myCoordinate.equals(other.myCoordinate)) return false;
+    if(currentState != other.currentState) return false;
+    if(!myModifiers.containsAll(other.myModifiers)) return false;
+    return true;
+
+  }
+
 }
