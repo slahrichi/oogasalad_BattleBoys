@@ -43,10 +43,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
   private static final Logger LOG = LogManager.getLogger(GameView.class);
-  private static final double SCREEN_WIDTH = 1400;
-  private static final double SCREEN_HEIGHT = 900;
+  private static final double SCREEN_WIDTH = 1200;
+  private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "mainStylesheet.css";
+  private static final String STYLESHEET = "viewStylesheet.css";
 
   private TitlePanel myTitle;
   private ResourceBundle myCellStateResources;
@@ -157,9 +157,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void setupBoardLabel() {
     currentBoardLabel = new Label("Your Board");
-    currentBoardLabel.setAlignment(Pos.CENTER);
-    currentBoardLabel.setTextAlignment(TextAlignment.CENTER);
-    currentBoardLabel.setFont(new Font(50));
+    currentBoardLabel.setId("currentBoardLabel");
     myCenterPane.getChildren().add(currentBoardLabel);
   }
 
