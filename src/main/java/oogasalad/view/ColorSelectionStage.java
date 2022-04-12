@@ -10,10 +10,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class ColorSelectionStage {
+public class ColorSelectionStage extends BuilderStage{
   private BorderPane myPane = new BorderPane();
   private ResourceBundle myBuilderResources ;
   private String[] optionList;
@@ -33,8 +34,13 @@ public class ColorSelectionStage {
 
     Scene myScene =  new Scene(myPane);
     myStage.setScene(myScene);
-    myStage.showAndWait();
+    myStage.show();
 
+  }
+
+  @Override
+  protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
+    return null;
   }
 
   private VBox buildOptionDisplay(){
@@ -51,12 +57,13 @@ public class ColorSelectionStage {
     return result;
   }
 
-  private void saveAndContinue(){
+  protected void saveAndContinue(){
     for(ColorPicker cp : colorPickers){
       colorList.add(cp.getValue());
       System.out.println(cp.getValue().toString());
     }
     myStage.close();
+    BoardSetUpStage bb = new BoardSetUpStage();
   }
 
 }

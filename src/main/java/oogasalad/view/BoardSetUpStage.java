@@ -3,7 +3,6 @@ package oogasalad.view;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,8 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-public class BoardSetUpStage {
+public class BoardSetUpStage extends BuilderStage {
 
 
   private int width;
@@ -28,10 +28,13 @@ public class BoardSetUpStage {
 
   private BorderPane myPane = new BorderPane();
   private int selectedType = 1;
-  private List<Color> cl = new ArrayList<>();
+  private List<Color> colorList = new ArrayList<>();
   private int[][] stateMap;
   private TextArea widthInput;
   private TextArea heightInput;
+  private static final Color DEFAULT_INACTIVE_COLOR = Color.GRAY;
+  private static final Color DEFAULT_ACTIVE_COLOR = Color.BLUE;
+  private static final String[] DEFAULT_STATE_OPTIONS = {"Inactive", "Active"};
 
   private Consumer<Integer> widthChange;
   private Consumer<Integer> heightChange;
@@ -39,31 +42,34 @@ public class BoardSetUpStage {
   public BoardSetUpStage() {
     width = DEFAULT_DIMENSION;
     height = DEFAULT_DIMENSION;
-    cl.add(Color.BLUE);
-    cl.add(Color.GRAY);
-    cl.add(Color.RED);
 
-    widthChange= i->setWidth(i);
-    heightChange=i->setHeight(i);
+    colorList.add(DEFAULT_INACTIVE_COLOR);
+    colorList.add(DEFAULT_ACTIVE_COLOR);
 
+    widthChange = i -> setWidth(i);
+    heightChange = i -> setHeight(i);
 
     stateMap = new int[height][width];
-    initializeBlankMap();
+    initializeBlankMap(height, width, stateMap);
     drawGrid();
     myPane.setTop(makeInfoInput());
-    myPane.setRight( displayColorChoice());
+    myPane.setRight(displayColorChoice());
+    Stage t = new Stage();
+    t.setScene(getScene());
+    t.showAndWait();
   }
 
-  private void setWidth(int newWidth){
-    width=newWidth;
-  }
-  private void setHeight(int newHeight){
-    height=newHeight;
+  private void setWidth(int newWidth) {
+    width = newWidth;
   }
 
-  private void drawGrid(){
+  private void setHeight(int newHeight) {
+    height = newHeight;
+  }
+
+  private void drawGrid() {
     myPane.setCenter(null);
-    myPane.setCenter(arrangeCells());
+    myPane.setCenter(arrangeCells(height, width, cellSize, stateMap));
   }
 
   public Scene getScene() {
@@ -71,34 +77,34 @@ public class BoardSetUpStage {
   }
 
   private HBox makeInfoInput() {
-   HBox result = new HBox();
-   widthInput = makeTextArea();
-   heightInput = makeTextArea();
-   Label widthLabel = new Label("Width");
-   Label heightLabel = new Label("Height");
-   result.getChildren().addAll(widthLabel,widthInput,heightLabel,heightInput,setDimensionButton());
-   return  result;
+    HBox result = new HBox();
+    widthInput = makeTextArea();
+    heightInput = makeTextArea();
+    Label widthLabel = new Label("Width");
+    Label heightLabel = new Label("Height");
+    result.getChildren()
+        .addAll(widthLabel, widthInput, heightLabel, heightInput, setDimensionButton());
+    return result;
   }
 
-  private Button setDimensionButton(){
+  private Button setDimensionButton() {
     Button result = new Button("Set Dimension");
-    result.setOnAction(e->{
-      checkAndSetDimension(widthInput.getText(),widthChange);
-      checkAndSetDimension(heightInput.getText(),heightChange);
+    result.setOnAction(e -> {
+      checkAndSetDimension(widthInput.getText(), widthChange);
+      checkAndSetDimension(heightInput.getText(), heightChange);
     });
     return result;
   }
 
-  private void checkAndSetDimension(String s, Consumer<Integer> changeConsumer){
-    if (!s.isEmpty()){
-      try{
-        changeConsumer.accept( Integer.valueOf(s) );
+  private void checkAndSetDimension(String s, Consumer<Integer> changeConsumer) {
+    if (!s.isEmpty()) {
+      try {
+        changeConsumer.accept(Integer.valueOf(s));
 
         stateMap = new int[height][width];
-        initializeBlankMap();
+        initializeBlankMap(height, width, stateMap);
         drawGrid();
-      }
-      catch (NumberFormatException e){
+      } catch (NumberFormatException e) {
 
         widthInput.clear();
       }
@@ -107,54 +113,22 @@ public class BoardSetUpStage {
   }
 
 
-  private TextArea makeTextArea(){
+  private TextArea makeTextArea() {
     TextArea result = new TextArea();
-    result.setMaxSize(DEFAULT_INPUT_BOX_WIDTH,DEFAULT_INPUT_BOX_HEIGHT);
+    result.setMaxSize(DEFAULT_INPUT_BOX_WIDTH, DEFAULT_INPUT_BOX_HEIGHT);
 
     return result;
   }
 
-  private void makeInputBox(){
-
-  }
-
-  private void initializeBlankMap() {
-    for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
-        stateMap[i][j] = 0;
-      }
-    }
-  }
-
-  protected Group arrangeCells() {
-    Group cellGroup = new Group();
-    double xPos;
-    double yPos = 0;
-    for (int i = 0; i < height; i++) {
-      xPos = 0;
-      for (int j = 0; j < width; j++) {
-        cellGroup.getChildren().add(createCell(xPos, yPos, i, j, stateMap[i][j]));
-
-        xPos = xPos + cellSize;
-      }
-      yPos = yPos + cellSize;
-    }
-    return cellGroup;
-  }
-
-  private void setDimension() {
-
-  }
-
-  private void changeState() {
+  private void makeInputBox() {
 
   }
 
 
-  private Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
+  protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
     Rectangle newCell = new Rectangle(xPos, yPos, cellSize, cellSize);
     newCell.setStroke(Color.BLACK);
-    newCell.setFill(cl.get(state));
+    newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {
       stateMap[i][j] = selectedType;
       drawGrid();
@@ -163,22 +137,28 @@ public class BoardSetUpStage {
     return newCell;
   }
 
-  private VBox displayColorChoice(){
+  private VBox displayColorChoice() {
     VBox result = new VBox();
-    for(Color c : cl){
-      result.getChildren().add(new HBox(new Text("test"),  createColorOptionRectangle(c) ));
+    for (Color c : colorList) {
+      result.getChildren().add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]),
+          createColorOptionRectangle(c)));
 
     }
 
-    return  result;
+    return result;
   }
 
-  private Rectangle createColorOptionRectangle(Color c){
-    Rectangle result = new Rectangle(50,25);
+  private Rectangle createColorOptionRectangle(Color c) {
+    Rectangle result = new Rectangle(50, 25);
     result.setFill(c);
-    result.setOnMouseClicked(e->{selectedType=cl.indexOf(c);});
-    return  result;
+    result.setOnMouseClicked(e -> {
+      result.setStroke(Color.RED);
+      selectedType = colorList.indexOf(c);
+    });
+    return result;
   }
 
-
+  protected void saveAndContinue() {
+    //write to file FIXME
+  }
 }
