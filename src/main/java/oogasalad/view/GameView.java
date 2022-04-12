@@ -118,6 +118,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void createRightPane() {
     shopButton = new Button("Open Shop");
+    shopButton.setId("view-shop");
     shopButton.setFont(new Font(15));
     shopButton.setOnMouseClicked(e -> openShop());
 
@@ -166,14 +167,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void setupBoardButtons() {
     boardButtonBox = new HBox();
+    boardButtonBox.setId("board-button-box");
     boardButtonBox.setSpacing(20);
     boardButtonBox.setAlignment(Pos.CENTER);
 
     leftButton = new Button("<-");
+    leftButton.setId("left-button");
     leftButton.setFont(new Font(25));
     leftButton.setOnMouseClicked(e -> decrementBoardIndex());
 
     rightButton = new Button("->");
+    rightButton.setId("right-button");
     rightButton.setFont(new Font(25));
     rightButton.setOnMouseClicked(e -> incrementBoardIndex());
 
@@ -236,8 +240,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     Node alertNode = alert.getDialogPane();
     alertNode.setId("switchAlert");
     alert.showAndWait();
-
-
   }
 
   @Override
