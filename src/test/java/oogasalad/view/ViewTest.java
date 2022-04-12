@@ -17,6 +17,7 @@ import oogasalad.model.players.HumanPlayer;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,10 +66,9 @@ public class ViewTest extends DukeApplicationTest {
   @Override
   public void start (Stage stage) {
     // create application and add scene for testing to given stage
-    GameManager game = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>()));
+    GameManager game = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>(), new ArrayList<WinCondition>()));
     stage.setScene(game.createScene());
     stage.show();
-
     myCell0 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-0").query();
   }
 

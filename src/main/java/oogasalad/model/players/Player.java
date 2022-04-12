@@ -7,6 +7,8 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.WinConditions.WinCondition;
+import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 /**
@@ -56,7 +58,7 @@ public interface Player {
     public int getHealth();
 
 
-    public int applyWinCondition(Function<PlayerRecord,Integer> lambda);
+    public WinState applyWinCondition(Function<PlayerRecord, WinState> lambda);
 
     public void setupBoard(int rows, int cols);
 

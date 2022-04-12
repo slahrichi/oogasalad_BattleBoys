@@ -2,25 +2,27 @@ package oogasalad.model.utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
+import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Board {
 
+  private static final Logger LOG = LogManager.getLogger(GameView.class);
   private Map<Coordinate, CellInterface> boardMap;
   private CellState[][] myBoardSetup;
-  private Map<String, Integer> maxElementsMap;
-  private Map<String, Integer> elementHitMap;
   private Map<String, Piece> myPieces;
-
   private ResourceBundle exceptions;
   private static AtomicInteger nextID = new AtomicInteger();
   private int id;
@@ -32,6 +34,7 @@ public class Board {
   private int myRows;
   private int myCols;
   private int myCurrTurnGold;
+  private int myNumShipsSunk;
 
 
 
@@ -41,6 +44,7 @@ public class Board {
     myCols = boardSetup[0].length;
     myPieces = new HashMap<>();
     myCurrTurnGold = 0;
+    myNumShipsSunk = 0;
     initialize(boardSetup);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
   }
@@ -83,6 +87,7 @@ public class Board {
   private void addPieceCellsToBoard(Coordinate topLeft, Piece piece) {
     piece.placeCellsAt(topLeft);
     myPieces.put(piece.getID(), piece); //can make this observer listener in future
+    System.out.println("Added piece " + piece.getID() + " to board");
     for(ShipCell c: piece.getCellList()) {
       place(c.getCoordinates(), c);
     }
@@ -103,13 +108,8 @@ public class Board {
     boardMap.put(c, cell);
   }
 
-
-  public int getNumHit(String cellType) {
-    return elementHitMap.get(cellType);
-  }
-
-  public List<CellInterface> listPieces() {
-    return new ArrayList<>(boardMap.values());
+  public List<Piece> listPieces() {
+    return new ArrayList<>(myPieces.values());
   }
 
   public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }
@@ -130,8 +130,19 @@ public class Board {
   }
 
   public CellState hit(Coordinate c) {
-
+    int numStartPieces = myPieces.keySet().size();
     CellState hitState = boardMap.get(c).hit();
+
+    Set<String> ogKeySet = new HashSet<String>(myPieces.keySet());
+    for(String key: ogKeySet) {
+      Piece currPiece = myPieces.get(key);
+      currPiece.updateShipHP();
+      if(currPiece.checkDeath()) {
+        myPieces.remove(key);
+      }
+    }
+
+    myNumShipsSunk += numStartPieces-myPieces.keySet().size();
     return hitState;
   }
 
@@ -140,12 +151,25 @@ public class Board {
     return;
   }
 
-  public Board copyOf() {
-    return new Board(myBoardSetup);
+  public int getNumPiecesSunk() {
+    return myNumShipsSunk;
   }
 
   public boolean canBeStruck(Coordinate c) {
     return boardMap.get(c).getHealth() != 0;
+  }
+
+  public List<Modifiers> update(){
+    ArrayList<Modifiers> retModifers = new ArrayList<>();
+    for(CellInterface cell: boardMap.values()){
+      ArrayList<Modifiers> cellMods = (ArrayList<Modifiers>) cell.update();
+      for(Modifiers mod: cellMods){
+        if(mod.getClass().getSimpleName().equals("BoardModifier")){
+          mod.modifierFunction().accept(this);
+        }
+      }
+    }
+  return  retModifers;
   }
 
 

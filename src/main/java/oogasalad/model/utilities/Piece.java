@@ -2,11 +2,13 @@ package oogasalad.model.utilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public abstract class Piece {
 
@@ -27,7 +29,7 @@ public abstract class Piece {
   }
 
   private List<ShipCell> createNewCellListInstance(List<ShipCell> cells) {
-    List<ShipCell> newCellList = new ArrayList<ShipCell>();
+    List<ShipCell> newCellList = new ArrayList<>();
     for(ShipCell c: cells) {
       newCellList.add(new ShipCell(c));
     }
@@ -72,6 +74,7 @@ public abstract class Piece {
   public abstract void registerDamage(ShipCell hitLocation);
 
   protected boolean checkDeath() {
+    System.out.println("Ship's hp is " + cellList.size());
     return (cellList.size() == 0);
   }
 
@@ -94,6 +97,17 @@ public abstract class Piece {
   public String getID(){return pieceId;}
 
   public abstract Piece copyOf();
+
+  public void updateShipHP() {
+    Iterator<ShipCell> itr = cellList.iterator();
+    while(itr.hasNext()) {
+      ShipCell currCell = itr.next();
+      if(currCell.getCellState()== CellState.SHIP_SUNKEN) {
+        itr.remove();
+        cellListHP.remove(currCell.getCoordinates());
+      }
+    }
+  }
 
 }
 

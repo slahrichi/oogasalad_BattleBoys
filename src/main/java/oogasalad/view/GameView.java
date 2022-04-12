@@ -96,6 +96,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     for (int i = 0; i < myBoards.size(); i++) {
       myPiecesLeft.add(piecesLeft);
     }
+    updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
   }
 
   private void initializeFirstPlayerBoards(List<CellState[][]> boards) {
@@ -180,10 +181,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void handleKeyInput(KeyCode code) {
     if (code == KeyCode.LEFT) {
-      System.out.println("Left pressed");
+      LOG.info("Left pressed");
       decrementBoardIndex();
     } else if (code == KeyCode.RIGHT) {
-      System.out.println("Right pressed");
+      LOG.info("Right pressed");
       incrementBoardIndex();
     }
   }
@@ -202,10 +203,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
+    System.out.println("Current board index: "+currentBoardIndex);
     currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board"
         : "Your Shots Against Player " + (myBoards.get(currentBoardIndex).getID() + 1));
     refreshCenterPane();
     updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
+    LOG.info("Current board index: "+currentBoardIndex);
     LOG.info("Showing board " + (myBoards.get(currentBoardIndex).getID()+1));
   }
 
@@ -266,15 +269,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
   }
 
-  public void endGame() {
+  public void displayWinningMessage(int id) {
+    LOG.info("Player "+(id+1)+" Won!");
+  }
 
+  public void displayLosingMessage(int id) {
+    LOG.info("Player "+(id+1)+" Lost!");
   }
 
   @Override
   public void updatePiecesLeft(Collection<Collection<Coordinate>> pieceCoords) {
-//    for (Piece piece : pieces) {
-//      pieceCoords.add(piece.getRelativeCoords());
-//    }
+    myPiecesLeft.set(currentBoardIndex, pieceCoords);
     piecesRemainingPane.updateShownPieces(pieceCoords);
   }
 
@@ -316,8 +321,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         .setColorAt(x, y, Color.valueOf(myMarkerResources.getString(FILL_PREFIX + result.name())));
   }
 
-  public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList) {
+  public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
+    switchPlayerMessage("Player "+(idList.get(0)+1));
     myBoards.clear();
+    myPiecesLeft = pieceList;
     currentBoardIndex = 0;
     CellState[][] firstBoard = boardList.get(currentBoardIndex);
     int firstID = idList.get(currentBoardIndex);

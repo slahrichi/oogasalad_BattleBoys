@@ -1,17 +1,20 @@
 package oogasalad.model.utilities.tiles;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 public interface CellInterface {
 
+
    CellState hit();
 
-   List<Function> boardUpdate();
+   List<Modifiers> update();
 
-   List<Function> playerUpdate();
 
 
    boolean canCarryObject();
@@ -19,6 +22,8 @@ public interface CellInterface {
    void updateCoordinates(int row, int col);
 
    Coordinate getCoordinates();
+
+   void addModifier(Modifiers myMod);
 
    /**
     * Getter method that returns integer representation of cell's current state

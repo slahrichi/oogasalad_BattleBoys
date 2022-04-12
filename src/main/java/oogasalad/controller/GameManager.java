@@ -5,15 +5,20 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.WinConditions.WinCondition;
+import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
@@ -21,6 +26,7 @@ import oogasalad.view.GameView;
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
+  private List<WinCondition> winConditionsList;
   private Map<Integer, Player> idMap;
   private GameView view;
   //current player, separate from ID
@@ -31,6 +37,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   public GameManager(GameData data) {
     initialize(data);
+    setupViewElements(data);
+
+  }
+
+  private void setupViewElements(GameData data) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
     view = new GameView(boards);
@@ -43,20 +54,20 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player firstPlayer = data.players().get(0);
     boards.add(firstPlayer.getBoard().getCurrentBoardState());
     for (int i = 0; i < firstPlayer.getEnemyMap().size(); i++) {
-      boards.add(makeCopy(data.board()));
+      boards.add(data.board());
     }
     return boards;
   }
 
-  private CellState[][] makeCopy(CellState[][] board) {
-    CellState[][] cellBoard = new CellState[board.length][board[0].length];
-    for (int i = 0; i < board.length; i++) {
-      for (int j = 0; j < board[0].length; j++) {
-        cellBoard[i][j] = board[i][j];
-      }
-    }
-    return cellBoard;
-  }
+//  private CellState[][] makeCopy(CellState[][] board) {
+//    CellState[][] cellBoard = new CellState[board.length][board[0].length];
+//    for (int i = 0; i < board.length; i++) {
+//      for (int j = 0; j < board[0].length; j++) {
+//        cellBoard[i][j] = board[i][j];
+//      }
+//    }
+//    return cellBoard;
+//  }
 
   private Collection<Collection<Coordinate>> createInitialPieces(List<Piece> pieces) {
     Collection<Collection<Coordinate>> pieceCoords = new ArrayList<>();
@@ -70,26 +81,21 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return view.createScene();
   }
 
-//  public void playGame() {
-//    while (canStillPlay())
-//    for (Player player : playerList) {
-//      promptPlayerToPlayTurn();
-//      player.playTurn();
-//    }
-//  }
-
+  /*
   public void promptPlayerToPlayTurn() {
     view.promptPlayTurn();
   }
+   */
 
 
   private void initialize(GameData data) {
-     this.playerList = data.players();
-     playerIndex = 0;
-     size = playerList.size();
-     numShots = 0;
-     allowedShots = 1;
-     createIDMap();
+    this.playerList = data.players();
+    playerIndex = 0;
+    size = playerList.size();
+    numShots = 0;
+    allowedShots = 1;
+    createIDMap();
+    winConditionsList = data.winConditions();
   }
 
   private void createIDMap() {
@@ -110,18 +116,29 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int row = ((Info)evt.getNewValue()).row();
     int col = ((Info)evt.getNewValue()).col();
     if (makeShot(new Coordinate(row, col), id)) {
-      updateConditions(row, col, id);
+      updateConditions(id);
     };
 
   }
 
-  private void updateConditions(int row, int col, int id) {
-    view.displayShotAt(row, col, CellState.SHIP_DAMAGED);
-//    view.updatePiecesLeft(idMap.get(id).getBoard().listPieces());
+  private void updateConditions(int id) {
+    applyWinConditions();
+    if(idMap.containsKey(id)){
+      List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
+      Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
+      System.out.println("update pieces left");
+      view.updatePiecesLeft(coords);
+    }
     numShots++;
-    checkIfPlayerHasBeenEliminated(id);
-    checkIfGameOver();
     checkIfMoveToNextToPlayer();
+  }
+
+  private Collection<Collection<Coordinate>> convertPiecesToCoords(List<Piece> piecesLeft) {
+    Collection<Collection<Coordinate>> coords = new ArrayList<>();
+    for (Piece piece : piecesLeft) {
+      coords.add(piece.getRelativeCoords());
+    }
+    return coords;
   }
 
   private void checkIfGameOver() {
@@ -138,17 +155,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-  private void checkIfPlayerHasBeenEliminated(int id) {
-    //CANT USE YET BECAUSE getHealth() always returns 0
-
-//    Player player = idMap.get(id);
-//    if (player.getHealth() == 0) {
-//      idMap.remove(id);
-//      playerList.remove(player);
-//      size = playerList.size();
-//    }
-  }
-
   public List<Player> getPlayerList() {
     return playerList;
   }
@@ -159,22 +165,74 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
       CellState result = enemy.getBoard().hit(c);//get result from model people
       currentPlayer.updateEnemyBoard(c, id, result);
+      view.displayShotAt(c.getRow(), c.getColumn(), result);
       return true;
     }
     return false;
   }
 
+  public void applyWinConditions() {
+    for (WinCondition condition: winConditionsList) {
+      checkCondition(condition);
+    }
+    if(playerList.size()==1) {
+      moveToWinGame(playerList.get(0));
+    }
+  }
+
+  private void checkCondition(WinCondition condition) {
+    Set<Integer> playerIds = new HashSet<>(idMap.keySet());
+    for(int id: playerIds) {
+      Player currPlayer = idMap.get(id);
+      WinState currPlayerWinState = condition.updateWinner(currPlayer);
+      System.out.format("Player %d's WinState %s\n", id, currPlayerWinState);
+      checkWinState(currPlayer, currPlayerWinState, id);
+    }
+  }
+
+  private void checkWinState(Player player, WinState state, int id) {
+    if (state.equals(WinState.LOSE)) {
+      removePlayer(player, id);
+      view.displayLosingMessage(id);
+    } else if (state.equals(WinState.WIN)) {
+      System.out.format("Player %d wins!", id);
+      moveToWinGame(player);
+    }
+  }
+
+  private void moveToWinGame(Player player) {
+    int id = player.getID();
+    view.displayWinningMessage(id);
+  }
+
+  private void removePlayer(Player player, int id) {
+    System.out.println("player " + id + " lost");
+    playerList.remove(player);
+    idMap.remove(id);
+    for (Player p : playerList) {
+      p.getEnemyMap().remove(id);
+    }
+  }
+
   private void sendUpdatedBoardsToView() {
     List<CellState[][]> boardList = new ArrayList<>();
     List<Integer> idList = new ArrayList<>();
+    List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
     Player currentPlayer = playerList.get(playerIndex);
     boardList.add(currentPlayer.getBoard().getCurrentBoardState());
     idList.add(currentPlayer.getID());
+    pieceList.add(convertPiecesToCoords(currentPlayer.getBoard().listPieces()));
+    Map<Integer, MarkerBoard> enemyMap = currentPlayer.getEnemyMap();
     for (int id : currentPlayer.getEnemyMap().keySet()) {
-      MarkerBoard board = currentPlayer.getEnemyMap().get(id);
-      boardList.add(board.getMarkerBoard());
-      idList.add(id);
+      addToBoardElements(enemyMap.get(id), id, idMap.get(id), boardList, idList, pieceList);
     }
-    view.moveToNextPlayer(boardList, idList);
+    view.moveToNextPlayer(boardList, idList, pieceList);
+  }
+
+  private void addToBoardElements(MarkerBoard board, int id, Player player, List<CellState[][]> boardList,
+      List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
+    boardList.add(board.getBoard());
+    idList.add(id);
+    pieceList.add(convertPiecesToCoords(player.getBoard().listPieces()));
   }
 }
