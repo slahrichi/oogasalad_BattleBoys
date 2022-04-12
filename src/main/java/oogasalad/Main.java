@@ -3,6 +3,7 @@ package oogasalad;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import oogasalad.controller.Game;
+import oogasalad.view.StartView;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -36,6 +37,10 @@ public class Main extends Application {
 
         Game game = new Game(stage);
         game.showSetup();
+
+//        StartView start = new StartView();
+//        stage.setScene(start.createScene());
+//        stage.show();
 
 //        GameManager game = new GameManager(/* player objects */);
 //        stage.setScene(game.createScene());

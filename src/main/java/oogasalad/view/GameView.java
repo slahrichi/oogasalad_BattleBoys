@@ -46,7 +46,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "mainStylesheet.css";
+  private static final String STYLESHEET = "viewStylesheet.css";
 
   private TitlePanel myTitle;
   private ResourceBundle myCellStateResources;
@@ -69,6 +69,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Label shotsRemainingLabel;
   private Label healthLabel;
   private Label goldLabel;
+  private PassComputerMessageView passComputerMessageView;
 
   private Scene myScene;
 
@@ -90,6 +91,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     createCenterPane();
     createRightPane();
     createTitlePanel();
+    createPassMessageView();
+  }
+
+  private void createPassMessageView() {
+    passComputerMessageView = new PassComputerMessageView();
+    passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
   }
 
   public void initializePiecesLeft(Collection<Collection<Coordinate>> piecesLeft) {
@@ -159,9 +166,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void setupBoardLabel() {
     currentBoardLabel = new Label("Your Board");
-    currentBoardLabel.setAlignment(Pos.CENTER);
-    currentBoardLabel.setTextAlignment(TextAlignment.CENTER);
-    currentBoardLabel.setFont(new Font(50));
+    currentBoardLabel.setId("currentBoardLabel");
     myCenterPane.getChildren().add(currentBoardLabel);
   }
 
@@ -232,14 +237,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myTitle.changeTitle("Player " + (playerID+1) + "'s turn");
   }
 
-  public void switchPlayerMessage(String nextPlayer) {
-
-    Alert alert = new Alert(AlertType.INFORMATION,
-        "Pass the computer to the next player: " + nextPlayer + ". Proceed when the "
-            + "next player is ready.");
-    Node alertNode = alert.getDialogPane();
-    alertNode.setId("switchAlert");
-    alert.showAndWait();
+  private void switchPlayerMessage(String nextPlayer) {
+    passComputerMessageView.setPlayerName(nextPlayer);
+    myScene.setRoot(passComputerMessageView);
   }
 
   @Override
