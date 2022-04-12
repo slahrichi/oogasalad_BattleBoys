@@ -2,6 +2,8 @@ package oogasalad.view;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Button;
@@ -19,6 +21,8 @@ import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +32,23 @@ public class GameViewTest extends DukeApplicationTest {
   private Button rightButton;
   private Polygon cell0;
   private Button shopButton;
+
+  private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+  private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+  private final PrintStream originalOut = System.out;
+  private final PrintStream originalErr = System.err;
+
+  @BeforeEach
+  public void setupStreams() {
+    System.setOut(new PrintStream(outContent));
+    System.setErr(new PrintStream(errContent));
+  }
+
+  @AfterEach
+  public void restoreStreams() {
+    System.setOut(originalOut);
+    System.setErr(originalErr);
+  }
 
   @Override
   public void start(Stage stage) {
@@ -57,8 +78,15 @@ public class GameViewTest extends DukeApplicationTest {
 
   @Test
   public void testSwitchBoard() {
-    clickOn(rightButton);
-    Polygon cell1 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-0").query();
+    rightClickOn(rightButton);
+    //Polygon cell1 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-0").query();
 //    clickOn(cell1);
+  }
+
+  @Test
+  public void testOpenShop() {
+
+    rightClickOn(shopButton);
+    assertEquals("Shop Opened\n", outContent.toString());
   }
 }
