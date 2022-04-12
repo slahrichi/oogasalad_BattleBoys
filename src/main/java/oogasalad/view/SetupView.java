@@ -49,6 +49,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private VBox configBox;
   private LegendPane legendPane;
   private SetPiecePane shipPane;
+  private PassComputerMessageView passComputerMessageView;
   private CellState[][] myCellBoard;
 
 
@@ -71,7 +72,12 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     createConfirmButton();
     createCenterPanel();
     createConfigPanel();
+    createPassMessageView();
+  }
 
+  private void createPassMessageView() {
+    passComputerMessageView = new PassComputerMessageView();
+    passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
   }
 
   public void activateConfirm() {
@@ -120,6 +126,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void handleConfirm() {
     setCurrentPlayerNum();
+    switchPlayerMessage(String.valueOf(currentPlayer));
     clearBoard();
     confirm.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
@@ -158,6 +165,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void setCurrentPlayerNum() {
     currentPlayer++;
     updateTitle();
+  }
+
+  private void switchPlayerMessage(String nextPlayer) {
+    passComputerMessageView.setPlayerName(nextPlayer);
+    myScene.setRoot(passComputerMessageView);
   }
 
   private void updateTitle() {
