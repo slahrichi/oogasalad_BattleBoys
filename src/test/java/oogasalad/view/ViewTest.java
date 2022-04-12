@@ -2,8 +2,6 @@ package oogasalad.view;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.input.KeyCode;
@@ -21,33 +19,15 @@ import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 public class ViewTest extends DukeApplicationTest {
-
-  private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-  private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-  private final PrintStream originalOut = System.out;
-  private final PrintStream originalErr = System.err;
 
   private Polygon myCell0;
   private CellState[][] cellBoard;
   private Player p1;
   private Player p2;
-
-  @BeforeEach
-  public void setUpStreams() {
-    System.setOut(new PrintStream(outContent));
-    System.setErr(new PrintStream(errContent));
-  }
-
-  @AfterEach
-  public void restoreStreams() {
-    System.setOut(originalOut);
-    System.setErr(originalErr);
-  }
-
+  
   @BeforeEach
   void setup() {
     int[][] board = new int[][]{{1, 1, 1}, {0, 1, 1}};
@@ -80,14 +60,7 @@ public class ViewTest extends DukeApplicationTest {
 
   @Test
   public void testSwitchBoard() {
-    clickOn(myCell0);
-    assertEquals("ID: 0\n", outContent.toString());
-    press(KeyCode.RIGHT);
-    Polygon myCell1 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-1-1-1").query();
-    clickOn(myCell1);
-    assertEquals("ID: 0\n"
-        + "Showing board 1\n"
-        + "ID: 1\n", outContent.toString());
+    
   }
 
   @Test

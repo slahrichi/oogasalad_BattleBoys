@@ -51,19 +51,13 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private SetPiecePane shipPane;
   private PassComputerMessageView passComputerMessageView;
   private CellState[][] myCellBoard;
-
-
   private int currentPlayer;
-
-  // current piece that is being placed
-  private Collection<Coordinate> currentPiece;
 
   public SetupView(CellState[][] board) {
     myPane = new BorderPane();
     myPane.setBackground(
         new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-    currentPiece = new ArrayList<>();
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     currentPlayer = 1;
@@ -96,12 +90,10 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void setCurrentPiece(Collection<Coordinate> nextPiece) {
-    currentPiece = nextPiece;
     shipPane.updateShownPieces(List.of(nextPiece));
   }
 
   private void createConfigPanel() {
-
     // FIXME: Move magic numbers to private static / resourcebundle
 
     configBox = new VBox();
@@ -150,7 +142,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
     myPane.setTop(myTitle);
   }
-
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
