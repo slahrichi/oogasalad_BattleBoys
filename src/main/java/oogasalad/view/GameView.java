@@ -230,12 +230,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void switchPlayerMessage(String nextPlayer) {
 
+    myScene.setRoot(new Label(""));
     Alert alert = new Alert(AlertType.INFORMATION,
         "Pass the computer to the next player: " + nextPlayer + ". Proceed when the "
             + "next player is ready.");
     Node alertNode = alert.getDialogPane();
     alertNode.setId("switchAlert");
     alert.showAndWait();
+    myScene.setRoot(myPane);
 
 
   }
