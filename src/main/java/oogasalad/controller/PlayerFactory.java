@@ -15,6 +15,7 @@ public class PlayerFactory {
   private CellState[][] myBoard;
   private int myRange;
   private static final String FILEPATH = "oogasalad.model.players.";
+  private static final String INVALID_PLAYER = "Invalid player type given";
 
   public PlayerFactory(CellState[][] board) {
     myBoard = board;
@@ -40,6 +41,7 @@ public class PlayerFactory {
           .newInstance(b, id, enemyMap);
     } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
         IllegalAccessException | NoSuchMethodException e) {
+      throw new NullPointerException(INVALID_PLAYER);
     }
     return p;
   }
