@@ -35,12 +35,12 @@ public class Main extends Application {
         // Parse and retrieve List of Player records
         // Create List of Player objects
 
-//        Game game = new Game(stage);
-//        game.showSetup();
+        Game game = new Game(stage);
+        game.showSetup();
 
-        StartView start = new StartView();
-        stage.setScene(start.createScene());
-        stage.show();
+//        StartView start = new StartView();
+//        stage.setScene(start.createScene());
+//        stage.show();
 
 //        GameManager game = new GameManager(/* player objects */);
 //        stage.setScene(game.createScene());
