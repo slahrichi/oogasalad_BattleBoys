@@ -61,7 +61,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     try {
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Coordinate.class);
       m.invoke(this, c);
-    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+    NullPointerException e) {
       throw new NullPointerException(INVALID_METHOD);
     }
   }
@@ -80,12 +81,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void moveToNextPlayer(Coordinate c) {
     playerIndex++;
     if(playerIndex >= playerList.size()) {
-      System.out.println("Moving to game");
       notifyObserver("moveToGame", null);
       return;
     }
     resetElements();
-    System.out.println("Moving to next player");
   }
 
   private void resetElements() {
@@ -100,6 +99,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     }
     setupView.placePiece(coords, CellState.SHIP_HEALTHY);
     pieceIndex++;
+    System.out.println(pieceIndex);
+    System.out.println(pieceList.size());
     if (pieceIndex != pieceList.size()) {
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
     }

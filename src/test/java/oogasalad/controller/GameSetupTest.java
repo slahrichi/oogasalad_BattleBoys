@@ -23,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import util.DukeApplicationTest;
 
 public class GameSetupTest extends DukeApplicationTest {
-  private GameData gd;
+  private GameData gd1;
+  private GameData gd2;
   private GameSetup gs;
 
   @BeforeEach
@@ -47,10 +48,15 @@ public class GameSetupTest extends DukeApplicationTest {
     dummyShipCellList.add(new ShipCell(1, new Coordinate(0,1), 0, "0"));
     dummyShipCellList.add(new ShipCell(1, new Coordinate(1,0), 0, "1"));
     dummyShipCellList.add(new ShipCell(1, new Coordinate(1,1), 0, "2"));
-    StaticPiece dummyShip = new StaticPiece(dummyShipCellList, coordinateList, "0");
-    List<Piece> pieceList = new ArrayList<>();
-    pieceList.add(dummyShip);
-    gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>());
+    StaticPiece dummyShip1 = new StaticPiece(dummyShipCellList, coordinateList, "0");
+    StaticPiece dummyShip2 = new StaticPiece(dummyShipCellList, coordinateList, "1");
+    List<Piece> pieceList1 = new ArrayList<>();
+    List<Piece> pieceList2 = new ArrayList<>();
+    pieceList1.add(dummyShip1);
+    pieceList2.add(dummyShip1);
+    pieceList2.add(dummyShip2);
+    gd1 = new GameData(playerList, cellBoard, pieceList1, new ArrayList<>());
+    gd2 = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>());
   }
 
   // Commented out these tests because GameSetup now takes in GameData with the players already
@@ -58,22 +64,22 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testBasicSetup() {
-    javafxRun(() -> gs = new GameSetup(gd));
+    javafxRun(() -> gs = new GameSetup(gd1));
     assertEquals(gs.getPlayerList().size(), 2);
     assertEquals(gs.getPlayerList().get(0).getClass(), HumanPlayer.class);
-    assertEquals(gs.getPlayerList().get(0).getClass(), AIPlayer.class);
+    assertEquals(gs.getPlayerList().get(1).getClass(), AIPlayer.class);
   }
 
   @Test
   void testInvalidMethodName() {
-    javafxRun(() -> gs = new GameSetup(gd));
+    javafxRun(() -> gs = new GameSetup(gd1));
     assertThrows(NullPointerException.class, () -> gs.propertyChange(new PropertyChangeEvent
         (gs.getSetupView(), null, null, new Coordinate(-1, 0)))) ;
   }
 
   @Test
   void testCoordinateChoice() {
-    javafxRun(() -> gs = new GameSetup(gd));
+    javafxRun(() -> gs = new GameSetup(gd1));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
        new Coordinate(0, 0))));
     assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -87,7 +93,7 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testInvalidCoordinate() {
-    javafxRun(() -> gs = new GameSetup(gd));
+    javafxRun(() -> gs = new GameSetup(gd1));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         new Coordinate(-1, 0))));
     assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -96,6 +102,53 @@ public class GameSetupTest extends DukeApplicationTest {
         CellState.WATER);
     assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][1],
         CellState.WATER);
+  }
+
+  @Test
+  void testMultiplePieces() {
+    javafxRun(() -> gs = new GameSetup(gd2));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        new Coordinate(0, 0))));
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][1],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][0],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][1],
+        CellState.SHIP_HEALTHY);
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        new Coordinate(0, 2))));
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][3],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][2],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][3],
+        CellState.SHIP_HEALTHY);
+  }
+
+  @Test
+  void testMoveToGame() {
+    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        new Coordinate(0, 0))));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "moveToNextPlayer", null,
+        null)));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        new Coordinate(0, 0))));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "moveToNextPlayer", null,
+        null)));
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][1],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][0],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][1],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(1).getBoard().getCurrentBoardState()[0][1],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(1).getBoard().getCurrentBoardState()[1][0],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gs.getPlayerList().get(1).getBoard().getCurrentBoardState()[1][1],
+        CellState.SHIP_HEALTHY);
+
   }
 
 }
