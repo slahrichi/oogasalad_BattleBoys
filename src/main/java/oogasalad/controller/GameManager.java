@@ -141,11 +141,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       CellState result = enemy.getBoard().hit(c);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
-<<<<<<< HEAD
-      //applyModifiers(currentPlayer, enemy);
-      //applyWinConditions();
-=======
->>>>>>> master
+      applyModifiers(currentPlayer, enemy);
       return true;
     }
     return false;
