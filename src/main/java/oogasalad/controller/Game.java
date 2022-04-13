@@ -14,6 +14,7 @@ import oogasalad.GameData;
 import oogasalad.model.parsing.Parser;
 import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.MarkerBoard;
@@ -41,7 +42,12 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     myStage = stage;
     parser = new Parser();
     fileChooser = new FilePicker();
-    PlayerData playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
+    PlayerData playerData;
+    try {
+      playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
+    } catch (ParserException e) {
+      playerData = null;
+    }
 
     stringPlayers = playerData.players();
     pieceList = playerData.pieces();
