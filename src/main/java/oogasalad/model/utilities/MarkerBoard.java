@@ -28,13 +28,8 @@ public class MarkerBoard {
     return new MarkerBoard(myMarkerArray);
   }
 
-  public CellState[][] getMarkerBoard() {
-    CellState[][] markerArrayCopy = new CellState[myMarkerArray.length][myMarkerArray[0].length];
-    for(int i = 0 ; i< myMarkerArray.length; i++) {
-      for(int j = 0; j< myMarkerArray[0].length; j++) {
-        markerArrayCopy[i][j] = myMarkerArray[i][j];
-      }
-    }
-    return markerArrayCopy;
+  public CellState[][] getBoard() {
+    return myMarkerArray;
   }
+
 }

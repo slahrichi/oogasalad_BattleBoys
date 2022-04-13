@@ -29,7 +29,7 @@ public abstract class Piece {
   }
 
   private List<ShipCell> createNewCellListInstance(List<ShipCell> cells) {
-    List<ShipCell> newCellList = new ArrayList<ShipCell>();
+    List<ShipCell> newCellList = new ArrayList<>();
     for(ShipCell c: cells) {
       newCellList.add(new ShipCell(c));
     }

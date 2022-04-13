@@ -14,7 +14,7 @@ public class ShipCell implements CellInterface {
   private Coordinate myCoordinate;
   private Coordinate myRelativeCoordinate;
   private int myHealthBar;
-  private transient  Piece myShip;
+  private transient Piece myShip;
   private CellState currentState;
   private int myGoldValue;
   private int id;
@@ -55,7 +55,7 @@ public class ShipCell implements CellInterface {
     myHealthBar --;
     if (myHealthBar <= 0) {
       currentState = CellState.SHIP_SUNKEN;
-      myShip.registerDamage(this);
+//      myShip.registerDamage(this);
     } else {
       currentState = CellState.SHIP_DAMAGED;
 
