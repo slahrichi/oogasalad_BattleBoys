@@ -59,7 +59,7 @@ public class ShipCell implements CellInterface {
     myHealthBar --;
     if (myHealthBar <= 0) {
       currentState = CellState.SHIP_SUNKEN;
-      myShip.registerDamage(this);
+      if(myShip!=null) myShip.registerDamage(this);
     } else {
       currentState = CellState.SHIP_DAMAGED;
 
@@ -89,7 +89,6 @@ public class ShipCell implements CellInterface {
       }
     }
     return returnMods;
-
   }
 
   public Coordinate getRelativeCoordinate(){
