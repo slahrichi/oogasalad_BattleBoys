@@ -4,6 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +51,7 @@ public class ParserTest {
     
     parser = new Parser();
     List<String> players = Arrays.asList("HumanPlayer", "AIPlayer", "HumanPlayer");
+    List<String> decisionEngines = Arrays.asList("None", "Easy", "None");
 
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(1, 0), new Coordinate(1, 1)));
@@ -78,7 +82,7 @@ public class ParserTest {
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER}};
 
-    examplePlayerData = new PlayerData(players, pieceList, dummyBoard);
+    examplePlayerData = new PlayerData(players, pieceList, dummyBoard, decisionEngines);
 
   }
 
@@ -195,5 +199,16 @@ public class ParserTest {
     assertEquals(exceptionMessageProperties.getProperty("missingArg").formatted("BoardFile"), thrown.getMessage());
   }
 
+  @Test
+  void basicSave() {
+    String path = "src/test/resources/BasicSave.properties";
+    try {
+      parser.save(examplePlayerData, path);
+      PlayerData check = parser.parse(path);
+      assertEquals(examplePlayerData, check);
+    } catch (ParserException e) {
+      fail(e.getMessage());
+    }
+  }
 
 }
