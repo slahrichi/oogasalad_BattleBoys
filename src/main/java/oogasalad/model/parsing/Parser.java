@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -40,26 +41,24 @@ public class Parser {
   private final String PROPERTIES_PLAYER_LIST = "Players";
   private final String PROPERTIES_PIECES_FILE = "PiecesFile";
   private final String PROPERTIES_BOARD_FILE = "BoardFile";
-  private final List<String> REQUIRED_ARGS = List.of(PROPERTIES_PLAYER_LIST, PROPERTIES_PIECES_FILE, PROPERTIES_BOARD_FILE);
+  private final String PROPERTIES_DECISION_ENGINES_LIST = "DecisionEngines";
+  private final String HUMAN_PLAYER = "HumanPlayer";
+  private final String AI_PLAYER = "AIPlayer";
+  private final List<String> REQUIRED_ARGS = List.of(PROPERTIES_PLAYER_LIST, PROPERTIES_PIECES_FILE, PROPERTIES_BOARD_FILE, PROPERTIES_DECISION_ENGINES_LIST);
   private final String MISSING_ARG = "missingArg";
   private final String DOT = ".";
   private final String PROPERTIES_EXTENSION = "properties";
   private final String JSON_EXTENSION = "json";
   private final List<String> jsonPaths = List.of("PiecesFile", "BoardFile");
   private Properties exceptionMessageProperties;
+  private final String HUMAN_DECISION_ENGINE = "None";
 
-  public void save(PlayerData data, String pathToNewFile)  {
-    exceptionMessageProperties = new Properties();
+  public void save(PlayerData data, String pathToNewFile) throws ParserException  {
 
-    try {
-      InputStream is = new FileInputStream("src/main/resources/ParserExceptions.properties");
-      exceptionMessageProperties.load(is);
-      is.close();
-    } catch (IOException ignored) {
-    }
     File file = new File(pathToNewFile);
     Properties props = new Properties();
     savePlayers(props, data.players());
+    saveDecisionEngines(props, data.decisionEngines());
     String nameOfNewFile = file.toString().replaceFirst("[.][^.]+$", "");
     String nameOfBoardFile = nameOfNewFile + "Board.json";
     String nameOfPiecesFile = nameOfNewFile + "Pieces.json";
@@ -88,7 +87,7 @@ public class Parser {
       }
   }
 
-  private void checkProperties(String pathToFile, Properties props) throws ParserException {
+  private void checkProperties(Properties props) throws ParserException {
     for (String key: REQUIRED_ARGS){
       if(props.getProperty(key) == null) {
         throw new ParserException(exceptionMessageProperties.getProperty(MISSING_ARG).formatted(key));
@@ -119,7 +118,7 @@ public class Parser {
     }
 
     checkExtension(pathToFile, PROPERTIES_EXTENSION);
-    checkProperties(pathToFile, props);
+    checkProperties(props);
     for (String path:jsonPaths) {
       checkExtension(props.getProperty(path), JSON_EXTENSION);
     }
@@ -128,17 +127,46 @@ public class Parser {
     List<String> players;
     CellState[][] cellBoard;
     List<Piece> pieces;
+    List<String> decisionEngines;
 
     try {
       players = loadPlayers(props);
       cellBoard = loadBoard(props);
       pieces = loadPieces(props);
+      decisionEngines = loadDecisionEngines(props, players);
     } catch (JsonSyntaxException e) {
       throw new ParserException(exceptionMessageProperties.getProperty("jsonError").formatted(pathToFile));
     }
 
-    return new PlayerData(players, pieces, cellBoard);
+    return new PlayerData(players, pieces, cellBoard, decisionEngines);
 
+  }
+
+  private List<String> loadDecisionEngines(Properties props, List<String> players)
+      throws ParserException {
+    List<String> decisionEngines = List.of(
+        props.getProperty(PROPERTIES_DECISION_ENGINES_LIST).split(" "));
+    if(decisionEngines.size() != players.size()) {
+      throw new ParserException(exceptionMessageProperties.getProperty("misalignedEngines").formatted(players.size(), decisionEngines.size()));
+    }
+    for(int i = 0; i < decisionEngines.size(); i++) {
+      String player = players.get(i);
+      String engine = decisionEngines.get(i);
+      if (player.equals(HUMAN_PLAYER)) {
+        if (!engine.equals(HUMAN_DECISION_ENGINE)) {
+          throw new ParserException(exceptionMessageProperties.getProperty("HumanPlayerAIEngine"));
+        }
+      } else if (player.equals(AI_PLAYER)) {
+        try {
+          Class.forName("oogasalad.model.players." + engine + "DecisionEngine");
+        } catch (ClassNotFoundException e) {
+          throw new ParserException(
+              exceptionMessageProperties.getProperty("AIPlayerBadEngine").formatted(engine));
+        }
+      }
+
+    }
+    return decisionEngines;
   }
 
   private List<String> loadPlayers(Properties props) throws ParserException {
@@ -149,7 +177,6 @@ public class Parser {
       } catch (ClassNotFoundException e) {
         throw new ParserException(exceptionMessageProperties.getProperty("badPlayer").formatted(player));
       }
-
     }
     return new ArrayList<>(Arrays.asList(playersData));
   }
@@ -195,6 +222,10 @@ public class Parser {
     props.put(PROPERTIES_PLAYER_LIST, String.join(" ", players));
   }
 
+  private void saveDecisionEngines(Properties props, List<String> decisionEngines) {
+    props.put(PROPERTIES_DECISION_ENGINES_LIST, String.join(" ", decisionEngines));
+  }
+
   private void saveBoard(Properties props, CellState[][] board, String location) {
     //make json for board
     //put link to json in props file
@@ -225,8 +256,6 @@ public class Parser {
         FileWriter myWriter = new FileWriter(myNewFile);
         myWriter.write(json);
         myWriter.close();
-      } else { //file already exists, maybe prompt to make sure you want to delete this
-        System.out.println("Encountered else block in saveData in Parser.saveData");
       }
     } catch (IOException e) {
       e.printStackTrace();
