@@ -29,7 +29,7 @@ public abstract class Piece {
   }
 
   private List<ShipCell> createNewCellListInstance(List<ShipCell> cells) {
-    List<ShipCell> newCellList = new ArrayList<ShipCell>();
+    List<ShipCell> newCellList = new ArrayList<>();
     for(ShipCell c: cells) {
       newCellList.add(new ShipCell(c));
     }
@@ -107,6 +107,16 @@ public abstract class Piece {
         cellListHP.remove(currCell.getCoordinates());
       }
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if(o == null) return false;
+    if(o == this) return true;
+    if(!(o instanceof Piece)) return false;
+    Piece other = (Piece)o;
+    //just need to check cellList
+    return this.cellList.equals(other.cellList);
   }
 
 }

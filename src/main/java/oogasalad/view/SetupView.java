@@ -49,20 +49,15 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private VBox configBox;
   private LegendPane legendPane;
   private SetPiecePane shipPane;
+  private PassComputerMessageView passComputerMessageView;
   private CellState[][] myCellBoard;
-
-
   private int currentPlayer;
-
-  // current piece that is being placed
-  private Collection<Coordinate> currentPiece;
 
   public SetupView(CellState[][] board) {
     myPane = new BorderPane();
     myPane.setBackground(
         new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-    currentPiece = new ArrayList<>();
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     currentPlayer = 1;
@@ -71,7 +66,12 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     createConfirmButton();
     createCenterPanel();
     createConfigPanel();
+    createPassMessageView();
+  }
 
+  private void createPassMessageView() {
+    passComputerMessageView = new PassComputerMessageView();
+    passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
   }
 
   public void activateConfirm() {
@@ -90,12 +90,10 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void setCurrentPiece(Collection<Coordinate> nextPiece) {
-    currentPiece = nextPiece;
     shipPane.updateShownPieces(List.of(nextPiece));
   }
 
   private void createConfigPanel() {
-
     // FIXME: Move magic numbers to private static / resourcebundle
 
     configBox = new VBox();
@@ -120,6 +118,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void handleConfirm() {
     setCurrentPlayerNum();
+    switchPlayerMessage(String.valueOf(currentPlayer));
     clearBoard();
     confirm.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
@@ -144,7 +143,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane.setTop(myTitle);
   }
 
-
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     if (confirm.isDisabled()) {
@@ -158,6 +156,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void setCurrentPlayerNum() {
     currentPlayer++;
     updateTitle();
+  }
+
+  private void switchPlayerMessage(String nextPlayer) {
+    passComputerMessageView.setPlayerName(nextPlayer);
+    myScene.setRoot(passComputerMessageView);
   }
 
   private void updateTitle() {

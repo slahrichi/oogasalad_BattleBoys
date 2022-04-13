@@ -46,7 +46,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "mainStylesheet.css";
+  private static final String STYLESHEET = "viewStylesheet.css";
 
   private TitlePanel myTitle;
   private ResourceBundle myCellStateResources;
@@ -69,6 +69,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Label shotsRemainingLabel;
   private Label healthLabel;
   private Label goldLabel;
+  private PassComputerMessageView passComputerMessageView;
 
   private Scene myScene;
 
@@ -90,6 +91,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     createCenterPane();
     createRightPane();
     createTitlePanel();
+    createPassMessageView();
+  }
+
+  private void createPassMessageView() {
+    passComputerMessageView = new PassComputerMessageView();
+    passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
   }
 
   public void initializePiecesLeft(Collection<Collection<Coordinate>> piecesLeft) {
@@ -118,6 +125,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void createRightPane() {
     shopButton = new Button("Open Shop");
+    shopButton.setId("view-shop");
     shopButton.setFont(new Font(15));
     shopButton.setOnMouseClicked(e -> openShop());
 
@@ -158,22 +166,23 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void setupBoardLabel() {
     currentBoardLabel = new Label("Your Board");
-    currentBoardLabel.setAlignment(Pos.CENTER);
-    currentBoardLabel.setTextAlignment(TextAlignment.CENTER);
-    currentBoardLabel.setFont(new Font(50));
+    currentBoardLabel.setId("currentBoardLabel");
     myCenterPane.getChildren().add(currentBoardLabel);
   }
 
   private void setupBoardButtons() {
     boardButtonBox = new HBox();
+    boardButtonBox.setId("board-button-box");
     boardButtonBox.setSpacing(20);
     boardButtonBox.setAlignment(Pos.CENTER);
 
     leftButton = new Button("<-");
+    leftButton.setId("left-button");
     leftButton.setFont(new Font(25));
     leftButton.setOnMouseClicked(e -> decrementBoardIndex());
 
     rightButton = new Button("->");
+    rightButton.setId("right-button");
     rightButton.setFont(new Font(25));
     rightButton.setOnMouseClicked(e -> incrementBoardIndex());
 
@@ -205,6 +214,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
+    System.out.println("Current board index: "+currentBoardIndex);
     currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board"
         : "Your Shots Against Player " + (myBoards.get(currentBoardIndex).getID() + 1));
     refreshCenterPane();
@@ -227,16 +237,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myTitle.changeTitle("Player " + (playerID+1) + "'s turn");
   }
 
-  public void switchPlayerMessage(String nextPlayer) {
-
-    Alert alert = new Alert(AlertType.INFORMATION,
-        "Pass the computer to the next player: " + nextPlayer + ". Proceed when the "
-            + "next player is ready.");
-    Node alertNode = alert.getDialogPane();
-    alertNode.setId("switchAlert");
-    alert.showAndWait();
-
-
+  private void switchPlayerMessage(String nextPlayer) {
+    passComputerMessageView.setPlayerName(nextPlayer);
+    myScene.setRoot(passComputerMessageView);
   }
 
   @Override
@@ -270,8 +273,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
   }
 
-  public void endGame() {
+  public void displayWinningMessage(int id) {
+    LOG.info("Player "+(id+1)+" Won!");
+  }
 
+  public void displayLosingMessage(int id) {
+    LOG.info("Player "+(id+1)+" Lost!");
   }
 
   @Override
@@ -321,7 +328,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
     switchPlayerMessage("Player "+(idList.get(0)+1));
     myBoards.clear();
-    myPiecesLeft.clear();
+    myPiecesLeft = pieceList;
     currentBoardIndex = 0;
     CellState[][] firstBoard = boardList.get(currentBoardIndex);
     int firstID = idList.get(currentBoardIndex);
@@ -333,6 +340,5 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
     updateTitle(firstID);
     updateDisplayedBoard();
-    myPiecesLeft = pieceList;
   }
 }

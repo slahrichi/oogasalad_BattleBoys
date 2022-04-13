@@ -25,9 +25,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private List<Piece> pieceList;
   private int pieceIndex;
 
-  private static final String FILEPATH = "oogasalad.model.players.";
-  private static final String CONFIG_ERROR = "Invalid player type given";
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
+  private static final String INVALID_METHOD = "Invalid method name given";
 
   public GameSetup(GameData data){
     this.playerList = data.players();
@@ -62,8 +61,9 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     try {
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Coordinate.class);
       m.invoke(this, c);
-    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-      e.printStackTrace();
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+    NullPointerException e) {
+      throw new NullPointerException(INVALID_METHOD);
     }
   }
 
@@ -81,12 +81,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void moveToNextPlayer(Coordinate c) {
     playerIndex++;
     if(playerIndex >= playerList.size()) {
-      System.out.println("Moving to game");
       notifyObserver("moveToGame", null);
       return;
     }
     resetElements();
-    System.out.println("Moving to next player");
   }
 
   private void resetElements() {
@@ -101,6 +99,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     }
     setupView.placePiece(coords, CellState.SHIP_HEALTHY);
     pieceIndex++;
+    System.out.println(pieceIndex);
+    System.out.println(pieceList.size());
     if (pieceIndex != pieceList.size()) {
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
     }

@@ -27,3 +27,8 @@
 #boardBox {
   -fx-padding: 10;
 }
+
+#currentBoardLabel {
+  -fx-font-size: 20pt;
+  -fx-alignment: center;
+}

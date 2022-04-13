@@ -11,9 +11,10 @@ import java.util.TreeMap;
 import javafx.stage.Stage;
 import oogasalad.FilePicker;
 import oogasalad.GameData;
-import oogasalad.Parser;
+import oogasalad.model.parsing.Parser;
 import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.MarkerBoard;
@@ -41,16 +42,19 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     myStage = stage;
     parser = new Parser();
     fileChooser = new FilePicker();
-    PlayerData playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
+    PlayerData playerData;
+    try {
+      playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
+    } catch (ParserException e) {
+      playerData = null;
+    }
 
     stringPlayers = playerData.players();
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();
 
-    List<Player> players = new ArrayList<>();
-    for (int i = 0; i < stringPlayers.size(); i++) {
-      players.add(createPlayer(stringPlayers.get(i), notSoDummyBoard, i));
-    }
+    PlayerFactory pf = new PlayerFactory(notSoDummyBoard);
+    List<Player> players = pf.createPlayerList(stringPlayers);
 
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
@@ -70,30 +74,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   public void showSetup() {
     myStage.setScene(setup.createScene());
     myStage.show();
-  }
-
-  private Player createPlayer(String playerType, CellState[][] board, int id) {
-    Board b = new Board(board);
-    MarkerBoard mb = new MarkerBoard(board);
-    Map<Integer, MarkerBoard> enemyMap = createEnemyMap(mb, id);
-    Player p = null;
-    try {
-      p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class,
-              Map.class)
-          .newInstance(b, id, enemyMap);
-    } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
-        IllegalAccessException | NoSuchMethodException e) {
-    }
-    return p;
-  }
-
-  private Map<Integer, MarkerBoard> createEnemyMap(MarkerBoard mb, int id) {
-    Map<Integer, MarkerBoard> boardMap = new TreeMap<>();
-    for (int i = 0; i < stringPlayers.size(); i++) {
-      if (i == id) continue;
-      boardMap.put(i, mb.copyOf());
-    }
-    return boardMap;
   }
 
   @Override

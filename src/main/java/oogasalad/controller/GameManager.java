@@ -39,11 +39,15 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   public GameManager(GameData data) {
     initialize(data);
+    setupViewElements(data);
+
+  }
+
+  private void setupViewElements(GameData data) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
     view = new GameView(boards);
     view.initializePiecesLeft(coords);
-    winConditionsList = data.winConditions();
     this.view.addObserver(this);
   }
 
@@ -52,19 +56,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player firstPlayer = data.players().get(0);
     boards.add(firstPlayer.getBoard().getCurrentBoardState());
     for (int i = 0; i < firstPlayer.getEnemyMap().size(); i++) {
-      boards.add(makeCopy(data.board()));
+      boards.add(data.board());
     }
     return boards;
-  }
-
-  private CellState[][] makeCopy(CellState[][] board) {
-    CellState[][] cellBoard = new CellState[board.length][board[0].length];
-    for (int i = 0; i < board.length; i++) {
-      for (int j = 0; j < board[0].length; j++) {
-        cellBoard[i][j] = board[i][j];
-      }
-    }
-    return cellBoard;
   }
 
   private Collection<Collection<Coordinate>> createInitialPieces(List<Piece> pieces) {
@@ -79,26 +73,15 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return view.createScene();
   }
 
-//  public void playGame() {
-//    while (canStillPlay())
-//    for (Player player : playerList) {
-//      promptPlayerToPlayTurn();
-//      player.playTurn();
-//    }
-//  }
-
-  public void promptPlayerToPlayTurn() {
-    view.promptPlayTurn();
-  }
-
 
   private void initialize(GameData data) {
-     this.playerList = data.players();
-     playerIndex = 0;
-     size = playerList.size();
-     numShots = 0;
-     allowedShots = 1;
-     createIDMap();
+    this.playerList = data.players();
+    playerIndex = 0;
+    size = playerList.size();
+    numShots = 0;
+    allowedShots = 1;
+    createIDMap();
+    winConditionsList = data.winConditions();
   }
 
   private void createIDMap() {
@@ -109,10 +92,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
 
-  private boolean canStillPlay() {
-    return playerList.size() != 1;
-  }
-
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     int id = ((Info)evt.getNewValue()).ID();
@@ -120,8 +99,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int col = ((Info)evt.getNewValue()).col();
     if (makeShot(new Coordinate(row, col), id)) {
       updateConditions(id);
-    };
-
+    }
   }
 
   private void updateConditions(int id) {
@@ -129,6 +107,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if(idMap.containsKey(id)){
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
       Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
+      System.out.println("update pieces left");
       view.updatePiecesLeft(coords);
     }
     numShots++;
@@ -143,29 +122,12 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return coords;
   }
 
-  private void checkIfGameOver() {
-    if (!canStillPlay()) {
-      //endGame
-    }
-  }
-
   private void checkIfMoveToNextToPlayer() {
     if (numShots == allowedShots) {
       playerIndex = (playerIndex + 1) % playerList.size();
       numShots = 0;
       sendUpdatedBoardsToView();
     }
-  }
-
-  private void checkIfPlayerHasBeenEliminated(int id) {
-    //CANT USE YET BECAUSE getHealth() always returns 0
-
-//    Player player = idMap.get(id);
-//    if (player.getHealth() == 0) {
-//      idMap.remove(id);
-//      playerList.remove(player);
-//      size = playerList.size();
-//    }
   }
 
   public List<Player> getPlayerList() {
@@ -176,11 +138,14 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-      CellState result = enemy.getBoard().hit(c);//get result from model people
+      CellState result = enemy.getBoard().hit(c);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
+<<<<<<< HEAD
       //applyModifiers(currentPlayer, enemy);
       //applyWinConditions();
+=======
+>>>>>>> master
       return true;
     }
     return false;
@@ -200,29 +165,45 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
 
   public void applyWinConditions() {
-    for(WinCondition w: winConditionsList) {
-      Set<Integer> ogKeyset = new HashSet<Integer>(idMap.keySet());
-      for(int key: ogKeyset) {
-        Player currPlayer = idMap.get(key);
-        WinState currPlayerWinState = w.updateWinner(currPlayer);
-        System.out.format("Player %d's WinState %s\n", key, currPlayerWinState);
-        if(currPlayerWinState.equals(WinState.LOSE)) {
-          System.out.println("player "+ key + "lost");
-          playerList.remove(currPlayer);
-          idMap.remove(key);
-          for(Player p: playerList) {
-            p.getEnemyMap().remove(key);
-          }
-          //show dead player
-        }
-        else if(currPlayerWinState.equals(WinState.WIN)) {
-          System.out.format("Player %d wins!", key);
-        }
-      }
+    for (WinCondition condition: winConditionsList) {
+      checkCondition(condition);
     }
-
     if(playerList.size()==1) {
-      //remaining player wins;
+      moveToWinGame(playerList.get(0));
+    }
+  }
+
+  private void checkCondition(WinCondition condition) {
+    Set<Integer> playerIds = new HashSet<>(idMap.keySet());
+    for(int id: playerIds) {
+      Player currPlayer = idMap.get(id);
+      WinState currPlayerWinState = condition.updateWinner(currPlayer);
+      System.out.format("Player %d's WinState %s\n", id, currPlayerWinState);
+      checkWinState(currPlayer, currPlayerWinState, id);
+    }
+  }
+
+  private void checkWinState(Player player, WinState state, int id) {
+    if (state.equals(WinState.LOSE)) {
+      removePlayer(player, id);
+      view.displayLosingMessage(id);
+    } else if (state.equals(WinState.WIN)) {
+      System.out.format("Player %d wins!", id);
+      moveToWinGame(player);
+    }
+  }
+
+  private void moveToWinGame(Player player) {
+    int id = player.getID();
+    view.displayWinningMessage(id);
+  }
+
+  private void removePlayer(Player player, int id) {
+    System.out.println("player " + id + " lost");
+    playerList.remove(player);
+    idMap.remove(id);
+    for (Player p : playerList) {
+      p.getEnemyMap().remove(id);
     }
   }
 
@@ -231,15 +212,19 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     List<Integer> idList = new ArrayList<>();
     List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
     Player currentPlayer = playerList.get(playerIndex);
-    boardList.add(currentPlayer.getBoard().getCurrentBoardState());
-    idList.add(currentPlayer.getID());
-    pieceList.add(convertPiecesToCoords(currentPlayer.getBoard().listPieces()));
+    addToBoardElements(currentPlayer.getBoard().getCurrentBoardState(), currentPlayer.getID(),
+        currentPlayer, boardList, idList, pieceList);
+    Map<Integer, MarkerBoard> enemyMap = currentPlayer.getEnemyMap();
     for (int id : currentPlayer.getEnemyMap().keySet()) {
-      MarkerBoard board = currentPlayer.getEnemyMap().get(id);
-      boardList.add(board.getMarkerBoard());
-      idList.add(id);
-      pieceList.add(convertPiecesToCoords(idMap.get(id).getBoard().listPieces()));
+      addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList, pieceList);
     }
     view.moveToNextPlayer(boardList, idList, pieceList);
+  }
+
+  private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
+      boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
+    boardList.add(board);
+    idList.add(id);
+    pieceList.add(convertPiecesToCoords(player.getBoard().listPieces()));
   }
 }
