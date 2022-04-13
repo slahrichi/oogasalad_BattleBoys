@@ -9,7 +9,8 @@ open module oogasalad_app {
     requires com.google.gson;
     requires org.apache.logging.log4j;
     requires java.scripting;
-    // allow other classes to access listed packages in your project
+  requires jdk.jfr;
+  // allow other classes to access listed packages in your project
     exports oogasalad;
     exports oogasalad.controller;
   exports oogasalad.model.parsing;

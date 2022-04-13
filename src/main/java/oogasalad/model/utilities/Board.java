@@ -37,6 +37,7 @@ public class Board {
   private int myCols;
   private int myCurrTurnGold;
   private int myNumShipsSunk;
+  private double scoreMultiplier;
 
 
 
@@ -177,6 +178,4 @@ public class Board {
     }
   return retModifers;
   }
-
-
 }
