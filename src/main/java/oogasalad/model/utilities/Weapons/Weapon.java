@@ -1,6 +1,14 @@
 package oogasalad.model.utilities.Weapons;
 
-public interface Weapon {
+public abstract class Weapon {
 
-    public WeaponFunction getWeaponFunction();
+    WeaponFunction myWeaponFunction;
+    String myID;
+
+
+    public abstract WeaponFunction getWeaponFunction();
+
+    public String getMyID(){
+        return myID;
+    }
 }
