@@ -2,8 +2,9 @@ package oogasalad.controller;
 
 import java.util.List;
 import oogasalad.FilePicker;
-import oogasalad.Parser;
 import oogasalad.PlayerData;
+import oogasalad.model.parsing.Parser;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,12 @@ public class PlayerFactoryTest {
   @BeforeEach
   void setup() {
     Parser parser = new Parser();
-    PlayerData playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
+    PlayerData playerData = null;
+    try {
+      playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
+    } catch (ParserException e) {
+      e.printStackTrace();
+    }
     playerTypes = playerData.players();
     CellState[][] notSoDummyBoard = playerData.board();
     pf = new PlayerFactory(notSoDummyBoard);
