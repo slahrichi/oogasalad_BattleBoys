@@ -23,7 +23,7 @@ public class HaveXGoldWinCondition extends WinCondition{
     return (PlayerRecord playerInfo) -> {
       int boardState = 0;
       int playerGold = playerInfo.myCurrency();
-      LOG.info(String.format("Player has %d Gold", playerInfo.myCurrency());
+      LOG.info(String.format("Player has %d Gold", playerInfo.myCurrency()));
       if(playerGold >= myGoldToHave){
         return WinState.WIN;
       }

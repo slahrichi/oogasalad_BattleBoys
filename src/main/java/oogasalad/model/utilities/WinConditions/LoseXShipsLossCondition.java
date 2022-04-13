@@ -3,10 +3,14 @@ package oogasalad.model.utilities.WinConditions;
 import java.util.function.Function;
 import oogasalad.model.players.PlayerRecord;
 import oogasalad.model.utilities.Board;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class LoseXShipsLossCondition extends WinCondition{
+public class LoseXShipsLossCondition extends WinCondition {
   //String myTypeToSink;
-  int myNumToSink;
+  private static final Logger LOG = LogManager.getLogger(HaveXGoldWinCondition.class);
+
+  private int myNumToSink;
 
   public LoseXShipsLossCondition(int numToSink) {
     myNumToSink = numToSink;
@@ -19,7 +23,7 @@ public class LoseXShipsLossCondition extends WinCondition{
     return (PlayerRecord playerInfo) -> {
       int boardState = 0;
       Board playerBoard = playerInfo.myBoard();
-      System.out.println("NumPieces Sunk = " + playerBoard.getNumPiecesSunk());
+      LOG.info("NumPieces Sunk = " + playerBoard.getNumPiecesSunk());
       if(playerBoard.getNumPiecesSunk()>=myNumToSink){
         return WinState.LOSE; //change this to whatever enum value represents "Win"
       }
