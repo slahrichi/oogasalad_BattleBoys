@@ -19,16 +19,18 @@ import org.apache.logging.log4j.Logger;
 
 public class Board {
 
-  private static final Logger LOG = LogManager.getLogger(GameView.class);
+  private static final Logger LOG = LogManager.getLogger(Board.class);
   private Map<Coordinate, CellInterface> boardMap;
   private CellState[][] myBoardSetup;
   private Map<String, Piece> myPieces;
   private ResourceBundle exceptions;
+  private ResourceBundle logMessages;
   private static AtomicInteger nextID = new AtomicInteger();
   private int id;
   //private static final Logger LOG = LogManager.getLogger(Board.class.getName());
   private static final String RESOURCES_PACKAGE = "/";
   private static final String EXCEPTIONS = "BoardExceptions";
+  private static final String BACKEND_MESSAGES = "BackendLogMessages";
   private static final String WRONG_TOP_LEFT = "wrongTopLeft";
   private static final String WRONG_NEIGHBOR = "wrongNeighbor";
   private int myRows;
@@ -47,6 +49,7 @@ public class Board {
     myNumShipsSunk = 0;
     initialize(boardSetup);
     exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
+    logMessages = ResourceBundle.getBundle(RESOURCES_PACKAGE+BACKEND_MESSAGES);
   }
 
 
@@ -78,6 +81,7 @@ public class Board {
    */
   public boolean placePiece(Coordinate topLeft, Piece piece){
     if (!hasValidPlacement(topLeft, piece)) {
+      LOG.info(logMessages.getString("failedPiecePlaceInfo"), topLeft.getRow(), topLeft.getColumn(), piece.getID());
       return false;
     }
     addPieceCellsToBoard(topLeft, piece);
@@ -87,7 +91,7 @@ public class Board {
   private void addPieceCellsToBoard(Coordinate topLeft, Piece piece) {
     piece.placeCellsAt(topLeft);
     myPieces.put(piece.getID(), piece); //can make this observer listener in future
-    System.out.println("Added piece " + piece.getID() + " to board");
+    LOG.info(String.format(logMessages.getString("successPiecePlaceInfo"), piece.getID(), topLeft.getRow(), topLeft.getColumn()));
     for(ShipCell c: piece.getCellList()) {
       place(c.getCoordinates(), c);
     }
@@ -138,6 +142,7 @@ public class Board {
       Piece currPiece = myPieces.get(key);
       currPiece.updateShipHP();
       if(currPiece.checkDeath()) {
+        LOG.info(String.format(logMessages.getString("pieceSunkInfo"), currPiece.getID()));
         myPieces.remove(key);
       }
     }
@@ -148,7 +153,6 @@ public class Board {
 
   public void addPiece(String id, Piece newPiece){
     myPieces.put(id, newPiece);
-    return;
   }
 
   public int getNumPiecesSunk() {

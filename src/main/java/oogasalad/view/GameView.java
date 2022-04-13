@@ -69,6 +69,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Label shotsRemainingLabel;
   private Label healthLabel;
   private Label goldLabel;
+  private PassComputerMessageView passComputerMessageView;
 
   private Scene myScene;
 
@@ -90,6 +91,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     createCenterPane();
     createRightPane();
     createTitlePanel();
+    createPassMessageView();
+  }
+
+  private void createPassMessageView() {
+    passComputerMessageView = new PassComputerMessageView();
+    passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
   }
 
   public void initializePiecesLeft(Collection<Collection<Coordinate>> piecesLeft) {
@@ -118,6 +125,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void createRightPane() {
     shopButton = new Button("Open Shop");
+    shopButton.setId("view-shop");
     shopButton.setFont(new Font(15));
     shopButton.setOnMouseClicked(e -> openShop());
 
@@ -164,14 +172,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void setupBoardButtons() {
     boardButtonBox = new HBox();
+    boardButtonBox.setId("board-button-box");
     boardButtonBox.setSpacing(20);
     boardButtonBox.setAlignment(Pos.CENTER);
 
     leftButton = new Button("<-");
+    leftButton.setId("left-button");
     leftButton.setFont(new Font(25));
     leftButton.setOnMouseClicked(e -> decrementBoardIndex());
 
     rightButton = new Button("->");
+    rightButton.setId("right-button");
     rightButton.setFont(new Font(25));
     rightButton.setOnMouseClicked(e -> incrementBoardIndex());
 
@@ -226,16 +237,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myTitle.changeTitle("Player " + (playerID+1) + "'s turn");
   }
 
-  public void switchPlayerMessage(String nextPlayer) {
-
-    Alert alert = new Alert(AlertType.INFORMATION,
-        "Pass the computer to the next player: " + nextPlayer + ". Proceed when the "
-            + "next player is ready.");
-    Node alertNode = alert.getDialogPane();
-    alertNode.setId("switchAlert");
-    alert.showAndWait();
-
-
+  private void switchPlayerMessage(String nextPlayer) {
+    passComputerMessageView.setPlayerName(nextPlayer);
+    myScene.setRoot(passComputerMessageView);
   }
 
   @Override
