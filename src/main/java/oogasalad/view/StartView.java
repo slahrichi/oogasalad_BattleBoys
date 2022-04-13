@@ -7,10 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,12 +17,10 @@ public class StartView {
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "startStylesheet.css";
-  private static final String BACKGROUND_IMAGE = "images/battleshipBackground.jpg";
   private static final String TITLE_IMAGE = "images/battleshipTitle.png";
 
   private Scene myScene;
   private BorderPane myPane;
-  private Background myBackground;
   private ImageView myTitle;
 
   public StartView(){
@@ -34,7 +28,6 @@ public class StartView {
     myPane = new BorderPane();
     myPane.setId("startPane");
 
-    setUpBackground();
     setUpTitle();
     setUpButtons();
 
@@ -50,16 +43,6 @@ public class StartView {
 
   }
 
-  private void setUpBackground(){
-
-    Image myImage = new Image(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + BACKGROUND_IMAGE).toString(), true);
-    BackgroundImage myBackgroundImage = new BackgroundImage(myImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-        BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-    myBackground = new Background(myBackgroundImage);
-    myPane.setBackground(myBackground);
-
-
-  }
 
   private void setUpTitle(){
 

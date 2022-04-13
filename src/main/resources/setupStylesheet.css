@@ -8,10 +8,6 @@
   -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
 }
 
-.button:hover{
-}
-
-
 
 #titleText{
   -fx-padding: 10;
