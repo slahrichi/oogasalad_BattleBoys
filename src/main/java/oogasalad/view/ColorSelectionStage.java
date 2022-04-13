@@ -2,7 +2,6 @@ package oogasalad.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -16,17 +15,15 @@ import javafx.stage.Stage;
 
 public class ColorSelectionStage extends BuilderStage{
   private BorderPane myPane = new BorderPane();
-  private ResourceBundle myBuilderResources ;
   private String[] optionList;
   private List<Color> colorList=new ArrayList<>();
   private List<ColorPicker> colorPickers=new ArrayList<>();
   private Stage myStage;
 
   public ColorSelectionStage(){
+    super();
     myStage =  new Stage();
-
-    myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
-    optionList= myBuilderResources.getString("possibleCellState").split(",");
+    optionList= getMyBuilderResources().getString("possibleCellState").split(",");
     myPane.setCenter(buildOptionDisplay());
     Button continueButton = new Button("Continue");
     continueButton.setOnAction(e->saveAndContinue());
@@ -64,6 +61,7 @@ public class ColorSelectionStage extends BuilderStage{
     }
     myStage.close();
     BoardSetUpStage bb = new BoardSetUpStage();
+    myStage.close();
   }
 
 }

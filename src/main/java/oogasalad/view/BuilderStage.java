@@ -1,20 +1,36 @@
 package oogasalad.view;
 
+import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.shape.Rectangle;
 
 public abstract class BuilderStage {
 
+  private ResourceBundle myBuilderResources ;
   public BuilderStage() {
+    myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
   }
-
-  protected void initializeBlankMap(int height, int width, int[][] stateMap) {
+  protected ResourceBundle getMyBuilderResources(){return myBuilderResources;}
+  protected int[][] initializeBlankMap(int height, int width) {
+    int[][] stateMap = new int[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        stateMap[i][j] = 1;
+        stateMap[i][j] = 0;
       }
     }
+    return stateMap;
   }
+
+  protected Button makeButton(String name, EventHandler<ActionEvent> handler){
+    Button result =  new Button(name);
+    result.setOnAction(handler);
+
+    return result;
+  }
+
 
   protected Group arrangeCells(int height, int width, double cellSize, int[][] stateMap) {
     Group cellGroup = new Group();

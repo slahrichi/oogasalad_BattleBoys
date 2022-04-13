@@ -38,6 +38,7 @@ public class BoardSetUpStage extends BuilderStage {
 
   private Consumer<Integer> widthChange;
   private Consumer<Integer> heightChange;
+  private Stage myStage;
 
   public BoardSetUpStage() {
     width = DEFAULT_DIMENSION;
@@ -49,14 +50,16 @@ public class BoardSetUpStage extends BuilderStage {
     widthChange = i -> setWidth(i);
     heightChange = i -> setHeight(i);
 
-    stateMap = new int[height][width];
-    initializeBlankMap(height, width, stateMap);
+    stateMap =  initializeBlankMap(height, width);
     drawGrid();
     myPane.setTop(makeInfoInput());
     myPane.setRight(displayColorChoice());
-    Stage t = new Stage();
-    t.setScene(getScene());
-    t.showAndWait();
+    Button continueButton = new Button("Continue");
+    continueButton.setOnAction(e->saveAndContinue());
+    myPane.setBottom(continueButton);
+     myStage= new Stage();
+    myStage.setScene(getScene());
+    myStage.show();
   }
 
   private void setWidth(int newWidth) {
@@ -101,8 +104,7 @@ public class BoardSetUpStage extends BuilderStage {
       try {
         changeConsumer.accept(Integer.valueOf(s));
 
-        stateMap = new int[height][width];
-        initializeBlankMap(height, width, stateMap);
+        stateMap = initializeBlankMap(height, width);
         drawGrid();
       } catch (NumberFormatException e) {
 
@@ -160,5 +162,7 @@ public class BoardSetUpStage extends BuilderStage {
 
   protected void saveAndContinue() {
     //write to file FIXME
+    myStage.close();
+    PieceDesignStage p=new PieceDesignStage();
   }
 }
