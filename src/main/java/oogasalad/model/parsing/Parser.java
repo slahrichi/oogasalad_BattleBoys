@@ -2,6 +2,7 @@ package oogasalad.model.parsing;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import oogasalad.PlayerData;
+import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -26,6 +28,13 @@ public class Parser {
 
 
   public Parser() {
+    exceptionMessageProperties = new Properties();
+    try {
+      InputStream is = new FileInputStream("src/main/resources/ParserExceptions.properties");
+      exceptionMessageProperties.load(is);
+      is.close();
+    } catch (IOException ignored) {
+    }
   }
 
   private final String PROPERTIES_PLAYER_LIST = "Players";
@@ -95,7 +104,7 @@ public class Parser {
    * @return a parser Player Data
    * @throws FileNotFoundException
    */
-  public PlayerData parse(String pathToFile){
+  public PlayerData parse(String pathToFile) throws ParserException {
     File file = new File(pathToFile);
     Properties props = new Properties();
     try {
@@ -104,39 +113,48 @@ public class Parser {
       is.close();
     } catch (IOException e) {
       if (e instanceof FileNotFoundException) {
-        //throw (FileNotFoundException) e;
+        throw new ParserException(exceptionMessageProperties.getProperty("badPath").formatted("properties",file.toString()));
       }
       e.printStackTrace();
     }
 
+    checkExtension(pathToFile, PROPERTIES_EXTENSION);
+    checkProperties(pathToFile, props);
+    for (String path:jsonPaths) {
+      checkExtension(props.getProperty(path), JSON_EXTENSION);
+    }
+
+
+    List<String> players;
+    CellState[][] cellBoard;
+    List<Piece> pieces;
+
     try {
-      checkExtension(pathToFile, PROPERTIES_EXTENSION);
-      checkProperties(pathToFile, props);
-      for (String path:jsonPaths) {
-        checkExtension(props.getProperty(path), JSON_EXTENSION);
-      }
+      players = loadPlayers(props);
+      cellBoard = loadBoard(props);
+      pieces = loadPieces(props);
+    } catch (JsonSyntaxException e) {
+      throw new ParserException(exceptionMessageProperties.getProperty("jsonError").formatted(pathToFile));
     }
-    catch(Exception e){
-      return null;
-    }
-
-
-
-
-    List<String> players = loadPlayers(props);
-    CellState[][] cellBoard = loadBoard(props);
-    List<Piece> pieces = loadPieces(props);
 
     return new PlayerData(players, pieces, cellBoard);
 
   }
 
-  private List<String> loadPlayers(Properties props) {
+  private List<String> loadPlayers(Properties props) throws ParserException {
     String[] playersData = props.getProperty(PROPERTIES_PLAYER_LIST).split(" ");
+    for(String player: playersData) {
+      try {
+        Class.forName("oogasalad.model.players." + player);
+      } catch (ClassNotFoundException e) {
+        throw new ParserException(exceptionMessageProperties.getProperty("badPlayer").formatted(player));
+      }
+
+    }
     return new ArrayList<>(Arrays.asList(playersData));
   }
 
-  private CellState[][] loadBoard(Properties props)  {
+  private CellState[][] loadBoard(Properties props) throws ParserException {
     String boardFile = props.getProperty(PROPERTIES_BOARD_FILE);
     Gson gson = new GsonBuilder().create();
     CellState[][] boardData;
@@ -146,7 +164,17 @@ public class Parser {
       e.printStackTrace();
       return null;
     }
+    checkAlignedBoard(boardData, boardFile);
     return boardData;
+  }
+
+  private void checkAlignedBoard(CellState[][] board, String path) throws ParserException {
+    int assumedLength = board[0].length;
+    for(int i = 1; i < board.length; i++) {
+      if(board[i].length != assumedLength) {
+        throw new ParserException(exceptionMessageProperties.getProperty("missingData").formatted(path,"Board"));
+      }
+    }
   }
 
   private List<Piece> loadPieces(Properties props) {

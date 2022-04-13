@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,33 +86,52 @@ public class ParserTest {
   void loadCorrectFileExtension(){
     String validPath = "src/test/resources/Test.properties";
     String invalidPath = "src/test/resources/Test.matt";
-    assertThrows(Exception.class, () -> parser.checkExtension(validPath, PROPERTIES_EXTENSION));
-    //assertTrue(parser.checkExtension(validPath, PROPERTIES_EXTENSION));
-    //assertFalse(parser.checkExtension(invalidPath, PROPERTIES_EXTENSION));
+    try {
+      parser.checkExtension(validPath, PROPERTIES_EXTENSION);
+    } catch(Exception e) {
+      fail(String.format("Exception thrown: %s",e.getMessage()));
+    }
+    assertThrows(Exception.class, () -> parser.checkExtension(invalidPath, PROPERTIES_EXTENSION));
   }
 
   @Test
-  void loadAll()  {
-    PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
-    assertEquals(examplePlayerData, generatedData);
+  void loadAll() {
+    try {
+      PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
+      assertEquals(examplePlayerData, generatedData);
+    } catch(Exception e) {
+      fail(String.format("Exception thrown: %s",e.getMessage()));
+    }
   }
 
   @Test
   void loadBoard()  {
-    PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
-    assertTrue(Arrays.deepEquals(examplePlayerData.board(), generatedData.board()));
+    try {
+      PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
+      assertTrue(Arrays.deepEquals(examplePlayerData.board(), generatedData.board()));
+    } catch(Exception e) {
+      fail(String.format("Exception thrown: %s",e.getMessage()));
+    }
   }
 
   @Test
   void loadPlayers()  {
-    PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
-    assertEquals(examplePlayerData.players(), generatedData.players());
+    try {
+      PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
+      assertEquals(examplePlayerData.players(), generatedData.players());
+    } catch(Exception e) {
+      fail(String.format("Exception thrown: %s",e.getMessage()));
+    }
   }
 
   @Test
   void loadPieces()  {
-    PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
-    assertEquals(examplePlayerData.pieces(), generatedData.pieces());
+    try {
+      PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
+      assertEquals(examplePlayerData.pieces(), generatedData.pieces());
+    } catch(Exception e) {
+      fail(String.format("Exception thrown: %s",e.getMessage()));
+    }
   }
 
   @Test
@@ -123,9 +144,7 @@ public class ParserTest {
   @Test
   void loadBadExtension() {
     String path = "src/test/resources/Test.xml";
-    String extension = path.substring(path.lastIndexOf(DOT) + 1);
-    ParserException thrown = assertThrows(ParserException.class, () -> parser.parse(path));
-    assertEquals(exceptionMessageProperties.getProperty("badExtension").formatted("properties",extension), thrown.getMessage());
+    assertThrows(ParserException.class, () -> parser.parse(path));
   }
 
   @Test
@@ -157,8 +176,9 @@ public class ParserTest {
   @Test
   void loadBoardWithMissingData() {
     String path = "src/test/resources/BoardWithMissingData.properties";
+    String jsonPath = "src/test/resources/BoardWithMissingData.json";
     ParserException thrown = assertThrows(ParserException.class, () -> parser.parse(path));
-    assertEquals(exceptionMessageProperties.getProperty("missingData").formatted(path,"Board"), thrown.getMessage());
+    assertEquals(exceptionMessageProperties.getProperty("missingData").formatted(jsonPath,"Board"), thrown.getMessage());
   }
 
   @Test
@@ -170,7 +190,7 @@ public class ParserTest {
 
   @Test
   void notEnoughKeys() {
-    String path = "src/tests/resources/MissingBoardfile.properties";
+    String path = "src/test/resources/MissingBoardFile.properties";
     ParserException thrown = assertThrows(ParserException.class, () -> parser.parse(path));
     assertEquals(exceptionMessageProperties.getProperty("missingArg").formatted("BoardFile"), thrown.getMessage());
   }
