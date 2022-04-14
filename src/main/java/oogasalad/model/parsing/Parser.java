@@ -204,7 +204,7 @@ public class Parser {
     }
   }
 
-  private List<Piece> loadPieces(Properties props) {
+  private List<Piece> loadPieces(Properties props) throws ParserException {
     String piecesFile = props.getProperty(PROPERTIES_PIECES_FILE);
     Gson gson = new GsonBuilder().registerTypeAdapter(Piece.class, new GSONHelper()).create();
 
@@ -214,6 +214,9 @@ public class Parser {
       ret = gson.fromJson(new FileReader(piecesFile), listOfMyClassObject);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
+    }
+    if (ret == null) {
+      throw new ParserException(exceptionMessageProperties.getProperty("missingData").formatted(piecesFile,"Pieces"));
     }
     return ret;
   }

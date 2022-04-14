@@ -188,8 +188,9 @@ public class ParserTest {
   @Test
   void loadPiecesWithMissingData() {
     String path = "src/test/resources/PiecesWithMissingData.properties";
+    String jsonPath = "src/test/resources/PiecesWithMissingData.json";
     ParserException thrown = assertThrows(ParserException.class, () -> parser.parse(path));
-    assertEquals(exceptionMessageProperties.getProperty("missingData").formatted(path,"Pieces"), thrown.getMessage());
+    assertEquals(exceptionMessageProperties.getProperty("missingData").formatted(jsonPath,"Pieces"), thrown.getMessage());
   }
 
   @Test
