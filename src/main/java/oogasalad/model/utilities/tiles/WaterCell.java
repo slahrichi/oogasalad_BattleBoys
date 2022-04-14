@@ -1,5 +1,6 @@
 package oogasalad.model.utilities.tiles;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import oogasalad.model.utilities.Coordinate;
@@ -27,7 +28,9 @@ public class WaterCell implements CellInterface {
 
   @Override
   public List<Modifiers> update() {
-    return null;
+    ArrayList<Modifiers> returnMods = new ArrayList<>();
+
+    return returnMods;
   }
 
   @Override
