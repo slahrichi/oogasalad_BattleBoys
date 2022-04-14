@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -47,6 +48,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String STYLESHEET = "viewStylesheet.css";
   private static final String CELLSTATE_RESOURCES_PATH = "/CellState";
   private static final String MARKER_RESOURCES_PATH = "/Markers";
+  private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
       CELLSTATE_RESOURCES_PATH);;
@@ -87,11 +89,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
     initializeFirstPlayerBoards(firstPlayerBoards);
-    initializePiecesLeft(coords);
     createCenterPane();
     createRightPane();
     createTitlePanel();
     createPassMessageView();
+    initializePiecesLeft(coords);
+
   }
 
   private void createPassMessageView() {
@@ -150,7 +153,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void setupLegendPane() {
     LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
     for(CellState state : CellState.values()) {
-      colorMap.put(state.name(), Color.valueOf(FILL_PREFIX + CELL_STATE_RESOURCES.getString(state.name())));
+      colorMap.put(state.name(), Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
     legendPane = new LegendPane(colorMap);
   }
@@ -211,7 +214,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
-    System.out.println("Current board index: "+currentBoardIndex);
+    LOG.info("Current board index: "+currentBoardIndex);
     currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board"
         : "Your Shots Against Player " + (myBoards.get(currentBoardIndex).getID() + 1));
     refreshCenterPane();
@@ -235,8 +238,16 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myScene.setRoot(passComputerMessageView);
   }
 
+  public int getCurrentBoardIndex() {
+    return currentBoardIndex;
+  }
+
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
+    int id = ((Info)evt.getNewValue()).ID();
+    int row = ((Info)evt.getNewValue()).row();
+    int col = ((Info)evt.getNewValue()).col();
+    LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
     notifyObserver(evt.getPropertyName(), evt.getNewValue());
   }
 

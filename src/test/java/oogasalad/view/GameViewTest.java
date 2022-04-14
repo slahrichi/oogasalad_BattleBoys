@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -36,6 +37,8 @@ public class GameViewTest extends DukeApplicationTest {
   private Button rightButton;
   private Polygon cell0;
   private Button shopButton;
+  private Label currentBoardLabel;
+  private GameView view;
 
   @Override
   public void start(Stage stage) {
@@ -81,13 +84,14 @@ public class GameViewTest extends DukeApplicationTest {
     for (Piece piece : pieces) {
       pieceCoords.add(piece.getRelativeCoords());
     }
-    GameView view = new GameView(firstPlayerBoards, pieceCoords);
+    view = new GameView(firstPlayerBoards, pieceCoords);
     stage.setScene(view.createScene());
     stage.show();
 
     cell0 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-0").query();
     rightButton = lookup("#view-pane #view-center-pane #board-button-box #right-button").query();
     shopButton = lookup("#view-pane #configBox #view-shop").query();
+    currentBoardLabel = lookup("#view-pane #view-center-pane #currentBoardLabel").query();
   }
 
   @Test
@@ -95,10 +99,13 @@ public class GameViewTest extends DukeApplicationTest {
     rightClickOn(rightButton);
     Polygon cell1 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-1").query();
     clickOn(cell1);
+    assertEquals(view.getCurrentBoardIndex(), 1);
   }
 
   @Test
-  public void testOpenShop() {
-    rightClickOn(shopButton);
+  public void testLabelText() {
+    assertEquals(currentBoardLabel.getText(), "Your Board");
+    rightClickOn(rightButton);
+    assertEquals(currentBoardLabel.getText(), "Your Shots Against Player 2");
   }
 }

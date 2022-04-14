@@ -22,9 +22,14 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.view.GameView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Game extends PropertyObservable implements PropertyChangeListener {
 
+  private static final Logger LOG = LogManager.getLogger(GameView.class);
+  private static final String START_GAME_LOG = "Game is starting";
   private static final String FILEPATH = "oogasalad.model.players.";
 
   private GameSetup setup;
@@ -79,7 +84,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    System.out.println("Start game");
+    LOG.info(START_GAME_LOG);
     //TODO: Change this to an instance of GameManager
     GameManager manager = new GameManager(data);
     myStage.setScene(manager.createScene());
