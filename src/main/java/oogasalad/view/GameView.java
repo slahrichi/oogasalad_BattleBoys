@@ -174,6 +174,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPane.setTop(myTitle);
   }
 
+
   private void setupBoardLabel() {
     currentBoardLabel = new Label("Your Board");
     currentBoardLabel.setId("currentBoardLabel");

@@ -36,7 +36,7 @@ public class Main extends Application {
         // Create List of Player objects
 
         Game game = new Game(stage);
-        game.showSetup();
+        game.showStart();
 
 //        StartView start = new StartView();
 //        stage.setScene(start.createScene());

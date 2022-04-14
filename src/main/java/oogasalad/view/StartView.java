@@ -45,7 +45,6 @@ public class StartView {
 
 
   private void setUpTitle(){
-
     Image myImage = new Image(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + TITLE_IMAGE).toString(), true);
     myTitle = new ImageView(myImage);
     myTitle.setPreserveRatio(true);
@@ -57,7 +56,6 @@ public class StartView {
     titleBox.setId("titleBox");
 
     myPane.setTop(titleBox);
-
   }
 
   private void setUpButtons(){
@@ -65,13 +63,17 @@ public class StartView {
 //    ButtonFactory startBtn = new ButtonFactory(150, 60, "Start", "mainMenuBtn", event -> notifyObserver());
 //    ButtonFactory loadBtn = new ButtonFactory(150, 60, "Load", "mainMenuBtn", event -> notifyObserver());
 //    ButtonFactory createBtn = new ButtonFactory(150, 60, "Create", "mainMenuBtn", event -> notifyObserver());
-//
-//    VBox buttonBox = new VBox();
-//    buttonBox.setSpacing(50);
-//    buttonBox.setId("buttonBox");
-//    buttonBox.getChildren().addAll(startBtn, loadBtn, createBtn);
-//
-//    myPane.setCenter(buttonBox);
+
+    Button startBtn = new Button("Start");
+    Button loadBtn = new Button("Load");
+    Button createBtn = new Button("Create");
+
+    VBox buttonBox = new VBox();
+    buttonBox.setSpacing(50);
+    buttonBox.setId("buttonBox");
+    buttonBox.getChildren().addAll(startBtn, loadBtn, createBtn);
+
+    myPane.setCenter(buttonBox);
 
   }
 
