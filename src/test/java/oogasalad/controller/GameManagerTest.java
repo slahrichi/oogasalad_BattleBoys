@@ -1,11 +1,12 @@
-package oogasalad.model.players;
+package oogasalad.controller;
 
 import java.util.ArrayList;
 import java.util.List;
 import oogasalad.GameData;
-import oogasalad.controller.GameManager;
+import oogasalad.model.players.AIPlayer;
+import oogasalad.model.players.HumanPlayer;
+import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
