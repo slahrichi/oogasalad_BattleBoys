@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.interfaces;
 
 /**
  * This interface represents classes that can open and close the shop.

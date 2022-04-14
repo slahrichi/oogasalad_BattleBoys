@@ -2,7 +2,6 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javafx.application.Platform;
@@ -25,6 +24,8 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
+import oogasalad.view.interfaces.BoardVisualizer;
+import oogasalad.view.interfaces.ErrorDisplayer;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;

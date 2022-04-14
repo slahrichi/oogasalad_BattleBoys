@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.interfaces;
 
 import java.util.Collection;
 import oogasalad.model.utilities.Coordinate;
