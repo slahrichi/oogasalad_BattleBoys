@@ -7,17 +7,16 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
-public class WaterCell implements CellInterface {
+public class WaterCell extends Cell implements CellInterface {
 
-  private Coordinate myCoordinate;
-  private CellState currentState = CellState.WATER;
-
-  public WaterCell(int row, int col){
-    myCoordinate = new Coordinate(row, col);
-  }
+  public static final CellState WATER_CELL_INTIAL_STATE = CellState.WATER;
+  public static final int WATER_HP_AMT = 1;
+  //private Coordinate myCoordinate;
+  //private CellState currentState = CellState.WATER;
 
   public WaterCell(Coordinate coord){
-    myCoordinate = coord;
+    super(coord, WATER_CELL_INTIAL_STATE, WATER_HP_AMT);
+    //myCoordinate = coord;
   }
 
 
@@ -27,15 +26,16 @@ public class WaterCell implements CellInterface {
   }
 
   @Override
+  public boolean canCarryObject() {
+    return true;
+  }
+
+  /*
+  @Override
   public List<Modifiers> update() {
     ArrayList<Modifiers> returnMods = new ArrayList<>();
 
     return returnMods;
-  }
-
-  @Override
-  public boolean canCarryObject() {
-    return true;
   }
 
   @Override
@@ -62,4 +62,6 @@ public class WaterCell implements CellInterface {
   public int getHealth() {
     return 1;
   }
+
+   */
 }
