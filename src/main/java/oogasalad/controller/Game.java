@@ -46,6 +46,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     try {
       playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
     } catch (ParserException e) {
+      System.out.println(e);
       playerData = null;
     }
 

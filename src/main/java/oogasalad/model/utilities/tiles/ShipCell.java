@@ -41,8 +41,9 @@ public class ShipCell implements CellInterface {
     currentState = CellState.SHIP_HEALTHY;
     myShip = parent.myShip;
   }
-//Use this only for testing purposes
-  public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String ID) {
+  // Use this only for testing purposes
+  // used to have String ID in constructor
+  public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String id) {
     myHealthBar = health;
     myGoldValue = goldValue;
     myModifiers.add(new GoldAdder(myGoldValue));

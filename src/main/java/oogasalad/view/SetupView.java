@@ -2,8 +2,8 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -97,7 +97,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     // FIXME: Move magic numbers to private static / resourcebundle
 
     configBox = new VBox();
-    legendPane = new LegendPane();
+    setupLegendPane();
     shipPane = new SetPiecePane(20);
     shipPane.setText("Current Ship");
 
@@ -106,6 +106,14 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane.setRight(configBox);
     configBox.getChildren().addAll(shipPane, legendPane);
 
+  }
+
+  private void setupLegendPane() {
+    LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
+    for(CellState state : CellState.values()) {
+      colorMap.put(state.name(), Color.valueOf(GameView.FILL_PREFIX + GameView.CELL_STATE_RESOURCES.getString(state.name())));
+    }
+    legendPane = new LegendPane(colorMap);
   }
 
   private void createConfirmButton() {

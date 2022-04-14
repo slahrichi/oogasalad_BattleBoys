@@ -11,7 +11,6 @@ open module oogasalad_app {
     requires java.scripting;
   requires jdk.jfr;
   // allow other classes to access listed packages in your project
-    exports oogasalad;
     exports oogasalad.controller;
   exports oogasalad.model.parsing;
 }
