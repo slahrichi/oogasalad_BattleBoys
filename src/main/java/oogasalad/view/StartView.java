@@ -59,16 +59,16 @@ public class StartView {
 
   private void setUpButtons(){
 
-    ButtonFactory startBtn = new ButtonFactory(150, 60, "Start", "mainMenuBtn", event -> notifyObserver());
-    ButtonFactory loadBtn = new ButtonFactory(150, 60, "Load", "mainMenuBtn", event -> notifyObserver());
-    ButtonFactory createBtn = new ButtonFactory(150, 60, "Create", "mainMenuBtn", event -> notifyObserver());
-
-    VBox buttonBox = new VBox();
-    buttonBox.setSpacing(50);
-    buttonBox.setId("buttonBox");
-    buttonBox.getChildren().addAll(startBtn, loadBtn, createBtn);
-
-    myPane.setCenter(buttonBox);
+//    ButtonFactory startBtn = new ButtonFactory(150, 60, "Start", "mainMenuBtn", event -> notifyObserver());
+//    ButtonFactory loadBtn = new ButtonFactory(150, 60, "Load", "mainMenuBtn", event -> notifyObserver());
+//    ButtonFactory createBtn = new ButtonFactory(150, 60, "Create", "mainMenuBtn", event -> notifyObserver());
+//
+//    VBox buttonBox = new VBox();
+//    buttonBox.setSpacing(50);
+//    buttonBox.setId("buttonBox");
+//    buttonBox.getChildren().addAll(startBtn, loadBtn, createBtn);
+//
+//    myPane.setCenter(buttonBox);
 
   }
 

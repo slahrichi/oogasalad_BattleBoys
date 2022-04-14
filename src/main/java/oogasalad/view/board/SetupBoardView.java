@@ -1,5 +1,7 @@
 package oogasalad.view.board;
 
+import static oogasalad.view.GameView.CELL_STATE_RESOURCES;
+
 import java.util.List;
 import javafx.scene.paint.Color;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -16,7 +18,7 @@ public class SetupBoardView extends BoardView {
       for (int col = 0; col < arrayLayout[0].length; col++) {
         List<Double> points = myBoardMaker.calculatePoints(row, col);
         CellView cell = new CellView(points, Color.valueOf(
-            myCellStateResources.getString(FILL_PREFIX + arrayLayout[row][col].name())), row,
+            CELL_STATE_RESOURCES.getString(FILL_PREFIX + arrayLayout[row][col].name())), row,
             col);
         if (arrayLayout[row][col] == CellState.WATER) {
           cell.addObserver(this);

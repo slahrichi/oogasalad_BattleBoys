@@ -31,4 +31,5 @@ public class MarkerBoard {
   public CellState[][] getBoard() {
     return myMarkerArray;
   }
+
 }

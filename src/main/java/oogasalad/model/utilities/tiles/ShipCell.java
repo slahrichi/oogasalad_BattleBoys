@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -29,19 +30,23 @@ public class ShipCell implements CellInterface {
     myRelativeCoordinate = relativeCoordinate;
     currentState = CellState.SHIP_HEALTHY;
     myShip = ship;
+    myModifiers.add(new GoldAdder(myGoldValue));
   }
 
   public ShipCell(ShipCell parent) {
     myHealthBar = parent.myHealthBar;
     myGoldValue = parent.myGoldValue;
+    myModifiers.add(new GoldAdder(myGoldValue));
     myRelativeCoordinate = parent.myRelativeCoordinate;
     currentState = CellState.SHIP_HEALTHY;
     myShip = parent.myShip;
   }
-//Use this only for testing purposes
-  public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String ID) {
+  // Use this only for testing purposes
+  // used to have String ID in constructor
+  public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String id) {
     myHealthBar = health;
     myGoldValue = goldValue;
+    myModifiers.add(new GoldAdder(myGoldValue));
     myRelativeCoordinate = relativeCoordinate;
     currentState = CellState.SHIP_HEALTHY;
   }
@@ -55,7 +60,7 @@ public class ShipCell implements CellInterface {
     myHealthBar --;
     if (myHealthBar <= 0) {
       currentState = CellState.SHIP_SUNKEN;
-//      myShip.registerDamage(this);
+      if(myShip!=null) myShip.registerDamage(this);
     } else {
       currentState = CellState.SHIP_DAMAGED;
 
@@ -85,7 +90,6 @@ public class ShipCell implements CellInterface {
       }
     }
     return returnMods;
-
   }
 
   public Coordinate getRelativeCoordinate(){
@@ -121,6 +125,21 @@ public class ShipCell implements CellInterface {
 
   public Piece getAssignedShip(){
     return myShip;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if(o == null) return false;
+    if(o == this) return true;
+    if(!(o instanceof ShipCell)) return false;
+    ShipCell other = (ShipCell)o;
+    //just need to check myCoordinate, currentState, and myModifiers
+    if(!(myCoordinate == null & other.myCoordinate == null))
+      if(!myCoordinate.equals(other.myCoordinate)) return false;
+    if(currentState != other.currentState) return false;
+    if(!myModifiers.containsAll(other.myModifiers)) return false;
+    return true;
+
   }
 
 }

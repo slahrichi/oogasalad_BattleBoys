@@ -37,6 +37,7 @@ public class Board {
   private int myCols;
   private int myCurrTurnGold;
   private int myNumShipsSunk;
+  private double scoreMultiplier;
 
 
 
@@ -108,7 +109,7 @@ public class Board {
   }
 
 
-  public void place(Coordinate c, CellInterface cell) {
+  private void place(Coordinate c, CellInterface cell) {
     boardMap.put(c, cell);
   }
 
@@ -151,9 +152,11 @@ public class Board {
     return hitState;
   }
 
+  /*
   public void addPiece(String id, Piece newPiece){
     myPieces.put(id, newPiece);
   }
+   */
 
   public int getNumPiecesSunk() {
     return myNumShipsSunk;
@@ -173,8 +176,6 @@ public class Board {
         }
       }
     }
-  return  retModifers;
+  return retModifers;
   }
-
-
 }

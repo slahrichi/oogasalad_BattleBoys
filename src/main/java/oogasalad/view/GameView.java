@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import javafx.geometry.Insets;
 import java.util.ResourceBundle;
@@ -13,8 +14,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -41,7 +42,6 @@ import oogasalad.view.panels.TitlePanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 public class GameView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer,
     ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
@@ -50,12 +50,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "viewStylesheet.css";
+  private static final String CELLSTATE_RESOURCES_PATH = "/CellState";
+  private static final String MARKER_RESOURCES_PATH = "/Markers";
+  private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
+
+  public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
+      CELLSTATE_RESOURCES_PATH);;
+  public static ResourceBundle MARKER_RESOURCES = ResourceBundle.getBundle(
+      MARKER_RESOURCES_PATH);
+  public static final String FILL_PREFIX = "FillColor_";
 
   private TitlePanel myTitle;
-  private ResourceBundle myCellStateResources;
-  private ResourceBundle myMarkerResources;
-  private static final String FILL_PREFIX = "FillColor_";
-
   private List<BoardView> myBoards;
   private List<Collection<Collection<Coordinate>>> myPiecesLeft;
   private BorderPane myPane;
@@ -78,10 +83,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private int currentBoardIndex;
 
-  public GameView(List<CellState[][]> firstPlayerBoards) {
-    myCellStateResources = ResourceBundle.getBundle("/CellState");
-    myMarkerResources = ResourceBundle.getBundle("/Markers");
-
+  public GameView(List<CellState[][]> firstPlayerBoards, Collection<Collection<Coordinate>> coords) {
     myPane = new BorderPane();
     myPane.setBackground(
         new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -95,6 +97,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     createRightPane();
     createTitlePanel();
     createPassMessageView();
+    initializePiecesLeft(coords);
+
   }
 
   private void createPassMessageView() {
@@ -120,7 +124,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
-    myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     myScene.getStylesheets()
         .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
     return myScene;
@@ -134,7 +137,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText("Ships Remaining");
-    legendPane = new LegendPane();
+    setupLegendPane();
     shotsRemainingLabel = new Label("Shots Remaining: 0");
     shotsRemainingLabel.setFont(new Font(25));
     healthLabel = new Label("Health: 0");
@@ -149,6 +152,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myRightPane.setAlignment(Pos.CENTER);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
+  }
+
+  private void setupLegendPane() {
+    LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
+    for(CellState state : CellState.values()) {
+      colorMap.put(state.name(), Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
+    }
+    legendPane = new LegendPane(colorMap);
   }
 
   private void createCenterPane() {
@@ -193,16 +204,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myCenterPane.getChildren().add(boardButtonBox);
   }
 
-  private void handleKeyInput(KeyCode code) {
-    if (code == KeyCode.LEFT) {
-      LOG.info("Left pressed");
-      decrementBoardIndex();
-    } else if (code == KeyCode.RIGHT) {
-      LOG.info("Right pressed");
-      incrementBoardIndex();
-    }
-  }
-
   // Decrements currentBoardIndex and updates the shown board
   private void decrementBoardIndex() {
     currentBoardIndex = (currentBoardIndex + myBoards.size() - 1) % myBoards.size();
@@ -217,7 +218,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
-    System.out.println("Current board index: "+currentBoardIndex);
+    LOG.info("Current board index: "+currentBoardIndex);
     currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board"
         : "Your Shots Against Player " + (myBoards.get(currentBoardIndex).getID() + 1));
     refreshCenterPane();
@@ -232,10 +233,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox);
   }
 
-  public void promptPlayTurn() {
-    System.out.println("Please play turn! Maybe we should show a player ID here!");
-  }
-
   private void updateTitle(int playerID) {
     myTitle.changeTitle("Player " + (playerID+1) + "'s turn");
   }
@@ -245,8 +242,16 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myScene.setRoot(passComputerMessageView);
   }
 
+  public int getCurrentBoardIndex() {
+    return currentBoardIndex;
+  }
+
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
+    int id = ((Info)evt.getNewValue()).ID();
+    int row = ((Info)evt.getNewValue()).row();
+    int col = ((Info)evt.getNewValue()).col();
+    LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
     notifyObserver(evt.getPropertyName(), evt.getNewValue());
   }
 
@@ -260,7 +265,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       CellState type) { //TODO: Change type to some enum
     for (Coordinate coord : coords) {
       myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
-          Color.valueOf(myCellStateResources.getString(FILL_PREFIX + type.name())));
+          Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
     }
   }
 
@@ -272,7 +277,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void removePiece(Collection<Coordinate> coords) {
     for (Coordinate coord : coords) {
       myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
-          Color.valueOf(myCellStateResources.getString(CellState.WATER.name())));
+          Color.valueOf(CELL_STATE_RESOURCES.getString(CellState.WATER.name())));
     }
   }
 
@@ -325,7 +330,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   @Override
   public void displayShotAt(int x, int y, CellState result) {
     myBoards.get(currentBoardIndex)
-        .setColorAt(x, y, Color.valueOf(myMarkerResources.getString(FILL_PREFIX + result.name())));
+        .setColorAt(x, y, Color.valueOf(MARKER_RESOURCES.getString(FILL_PREFIX + result.name())));
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
