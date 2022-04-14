@@ -1,5 +1,7 @@
 package oogasalad.controller;
 
+import static jdk.jfr.internal.consumer.EventLog.update;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.WinConditions.WinState;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
@@ -138,10 +141,24 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       CellState result = enemy.getBoard().hit(c);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
+      applyModifiers(currentPlayer, enemy);
       return true;
     }
     return false;
   }
+
+  private void applyModifiers(Player currPlayer, Player enemyPlayer){
+    ArrayList<Modifiers> mods = (ArrayList<Modifiers>) enemyPlayer.getBoard().update();
+    for(Modifiers mod :mods){
+      if(mod.getClass().getSimpleName().equals("PlayerModifier")){
+        Player[] players = {currPlayer, enemyPlayer};
+        try{
+          mod.modifierFunction().accept(players);
+        }catch(Exception e){}
+      }
+    }
+  }
+
 
   public void applyWinConditions() {
     for (WinCondition condition: winConditionsList) {

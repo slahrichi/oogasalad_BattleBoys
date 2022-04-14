@@ -19,7 +19,10 @@ public interface CellInterface {
 
    boolean canCarryObject();
 
+   //do we need this? Its a setter so you know how it be.
    void updateCoordinates(int row, int col);
+
+   void moveCoordinate(Coordinate amtToMove);
 
    Coordinate getCoordinates();
 
