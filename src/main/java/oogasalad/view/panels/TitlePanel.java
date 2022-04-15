@@ -4,7 +4,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import oogasalad.view.DynamicLabel;
 
 public class TitlePanel extends HBox {
 
@@ -26,6 +25,7 @@ public class TitlePanel extends HBox {
 
     this.setId("titleBox");
     this.getChildren().addAll(titleImage, titleText);
+
   }
 
 

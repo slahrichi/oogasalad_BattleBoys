@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.maker;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
