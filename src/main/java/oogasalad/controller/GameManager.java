@@ -13,6 +13,7 @@ import java.util.Set;
 import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
+import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
@@ -29,12 +30,12 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private List<Player> playerList;
   private List<WinCondition> winConditionsList;
   private Map<Integer, Player> idMap;
+  private Map<Player, DecisionEngine> engineMap;
   private GameView view;
   //current player, separate from ID
   private int playerIndex;
   private int numShots;
   private int allowedShots;
-  private int size;
 
   public GameManager(GameData data) {
     initialize(data);
@@ -75,11 +76,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void initialize(GameData data) {
     this.playerList = data.players();
     playerIndex = 0;
-    size = playerList.size();
     numShots = 0;
     allowedShots = 1;
     createIDMap();
     winConditionsList = data.winConditions();
+    engineMap = data.engineMap();
   }
 
   private void createIDMap() {
@@ -125,6 +126,15 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       playerIndex = (playerIndex + 1) % playerList.size();
       numShots = 0;
       sendUpdatedBoardsToView();
+      //handleAI();
+    }
+  }
+
+  private void handleAI() {
+    Player player = playerList.get(playerIndex);
+    if (engineMap.containsKey(player)) {
+      DecisionEngine engine = engineMap.get(player);
+      Coordinate move = engine.makeMove();
     }
   }
 
@@ -146,7 +156,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void applyModifiers(Player currPlayer, Player enemyPlayer){
-    ArrayList<Modifiers> mods = (ArrayList<Modifiers>) enemyPlayer.getBoard().update();
+    List<Modifiers> mods = enemyPlayer.getBoard().update();
     for(Modifiers mod :mods){
       if(mod.getClass().getSimpleName().equals("PlayerModifier")){
         Player[] players = {currPlayer, enemyPlayer};
