@@ -27,6 +27,7 @@ import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.interfaces.BoardVisualizer;
 import oogasalad.view.interfaces.ErrorDisplayer;
+import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.panes.LegendPane;
@@ -141,6 +142,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void createTitlePanel() {
     myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
+    myTitle.setId("setup-title");
     myPane.setTop(myTitle);
   }
 
