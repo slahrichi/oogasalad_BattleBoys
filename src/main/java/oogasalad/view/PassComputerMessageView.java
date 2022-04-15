@@ -1,5 +1,6 @@
 package oogasalad.view;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -37,7 +38,7 @@ public class PassComputerMessageView extends VBox {
     messageLabel.setText(PASS_MESSAGE + playerName);
   }
 
-  public void setButtonOnMouseClicked(EventHandler handler) {
-    confirmButton.setOnMouseClicked(handler);
+  public void setButtonOnMouseClicked(EventHandler<ActionEvent> handler) {
+    confirmButton.setOnAction(handler);
   }
 }

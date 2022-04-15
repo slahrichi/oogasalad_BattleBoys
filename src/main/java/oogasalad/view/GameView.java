@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -36,6 +35,7 @@ import oogasalad.view.interfaces.BoardVisualizer;
 import oogasalad.view.interfaces.GameDataVisualizer;
 import oogasalad.view.interfaces.ShopVisualizer;
 import oogasalad.view.interfaces.ShotVisualizer;
+import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import oogasalad.view.panels.TitlePanel;
@@ -49,13 +49,16 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "viewStylesheet.css";
-  private static final String CELLSTATE_RESOURCES_PATH = "/CellState";
+  private static final String DAY_STYLESHEET = "stylesheets/viewStylesheet.css";
+  private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
+  private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String MARKER_RESOURCES_PATH = "/Markers";
+  private static final String IMAGES_PATH = "/images";
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
 
+
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
-      CELLSTATE_RESOURCES_PATH);;
+      CELL_STATE_RESOURCES_PATH);;
   public static ResourceBundle MARKER_RESOURCES = ResourceBundle.getBundle(
       MARKER_RESOURCES_PATH);
   public static final String FILL_PREFIX = "FillColor_";
@@ -78,6 +81,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Label healthLabel;
   private Label goldLabel;
   private PassComputerMessageView passComputerMessageView;
+  private boolean nightMode;
 
   private Scene myScene;
 
@@ -88,6 +92,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPane.setBackground(
         new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     myPane.setId("view-pane");
+    nightMode = false;
 
     myBoards = new ArrayList<>();
     myPiecesLeft = new ArrayList<>();
@@ -125,15 +130,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.getStylesheets()
-        .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
+        .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     return myScene;
   }
 
   public void createRightPane() {
-    shopButton = new Button("Open Shop");
-    shopButton.setId("view-shop");
-    shopButton.setFont(new Font(15));
-    shopButton.setOnMouseClicked(e -> openShop());
+    shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
 
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText("Ships Remaining");
@@ -144,6 +146,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     healthLabel.setFont(new Font(25));
     goldLabel = new Label("Gold: 0");
     goldLabel.setFont(new Font(25));
+
 
     myRightPane = new VBox(shotsRemainingLabel, healthLabel, goldLabel, shopButton,
         piecesRemainingPane, legendPane);
@@ -190,15 +193,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     boardButtonBox.setSpacing(20);
     boardButtonBox.setAlignment(Pos.CENTER);
 
-    leftButton = new Button("<-");
-    leftButton.setId("left-button");
-    leftButton.setFont(new Font(25));
-    leftButton.setOnMouseClicked(e -> decrementBoardIndex());
+    leftButton = ButtonMaker.makeImageButton("left-button", e -> decrementBoardIndex(), IMAGES_PATH + "/arrow-left.png", 50, 50);
+    leftButton.getStyleClass().add("arrow-button");
 
-    rightButton = new Button("->");
-    rightButton.setId("right-button");
-    rightButton.setFont(new Font(25));
-    rightButton.setOnMouseClicked(e -> incrementBoardIndex());
+    rightButton = ButtonMaker.makeImageButton("right-button", e -> incrementBoardIndex(), IMAGES_PATH + "/arrow-right.png", 50, 50);
+    rightButton.getStyleClass().add("arrow-button");
 
     boardButtonBox.getChildren().addAll(leftButton, rightButton);
     myCenterPane.getChildren().add(boardButtonBox);
@@ -267,6 +266,21 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
           Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
     }
+  }
+
+  private void changeStylesheet(){
+    if(nightMode){
+      myScene.getStylesheets().clear();
+      myScene.getStylesheets()
+          .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET).toExternalForm());
+    }
+    else{
+      myScene.getStylesheets().clear();
+      myScene.getStylesheets()
+          .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
+    }
+
+
   }
 
   /**

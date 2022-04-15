@@ -5,15 +5,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import oogasalad.view.factory.ButtonFactory;
 
 public class StartView {
 
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "startStylesheet.css";
+  private static final String STYLESHEET = "stylesheets/startStylesheet.css";
   private static final String TITLE_IMAGE = "images/battleshipTitle.png";
 
   private Scene myScene;

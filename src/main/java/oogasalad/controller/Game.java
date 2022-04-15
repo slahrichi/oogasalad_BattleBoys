@@ -85,9 +85,9 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     LOG.info(START_GAME_LOG);
+    System.out.println(evt.getPropertyName());
     //TODO: Change this to an instance of GameManager
     GameManager manager = new GameManager(data);
     myStage.setScene(manager.createScene());
-//    manager.updateShipsLeft(pieceList);
   }
 }

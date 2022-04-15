@@ -27,6 +27,7 @@ import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.interfaces.BoardVisualizer;
 import oogasalad.view.interfaces.ErrorDisplayer;
+import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
@@ -38,7 +39,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final double SCREEN_HEIGHT = 800;
   private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "setupStylesheet.css";
+  private static final String STYLESHEET = "stylesheets/setupStylesheet.css";
 
 
   private BorderPane myPane;
@@ -113,17 +114,14 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private void setupLegendPane() {
     LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
     for(CellState state : CellState.values()) {
-      colorMap.put(state.name(), Color.valueOf(GameView.FILL_PREFIX + GameView.CELL_STATE_RESOURCES.getString(state.name())));
+      colorMap.put(state.name(), Color.valueOf(GameView.CELL_STATE_RESOURCES.getString(GameView.FILL_PREFIX + state.name())));
     }
     legendPane = new LegendPane(colorMap);
   }
 
   private void createConfirmButton() {
-    confirm = new Button("Confirm");
-    confirm.setPrefHeight(40);
-    confirm.setPrefWidth(80);
+    confirm = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), "Confirm");
     confirm.setDisable(true);
-    confirm.setOnAction(e -> handleConfirm());
   }
 
   private void handleConfirm() {
