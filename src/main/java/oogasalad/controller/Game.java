@@ -60,8 +60,8 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();
 
-    PlayerFactory pf = new PlayerFactory(notSoDummyBoard);
-    List<Player> players = pf.createPlayerList(stringPlayers);
+    PlayerFactoryRecord pr = PlayerFactory.initialize(notSoDummyBoard, stringPlayers);
+    List<Player> players = pr.playerList();
 
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
