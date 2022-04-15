@@ -60,7 +60,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     PlayerFactoryRecord pr = PlayerFactory.initializePlayers(notSoDummyBoard, stringPlayers,
         playerData.decisionEngines());
     List<Player> players = pr.playerList();
-    Map<Integer, DecisionEngine> engineMap = pr.engineMap();
+    Map<Player, DecisionEngine> engineMap = pr.engineMap();
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
     dummyWinConditions.add(new LoseXShipsLossCondition(1));

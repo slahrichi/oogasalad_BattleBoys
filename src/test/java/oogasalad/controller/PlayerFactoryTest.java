@@ -41,7 +41,7 @@ public class PlayerFactoryTest {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(board, playerTypes, difficulties);
     List<Player> playerList = pfr.playerList();
     assertEquals(playerList.size(), 3);
-    Map<Integer, DecisionEngine> map = pfr.engineMap();
+    Map<Player, DecisionEngine> map = pfr.engineMap();
     assertEquals(map.size(), 1);
     List<DecisionEngine> list = new ArrayList<>(map.values());
     assertEquals(list.get(0).getClass(), EasyDecisionEngine.class);

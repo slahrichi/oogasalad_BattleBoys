@@ -16,7 +16,7 @@ public class PlayerFactory {
 
   private static CellState[][] myBoard;
   private static int myRange;
-  private static Map<Integer, DecisionEngine> engineMap;
+  private static Map<Player, DecisionEngine> engineMap;
   private static List<String> myDifficulties;
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String AI_PLAYER = "AIPlayer";
@@ -73,7 +73,7 @@ public class PlayerFactory {
         DecisionEngine ds = (DecisionEngine) Class.forName(FILEPATH + difficulty + ENGINE)
             .getConstructor(List.class, Map.class).newInstance(
                 player.getBoard().listCoordinates(), enemyMap);
-        engineMap.put(id, ds);
+        engineMap.put(player, ds);
       }
       catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
           IllegalAccessException | NoSuchMethodException e) {

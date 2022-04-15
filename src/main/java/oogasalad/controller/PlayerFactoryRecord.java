@@ -5,4 +5,4 @@ import java.util.Map;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 
-public record PlayerFactoryRecord(List<Player> playerList, Map<Integer, DecisionEngine> engineMap){}
+public record PlayerFactoryRecord(List<Player> playerList, Map<Player, DecisionEngine> engineMap){}
