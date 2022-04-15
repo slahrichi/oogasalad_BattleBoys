@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.gameBuilder;
 
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;

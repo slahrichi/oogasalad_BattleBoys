@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.gameBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

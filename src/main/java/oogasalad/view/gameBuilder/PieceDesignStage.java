@@ -1,8 +1,7 @@
-package oogasalad.view;
+package oogasalad.view.gameBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
