@@ -153,7 +153,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     configPane.setOnAction(e -> changeStylesheet());
 
     myRightPane = BoxMaker.makeVBox("configBox", 20, Pos.CENTER, shotsRemainingLabel, healthLabel, goldLabel, shopButton,
-        piecesRemainingPane, legendPane);
+        piecesRemainingPane, legendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
   }
@@ -189,10 +189,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void setupBoardButtons() {
-    leftButton = ButtonMaker.makeImageButton("left-button", e -> decrementBoardIndex(), IMAGES_PATH + "/arrow-left.png", 50, 50);
+    leftButton = ButtonMaker.makeImageButton("left-button", e -> decrementBoardIndex(), IMAGES_PATH + "arrow-left.png", 50, 50);
     leftButton.getStyleClass().add("arrow-button");
 
-    rightButton = ButtonMaker.makeImageButton("right-button", e -> incrementBoardIndex(), IMAGES_PATH + "/arrow-right.png", 50, 50);
+    rightButton = ButtonMaker.makeImageButton("right-button", e -> incrementBoardIndex(), IMAGES_PATH + "arrow-right.png", 50, 50);
     rightButton.getStyleClass().add("arrow-button");
 
     boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER, leftButton, rightButton);
