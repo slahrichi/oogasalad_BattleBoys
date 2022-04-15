@@ -36,9 +36,12 @@ public class ButtonMaker {
    * @param image file name of image to appear on this Button
    * @return new Button
    */
-  public static Button makeImageButton(String id, EventHandler<ActionEvent> handler, String image) {
+  public static Button makeImageButton(String id, EventHandler<ActionEvent> handler, String image, double width, double height) {
     Button button = makeGenericButton(id, handler);
-    button.setGraphic(new ImageView(new Image(image)));
+    ImageView imageView = new ImageView(new Image(image));
+    imageView.setFitWidth(width);
+    imageView.setFitHeight(height);
+    button.setGraphic(imageView);
     return button;
   }
 

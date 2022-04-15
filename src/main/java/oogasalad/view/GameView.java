@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -32,6 +31,12 @@ import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
 import oogasalad.view.board.SelfBoardView;
+import oogasalad.view.interfaces.BoardVisualizer;
+import oogasalad.view.interfaces.GameDataVisualizer;
+import oogasalad.view.interfaces.ShopVisualizer;
+import oogasalad.view.interfaces.ShotVisualizer;
+import oogasalad.view.maker.ButtonMaker;
+import oogasalad.view.maker.LabelMaker;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import oogasalad.view.panels.TitlePanel;
@@ -45,13 +50,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "viewStylesheet.css";
-  private static final String CELLSTATE_RESOURCES_PATH = "/CellState";
+  private static final String DAY_STYLESHEET = "stylesheets/viewStylesheet.css";
+  private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
+  private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String MARKER_RESOURCES_PATH = "/Markers";
+  private static final String IMAGES_PATH = "/images";
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
+  private static final String CENTER_PANE_ID = "view-center-pane";
+
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
-      CELLSTATE_RESOURCES_PATH);;
+      CELL_STATE_RESOURCES_PATH);;
   public static ResourceBundle MARKER_RESOURCES = ResourceBundle.getBundle(
       MARKER_RESOURCES_PATH);
   public static final String FILL_PREFIX = "FillColor_";
@@ -70,10 +79,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
   private LegendPane legendPane;
-  private Label shotsRemainingLabel;
-  private Label healthLabel;
-  private Label goldLabel;
+  private DynamicLabel shotsRemainingLabel;
+  private DynamicLabel healthLabel;
+  private DynamicLabel goldLabel;
   private PassComputerMessageView passComputerMessageView;
+  private boolean nightMode;
 
   private Scene myScene;
 
@@ -84,6 +94,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPane.setBackground(
         new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     myPane.setId("view-pane");
+    nightMode = false;
 
     myBoards = new ArrayList<>();
     myPiecesLeft = new ArrayList<>();
@@ -121,31 +132,25 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.getStylesheets()
-        .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
+        .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     return myScene;
   }
 
   public void createRightPane() {
-    shopButton = new Button("Open Shop");
-    shopButton.setId("view-shop");
-    shopButton.setFont(new Font(15));
-    shopButton.setOnMouseClicked(e -> openShop());
+    shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
 
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText("Ships Remaining");
-    setupLegendPane();
-    shotsRemainingLabel = new Label("Shots Remaining: 0");
-    shotsRemainingLabel.setFont(new Font(25));
-    healthLabel = new Label("Health: 0");
-    healthLabel.setFont(new Font(25));
-    goldLabel = new Label("Gold: 0");
-    goldLabel.setFont(new Font(25));
 
-    myRightPane = new VBox(shotsRemainingLabel, healthLabel, goldLabel, shopButton,
+    setupLegendPane();
+
+    shotsRemainingLabel = LabelMaker.makeDynamicLabel("Shots Remaining: %s", "0", "shots-remaining-label");
+    healthLabel = LabelMaker.makeDynamicLabel("Health: %s", "0", "health-label");
+    goldLabel = LabelMaker.makeDynamicLabel("Gold: %s", "0", "gold-label");
+
+
+    myRightPane = BoxMaker.makeVBox("configBox", 20, Pos.CENTER, shotsRemainingLabel, healthLabel, goldLabel, shopButton,
         piecesRemainingPane, legendPane);
-    myRightPane.setId("configBox");
-    myRightPane.setSpacing(20);
-    myRightPane.setAlignment(Pos.CENTER);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
   }
@@ -159,13 +164,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createCenterPane() {
-    myCenterPane = new VBox();
-    myCenterPane.setId("view-center-pane");
-    myCenterPane.setSpacing(20);
-    myCenterPane.setAlignment(Pos.CENTER);
+    myCenterPane = BoxMaker.makeVBox(CENTER_PANE_ID, 20, Pos.CENTER, myBoards.get(currentBoardIndex).getBoardPane());
     myPane.setCenter(myCenterPane);
+
     setupBoardLabel();
-    myCenterPane.getChildren().add(myBoards.get(currentBoardIndex).getBoardPane());
     setupBoardButtons();
   }
 
@@ -176,28 +178,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
 
   private void setupBoardLabel() {
-    currentBoardLabel = new Label("Your Board");
+    currentBoardLabel = LabelMaker.makeLabel("Your Board", "board-label");
     currentBoardLabel.setId("currentBoardLabel");
     myCenterPane.getChildren().add(currentBoardLabel);
   }
 
   private void setupBoardButtons() {
-    boardButtonBox = new HBox();
-    boardButtonBox.setId("board-button-box");
-    boardButtonBox.setSpacing(20);
-    boardButtonBox.setAlignment(Pos.CENTER);
+    leftButton = ButtonMaker.makeImageButton("left-button", e -> decrementBoardIndex(), IMAGES_PATH + "/arrow-left.png", 50, 50);
+    leftButton.getStyleClass().add("arrow-button");
 
-    leftButton = new Button("<-");
-    leftButton.setId("left-button");
-    leftButton.setFont(new Font(25));
-    leftButton.setOnMouseClicked(e -> decrementBoardIndex());
+    rightButton = ButtonMaker.makeImageButton("right-button", e -> incrementBoardIndex(), IMAGES_PATH + "/arrow-right.png", 50, 50);
+    rightButton.getStyleClass().add("arrow-button");
 
-    rightButton = new Button("->");
-    rightButton.setId("right-button");
-    rightButton.setFont(new Font(25));
-    rightButton.setOnMouseClicked(e -> incrementBoardIndex());
+    boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER);
 
-    boardButtonBox.getChildren().addAll(leftButton, rightButton);
     myCenterPane.getChildren().add(boardButtonBox);
   }
 
@@ -266,6 +260,21 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
   }
 
+  private void changeStylesheet(){
+    if(nightMode){
+      myScene.getStylesheets().clear();
+      myScene.getStylesheets()
+          .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET).toExternalForm());
+    }
+    else{
+      myScene.getStylesheets().clear();
+      myScene.getStylesheets()
+          .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
+    }
+
+
+  }
+
   /**
    * Removes any Pieces that are at the coordinates contained in coords.
    *
@@ -286,25 +295,55 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     LOG.info("Player "+(id+1)+" Lost!");
   }
 
+  /**
+   * Updates the user's side-view to show which of the opponent's ships are still alive.
+   *
+   * @param pieceCoords Coordinates of Piece objects owned by the opponent that are still alive.
+   */
   @Override
   public void updatePiecesLeft(Collection<Collection<Coordinate>> pieceCoords) {
     myPiecesLeft.set(currentBoardIndex, pieceCoords);
     piecesRemainingPane.updateShownPieces(pieceCoords);
   }
 
+  /**
+   * Updates the text that shows the user how many shots they have left in their turn.
+   *
+   * @param shotsRemaining number of shots the user has left in their turn
+   */
   @Override
   public void setNumShotsRemaining(int shotsRemaining) {
-    shotsRemainingLabel.setText("Shots Remaining: " + shotsRemaining);
+    shotsRemainingLabel.changeDynamicText(String.valueOf(shotsRemaining));
   }
 
+  /**
+   * Updates the text that shows the user how much gold they currently have.
+   *
+   * @param amountOfGold gold that user has
+   */
   @Override
   public void setGold(int amountOfGold) {
-    goldLabel.setText("Gold: " + amountOfGold);
+    goldLabel.changeDynamicText(String.valueOf(amountOfGold));
   }
 
-  @Override
-  public void setPlayerTurnIndicator(String playerName) {
+//  /**
+//   * Updates the text that shows the user whose turn it currently is.
+//   *
+//   * @param playerName name or ID of player whose turn it is
+//   */
+//  @Override
+//  public void setPlayerTurnIndicator(String playerName) {
+//
+//  }
 
+  /**
+   * Updates the text that shows how much health the current player has left.
+   *
+   * @param healthRemaining amount of health points remaiing
+   */
+  @Override
+  public void setHealthRemaining(int healthRemaining) {
+    healthLabel.changeDynamicText(String.valueOf(healthRemaining));
   }
 
   @Override

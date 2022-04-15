@@ -1,15 +1,11 @@
-.button{
-  -fx-font-size: 12pt;
-  -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
-}
-
 .label{
   -fx-font-family: "Segoe UI Semibold";
   -fx-font-size: 14pt;
 }
 
-#view-pane {
-  -fx-background-color: white;
+.button{
+  -fx-font-size: 12pt;
+  -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
 }
 
 
@@ -38,14 +34,14 @@
   -fx-padding: 10;
 }
 
-#currentBoardLabel {
-  -fx-font-size: 20pt;
+#shipBox {
+  -fx-pref-height: 200;
+}
+
+#shipLabel {
   -fx-alignment: center;
 }
 
-#arrow-button{
-
+#confirm-button{
 
 }
-
-

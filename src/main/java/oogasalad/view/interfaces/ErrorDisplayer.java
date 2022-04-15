@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.interfaces;
 
 /**
  * Purpose: This class provides API to display error messages, should be implemented by the

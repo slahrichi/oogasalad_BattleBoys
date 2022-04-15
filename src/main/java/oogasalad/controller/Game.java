@@ -53,10 +53,10 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     try {
       playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
     } catch (ParserException e) {
-      System.out.println(e);
+      LOG.error(e);
       playerData = null;
     }
-
+    LOG.info(playerData);
     stringPlayers = playerData.players();
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();
@@ -86,7 +86,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    //TODO: Change this to an instance of GameManager
+    LOG.info(START_GAME_LOG);
     GameManager manager = new GameManager(data);
     myStage.setScene(manager.createScene());
   }

@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.interfaces;
 
 import java.util.Collection;
 import oogasalad.model.utilities.Coordinate;
@@ -15,29 +15,40 @@ public interface GameDataVisualizer {
   /**
    * Updates the user's side-view to show which of the opponent's ships are still alive.
    *
-   * @param pieces Piece objects owned by the opponent that are still alive.
+   * @param pieceCoords Coordinates of Piece objects owned by the opponent that are still alive.
    */
-  public void updatePiecesLeft(Collection<Collection<Coordinate>> pieces);
+  void updatePiecesLeft(Collection<Collection<Coordinate>> pieceCoords);
 
   /**
    * Updates the text that shows the user how many shots they have left in their turn.
    *
    * @param shotsRemaining number of shots the user has left in their turn
    */
-  public void setNumShotsRemaining(int shotsRemaining);
+  void setNumShotsRemaining(int shotsRemaining);
 
   /**
    * Updates the text that shows the user how much gold they currently have.
    *
    * @param amountOfGold gold that user has
    */
-  public void setGold(int amountOfGold);
+  void setGold(int amountOfGold);
+
+//  /**
+//   * Updates the text that shows the user whose turn it currently is.
+//   *
+//   * @param playerName name or ID of player whose turn it is
+//   */
+//  void setPlayerTurnIndicator(String playerName);
 
   /**
-   * Updates the text that shows the user whose turn it currently is.
+   * Updates the text that shows how much health the current player has left.
    *
-   * @param playerName name or ID of player whose turn it is
+   * @param healthRemaining amount of health points remaiing
    */
-  public void setPlayerTurnIndicator(String playerName);
+  void setHealthRemaining(int healthRemaining);
+
+
+
+
 
 }

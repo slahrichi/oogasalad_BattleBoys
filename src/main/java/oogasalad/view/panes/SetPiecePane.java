@@ -9,7 +9,9 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.view.BoxMaker;
 import oogasalad.view.ShipIndicatorView;
+import oogasalad.view.maker.LabelMaker;
 
 // need to hold the ship list as well as create the ships to display
 
@@ -23,13 +25,11 @@ public class SetPiecePane extends TitledPane {
   public SetPiecePane(double size) {
     myShipSize = size;
     shipViews = new ArrayList<>();
-    shipIndicatorsBox = new VBox();
-    shipIndicatorsBox.setAlignment(Pos.CENTER);
-    shipIndicatorsBox.setSpacing(20);
-    shipIndicatorsBox.setId("shipBox");
+    shipIndicatorsBox = BoxMaker.makeVBox("shipBox", 20, Pos.CENTER);
 //    shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
     setUpPane();
   }
+
 
 
   private void setUpPane() {
@@ -54,8 +54,7 @@ public class SetPiecePane extends TitledPane {
 
   public void showListCompletion() {
     shipIndicatorsBox.getChildren().clear();
-    Label shipsPlaced = new Label("All ships placed. Press confirm to move on.");
-    shipsPlaced.setId("shipLabel");
+    Label shipsPlaced = LabelMaker.makeLabel("All ships placed. Press confirm to move on.", "all-ships-placed-label");
     shipsPlaced.setMaxWidth(200);
     shipsPlaced.setWrapText(true);
     shipIndicatorsBox.getChildren().add(shipsPlaced);

@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import oogasalad.view.maker.LabelMaker;
 
 public class BoardSetUpStage extends BuilderStage {
 
@@ -83,8 +84,8 @@ public class BoardSetUpStage extends BuilderStage {
     HBox result = new HBox();
     widthInput = makeTextArea();
     heightInput = makeTextArea();
-    Label widthLabel = new Label("Width");
-    Label heightLabel = new Label("Height");
+    Label widthLabel = LabelMaker.makeLabel("Width", "width-label");
+    Label heightLabel = LabelMaker.makeLabel("Height", "height-label");
     result.getChildren()
         .addAll(widthLabel, widthInput, heightLabel, heightInput, setDimensionButton());
     return result;

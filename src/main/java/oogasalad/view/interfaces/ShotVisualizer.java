@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.interfaces;
 
 import oogasalad.model.utilities.tiles.enums.CellState;
 
