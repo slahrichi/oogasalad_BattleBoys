@@ -78,7 +78,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private VBox myRightPane;
   private Button shopButton;
-  private Button nightButton;
   private SetPiecePane piecesRemainingPane;
   private LegendPane legendPane;
   private ConfigPane configPane;
@@ -100,13 +99,13 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myBoards = new ArrayList<>();
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
+
     initializeFirstPlayerBoards(firstPlayerBoards);
     createCenterPane();
     createRightPane();
     createTitlePanel();
     createPassMessageView();
     initializePiecesLeft(coords);
-
   }
 
   private void createPassMessageView() {
@@ -168,10 +167,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createCenterPane() {
-    myCenterPane = BoxMaker.makeVBox(CENTER_PANE_ID, 20, Pos.CENTER, myBoards.get(currentBoardIndex).getBoardPane());
+    myCenterPane = BoxMaker.makeVBox(CENTER_PANE_ID, 20, Pos.CENTER);
     myPane.setCenter(myCenterPane);
 
     setupBoardLabel();
+    myCenterPane.getChildren().add(myBoards.get(currentBoardIndex).getBoardPane());
     setupBoardButtons();
   }
 
