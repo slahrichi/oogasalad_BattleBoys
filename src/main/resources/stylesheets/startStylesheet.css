@@ -1,0 +1,27 @@
+.button{
+  -fx-font-size: 12pt;
+  -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+}
+
+.button:hover {background-color: #3e8e41}
+
+
+#titleBox{
+  -fx-alignment: center;
+  -fx-padding: 10;
+}
+
+#buttonBox{
+  -fx-alignment: center;
+}
+
+#startPane{
+  -fx-background-image: url("https://ips4-wowslegends-global.gcdn.co/monthly_2021_06/Georgia_US_T7_BB_Promoslides_Update-3-4_1920x1080_WG_SPb_WoWSL.jpg.5ab4186047f66be030b5a25047760f1c.jpg");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: 1200 900;
+  -fx-background-position: center center;
+}
+
+
+
+

@@ -2,11 +2,8 @@ package oogasalad.view.board;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import java.util.ResourceBundle;
 import javafx.scene.Group;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.PropertyObservable;
@@ -15,22 +12,22 @@ import oogasalad.view.CellView;
 import oogasalad.view.Info;
 
 public abstract class BoardView extends PropertyObservable implements PropertyChangeListener {
+  private static final String BOARD_ID = "board-view";
+  private static final String BASE_ID = "board-view-base";
+  private static final String ERROR_MESSAGE = "Row %d and column %d out of bounds";
+  private static final String BOARD_CLICKED_METHOD_NAME = "boardClicked";
+  private static final String CELL_ID = "cell-view-%d-%d-%d";
 
   protected CellView[][] myLayout;
   private StackPane myBoard;
   private Group myBase;
   private int myID;
   protected BoardMaker myBoardMaker;
-  protected ResourceBundle myCellStateResources;
-  protected ResourceBundle myMarkerResources;
   protected static String FILL_PREFIX = "FillColor_";
 
   // controller passes some kind of parameter to the
   public BoardView(double size, CellState[][] arrayLayout, int id) {
     myBoardMaker = new BoardMaker(size);
-    myCellStateResources = ResourceBundle.getBundle("/CellState");
-    myMarkerResources = ResourceBundle.getBundle("/Markers");
-
     myID = id;
     setupBoard(arrayLayout);
   }
@@ -38,9 +35,9 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private void setupBoard(CellState[][] arrayLayout) {
     myLayout = new CellView[arrayLayout.length][arrayLayout[0].length];
     myBoard = new StackPane();
-    myBoard.setId("board-view");
+    myBoard.setId(BOARD_ID);
     myBase = new Group();
-    myBase.setId("board-view-base");
+    myBase.setId(BASE_ID);
     initializeCellViews(arrayLayout);
     initializeBoardNodes();
   }
@@ -55,25 +52,16 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
    */
   public void setColorAt(int row, int col, Paint color) {
     if(!(row < myLayout.length && col < myLayout[0].length)) {
-      throw new IllegalArgumentException("Row " + row + " and column " + col + " out of bounds");
+      throw new IllegalArgumentException(String.format(ERROR_MESSAGE, row, col));
     }
     myLayout[row][col].getCell().setFill(color);
   }
-
-//  public void clear() {
-//    for (int i = 0; i < myLayout.length; i++) {
-//      for (int j = 0; j < myLayout[0].length; j++) {
-//        if (myLayout[i][j].
-//        myLayout[i][j].getCell().setFill(Color.valueOf(myCellStateResources.getString(FILL_PREFIX+CellState.WATER.name())));
-//      }
-//    }
-//  }
 
   private void initializeBoardNodes() {
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {
         if (myLayout[i][j] != null) {
-          myLayout[i][j].getCell().setId("cell-view-"+i+"-"+j+"-"+myID);
+          myLayout[i][j].getCell().setId(String.format(CELL_ID, i, j, myID));
           myBase.getChildren().add(myLayout[i][j].getCell());
         }
       }
@@ -91,7 +79,6 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-//    System.out.println(evt.getPropertyName());
-    notifyObserver("boardClicked", new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
+    notifyObserver(BOARD_CLICKED_METHOD_NAME, new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
   }
 }

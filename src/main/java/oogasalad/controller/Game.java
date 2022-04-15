@@ -22,11 +22,18 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.view.GameView;
+import oogasalad.view.StartView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Game extends PropertyObservable implements PropertyChangeListener {
 
+  private static final Logger LOG = LogManager.getLogger(GameView.class);
+  private static final String START_GAME_LOG = "Game is starting";
   private static final String FILEPATH = "oogasalad.model.players.";
 
+  private StartView myStart;
   private GameSetup setup;
   private GameManager manager;
   private Stage myStage;
@@ -46,9 +53,9 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     try {
       playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
     } catch (ParserException e) {
+      LOG.error(e);
       playerData = null;
     }
-
     stringPlayers = playerData.players();
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();
@@ -71,17 +78,15 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     return fileChooser.getFile();
   }
 
-  public void showSetup() {
+  public void showStart() {
     myStage.setScene(setup.createScene());
     myStage.show();
   }
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    System.out.println("Start game");
-    //TODO: Change this to an instance of GameManager
+    LOG.info(START_GAME_LOG);
     GameManager manager = new GameManager(data);
     myStage.setScene(manager.createScene());
-//    manager.updateShipsLeft(pieceList);
   }
 }

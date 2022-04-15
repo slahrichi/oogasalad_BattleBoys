@@ -2,8 +2,8 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -25,6 +25,10 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
+import oogasalad.view.interfaces.BoardVisualizer;
+import oogasalad.view.interfaces.ErrorDisplayer;
+import oogasalad.view.maker.BoxMaker;
+import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
@@ -36,11 +40,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final double SCREEN_HEIGHT = 800;
   private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "setupStylesheet.css";
+  private static final String STYLESHEET = "stylesheets/setupStylesheet.css";
 
 
   private BorderPane myPane;
-  private Button confirm;
+  private Button confirmButton;
   private VBox centerBox;
   private StackPane myCenterPane;
   private BoardView setupBoard;
@@ -57,7 +61,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane = new BorderPane();
     myPane.setBackground(
         new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-
+    myPane.setId("setup-view-pane");
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     currentPlayer = 1;
@@ -75,7 +79,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void activateConfirm() {
-    confirm.setDisable(false);
+    confirmButton.setDisable(false);
   }
 
   public void displayCompletion() {
@@ -96,56 +100,55 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private void createConfigPanel() {
     // FIXME: Move magic numbers to private static / resourcebundle
 
-    configBox = new VBox();
-    legendPane = new LegendPane();
+    setupLegendPane();
     shipPane = new SetPiecePane(20);
     shipPane.setText("Current Ship");
 
-    configBox.setId("configBox");
+    configBox = BoxMaker.makeVBox("configBox", 20, Pos.CENTER, shipPane, legendPane);
     configBox.setMinWidth(300);
     myPane.setRight(configBox);
-    configBox.getChildren().addAll(shipPane, legendPane);
+  }
 
+  private void setupLegendPane() {
+    LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
+    for(CellState state : CellState.values()) {
+      colorMap.put(state.name(), Color.valueOf(GameView.CELL_STATE_RESOURCES.getString(GameView.FILL_PREFIX + state.name())));
+    }
+    legendPane = new LegendPane(colorMap);
   }
 
   private void createConfirmButton() {
-    confirm = new Button("Confirm");
-    confirm.setPrefHeight(40);
-    confirm.setPrefWidth(80);
-    confirm.setDisable(true);
-    confirm.setOnAction(e -> handleConfirm());
+    confirmButton = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), "Confirm");
+    confirmButton.setDisable(true);
   }
 
   private void handleConfirm() {
     setCurrentPlayerNum();
     switchPlayerMessage(String.valueOf(currentPlayer));
     clearBoard();
-    confirm.setDisable(true);
+    confirmButton.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
   }
 
   private void createCenterPanel() {
-    myCenterPane = new StackPane();
-    centerBox = new VBox();
-
-    centerBox.getChildren().addAll(myCenterPane, confirm);
-    centerBox.setAlignment(Pos.CENTER);
-    centerBox.setSpacing(20);
-    myPane.setCenter(centerBox);
-
-    myCenterPane.setId("boardBox");
     setupBoard.addObserver(this);
-    myCenterPane.getChildren().addAll(setupBoard.getBoardPane());
+
+    myCenterPane = new StackPane();
+    myCenterPane.setId("boardBox");
+    centerBox = BoxMaker.makeVBox("setup-center-box", 20, Pos.CENTER, myCenterPane, confirmButton);
+    myPane.setCenter(centerBox);
+    myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }
 
   private void createTitlePanel() {
     myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
+    myTitle.setId("setup-title");
     myPane.setTop(myTitle);
   }
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    if (confirm.isDisabled()) {
+    if (confirmButton.isDisabled()) {
       Info info = (Info) evt.getNewValue();
       notifyObserver("placePiece", new Coordinate(info.row(), info.col()));
     }

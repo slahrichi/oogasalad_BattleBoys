@@ -46,8 +46,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void setupViewElements(GameData data) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards);
-    view.initializePiecesLeft(coords);
+    view = new GameView(boards, coords);
     this.view.addObserver(this);
   }
 

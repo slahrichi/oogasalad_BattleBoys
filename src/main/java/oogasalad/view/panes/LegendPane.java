@@ -1,92 +1,92 @@
 package oogasalad.view.panes;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 
+public class LegendPane extends TitledPane {
 
-public class LegendPane extends TitledPane{
-
+  private ScrollPane myScroller;
   private GridPane myGrid;
-  private ResourceBundle myCellStateResources;
-  private HashMap<String, Color> keyPairs;
-
+  private LinkedHashMap<String, Color> colorMap;
 
   private static final int PANE_PADDING = 10;
   private static final int PANE_GAP = PANE_PADDING / 2;
 
 
-  public LegendPane(){
+  public LegendPane(LinkedHashMap<String, Color> colors){
+    colorMap = colors;
 
-    myCellStateResources = ResourceBundle.getBundle("/CellState");
-
-    setUpHashMap();
     setUpGrid();
     setUpPane();
-
   }
 
   private void setUpGrid(){
-
     myGrid = new GridPane();
     myGrid.setPadding(new Insets(PANE_PADDING));
     myGrid.setHgap(PANE_GAP);
     myGrid.setVgap(PANE_GAP);
 
+    myScroller = new ScrollPane();
+    myScroller.setContent(myGrid);
 
-    int index = 0;
-    for(String key : keyPairs.keySet()){
+    String[] orderedKeys = colorMap.keySet().toArray(new String[0]);
 
-      myGrid.add(new LegendLabel(key, keyPairs.get(key)), 0, index);
-      index++;
-
+    for (int i = 0; i < orderedKeys.length; i++) {
+      myGrid.add(new LegendElement(orderedKeys[i], colorMap.get(orderedKeys[i])), 0, i);
     }
-
-//
-//    myGrid.add(new LegendLabel("Ship", Color.BLACK), 0, 0);
-//    myGrid.add(new Label("     "), 1, 0);
-//    myGrid.add(new LegendLabel("Water", Color.BLUE), 2, 0);
-//    myGrid.add(new LegendLabel("Sunk Ship", Color.RED), 0, 1);
-//    myGrid.add(new Label("     "), 1, 1);
-//    myGrid.add(new LegendLabel("Hit Ship", Color.ORANGE), 2, 1);
-
   }
 
   private void setUpPane(){
 
     this.setId("legendPane");
-    this.setText("Legend Key");
-    this.setContent(myGrid);
+    this.setText("Piece Legend");
+    this.setContent(myScroller);
     this.setExpanded(false);
-    this.setMinHeight(250);
+    this.setMaxHeight(150);
 
   }
 
-  // thinking ahead of when we're passed the list of user chosen colors
+  // This class represents one cell in the legend, consisting of a rectangle with a color and then a label that
+  // says what that color represents
+  private class LegendElement extends HBox {
 
-  private void setUpHashMap(){
+    private Color myColor;
+    private String myName;
 
-    keyPairs = new HashMap<>();
+    // Class constructor
+    private LegendElement(String labelName, Color color) {
+      myColor = color;
+      myName = labelName;
 
+      createColorIndicator();
+      setUpLabel();
+    }
 
-    keyPairs.put("Ship", Color.BLACK);
-    keyPairs.put("Water", Color.BLUE);
-    keyPairs.put("Ship Sunk", Color.RED);
-    keyPairs.put("Ship Hit", Color.ORANGE);
-    keyPairs.put("Missed Shot", Color.YELLOW);
-    keyPairs.put("Island Damaged", Color.GREEN);
-    keyPairs.put("Island Sunk", Color.PURPLE);
+    // Creates rectangle of the specified color
+    private void createColorIndicator() {
+      Rectangle legendColor = new Rectangle();
+      legendColor.setWidth(30);
+      legendColor.setHeight(30);
+      legendColor.setFill(myColor);
 
+      this.getChildren().add(legendColor);
+    }
 
+    // Creates label for colored rectangle and places it to the right of the rectangle
+    private void setUpLabel() {
+      Label name = new Label("   " + myName);
+      this.getChildren().add(name);
+    }
   }
-
-
-
-
-
-
 }
