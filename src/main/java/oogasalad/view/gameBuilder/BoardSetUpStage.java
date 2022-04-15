@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.gameBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import oogasalad.view.maker.LabelMaker;
 
@@ -24,7 +22,8 @@ public class BoardSetUpStage extends BuilderStage {
   private static final int DEFAULT_DIMENSION = 10;
   private static final int DEFAULT_INPUT_BOX_WIDTH = 60;
   private static final int DEFAULT_INPUT_BOX_HEIGHT = 20;
-  private double cellSize = 50;
+  private double MAX_GRID_WIDTH = 400;
+  private double MAX_GRID_HEIGHT = 400;
 
 
   private BorderPane myPane = new BorderPane();
@@ -51,14 +50,12 @@ public class BoardSetUpStage extends BuilderStage {
     widthChange = i -> setWidth(i);
     heightChange = i -> setHeight(i);
 
-    stateMap =  initializeBlankMap(height, width);
+    stateMap = initializeBlankMap(height, width);
     drawGrid();
     myPane.setTop(makeInfoInput());
-    myPane.setRight(displayColorChoice());
-    Button continueButton = new Button("Continue");
-    continueButton.setOnAction(e->saveAndContinue());
-    myPane.setBottom(continueButton);
-     myStage= new Stage();
+    myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
+    myPane.setBottom(makeContinueButton());
+    myStage = new Stage();
     myStage.setScene(getScene());
     myStage.show();
   }
@@ -73,11 +70,12 @@ public class BoardSetUpStage extends BuilderStage {
 
   private void drawGrid() {
     myPane.setCenter(null);
-    myPane.setCenter(arrangeCells(height, width, cellSize, stateMap));
+    myPane.setCenter(
+        arrangeCells(height, width, MAX_GRID_HEIGHT / height, MAX_GRID_WIDTH / width, stateMap));
   }
 
   public Scene getScene() {
-    return new Scene(myPane, 1100, 500);
+    return new Scene(myPane, 900, 500);
   }
 
   private HBox makeInfoInput() {
@@ -101,18 +99,16 @@ public class BoardSetUpStage extends BuilderStage {
   }
 
   private void checkAndSetDimension(String s, Consumer<Integer> changeConsumer) {
-    if (!s.isEmpty()) {
-      try {
-        changeConsumer.accept(Integer.valueOf(s));
+    if (!s.isEmpty() && checkIntConversion(s)) {
+      changeConsumer.accept(Integer.valueOf(s));
 
-        stateMap = initializeBlankMap(height, width);
-        drawGrid();
-      } catch (NumberFormatException e) {
-
-        widthInput.clear();
-      }
-
+      stateMap = initializeBlankMap(height, width);
+      drawGrid();
+    } else {
+      widthInput.clear();
     }
+
+
   }
 
 
@@ -129,41 +125,22 @@ public class BoardSetUpStage extends BuilderStage {
 
 
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
-    Rectangle newCell = new Rectangle(xPos, yPos, cellSize, cellSize);
+    Rectangle newCell = new Rectangle(xPos, yPos,
+        MAX_GRID_WIDTH / width,MAX_GRID_HEIGHT / height);
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {
-      stateMap[i][j] = selectedType;
+      stateMap[i][j] = getSelectedType();
       drawGrid();
     });
 
     return newCell;
   }
 
-  private VBox displayColorChoice() {
-    VBox result = new VBox();
-    for (Color c : colorList) {
-      result.getChildren().add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]),
-          createColorOptionRectangle(c)));
-
-    }
-
-    return result;
-  }
-
-  private Rectangle createColorOptionRectangle(Color c) {
-    Rectangle result = new Rectangle(50, 25);
-    result.setFill(c);
-    result.setOnMouseClicked(e -> {
-      result.setStroke(Color.RED);
-      selectedType = colorList.indexOf(c);
-    });
-    return result;
-  }
 
   protected void saveAndContinue() {
     //write to file FIXME
     myStage.close();
-    PieceDesignStage p=new PieceDesignStage();
+    PieceDesignStage p = new PieceDesignStage();
   }
 }
