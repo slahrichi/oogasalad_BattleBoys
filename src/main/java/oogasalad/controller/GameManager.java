@@ -1,6 +1,5 @@
 package oogasalad.controller;
 
-import static jdk.jfr.internal.consumer.EventLog.update;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

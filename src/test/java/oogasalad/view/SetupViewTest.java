@@ -64,7 +64,7 @@ public class SetupViewTest extends DukeApplicationTest {
     List<Player> players = record.playerList();
     List<WinCondition> winConditions = new ArrayList<>();
     winConditions.add(new LoseXShipsLossCondition(2));
-    GameData data = new GameData(players, board, pieces, winConditions);
+    GameData data = new GameData(players, board, pieces, winConditions, null);
     GameSetup setup = new GameSetup(data);
     stage.setScene(setup.createScene());
     stage.show();

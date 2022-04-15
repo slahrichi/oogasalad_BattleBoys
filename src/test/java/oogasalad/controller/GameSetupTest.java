@@ -37,11 +37,8 @@ public class GameSetupTest extends DukeApplicationTest {
         cellBoard[i][j] = CellState.of(dummyBoard[i][j]);
       }
     }
-    Map<Integer, MarkerBoard> enemyMap1 = Map.of(1, new MarkerBoard(cellBoard));
-    Player p1 = new HumanPlayer(new Board(cellBoard), 0, enemyMap1);
-    Map<Integer, MarkerBoard> enemyMap2 = Map.of(0, new MarkerBoard(cellBoard));
-    Player p2 = new AIPlayer(new Board(cellBoard), 1, enemyMap2);
-    List<Player> playerList = new ArrayList<>(Arrays.asList(p1, p2));
+    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
+        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(1, 0), new Coordinate(1, 1)));
     List<ShipCell> dummyShipCellList = new ArrayList<>();
@@ -55,8 +52,8 @@ public class GameSetupTest extends DukeApplicationTest {
     pieceList1.add(dummyShip1);
     pieceList2.add(dummyShip1);
     pieceList2.add(dummyShip2);
-    gd1 = new GameData(playerList, cellBoard, pieceList1, new ArrayList<>());
-    gd2 = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>());
+    gd1 = new GameData(pfr.playerList(), cellBoard, pieceList1, new ArrayList<>(), pfr.engineMap());
+    gd2 = new GameData(pfr.playerList(), cellBoard, pieceList2, new ArrayList<>(), pfr.engineMap());
   }
 
   // Commented out these tests because GameSetup now takes in GameData with the players already

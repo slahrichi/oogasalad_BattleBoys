@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javafx.stage.Stage;
 import oogasalad.FilePicker;
 import oogasalad.GameData;
@@ -12,6 +13,7 @@ import oogasalad.model.parsing.Parser;
 import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.parsing.ParserException;
+import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
@@ -58,13 +60,13 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     PlayerFactoryRecord pr = PlayerFactory.initializePlayers(notSoDummyBoard, stringPlayers,
         playerData.decisionEngines());
     List<Player> players = pr.playerList();
-
+    Map<Integer, DecisionEngine> engineMap = pr.engineMap();
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
     dummyWinConditions.add(new LoseXShipsLossCondition(1));
 
 
-    data = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions);
+    data = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions, engineMap);
     setup = new GameSetup(data);
     setup.addObserver(this);
     // GameManager should take in list of players and GameData
