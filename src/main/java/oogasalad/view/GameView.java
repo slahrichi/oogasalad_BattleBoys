@@ -197,7 +197,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     rightButton = ButtonMaker.makeImageButton("right-button", e -> incrementBoardIndex(), IMAGES_PATH + "/arrow-right.png", 50, 50);
     rightButton.getStyleClass().add("arrow-button");
 
-    boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER);
+    boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER, leftButton, rightButton);
 
     myCenterPane.getChildren().add(boardButtonBox);
   }
