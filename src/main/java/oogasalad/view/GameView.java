@@ -78,13 +78,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private VBox myRightPane;
   private Button shopButton;
-  private Button nightButton;
   private SetPiecePane piecesRemainingPane;
   private LegendPane legendPane;
   private ConfigPane configPane;
-  private Label shotsRemainingLabel;
-  private Label healthLabel;
-  private Label goldLabel;
   private DynamicLabel shotsRemainingLabel;
   private DynamicLabel healthLabel;
   private DynamicLabel goldLabel;
