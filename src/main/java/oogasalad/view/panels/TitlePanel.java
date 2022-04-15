@@ -20,12 +20,9 @@ public class TitlePanel extends HBox {
     titleText = new Label(inputString);
     titleText.setId("titleText");
 
-
     setUpImage();
 
-    this.setId("titleBox");
     this.getChildren().addAll(titleImage, titleText);
-
   }
 
 
@@ -38,8 +35,6 @@ public class TitlePanel extends HBox {
             true));
     titleImage.setFitHeight(IMAGE_DIMENSIONS);
     titleImage.setFitWidth(IMAGE_DIMENSIONS);
-
-
   }
 
   public void changeTitle(String inputString) {

@@ -15,7 +15,7 @@
   -fx-alignment: center;
 }
 
-#titleBox{
+#setup-title{
   -fx-border-style: hidden hidden solid hidden;
   -fx-padding: 10;
   -fx-max-width: infinity;

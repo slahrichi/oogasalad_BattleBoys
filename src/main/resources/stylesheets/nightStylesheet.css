@@ -33,12 +33,12 @@
 }
 
 
-#titleBox{
+#game-title{
   -fx-border-style: hidden hidden solid hidden;
   -fx-padding: 10;
   -fx-max-width: infinity;
   -fx-alignment: center;
-  -fx-border-color: white;
+  -fx-border-color: black;
 }
 
 #view-pane {

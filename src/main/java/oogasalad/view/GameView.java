@@ -178,6 +178,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createTitlePanel() {
     myTitle = new TitlePanel("Player 1's Turn");
+    myTitle.setId("game-title");
     myPane.setTop(myTitle);
   }
 

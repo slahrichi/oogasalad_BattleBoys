@@ -18,7 +18,7 @@
   -fx-alignment: center;
 }
 
-#titleBox{
+#game-title{
   -fx-border-style: hidden hidden solid hidden;
   -fx-padding: 10;
   -fx-max-width: infinity;
