@@ -56,7 +56,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
       LOG.error(e);
       playerData = null;
     }
-    LOG.info(playerData);
     stringPlayers = playerData.players();
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();

@@ -55,7 +55,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
   private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String MARKER_RESOURCES_PATH = "/Markers";
-  private static final String IMAGES_PATH = "/images";
+  private static final String IMAGES_PATH = "images/";
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
   private static final String CENTER_PANE_ID = "view-center-pane";
 
@@ -82,9 +82,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private SetPiecePane piecesRemainingPane;
   private LegendPane legendPane;
   private ConfigPane configPane;
-  private Label shotsRemainingLabel;
-  private Label healthLabel;
-  private Label goldLabel;
   private DynamicLabel shotsRemainingLabel;
   private DynamicLabel healthLabel;
   private DynamicLabel goldLabel;
@@ -155,9 +152,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     configPane = new ConfigPane();
     configPane.setOnAction(e -> changeStylesheet());
 
-
-
-
     myRightPane = BoxMaker.makeVBox("configBox", 20, Pos.CENTER, shotsRemainingLabel, healthLabel, goldLabel, shopButton,
         piecesRemainingPane, legendPane);
     myRightPane.setMinWidth(300);
@@ -194,14 +188,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void setupBoardButtons() {
-    leftButton = ButtonMaker.makeImageButton("left-button", e -> decrementBoardIndex(), IMAGES_PATH + "/arrow-left.png", 50, 50);
-    leftButton.getStyleClass().add("arrow-button");
-
-    rightButton = ButtonMaker.makeImageButton("right-button", e -> incrementBoardIndex(), IMAGES_PATH + "/arrow-right.png", 50, 50);
-    rightButton.getStyleClass().add("arrow-button");
-
+    leftButton = ButtonMaker.makeImageButton("left-button", e -> decrementBoardIndex(), IMAGES_PATH + "arrow-left.png", 50, 50);
+    rightButton = ButtonMaker.makeImageButton("right-button", e -> incrementBoardIndex(), IMAGES_PATH + "arrow-right.png", 50, 50);
     boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER);
-
     myCenterPane.getChildren().add(boardButtonBox);
   }
 
@@ -285,8 +274,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       myScene.getStylesheets()
           .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     }
-
-
   }
 
   /**
