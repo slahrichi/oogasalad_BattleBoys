@@ -15,13 +15,29 @@ import oogasalad.view.maker.LabelMaker;
 
 // need to hold the ship list as well as create the ships to display
 
+/**
+ * This class represents a TitledPane that shows visual representations of ships on the side of
+ * the main screen. These ships may represent the opponent's remaining ships, the current ship
+ * being placed in setup phase, etc.
+ *
+ * @author Edison Ooi, Eric Xie
+ */
 public class SetPiecePane extends TitledPane {
 
+  // The visual representations of all ships to be shown in this pane
   private List<ShipIndicatorView> shipViews;
+
+  // Holds all ShipIndicatorViews to be shown
   private VBox shipIndicatorsBox;
+
+  // Indicates whether this player has placed all of their ships
   private boolean lastPiecePlaced = false;
   private double myShipSize;
 
+  /**
+   * Class constructor.
+   * @param size
+   */
   public SetPiecePane(double size) {
     myShipSize = size;
     shipViews = new ArrayList<>();
@@ -31,7 +47,7 @@ public class SetPiecePane extends TitledPane {
   }
 
 
-
+  // Initializes key attributes of this TitledPane
   private void setUpPane() {
 //    for(ShipIndicatorView view : shipViews) {
 //      shipIndicatorsBox.getChildren().add(view.getBoardPane());
@@ -42,6 +58,11 @@ public class SetPiecePane extends TitledPane {
     setExpanded(true);
   }
 
+  /**
+   * Updates the Pieces shown to reflect the input relativeCoords of the Pieces to be shown
+   *
+   * @param relativeCoords Coordinates of every Piece to be shown in this pane
+   */
   public void updateShownPieces(Collection<Collection<Coordinate>> relativeCoords) {
     // Change ship indicator image
     shipIndicatorsBox.getChildren().clear();
@@ -52,6 +73,9 @@ public class SetPiecePane extends TitledPane {
     setContent(shipIndicatorsBox);
   }
 
+  /**
+   * Shows a message that indicates that there are no more ships to show or place.
+   */
   public void showListCompletion() {
     shipIndicatorsBox.getChildren().clear();
     Label shipsPlaced = LabelMaker.makeLabel("All ships placed. Press confirm to move on.", "all-ships-placed-label");
@@ -60,6 +84,8 @@ public class SetPiecePane extends TitledPane {
     shipIndicatorsBox.getChildren().add(shipsPlaced);
   }
 
+  // Converts a Collection of Coordinates to a rectangular array representation of their relative
+  // locations
   private CellState[][] getArrayRepresentation(Collection<Coordinate> relativeCoords) {
     int numRows = 0;
     int numCols = 0;
@@ -83,6 +109,4 @@ public class SetPiecePane extends TitledPane {
 
     return arrayRepresentation;
   }
-
-
 }

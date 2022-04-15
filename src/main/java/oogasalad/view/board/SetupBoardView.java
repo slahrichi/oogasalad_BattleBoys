@@ -7,6 +7,14 @@ import javafx.scene.paint.Color;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.CellView;
 
+/**
+ * This class represents a BoardView that appears during the setup phase of the game. It allows
+ * users to place their Pieces on their board. Because the frontend is not in charge of preserving
+ * board state for each player, only one instance of SetupBoardView is created for the entire setup
+ * phase, and it is cleared after each player finishes placing their Pieces.
+ *
+ * @author Eric Xie, Minjun Kwak, Edison Ooi
+ */
 public class SetupBoardView extends BoardView {
 
   public SetupBoardView(double size, CellState[][] arrayLayout, int id) {
