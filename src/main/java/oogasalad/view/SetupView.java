@@ -104,7 +104,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     shipPane = new SetPiecePane(20);
     shipPane.setText("Current Ship");
 
-    configBox = BoxMaker.makeVBox("configBox", 20, Pos.CENTER, shipPane, legendPane);
+    configBox = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shipPane, legendPane);
     configBox.setMinWidth(300);
     myPane.setRight(configBox);
   }
