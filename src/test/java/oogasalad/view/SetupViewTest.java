@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import oogasalad.GameData;
@@ -82,5 +83,6 @@ public class SetupViewTest extends DukeApplicationTest {
   @Test
   void spotClicked() {
     clickOn(cell2_2);
+    assertEquals(Color.BLACK, cell2_2.getFill());
   }
 }

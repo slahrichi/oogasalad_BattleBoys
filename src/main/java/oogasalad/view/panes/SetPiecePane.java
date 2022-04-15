@@ -9,7 +9,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.view.BoxMaker;
+import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.ShipIndicatorView;
 import oogasalad.view.maker.LabelMaker;
 

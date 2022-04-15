@@ -35,6 +35,7 @@ import oogasalad.view.interfaces.BoardVisualizer;
 import oogasalad.view.interfaces.GameDataVisualizer;
 import oogasalad.view.interfaces.ShopVisualizer;
 import oogasalad.view.interfaces.ShotVisualizer;
+import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.maker.LabelMaker;
 import oogasalad.view.panes.ConfigPane;
@@ -55,7 +56,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
   private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String MARKER_RESOURCES_PATH = "/Markers";
-  private static final String IMAGES_PATH = "/images";
+  private static final String IMAGES_PATH = "images/";
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
   private static final String CENTER_PANE_ID = "view-center-pane";
 
@@ -150,9 +151,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     configPane = new ConfigPane();
     configPane.setOnAction(e -> changeStylesheet());
-
-
-
 
     myRightPane = BoxMaker.makeVBox("configBox", 20, Pos.CENTER, shotsRemainingLabel, healthLabel, goldLabel, shopButton,
         piecesRemainingPane, legendPane);
@@ -282,8 +280,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       myScene.getStylesheets()
           .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     }
-
-
   }
 
   /**

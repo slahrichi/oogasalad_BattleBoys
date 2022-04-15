@@ -141,7 +141,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void createTitlePanel() {
     myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
-    myTitle.setId("setup-title");
     myPane.setTop(myTitle);
   }
 
