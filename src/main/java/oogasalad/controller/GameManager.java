@@ -134,7 +134,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player player = playerList.get(playerIndex);
     if (engineMap.containsKey(player)) {
       DecisionEngine engine = engineMap.get(player);
-      Coordinate move = engine.makeMove();
+      //Coordinate move = engine.makeMove();
     }
   }
 
