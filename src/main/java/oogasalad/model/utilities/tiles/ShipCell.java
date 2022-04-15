@@ -10,72 +10,92 @@ import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 
-public class ShipCell implements CellInterface {
+public class ShipCell extends Cell implements CellInterface {
 
-  private Coordinate myCoordinate;
+  public static final CellState SHIP_CELL_INTIAL_STATE = CellState.SHIP_HEALTHY;
+
+  //private Coordinate myCoordinate;
   private Coordinate myRelativeCoordinate;
-  private int myHealthBar;
+  //private int myHealthBar;
   private transient Piece myShip;
-  private CellState currentState;
+  //private CellState currentState;
   private int myGoldValue;
   private int id;
-  private ArrayList<Modifiers> myModifiers = new ArrayList<>();
+  //private ArrayList<Modifiers> myModifiers = new ArrayList<>();
 
 
 
 // Use this Constructor to create ships in the real game
   public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, Piece ship) {
-    myHealthBar = health;
+    super(null, SHIP_CELL_INTIAL_STATE, health);
+    //myHealthBar = health;
     myGoldValue = goldValue;
     myRelativeCoordinate = relativeCoordinate;
-    currentState = CellState.SHIP_HEALTHY;
+    //currentState = CellState.SHIP_HEALTHY;
     myShip = ship;
-    myModifiers.add(new GoldAdder(myGoldValue));
+    addModifier(new GoldAdder(myGoldValue));
   }
 
   public ShipCell(ShipCell parent) {
-    myHealthBar = parent.myHealthBar;
+    super(null,parent.getCellState(),parent.getHealth());
+    //myHealthBar = parent.myHealthBar;
     myGoldValue = parent.myGoldValue;
-    myModifiers.add(new GoldAdder(myGoldValue));
+    addModifier(new GoldAdder(myGoldValue));
     myRelativeCoordinate = parent.myRelativeCoordinate;
-    currentState = CellState.SHIP_HEALTHY;
+    //currentState = CellState.SHIP_HEALTHY;
     myShip = parent.myShip;
   }
-  // Use this only for testing purposes
-  // used to have String ID in constructor
-  public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String id) {
-    myHealthBar = health;
+
+//Use this only for testing purposes
+  public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String ID) {
+    super(null, SHIP_CELL_INTIAL_STATE, health);
+    //myHealthBar = health;
     myGoldValue = goldValue;
-    myModifiers.add(new GoldAdder(myGoldValue));
     myRelativeCoordinate = relativeCoordinate;
-    currentState = CellState.SHIP_HEALTHY;
+    //currentState = CellState.SHIP_HEALTHY;
+    addModifier(new GoldAdder(myGoldValue));
   }
 
   public void placeAt(Coordinate absoluteCoord) {
-    myCoordinate = Coordinate.sum(absoluteCoord, myRelativeCoordinate);
+    setMyCoordinate(Coordinate.sum(absoluteCoord, myRelativeCoordinate));
   }
 
   @Override
   public CellState hit() {
-    myHealthBar --;
-    if (myHealthBar <= 0) {
-      currentState = CellState.SHIP_SUNKEN;
+    System.out.println("Health = " + getHealth());
+    addToHealthBar(-1); //change this to whatever ship damage
+    System.out.println("Health AFter Hit = " + getHealth());
+    if (getHealth() <= 0) {
+      //currentState = CellState.SHIP_SUNKEN;
+      setCellState(CellState.SHIP_SUNKEN);
       if(myShip!=null) myShip.registerDamage(this);
     } else {
-      currentState = CellState.SHIP_DAMAGED;
-
+      //currentState = CellState.SHIP_DAMAGED;
+      setCellState(CellState.SHIP_DAMAGED);
     }
-    return currentState;
+    return getCellState();
+  }
+
+  @Override
+  public boolean canCarryObject() {
+    return false;
+  }
+
+  public Coordinate getRelativeCoordinate(){
+    return myRelativeCoordinate;
+  }
+
+  public Piece getAssignedShip(){
+    return myShip;
   }
 
 
-
+  /*
   @Override
   public void addModifier(Modifiers myMod){myModifiers.add(myMod);}
 
   @Override
   public List<Modifiers> update() {
-
     ArrayList<Modifiers> returnMods = new ArrayList<>();
     for(Modifiers mod: myModifiers){
       if(mod.checkConditions(this)) returnMods.add(mod);
@@ -90,15 +110,6 @@ public class ShipCell implements CellInterface {
       }
     }
     return returnMods;
-  }
-
-  public Coordinate getRelativeCoordinate(){
-    return myRelativeCoordinate;
-  }
-
-  @Override
-  public boolean canCarryObject() {
-    return false;
   }
 
   @Override
@@ -123,9 +134,7 @@ public class ShipCell implements CellInterface {
     return myHealthBar;
   }
 
-  public Piece getAssignedShip(){
-    return myShip;
-  }
+   */
 
   @Override
   public boolean equals(Object o) {
@@ -134,10 +143,10 @@ public class ShipCell implements CellInterface {
     if(!(o instanceof ShipCell)) return false;
     ShipCell other = (ShipCell)o;
     //just need to check myCoordinate, currentState, and myModifiers
-    if(!(myCoordinate == null & other.myCoordinate == null))
-      if(!myCoordinate.equals(other.myCoordinate)) return false;
-    if(currentState != other.currentState) return false;
-    if(!myModifiers.containsAll(other.myModifiers)) return false;
+    if(!(getCoordinates() == null & other.getCoordinates() == null))
+      if(!getCoordinates().equals(other.getCoordinates())) return false;
+    if(getCellState() != other.getCellState()) return false;
+    if(!getMyModifiers().containsAll(other.getMyModifiers())) return false;
     return true;
 
   }
