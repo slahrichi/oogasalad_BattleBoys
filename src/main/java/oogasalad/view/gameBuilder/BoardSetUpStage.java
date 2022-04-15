@@ -9,10 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class BoardSetUpStage extends BuilderStage {
@@ -50,14 +48,12 @@ public class BoardSetUpStage extends BuilderStage {
     widthChange = i -> setWidth(i);
     heightChange = i -> setHeight(i);
 
-    stateMap =  initializeBlankMap(height, width);
+    stateMap = initializeBlankMap(height, width);
     drawGrid();
     myPane.setTop(makeInfoInput());
-    myPane.setRight(displayColorChoice());
-    Button continueButton = new Button("Continue");
-    continueButton.setOnAction(e->saveAndContinue());
-    myPane.setBottom(continueButton);
-     myStage= new Stage();
+    myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
+    myPane.setBottom(makeContinueButton());
+    myStage = new Stage();
     myStage.setScene(getScene());
     myStage.show();
   }
@@ -132,37 +128,17 @@ public class BoardSetUpStage extends BuilderStage {
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {
-      stateMap[i][j] = selectedType;
+      stateMap[i][j] = getSelectedType();
       drawGrid();
     });
 
     return newCell;
   }
 
-  private VBox displayColorChoice() {
-    VBox result = new VBox();
-    for (Color c : colorList) {
-      result.getChildren().add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]),
-          createColorOptionRectangle(c)));
-
-    }
-
-    return result;
-  }
-
-  private Rectangle createColorOptionRectangle(Color c) {
-    Rectangle result = new Rectangle(50, 25);
-    result.setFill(c);
-    result.setOnMouseClicked(e -> {
-      result.setStroke(Color.RED);
-      selectedType = colorList.indexOf(c);
-    });
-    return result;
-  }
 
   protected void saveAndContinue() {
     //write to file FIXME
     myStage.close();
-    PieceDesignStage p=new PieceDesignStage();
+    PieceDesignStage p = new PieceDesignStage();
   }
 }

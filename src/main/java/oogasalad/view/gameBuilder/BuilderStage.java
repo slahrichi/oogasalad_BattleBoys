@@ -1,19 +1,32 @@
 package oogasalad.view.gameBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 public abstract class BuilderStage {
 
-  private ResourceBundle myBuilderResources ;
+  private ResourceBundle myBuilderResources;
+  private int selectedType;
+  private List<Rectangle> colorOptionList = new ArrayList<>();
+
   public BuilderStage() {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
   }
-  protected ResourceBundle getMyBuilderResources(){return myBuilderResources;}
+
+  protected ResourceBundle getMyBuilderResources() {
+    return myBuilderResources;
+  }
+
   protected int[][] initializeBlankMap(int height, int width) {
     int[][] stateMap = new int[height][width];
     for (int i = 0; i < height; i++) {
@@ -24,8 +37,8 @@ public abstract class BuilderStage {
     return stateMap;
   }
 
-  protected Button makeButton(String name, EventHandler<ActionEvent> handler){
-    Button result =  new Button(name);
+  protected Button makeButton(String name, EventHandler<ActionEvent> handler) {
+    Button result = new Button(name);
     result.setOnAction(handler);
 
     return result;
@@ -46,6 +59,52 @@ public abstract class BuilderStage {
       yPos = yPos + cellSize;
     }
     return cellGroup;
+  }
+
+  protected VBox displayColorChoice(String[] DEFAULT_STATE_OPTIONS, List<Color> colorList) {
+    VBox result = new VBox();
+    for (Color c : colorList) {
+      Rectangle option = createColorOptionRectangle(c, colorList);
+      colorOptionList.add(option);
+      result.getChildren().add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]),
+          option));
+
+    }
+    result.setId("ColorChoiceBox");
+
+    return result;
+  }
+
+  protected int getSelectedType() {
+    return selectedType;
+  }
+
+  private Rectangle createColorOptionRectangle(Color c, List<Color> colorList) {
+    Rectangle result = new Rectangle(50, 25);
+    result.setFill(c);
+    result.setId("ColorOption");
+
+    result.setOnMouseClicked(e -> {
+      removeSelectionStrokeFromOption();
+      result.setStroke(Color.RED);
+      selectedType = colorList.indexOf(c);
+      System.out.println(selectedType);
+    });
+    return result;
+  }
+
+  private void removeSelectionStrokeFromOption() {
+    for (Rectangle option : colorOptionList) {
+      option.setStroke(null);
+    }
+  }
+
+  protected Button makeContinueButton(){
+
+    Button continueButton = new Button("Continue");
+    continueButton.setOnAction(e -> saveAndContinue());
+    continueButton.setId("ContinueButton");
+    return continueButton;
   }
 
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);

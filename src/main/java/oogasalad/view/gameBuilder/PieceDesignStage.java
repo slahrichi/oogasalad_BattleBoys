@@ -6,11 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PieceDesignStage extends BuilderStage {
@@ -25,7 +23,6 @@ public class PieceDesignStage extends BuilderStage {
   private static final String[] DEFAULT_STATE_OPTIONS = {"Inactive", "Active"};
   private static final Color DEFAULT_INACTIVE_COLOR = Color.GRAY;
   private static final Color DEFAULT_ACTIVE_COLOR = Color.LIME;
-  private int selectedType;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
@@ -36,10 +33,11 @@ public class PieceDesignStage extends BuilderStage {
     colorList.add(DEFAULT_ACTIVE_COLOR);
 
     myPane.setTop(makePieceSelectionBox(t.split(",")));
-    myPane.setRight(displayColorChoice());
+    myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
+    myPane.setBottom(makeContinueButton());
     Stage myStage = new Stage();
 
-    Scene myScene = new Scene(myPane,1000,500);
+    Scene myScene = new Scene(myPane, 1000, 500);
     myStage.setScene(myScene);
     myStage.showAndWait();
   }
@@ -51,7 +49,7 @@ public class PieceDesignStage extends BuilderStage {
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {
       stateMap[i][j] = 1;
-      newCell.setFill(colorList.get(selectedType));
+      newCell.setFill(colorList.get(getSelectedType()));
     });
 
     return newCell;
@@ -100,7 +98,7 @@ public class PieceDesignStage extends BuilderStage {
 
     TextArea infoBox = new TextArea();
     ComboBox comboBox = makeComboBox(options);
-    infoBox.setMaxSize(50,20);
+    infoBox.setMaxSize(50, 20);
     VBox result = new VBox(comboBox);
     result.getChildren().add(infoBox);
     result.getChildren()
@@ -109,24 +107,5 @@ public class PieceDesignStage extends BuilderStage {
   }
 
   //FIXME
-  private VBox displayColorChoice() {
-    VBox result = new VBox();
-    for (Color c : colorList) {
-      result.getChildren().add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]),
-          createColorOptionRectangle(c)));
 
-    }
-
-    return result;
-  }
-
-  private Rectangle createColorOptionRectangle(Color c) {
-    Rectangle result = new Rectangle(50, 25);
-    result.setFill(c);
-    result.setOnMouseClicked(e -> {
-      result.setStroke(Color.RED);
-      selectedType = colorList.indexOf(c);
-    });
-    return result;
-  }
 }
