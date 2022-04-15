@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -15,6 +16,7 @@ import javafx.scene.shape.Rectangle;
 
 public class LegendPane extends TitledPane {
 
+  private ScrollPane myScroller;
   private GridPane myGrid;
   private LinkedHashMap<String, Color> colorMap;
 
@@ -35,6 +37,9 @@ public class LegendPane extends TitledPane {
     myGrid.setHgap(PANE_GAP);
     myGrid.setVgap(PANE_GAP);
 
+    myScroller = new ScrollPane();
+    myScroller.setContent(myGrid);
+
     String[] orderedKeys = colorMap.keySet().toArray(new String[0]);
 
     for (int i = 0; i < orderedKeys.length; i++) {
@@ -46,9 +51,9 @@ public class LegendPane extends TitledPane {
 
     this.setId("legendPane");
     this.setText("Piece Legend");
-    this.setContent(myGrid);
+    this.setContent(myScroller);
     this.setExpanded(false);
-    this.setMinHeight(250);
+    this.setMaxHeight(150);
 
   }
 

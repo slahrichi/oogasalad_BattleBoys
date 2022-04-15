@@ -36,6 +36,7 @@ import oogasalad.view.interfaces.GameDataVisualizer;
 import oogasalad.view.interfaces.ShopVisualizer;
 import oogasalad.view.interfaces.ShotVisualizer;
 import oogasalad.view.maker.ButtonMaker;
+import oogasalad.view.panes.ConfigPane;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import oogasalad.view.panels.TitlePanel;
@@ -75,8 +76,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private VBox myRightPane;
   private Button shopButton;
+  private Button nightButton;
   private SetPiecePane piecesRemainingPane;
   private LegendPane legendPane;
+  private ConfigPane configPane;
   private Label shotsRemainingLabel;
   private Label healthLabel;
   private Label goldLabel;
@@ -89,8 +92,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public GameView(List<CellState[][]> firstPlayerBoards, Collection<Collection<Coordinate>> coords) {
     myPane = new BorderPane();
-    myPane.setBackground(
-        new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     myPane.setId("view-pane");
     nightMode = false;
 
@@ -147,15 +148,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     goldLabel = new Label("Gold: 0");
     goldLabel.setFont(new Font(25));
 
+    configPane = new ConfigPane();
+    configPane.setOnAction(e -> changeStylesheet());
+
+
 
     myRightPane = new VBox(shotsRemainingLabel, healthLabel, goldLabel, shopButton,
-        piecesRemainingPane, legendPane);
+        piecesRemainingPane, legendPane, configPane);
     myRightPane.setId("configBox");
     myRightPane.setSpacing(20);
     myRightPane.setAlignment(Pos.CENTER);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
   }
+
 
   private void setupLegendPane() {
     LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
@@ -241,6 +247,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myScene.setRoot(passComputerMessageView);
   }
 
+
   public int getCurrentBoardIndex() {
     return currentBoardIndex;
   }
@@ -269,6 +276,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void changeStylesheet(){
+
+    nightMode = !nightMode;
+
     if(nightMode){
       myScene.getStylesheets().clear();
       myScene.getStylesheets()

@@ -9,7 +9,7 @@
 }
 
 #view-pane {
-  -fx-background-color: white;
+  -fx-background-color: lightblue;
 }
 
 
@@ -43,6 +43,11 @@
   -fx-alignment: center;
 }
 
+#configGrid {
+  -fx-padding: 10;
+  -fx-spacing: 10;
+
+}
 
 
 
