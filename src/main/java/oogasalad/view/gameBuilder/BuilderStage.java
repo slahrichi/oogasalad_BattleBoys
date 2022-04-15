@@ -46,7 +46,7 @@ public abstract class BuilderStage {
   }
 
 
-  protected Group arrangeCells(int height, int width, double cellSize, int[][] stateMap) {
+  protected Group arrangeCells(int height, int width, double cellHeight,double cellWidth, int[][] stateMap) {
     Group cellGroup = new Group();
     double xPos;
     double yPos = 0;
@@ -55,9 +55,9 @@ public abstract class BuilderStage {
       for (int j = 0; j < width; j++) {
         cellGroup.getChildren().add(createCell(xPos, yPos, i, j, stateMap[i][j]));
 
-        xPos = xPos + cellSize;
+        xPos = xPos + cellWidth;
       }
-      yPos = yPos + cellSize;
+      yPos = yPos + cellHeight;
     }
     return cellGroup;
   }
@@ -89,7 +89,6 @@ public abstract class BuilderStage {
       removeSelectionStrokeFromOption();
       result.setStroke(Color.RED);
       selectedType = colorList.indexOf(c);
-      System.out.println(selectedType);
     });
     return result;
   }

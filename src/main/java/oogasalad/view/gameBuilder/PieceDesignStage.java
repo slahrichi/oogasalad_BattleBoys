@@ -32,6 +32,7 @@ public class PieceDesignStage extends BuilderStage {
   private ObservableList<String> items = FXCollections.observableArrayList();
   private final int MAX_LIST_WIDTH=100;
   private final int MAX_LIST_HEIGHT=400;
+  private final double CELL_SIZE=20;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
@@ -103,7 +104,7 @@ public class PieceDesignStage extends BuilderStage {
         result.getChildren().add(makeComboBoxWithVariable(reqVars));
       }
       myPane.setLeft(listView);
-      myPane.setCenter(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, 20, stateMap));
+      myPane.setCenter(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, CELL_SIZE,CELL_SIZE, stateMap));
     }
   }
 

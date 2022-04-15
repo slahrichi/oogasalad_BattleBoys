@@ -21,7 +21,8 @@ public class BoardSetUpStage extends BuilderStage {
   private static final int DEFAULT_DIMENSION = 10;
   private static final int DEFAULT_INPUT_BOX_WIDTH = 60;
   private static final int DEFAULT_INPUT_BOX_HEIGHT = 20;
-  private double cellSize = 50;
+  private double MAX_GRID_WIDTH = 400;
+  private double MAX_GRID_HEIGHT = 400;
 
 
   private BorderPane myPane = new BorderPane();
@@ -68,7 +69,8 @@ public class BoardSetUpStage extends BuilderStage {
 
   private void drawGrid() {
     myPane.setCenter(null);
-    myPane.setCenter(arrangeCells(height, width, cellSize, stateMap));
+    myPane.setCenter(
+        arrangeCells(height, width, MAX_GRID_HEIGHT / height, MAX_GRID_WIDTH / width, stateMap));
   }
 
   public Scene getScene() {
@@ -122,7 +124,8 @@ public class BoardSetUpStage extends BuilderStage {
 
 
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
-    Rectangle newCell = new Rectangle(xPos, yPos, cellSize, cellSize);
+    Rectangle newCell = new Rectangle(xPos, yPos,
+        MAX_GRID_WIDTH / width,MAX_GRID_HEIGHT / height);
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {
