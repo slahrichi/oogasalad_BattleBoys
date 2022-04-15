@@ -33,14 +33,14 @@ public class PlayerFactoryTest {
 
   @Test
   void testBasicPlayerFactory() {
-    List<Player> playerList = PlayerFactory.initialize(board, playerTypes).playerList();
+    List<Player> playerList = PlayerFactory.initializePlayers(board, playerTypes, null).playerList();
     assertEquals(playerList.size(), 3);
   }
 
   @Test
   void testInvalidFileData() {
     playerTypes.add("Playyer");
-    assertThrows(NullPointerException.class, () -> PlayerFactory.initialize(board, playerTypes).
+    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, null).
         playerList());
   }
 
