@@ -29,7 +29,7 @@ public class ColorSelectionStage extends BuilderStage{
     continueButton.setOnAction(e->saveAndContinue());
     myPane.setRight(continueButton);
 
-    Scene myScene =  new Scene(myPane);
+    Scene myScene =  new Scene(myPane, 900, 500);
     myStage.setScene(myScene);
     myStage.show();
 
@@ -57,7 +57,6 @@ public class ColorSelectionStage extends BuilderStage{
   protected void saveAndContinue(){
     for(ColorPicker cp : colorPickers){
       colorList.add(cp.getValue());
-      System.out.println(cp.getValue().toString());
     }
     myStage.close();
     BoardSetUpStage bb = new BoardSetUpStage();

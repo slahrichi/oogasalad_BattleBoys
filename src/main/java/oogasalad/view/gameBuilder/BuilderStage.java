@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -99,12 +100,31 @@ public abstract class BuilderStage {
     }
   }
 
-  protected Button makeContinueButton(){
+  protected Button makeContinueButton() {
 
     Button continueButton = new Button("Continue");
     continueButton.setOnAction(e -> saveAndContinue());
     continueButton.setId("ContinueButton");
     return continueButton;
+  }
+
+  protected Boolean checkIntConversion(String string) {
+    try {
+      int x = Integer.parseInt(string);
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
+    }
+  }
+
+  protected ComboBox makeComboBox(String[] options) {
+    ComboBox comboBox = new ComboBox();
+    for (String option : options) {
+      comboBox.getItems().add(option);
+
+    }
+
+    return comboBox;
   }
 
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);

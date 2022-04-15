@@ -2,10 +2,14 @@ package oogasalad.view.gameBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,19 +24,25 @@ public class PieceDesignStage extends BuilderStage {
   private Object pieceType;
   private List<String> piecePath = new ArrayList<>();
   private List<Color> colorList = new ArrayList<>();
-  private static final String[] DEFAULT_STATE_OPTIONS = {"Inactive", "Active"};
-  private static final Color DEFAULT_INACTIVE_COLOR = Color.GRAY;
-  private static final Color DEFAULT_ACTIVE_COLOR = Color.LIME;
+  private final String[] DEFAULT_STATE_OPTIONS = {"Inactive", "Active"};
+  private final Color DEFAULT_INACTIVE_COLOR = Color.GRAY;
+  private final Color DEFAULT_ACTIVE_COLOR = Color.LIME;
+  private String availablePieceTypes;
+  private final ListView<String> listView = new ListView<>();
+  private ObservableList<String> items = FXCollections.observableArrayList();
 
   public PieceDesignStage() {
     myPane = new BorderPane();
     stateMap = initializeBlankMap(MAX_DIMENSION, MAX_DIMENSION);
-    String t = getMyBuilderResources().getString("possiblePieceType");
+    availablePieceTypes = getMyBuilderResources().getString("possiblePieceType");
+
+    listView.setItems(items);
+    listView.setMaxSize(100, 400);
 
     colorList.add(DEFAULT_INACTIVE_COLOR);
     colorList.add(DEFAULT_ACTIVE_COLOR);
 
-    myPane.setTop(makePieceSelectionBox(t.split(",")));
+    myPane.setTop(makePieceSelectionBox(availablePieceTypes.split(",")));
     myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
     myPane.setBottom(makeContinueButton());
     Stage myStage = new Stage();
@@ -41,6 +51,15 @@ public class PieceDesignStage extends BuilderStage {
     myStage.setScene(myScene);
     myStage.showAndWait();
   }
+
+  private void resetCustomization(){
+    myPane.setCenter(null);
+    stateMap = initializeBlankMap(MAX_DIMENSION, MAX_DIMENSION);
+    items.clear();
+    myPane.setLeft(null);
+  }
+
+
 
   @Override
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
@@ -69,43 +88,38 @@ public class PieceDesignStage extends BuilderStage {
     return result;
   }
 
-  private ComboBox makeComboBox(String[] options) {
-    ComboBox comboBox = new ComboBox();
-    for (String option : options) {
-      comboBox.getItems().add(option);
-
-    }
-
-    return comboBox;
-  }
 
   private void selectPieceType(VBox result, ComboBox comboBox) {
     pieceType = comboBox.getValue();
-    String[] reqVars = getMyBuilderResources().getString(pieceType + "PieceRequiredInfo")
-        .split(",");
-    if (!reqVars[0].isEmpty()) {
-      result.getChildren().add(makeComboBoxWithVariable(reqVars));
+    if (!pieceType.equals(null)) {
+      resetCustomization();
+      result=makePieceSelectionBox(availablePieceTypes.split(","));
+      myPane.setTop(result);
+      String[] reqVars = getMyBuilderResources().getString(pieceType + "PieceRequiredInfo")
+          .split(",");
+      if (!reqVars[0].isEmpty()) {
+        result.getChildren().add(makeComboBoxWithVariable(reqVars));
+      }
+      myPane.setLeft(listView);
+      myPane.setCenter(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, 20, stateMap));
     }
-    myPane.setCenter(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, 20, stateMap));
   }
 
   private void updatePath(String path) {
-    System.out.println(path);
-    piecePath.add(path);
+    items.add(path);
   }
 
-  private VBox makeComboBoxWithVariable(String[] options) {
+  private HBox makeComboBoxWithVariable(String[] options) {
 
     TextArea infoBox = new TextArea();
     ComboBox comboBox = makeComboBox(options);
     infoBox.setMaxSize(50, 20);
-    VBox result = new VBox(comboBox);
+    HBox result = new HBox(comboBox);
     result.getChildren().add(infoBox);
     result.getChildren()
         .add(makeButton("Add to Path", e -> updatePath(comboBox.getValue() + infoBox.getText())));
     return result;
   }
 
-  //FIXME
 
 }

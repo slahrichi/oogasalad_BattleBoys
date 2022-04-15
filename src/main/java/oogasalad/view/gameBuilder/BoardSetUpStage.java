@@ -72,7 +72,7 @@ public class BoardSetUpStage extends BuilderStage {
   }
 
   public Scene getScene() {
-    return new Scene(myPane, 1100, 500);
+    return new Scene(myPane, 900, 500);
   }
 
   private HBox makeInfoInput() {
@@ -96,18 +96,16 @@ public class BoardSetUpStage extends BuilderStage {
   }
 
   private void checkAndSetDimension(String s, Consumer<Integer> changeConsumer) {
-    if (!s.isEmpty()) {
-      try {
-        changeConsumer.accept(Integer.valueOf(s));
+    if (!s.isEmpty() && checkIntConversion(s)) {
+      changeConsumer.accept(Integer.valueOf(s));
 
-        stateMap = initializeBlankMap(height, width);
-        drawGrid();
-      } catch (NumberFormatException e) {
-
-        widthInput.clear();
-      }
-
+      stateMap = initializeBlankMap(height, width);
+      drawGrid();
+    } else {
+      widthInput.clear();
     }
+
+
   }
 
 
