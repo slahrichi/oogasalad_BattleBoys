@@ -30,6 +30,8 @@ public class PieceDesignStage extends BuilderStage {
   private String availablePieceTypes;
   private final ListView<String> listView = new ListView<>();
   private ObservableList<String> items = FXCollections.observableArrayList();
+  private final int MAX_LIST_WIDTH=100;
+  private final int MAX_LIST_HEIGHT=400;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
@@ -37,7 +39,7 @@ public class PieceDesignStage extends BuilderStage {
     availablePieceTypes = getMyBuilderResources().getString("possiblePieceType");
 
     listView.setItems(items);
-    listView.setMaxSize(100, 400);
+    listView.setMaxSize(MAX_LIST_WIDTH, MAX_LIST_HEIGHT);
 
     colorList.add(DEFAULT_INACTIVE_COLOR);
     colorList.add(DEFAULT_ACTIVE_COLOR);
