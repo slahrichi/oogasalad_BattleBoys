@@ -99,16 +99,13 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private void createConfigPanel() {
     // FIXME: Move magic numbers to private static / resourcebundle
 
-    configBox = new VBox();
     setupLegendPane();
     shipPane = new SetPiecePane(20);
     shipPane.setText("Current Ship");
 
-    configBox.setId("configBox");
+    configBox = BoxMaker.makeVBox("configBox", 20, Pos.CENTER, shipPane, legendPane);
     configBox.setMinWidth(300);
     myPane.setRight(configBox);
-    configBox.getChildren().addAll(shipPane, legendPane);
-
   }
 
   private void setupLegendPane() {
@@ -133,17 +130,12 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void createCenterPanel() {
-    myCenterPane = new StackPane();
-    centerBox = new VBox();
-    centerBox.getChildren().addAll(myCenterPane, confirmButton);
-    centerBox.setAlignment(Pos.CENTER);
-    centerBox.setSpacing(20);
-    centerBox.setId("setup-center-box");
-
-    myPane.setCenter(centerBox);
-
-    myCenterPane.setId("boardBox");
     setupBoard.addObserver(this);
+
+    myCenterPane = new StackPane();
+    myCenterPane.setId("boardBox");
+    centerBox = BoxMaker.makeVBox("setup-center-box", 20, Pos.CENTER, myCenterPane, confirmButton);
+    myPane.setCenter(centerBox);
     myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }
 
