@@ -19,6 +19,7 @@ public class PlayerFactory {
   private static Map<Integer, DecisionEngine> engineMap;
   private static List<String> myDifficulties;
   private static final String FILEPATH = "oogasalad.model.players.";
+  private static final String AI_PLAYER = "AIPlayer";
   private static final String ENGINE = "DecisionEngine";
   private static final String INVALID_PLAYER = "Invalid player type given";
   private static final String INVALID_DIFFICULTY = "Invalid difficulty given";
@@ -47,7 +48,9 @@ public class PlayerFactory {
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class,
               Map.class)
           .newInstance(b, id, enemyMap);
-      createEngineIfAI(playerType, id, enemyMap);
+      if (playerType.equals(AI_PLAYER)) {
+        createEngine(p, id, enemyMap);
+      }
     } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
         IllegalAccessException | NoSuchMethodException e) {
       throw new NullPointerException(INVALID_PLAYER);
@@ -64,19 +67,18 @@ public class PlayerFactory {
     return boardMap;
   }
 
-  private static void createEngineIfAI(String playerType, int id, Map<Integer, MarkerBoard> enemyMap) {
-    if (playerType.equals("AIPlayer")) {
+  private static void createEngine(Player player, int id, Map<Integer, MarkerBoard> enemyMap) {
       try {
         String difficulty = myDifficulties.get(id);
         DecisionEngine ds = (DecisionEngine) Class.forName(FILEPATH + difficulty + ENGINE)
-            .getConstructor(List.class, Map.class).newInstance(null, enemyMap);
+            .getConstructor(List.class, Map.class).newInstance(
+                player.getBoard().listCoordinates(), enemyMap);
         engineMap.put(id, ds);
       }
       catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
           IllegalAccessException | NoSuchMethodException e) {
         throw new NullPointerException(INVALID_DIFFICULTY);
       }
-    }
   }
 
 }
