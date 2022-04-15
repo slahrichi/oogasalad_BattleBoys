@@ -4,8 +4,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import oogasalad.view.DynamicLabel;
 
-public class TitlePanel extends HBox{
+public class TitlePanel extends HBox {
 
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String TITLE_IMAGE = "images/battleshipLogo.png";
@@ -25,8 +26,6 @@ public class TitlePanel extends HBox{
 
     this.setId("titleBox");
     this.getChildren().addAll(titleImage, titleText);
-
-
   }
 
 
@@ -45,6 +44,10 @@ public class TitlePanel extends HBox{
 
   public void changeTitle(String inputString) {
     titleText.setText(inputString);
+  }
+
+  public String getTitle() {
+    return titleText.getText();
   }
 
 

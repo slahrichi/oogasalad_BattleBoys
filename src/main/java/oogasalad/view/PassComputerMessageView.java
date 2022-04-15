@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import oogasalad.view.maker.LabelMaker;
 
 public class PassComputerMessageView extends VBox {
   private static String PASS_MESSAGE = "Please pass the computer to player ";
@@ -22,10 +23,8 @@ public class PassComputerMessageView extends VBox {
   }
 
   private void createMessageLabel() {
-    messageLabel = new Label(PASS_MESSAGE);
-    messageLabel.setFont(new Font(25));
+    messageLabel = LabelMaker.makeLabel(PASS_MESSAGE, "pass-computer-message-label");
     getChildren().add(messageLabel);
-
   }
 
   private void createConfirmButton() {

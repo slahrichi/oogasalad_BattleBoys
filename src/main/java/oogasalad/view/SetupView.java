@@ -43,7 +43,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
 
   private BorderPane myPane;
-  private Button confirm;
+  private Button confirmButton;
   private VBox centerBox;
   private StackPane myCenterPane;
   private BoardView setupBoard;
@@ -60,7 +60,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane = new BorderPane();
     myPane.setBackground(
         new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-
+    myPane.setId("setup-view-pane");
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     currentPlayer = 1;
@@ -78,7 +78,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void activateConfirm() {
-    confirm.setDisable(false);
+    confirmButton.setDisable(false);
   }
 
   public void displayCompletion() {
@@ -120,40 +120,42 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void createConfirmButton() {
-    confirm = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), "Confirm");
-    confirm.setDisable(true);
+    confirmButton = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), "Confirm");
+    confirmButton.setDisable(true);
   }
 
   private void handleConfirm() {
     setCurrentPlayerNum();
     switchPlayerMessage(String.valueOf(currentPlayer));
     clearBoard();
-    confirm.setDisable(true);
+    confirmButton.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
   }
 
   private void createCenterPanel() {
     myCenterPane = new StackPane();
     centerBox = new VBox();
-
-    centerBox.getChildren().addAll(myCenterPane, confirm);
+    centerBox.getChildren().addAll(myCenterPane, confirmButton);
     centerBox.setAlignment(Pos.CENTER);
     centerBox.setSpacing(20);
+    centerBox.setId("setup-center-box");
+
     myPane.setCenter(centerBox);
 
     myCenterPane.setId("boardBox");
     setupBoard.addObserver(this);
-    myCenterPane.getChildren().addAll(setupBoard.getBoardPane());
+    myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }
 
   private void createTitlePanel() {
     myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
+    myTitle.setId("setup-title");
     myPane.setTop(myTitle);
   }
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    if (confirm.isDisabled()) {
+    if (confirmButton.isDisabled()) {
       Info info = (Info) evt.getNewValue();
       notifyObserver("placePiece", new Coordinate(info.row(), info.col()));
     }

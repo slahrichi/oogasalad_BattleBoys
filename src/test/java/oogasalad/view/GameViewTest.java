@@ -2,32 +2,18 @@ package oogasalad.view;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
-import oogasalad.GameData;
-import oogasalad.controller.GameManager;
-import oogasalad.model.players.AIPlayer;
-import oogasalad.model.players.HumanPlayer;
-import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
-import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
 
@@ -35,8 +21,7 @@ public class GameViewTest extends DukeApplicationTest {
 
   private int numPlayers = 3;
   private Button rightButton;
-  private Polygon cell0;
-  private Button shopButton;
+  private Button leftButton;
   private Label currentBoardLabel;
   private GameView view;
 
@@ -88,24 +73,25 @@ public class GameViewTest extends DukeApplicationTest {
     stage.setScene(view.createScene());
     stage.show();
 
-    cell0 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-0").query();
     rightButton = lookup("#view-pane #view-center-pane #board-button-box #right-button").query();
-    shopButton = lookup("#view-pane #configBox #view-shop").query();
+    leftButton = lookup("#view-pane #view-center-pane #board-button-box #left-button").query();
     currentBoardLabel = lookup("#view-pane #view-center-pane #currentBoardLabel").query();
   }
 
   @Test
   public void testSwitchBoard() {
-    rightClickOn(rightButton);
+    assertEquals(view.getCurrentBoardIndex(), 0);
+    clickOn(rightButton);
     Polygon cell1 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-1").query();
     clickOn(cell1);
     assertEquals(view.getCurrentBoardIndex(), 1);
+    clickOn(leftButton);
   }
 
   @Test
   public void testLabelText() {
     assertEquals(currentBoardLabel.getText(), "Your Board");
-    rightClickOn(rightButton);
+    clickOn(rightButton);
     assertEquals(currentBoardLabel.getText(), "Your Shots Against Player 2");
   }
 }

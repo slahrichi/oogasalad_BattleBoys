@@ -1,10 +1,13 @@
 package oogasalad.view;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import oogasalad.view.maker.ButtonMaker;
 
 public class StartView {
 
@@ -19,28 +22,22 @@ public class StartView {
   private ImageView myTitle;
 
   public StartView(){
-
     myPane = new BorderPane();
     myPane.setId("startPane");
 
     setUpTitle();
     setUpButtons();
-
-
   }
 
   public Scene createScene(){
-
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.getStylesheets()
         .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
     return myScene;
-
   }
 
 
   private void setUpTitle(){
-
     Image myImage = new Image(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + TITLE_IMAGE).toString(), true);
     myTitle = new ImageView(myImage);
     myTitle.setPreserveRatio(true);
@@ -52,22 +49,20 @@ public class StartView {
     titleBox.setId("titleBox");
 
     myPane.setTop(titleBox);
-
   }
 
   private void setUpButtons(){
+    //TODO: Add event handlers to these buttons
+    Button startBtn = ButtonMaker.makeTextButton("start-button", null, "Start");
+    Button loadBtn = ButtonMaker.makeTextButton("load-button", null, "Load");
+    Button createBtn = ButtonMaker.makeTextButton("create-button", null, "Create");
 
-//    ButtonFactory startBtn = new ButtonFactory(150, 60, "Start", "mainMenuBtn", event -> notifyObserver());
-//    ButtonFactory loadBtn = new ButtonFactory(150, 60, "Load", "mainMenuBtn", event -> notifyObserver());
-//    ButtonFactory createBtn = new ButtonFactory(150, 60, "Create", "mainMenuBtn", event -> notifyObserver());
-//
-//    VBox buttonBox = new VBox();
-//    buttonBox.setSpacing(50);
-//    buttonBox.setId("buttonBox");
-//    buttonBox.getChildren().addAll(startBtn, loadBtn, createBtn);
-//
-//    myPane.setCenter(buttonBox);
+    VBox buttonBox = new VBox();
+    buttonBox.setSpacing(50);
+    buttonBox.setId("buttonBox");
+    buttonBox.getChildren().addAll(startBtn, loadBtn, createBtn);
 
+    myPane.setCenter(buttonBox);
   }
 
   private void notifyObserver(){
