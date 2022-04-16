@@ -127,7 +127,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       playerIndex = (playerIndex + 1) % playerList.size();
       numShots = 0;
       sendUpdatedBoardsToView();
-      handleAI();
+      //handleAI();
     }
   }
 
