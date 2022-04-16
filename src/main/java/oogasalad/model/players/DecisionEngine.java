@@ -55,4 +55,6 @@ public abstract class DecisionEngine {
         result == CellState.ISLAND_SUNK || result == CellState.WATER_HIT;
   }
 
+  public abstract void adjustStrategy(CellState result);
+
 }

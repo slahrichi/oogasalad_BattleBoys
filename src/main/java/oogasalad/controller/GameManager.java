@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
+import oogasalad.model.players.EngineRecord;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
@@ -126,7 +127,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       playerIndex = (playerIndex + 1) % playerList.size();
       numShots = 0;
       sendUpdatedBoardsToView();
-      //handleAI();
+      handleAI();
     }
   }
 
@@ -134,7 +135,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player player = playerList.get(playerIndex);
     if (engineMap.containsKey(player)) {
       DecisionEngine engine = engineMap.get(player);
-      //Coordinate move = engine.makeMove();
+      EngineRecord move = engine.makeMove();
+      System.out.println(move);
+      makeShot(move.shot(), move.enemyID());
+      updateConditions(player.getID());
     }
   }
 
@@ -147,12 +151,20 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
       CellState result = enemy.getBoard().hit(c);
+      adjustStrategy(currentPlayer, result);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
       applyModifiers(currentPlayer, enemy);
       return true;
     }
     return false;
+  }
+
+  private void adjustStrategy(Player player, CellState result) {
+    if (engineMap.containsKey(player)) {
+      DecisionEngine engine = engineMap.get(player);
+      engine.adjustStrategy(result);
+    }
   }
 
   private void applyModifiers(Player currPlayer, Player enemyPlayer){
