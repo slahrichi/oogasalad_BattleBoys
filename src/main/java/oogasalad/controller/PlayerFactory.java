@@ -12,6 +12,12 @@ import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+
+/**
+ * Class for generating Player objects and a Map of DecisionEngines for all the AIPlayers
+ *
+ * @author Matthew Giglio
+ */
 public class PlayerFactory {
 
   private static CellState[][] myBoard;
@@ -25,7 +31,13 @@ public class PlayerFactory {
   private static final String INVALID_DIFFICULTY = "Invalid difficulty given";
 
 
-
+  /**
+   *
+   * @param board CellState[][] used to initialize the board states of each player
+   * @param playerTypes list of strings representing player type between human or AI
+   * @param decisionEngines list of difficulty levels for each AIPlayer's DecisionEngine
+   * @return
+   */
   public static PlayerFactoryRecord initializePlayers(CellState[][] board, List<String> playerTypes,
       List<String> decisionEngines) {
     myBoard = board;
