@@ -4,18 +4,15 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import oogasalad.GameData;
 import oogasalad.model.players.AIPlayer;
 import oogasalad.model.players.HumanPlayer;
-import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.view.SetupView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,16 +59,16 @@ public class GameSetupTest extends DukeApplicationTest {
   @Test
   void testBasicSetup() {
     javafxRun(() -> gs = new GameSetup(gd1));
-    assertEquals(gs.getPlayerList().size(), 2);
-    assertEquals(gs.getPlayerList().get(0).getClass(), HumanPlayer.class);
-    assertEquals(gs.getPlayerList().get(1).getClass(), AIPlayer.class);
+    assertEquals(gd1.players().size(), 2);
+    assertEquals(gd1.players().get(0).getClass(), HumanPlayer.class);
+    assertEquals(gd1.players().get(1).getClass(), AIPlayer.class);
   }
 
   @Test
   void testInvalidMethodName() {
     javafxRun(() -> gs = new GameSetup(gd1));
     assertThrows(NullPointerException.class, () -> gs.propertyChange(new PropertyChangeEvent
-        (gs.getSetupView(), null, null, new Coordinate(-1, 0)))) ;
+        (new SetupView(gd1.board()), null, null, new Coordinate(-1, 0)))) ;
   }
 
   @Test
@@ -79,11 +76,11 @@ public class GameSetupTest extends DukeApplicationTest {
     javafxRun(() -> gs = new GameSetup(gd1));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
        new Coordinate(0, 0))));
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][1],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][0],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][1],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
         CellState.SHIP_HEALTHY);
   }
 
@@ -93,11 +90,11 @@ public class GameSetupTest extends DukeApplicationTest {
     javafxRun(() -> gs = new GameSetup(gd1));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         new Coordinate(-1, 0))));
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][1],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
         CellState.WATER);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][0],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
         CellState.WATER);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][1],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
         CellState.WATER);
   }
 
@@ -106,19 +103,19 @@ public class GameSetupTest extends DukeApplicationTest {
     javafxRun(() -> gs = new GameSetup(gd2));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         new Coordinate(0, 0))));
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][1],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][0],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][1],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
         CellState.SHIP_HEALTHY);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         new Coordinate(0, 2))));
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][3],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][3],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][2],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][2],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][3],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][3],
         CellState.SHIP_HEALTHY);
   }
 
@@ -133,17 +130,17 @@ public class GameSetupTest extends DukeApplicationTest {
         new Coordinate(0, 0))));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "moveToNextPlayer", null,
         null)));
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[0][1],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][0],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(0).getBoard().getCurrentBoardState()[1][1],
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(1).getBoard().getCurrentBoardState()[0][1],
+    assertEquals(gd1.players().get(1).getBoard().getCurrentBoardState()[0][1],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(1).getBoard().getCurrentBoardState()[1][0],
+    assertEquals(gd1.players().get(1).getBoard().getCurrentBoardState()[1][0],
         CellState.SHIP_HEALTHY);
-    assertEquals(gs.getPlayerList().get(1).getBoard().getCurrentBoardState()[1][1],
+    assertEquals(gd1.players().get(1).getBoard().getCurrentBoardState()[1][1],
         CellState.SHIP_HEALTHY);
 
   }
