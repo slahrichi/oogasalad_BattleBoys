@@ -98,7 +98,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void moveToNextPlayer(Coordinate c) {
     playerIndex++;
     if(playerIndex >= playerList.size()) {
-      notifyObserver("moveToGame", null);
+      notifyObserver("startGame", null);
       return;
     }
     resetElements();

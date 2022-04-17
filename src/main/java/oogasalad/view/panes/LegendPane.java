@@ -53,7 +53,7 @@ public class LegendPane extends TitledPane {
     this.setText("Piece Legend");
     this.setContent(myScroller);
     this.setExpanded(false);
-    this.setMaxHeight(150);
+    this.setMaxHeight(250);
 
   }
 
