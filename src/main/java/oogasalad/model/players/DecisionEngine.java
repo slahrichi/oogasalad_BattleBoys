@@ -15,13 +15,16 @@ public abstract class DecisionEngine {
   private List<Coordinate> myCoordinateList;
   private Deque<EngineRecord> myDeque;
   private Map<Integer, MarkerBoard> myEnemyMap;
+  private Player myPlayer;
   private Random myRandom;
   private EngineRecord myLastShot;
 
-  public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap) {
+  public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
+      Player player) {
     myCoordinateList = coordinateList;
     myDeque = new ArrayDeque<>();
     myEnemyMap = enemyMap;
+    myPlayer = player;
     myRandom = new Random(System.currentTimeMillis());
   }
 
@@ -37,6 +40,10 @@ public abstract class DecisionEngine {
 
   protected Map<Integer, MarkerBoard> getEnemyMap() {
     return myEnemyMap;
+  }
+
+  protected Player getPlayer() {
+    return myPlayer;
   }
 
   protected Random getRandom() {

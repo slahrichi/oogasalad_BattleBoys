@@ -10,8 +10,9 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class EasyDecisionEngine extends DecisionEngine {
 
-  public EasyDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap) {
-    super(coordinateList, enemyMap);
+  public EasyDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
+      Player player) {
+    super(coordinateList, enemyMap, player);
   }
 
   public EngineRecord makeMove() {
