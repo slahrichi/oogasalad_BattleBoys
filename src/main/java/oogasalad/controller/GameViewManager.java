@@ -3,9 +3,11 @@ package oogasalad.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import oogasalad.GameData;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.GameView;
@@ -13,9 +15,13 @@ import oogasalad.view.GameView;
 public class GameViewManager {
 
   private GameView view;
+  private Map<Integer, Player> idMap;
+  private List<Player> playerList;
 
-  public GameViewManager(GameData data) {
+  public GameViewManager(GameData data, Map<Integer, Player> idMap) {
     setupGameView(data);
+    this.idMap = idMap;
+    playerList = data.players();
   }
 
   private void setupGameView(GameData data) {
@@ -44,5 +50,39 @@ public class GameViewManager {
 
   GameView getView() {
     return view;
+  }
+
+  void sendUpdatedBoardsToView(int playerIndex) {
+    List<CellState[][]> boardList = new ArrayList<>();
+    List<Integer> idList = new ArrayList<>();
+    List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
+    Player currentPlayer = playerList.get(playerIndex);
+    addToBoardElements(currentPlayer.getBoard().getCurrentBoardState(), currentPlayer.getID(),
+        currentPlayer, boardList, idList, pieceList);
+    Map<Integer, MarkerBoard> enemyMap = currentPlayer.getEnemyMap();
+    for (int id : currentPlayer.getEnemyMap().keySet()) {
+      addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList, pieceList);
+    }
+    view.moveToNextPlayer(boardList, idList, pieceList);
+  }
+
+  private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
+      boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
+    boardList.add(board);
+    idList.add(id);
+    pieceList.add(convertPiecesToCoords(player.getBoard().listPieces()));
+  }
+
+  private Collection<Collection<Coordinate>> convertPiecesToCoords(List<Piece> piecesLeft) {
+    Collection<Collection<Coordinate>> coords = new ArrayList<>();
+    for (Piece piece : piecesLeft) {
+      coords.add(piece.getRelativeCoords());
+    }
+    return coords;
+  }
+
+  void updatePiecesLeft(List<Piece> piecesLeft) {
+    Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
+    view.updatePiecesLeft(coords);
   }
 }

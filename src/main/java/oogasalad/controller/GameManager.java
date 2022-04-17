@@ -4,8 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +16,6 @@ import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.EngineRecord;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.WinConditions.WinState;
@@ -37,7 +34,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private Map<Player, DecisionEngine> engineMap;
   private GameView view;
   private GameViewManager gameViewManager;
-  //current player, separate from ID
   private int playerIndex;
   private int numShots;
   private int allowedShots;
@@ -62,7 +58,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     createIDMap();
     winConditionsList = data.winConditions();
     engineMap = data.engineMap();
-    gameViewManager = new GameViewManager(data);
+    gameViewManager = new GameViewManager(data, idMap);
   }
 
   private void createIDMap() {
@@ -101,26 +97,17 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     applyWinConditions();
     if(idMap.containsKey(id)){
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
-      Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
-      view.updatePiecesLeft(coords);
+      gameViewManager.updatePiecesLeft(piecesLeft);
     }
     numShots++;
     checkIfMoveToNextToPlayer();
-  }
-
-  private Collection<Collection<Coordinate>> convertPiecesToCoords(List<Piece> piecesLeft) {
-    Collection<Collection<Coordinate>> coords = new ArrayList<>();
-    for (Piece piece : piecesLeft) {
-      coords.add(piece.getRelativeCoords());
-    }
-    return coords;
   }
 
   private void checkIfMoveToNextToPlayer() {
     if (numShots == allowedShots) {
       playerIndex = (playerIndex + 1) % playerList.size();
       numShots = 0;
-      sendUpdatedBoardsToView();
+      gameViewManager.sendUpdatedBoardsToView(playerIndex);
       handleAI();
     }
   }
@@ -216,26 +203,5 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     for (Player p : playerList) {
       p.getEnemyMap().remove(id);
     }
-  }
-
-  private void sendUpdatedBoardsToView() {
-    List<CellState[][]> boardList = new ArrayList<>();
-    List<Integer> idList = new ArrayList<>();
-    List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
-    Player currentPlayer = playerList.get(playerIndex);
-    addToBoardElements(currentPlayer.getBoard().getCurrentBoardState(), currentPlayer.getID(),
-        currentPlayer, boardList, idList, pieceList);
-    Map<Integer, MarkerBoard> enemyMap = currentPlayer.getEnemyMap();
-    for (int id : currentPlayer.getEnemyMap().keySet()) {
-      addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList, pieceList);
-    }
-    view.moveToNextPlayer(boardList, idList, pieceList);
-  }
-
-  private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
-      boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
-    boardList.add(board);
-    idList.add(id);
-    pieceList.add(convertPiecesToCoords(player.getBoard().listPieces()));
   }
 }
