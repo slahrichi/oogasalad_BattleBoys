@@ -36,7 +36,7 @@ public abstract class Cell implements CellInterface{
   }
 
   @Override
-  public abstract CellState hit();
+  public abstract CellState hit(int dmg);
 
   @Override
   public List<Modifiers> update() {

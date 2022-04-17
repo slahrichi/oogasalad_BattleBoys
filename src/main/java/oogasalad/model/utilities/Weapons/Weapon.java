@@ -25,12 +25,7 @@ public abstract class Weapon {
         }
     }
 
-    /**
-     * @return the name of the Weapon system.
-     */
-    public String getMyID(){
-        return myID;
-    }
+
 
     /**
      * Method that front end can call to display the action/tiles that will be affected by this weapon
@@ -53,4 +48,13 @@ public abstract class Weapon {
     }
 
     protected abstract void updateRelativeCoords(Board currBoard);
+
+    protected abstract void makeWeaponFunction();
+
+    /**
+     * @return the name of the Weapon system.
+     */
+    public String getMyID(){
+        return myID;
+    }
 }

@@ -57,16 +57,14 @@ public class ShipCell extends Cell implements CellInterface {
   }
 
   @Override
-  public CellState hit() {
+  public CellState hit(int dmg) {
     System.out.println("Health = " + getHealth());
-    addToHealthBar(-1); //change this to whatever ship damage
+    addToHealthBar(-1*dmg); //change this to whatever ship damage
     System.out.println("Health AFter Hit = " + getHealth());
     if (getHealth() <= 0) {
-      //currentState = CellState.SHIP_SUNKEN;
       setCellState(CellState.SHIP_SUNKEN);
       if(myShip!=null) myShip.registerDamage(this);
     } else {
-      //currentState = CellState.SHIP_DAMAGED;
       setCellState(CellState.SHIP_DAMAGED);
     }
     return getCellState();
@@ -84,53 +82,6 @@ public class ShipCell extends Cell implements CellInterface {
   public Piece getAssignedShip(){
     return myShip;
   }
-
-
-  /*
-  @Override
-  public void addModifier(Modifiers myMod){myModifiers.add(myMod);}
-
-  @Override
-  public List<Modifiers> update() {
-    ArrayList<Modifiers> returnMods = new ArrayList<>();
-    for(Modifiers mod: myModifiers){
-      if(mod.checkConditions(this)) returnMods.add(mod);
-    }
-    for(Modifiers currMod: returnMods){
-      if(currMod.getClass().getSimpleName().equals("CellModifier")){
-        try {
-          currMod.modifierFunction().accept(this);
-          returnMods.remove(currMod);
-        }catch(Exception e){
-        }
-      }
-    }
-    return returnMods;
-  }
-
-  @Override
-  public void updateCoordinates(int row, int col) {
-    myCoordinate = new Coordinate(row, col);
-  }
-
-  @Override
-  public Coordinate getCoordinates() {
-    return myCoordinate;
-  }
-
-
-
-  @Override
-  public CellState getCellState() {
-    return currentState;
-  }
-
-  @Override
-  public int getHealth() {
-    return myHealthBar;
-  }
-
-   */
 
   @Override
   public boolean equals(Object o) {

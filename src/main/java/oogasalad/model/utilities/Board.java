@@ -133,9 +133,9 @@ public class Board {
     return currStateArray;
   }
 
-  public CellState hit(Coordinate c) {
+  public CellState hit(Coordinate c, int dmg) {
     int numStartPieces = myPieces.keySet().size();
-    CellState hitState = boardMap.get(c).hit();
+    CellState hitState = boardMap.get(c).hit(dmg);
 
     Set<String> ogKeySet = new HashSet<String>(myPieces.keySet());
     for(String key: ogKeySet) {

@@ -17,7 +17,7 @@ public class WaterCell extends Cell implements CellInterface {
 
 
   @Override
-  public CellState hit() {
+  public CellState hit(int dmg) {
     return CellState.WATER_HIT;
   }
 
@@ -25,39 +25,4 @@ public class WaterCell extends Cell implements CellInterface {
   public boolean canCarryObject() {
     return true;
   }
-
-  /*
-  @Override
-  public List<Modifiers> update() {
-    ArrayList<Modifiers> returnMods = new ArrayList<>();
-
-    return returnMods;
-  }
-
-  @Override
-  public void updateCoordinates(int row, int col) {
-    myCoordinate = new Coordinate(row,col);
-  }
-
-  @Override
-  public Coordinate getCoordinates() {
-    return myCoordinate;
-  }
-
-  @Override
-  public void addModifier(Modifiers myMod) {
-    return;
-  }
-
-  @Override
-  public CellState getCellState() {
-    return currentState;
-  }
-
-  @Override
-  public int getHealth() {
-    return 1;
-  }
-
-   */
 }

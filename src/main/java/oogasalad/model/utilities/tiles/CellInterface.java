@@ -8,7 +8,7 @@ import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 public interface CellInterface {
 
 
-   CellState hit();
+   CellState hit(int dmg);
 
    List<Modifiers> update();
 

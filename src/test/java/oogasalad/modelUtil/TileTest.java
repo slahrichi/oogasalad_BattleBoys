@@ -63,8 +63,8 @@ public class TileTest {
     }
     assertEquals( 0, p1.getMyCurrency());
     cell.addModifier(new GoldAdder(200));
-    cell.hit();
-    cell.hit();
+    cell.hit(1);
+    cell.hit(1);
     mods = (ArrayList<Modifiers>) cell.update();
     for(Modifiers m: mods){
       m.modifierFunction().accept(players);

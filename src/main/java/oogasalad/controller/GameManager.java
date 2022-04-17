@@ -151,7 +151,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-      CellState result = enemy.getBoard().hit(c);
+      CellState result = enemy.getBoard().hit(c,1);
       adjustStrategy(currentPlayer, result);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
