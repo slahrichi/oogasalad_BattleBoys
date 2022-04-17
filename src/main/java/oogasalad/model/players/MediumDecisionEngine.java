@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
+import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 
@@ -14,8 +15,9 @@ public class MediumDecisionEngine extends DecisionEngine {
   private static final int[] COL_DELTA = new int[]{-1, 1, 0, 1, 0, 1, -1, -1};
   private int currentEnemyID;
 
-  public MediumDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap) {
-    super(coordinateList, enemyMap);
+  public MediumDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
+      Player player) {
+    super(coordinateList, enemyMap, player);
   }
 
   public EngineRecord makeMove() {
@@ -50,6 +52,11 @@ public class MediumDecisionEngine extends DecisionEngine {
     if (canBeRemoved(result)) {
       getCoordinateList().remove(getLastShot());
     }
+  }
+
+  @Override
+  public Coordinate placePiece(List<Piece> pieceList) {
+    return null;
   }
 
   private void prepareBFS() {

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
+import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 public abstract class DecisionEngine {
@@ -14,13 +15,17 @@ public abstract class DecisionEngine {
   private List<Coordinate> myCoordinateList;
   private Deque<EngineRecord> myDeque;
   private Map<Integer, MarkerBoard> myEnemyMap;
+  private Player myPlayer;
   private Random myRandom;
   private EngineRecord myLastShot;
+  private int pieceIndex;
 
-  public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap) {
+  public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
+      Player player) {
     myCoordinateList = coordinateList;
     myDeque = new ArrayDeque<>();
     myEnemyMap = enemyMap;
+    myPlayer = player;
     myRandom = new Random(System.currentTimeMillis());
   }
 
@@ -38,6 +43,10 @@ public abstract class DecisionEngine {
     return myEnemyMap;
   }
 
+  protected Player getPlayer() {
+    return myPlayer;
+  }
+
   protected Random getRandom() {
     return myRandom;
   }
@@ -50,6 +59,14 @@ public abstract class DecisionEngine {
     myLastShot = shot;
   }
 
+  protected int getPieceIndex() {
+    return pieceIndex;
+  }
+
+  protected void updatePieceIndex() {
+    pieceIndex += 1;
+  }
+
   protected boolean canBeRemoved(CellState result) {
     return result == CellState.SHIP_SUNKEN || result == CellState.WATER ||
         result == CellState.ISLAND_SUNK || result == CellState.WATER_HIT;
@@ -57,4 +74,5 @@ public abstract class DecisionEngine {
 
   public abstract void adjustStrategy(CellState result);
 
+  public abstract Coordinate placePiece(List<Piece> pieceList);
 }
