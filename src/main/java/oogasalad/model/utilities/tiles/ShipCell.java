@@ -81,6 +81,11 @@ public class ShipCell extends Cell implements CellInterface {
     return false;
   }
 
+  @Override
+  public void moveCell(Coordinate nextMovement) {
+
+  }
+
   public Coordinate getRelativeCoordinate(){
     return myRelativeCoordinate;
   }

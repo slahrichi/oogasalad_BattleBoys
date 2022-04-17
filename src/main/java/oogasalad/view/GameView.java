@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.geometry.Insets;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
@@ -94,6 +95,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private int currentBoardIndex;
 
+  private Map<Integer, String> playerIDToNames;
+
   public GameView(List<CellState[][]> firstPlayerBoards, Collection<Collection<Coordinate>> coords) {
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
@@ -117,6 +120,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       idList.add(i);
     }
     return idList;
+  }
+
+  public void setPlayerIDToNames(Map<Integer, String> names) {
+    playerIDToNames = names;
+    updateTitle(playerIDToNames.getOrDefault(myBoards.get(currentBoardIndex).getID(),
+        "Player " + (myBoards.get(currentBoardIndex).getID() + 1)));
   }
 
   private void createPassMessageView() {
@@ -149,7 +158,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     return myScene;
   }
 
-  public void createRightPane() {
+  private void createRightPane() {
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
 
     piecesRemainingPane = new SetPiecePane(20);
@@ -164,7 +173,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     configPane = new ConfigPane();
     configPane.setOnAction(e -> changeStylesheet());
 
-    myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.CENTER, shotsRemainingLabel, healthLabel, goldLabel, shopButton,
+    myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel, healthLabel, goldLabel, shopButton,
         piecesRemainingPane, legendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
@@ -229,7 +238,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void updateDisplayedBoard() {
     LOG.info("Current board index: "+currentBoardIndex);
     currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board"
-        : "Your Shots Against Player " + (myBoards.get(currentBoardIndex).getID() + 1));
+        : "Your Shots Against " + playerIDToNames.getOrDefault(myBoards.get(currentBoardIndex).getID(),
+            "Player " + (myBoards.get(currentBoardIndex).getID() + 1)));
     refreshCenterPane();
     updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
     LOG.info("Current board index: "+currentBoardIndex);
@@ -242,8 +252,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox);
   }
 
-  private void updateTitle(int playerID) {
-    myTitle.changeTitle("Player " + (playerID+1) + "'s turn");
+  private void updateTitle(String playerName) {
+    myTitle.changeTitle(playerName + "'s turn");
   }
 
   private void switchPlayerMessage(String nextPlayer) {
@@ -266,27 +276,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     notifyObserver(evt.getPropertyName(), evt.getNewValue());
   }
 
-  /**
-   * Places a Piece of a certain type at the specified coordinates
-   *
-   * @param coords Coordinates to place Piece at
-   * @param type   Type of piece being placed
-   */
-  public void placePiece(Collection<Coordinate> coords,
-      CellState type) { //TODO: Change type to some enum
-    for (Coordinate coord : coords) {
-      myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
-          Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
-    }
-  }
-
-  @Override
-  public void removePiece() {
-
-  }
-
   private void changeStylesheet(){
-
     nightMode = !nightMode;
 
     if(nightMode){
@@ -302,10 +292,26 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   /**
+   * Places a Piece of a certain type at the specified coordinates
+   *
+   * @param coords Coordinates to place Piece at
+   * @param type   Type of piece being placed
+   */
+  @Override
+  public void placePiece(Collection<Coordinate> coords,
+      CellState type) { //TODO: Change type to some enum
+    for (Coordinate coord : coords) {
+      myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
+          Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
+    }
+  }
+
+  /**
    * Removes any Pieces that are at the coordinates contained in coords.
    *
    * @param coords Coordinates that contain pieces to remove
    */
+  @Override
   public void removePiece(Collection<Coordinate> coords) {
     for (Coordinate coord : coords) {
       myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
@@ -402,7 +408,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     currentBoardIndex = 0;
     int firstID = idList.get(currentBoardIndex);
     initializeBoards(boardList, idList);
-    updateTitle(firstID);
+    updateTitle(playerIDToNames.get(firstID));
     updateDisplayedBoard();
   }
+
+//  public void updateCurrentPlayerName(String name) {
+//    updateTitle(name);
+//  }
 }

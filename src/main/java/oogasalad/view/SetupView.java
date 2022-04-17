@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -58,8 +60,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private VBox centerBox;
   private HBox bottomPanel;
   private VBox removePiecePanel;
-  private Collection<Coordinate> lastPlaced;
   private StackPane myCenterPane;
+  private Collection<Coordinate> lastPlaced;
   private BoardView setupBoard;
   private Scene myScene;
   private TitlePanel myTitle;
@@ -68,7 +70,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private SetPiecePane shipPane;
   private PassComputerMessageView passComputerMessageView;
   private CellState[][] myCellBoard;
-  private int currentPlayer;
+  private int currentPlayerNumber;
+  private String currentPlayerName;
 
   public SetupView(CellState[][] board) {
     myPane = new BorderPane();
@@ -77,7 +80,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane.setId("setup-view-pane");
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
-    currentPlayer = 1;
+    currentPlayerNumber = 1;
+    currentPlayerName = "Player";
+    lastPlaced = new ArrayList<>();
 
     createTitlePanel();
     createBottomPanel();
@@ -88,7 +93,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void createPassMessageView() {
     passComputerMessageView = new PassComputerMessageView();
-    passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
+    passComputerMessageView.setButtonOnMouseClicked(e -> {
+      myScene.setRoot(myPane);
+      updateTitle("Player");
+      promptForName();
+    });
   }
 
   public void activateConfirm() {
@@ -133,8 +142,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private void createBottomPanel() {
     confirmButton = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), "Confirm");
     confirmButton.setDisable(true);
-    lastPlaced = new ArrayList<>();
-    Button removeLastPiece = ButtonMaker.makeTextButton("remove-last-button", e -> removePiece(), "Remove Last Placed Piece");
+    Button removeLastPiece = ButtonMaker.makeTextButton("remove-last-button", e -> removePiece(lastPlaced), "Remove Last Placed Piece");
     Button removeAll = ButtonMaker.makeTextButton("remove-all-button", e -> removeAllPieces(), "Remove All Pieces");
     removePiecePanel = BoxMaker.makeVBox("remove-piece-panel", 10, Pos.CENTER, removeLastPiece, removeAll);
     bottomPanel = BoxMaker.makeHBox("bottom-panel", 20, Pos.CENTER, removePiecePanel, confirmButton);
@@ -142,8 +150,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void handleConfirm() {
-    setCurrentPlayerNum();
-    switchPlayerMessage(" "+currentPlayer);
+    currentPlayerNumber++;
+    switchPlayerMessage(" "+ currentPlayerNumber);
     clearBoard();
     confirmButton.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
@@ -160,7 +168,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void createTitlePanel() {
-    myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
+    myTitle = new TitlePanel("Player " + currentPlayerNumber + SCREEN_TITLE);
     myTitle.setId("setup-title");
     myPane.setTop(myTitle);
   }
@@ -169,32 +177,43 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void propertyChange(PropertyChangeEvent evt) {
     if (confirmButton.isDisabled()) {
       Info info = (Info) evt.getNewValue();
-      notifyObserver(evt.getPropertyName(), new Coordinate(info.row(), info.col()));
+      notifyObserver(evt.getPropertyName(), info.row() + " " + info.col());
     }
   }
 
-  // FIXME: Make it so that we take player number from the player's list
+  public void promptForName() {
+    TextInputDialog dialog = new TextInputDialog();
 
-  public void setCurrentPlayerNum() {
-    currentPlayer++;
-    updateTitle();
+    dialog.setTitle("Setup");
+    dialog.setHeaderText("Player " + currentPlayerNumber + ", enter your name:");
+    dialog.setContentText("Name:");
+
+    Optional<String> result = dialog.showAndWait();
+
+    result.ifPresent(name -> {
+      currentPlayerName = name;
+      updateTitle(currentPlayerName);
+      notifyObserver("assignCurrentPlayerName", name);
+    });
   }
+
+  // FIXME: Make it so that we take player number from the player's list
 
   private void switchPlayerMessage(String nextPlayer) {
     passComputerMessageView.setPlayerName(nextPlayer);
     myScene.setRoot(passComputerMessageView);
   }
 
-  private void updateTitle() {
-    myTitle.changeTitle("Player " + currentPlayer + SCREEN_TITLE);
+  private void updateTitle(String playerName) {
+    myTitle.changeTitle(playerName + SCREEN_TITLE);
   }
 
   @Override
   public void placePiece(Collection<Coordinate> coords, CellState type) {
-    lastPlaced = coords;
     for (Coordinate c : coords) {
       setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
     }
+    lastPlaced = coords;
   }
 
   public void setLastPlaced(Collection<Coordinate> coords) {
@@ -202,21 +221,23 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   @Override
-  public void removePiece() {
-    for (Coordinate c : lastPlaced) {
+  public void removePiece(Collection<Coordinate> coords) {
+    for (Coordinate c : coords) {
       setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
     }
     confirmButton.setDisable(true);
     notifyObserver("removePiece", null);
+
   }
 
   public void removeAllPieces() {
+    lastPlaced = new ArrayList<>();
     confirmButton.setDisable(true);
+    clearBoard();
     notifyObserver("removeAllPieces", null);
   }
 
   public void clearBoard() {
-    lastPlaced.clear();
     myCenterPane.getChildren().remove(setupBoard.getBoardPane());
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     setupBoard.addObserver(this);

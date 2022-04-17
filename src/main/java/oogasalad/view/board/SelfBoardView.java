@@ -10,6 +10,13 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.CellView;
 import oogasalad.view.Info;
 
+/**
+ * This class is a BoardView that represents the current player's own board. It has no onClickHandlers
+ * as a user clicking on their own board should not do anything. This BoardView is displayed as one
+ * of the BoardViews during the main game.
+ *
+ * @author Minjun Kwak, Eric Xie, Edison Ooi
+ */
 public class SelfBoardView extends GameBoardView {
 
   private static final String HANDLE_SELF = "selfBoardClicked";

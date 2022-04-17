@@ -16,5 +16,5 @@ public interface BoardVisualizer {
   /**
    * Removes any Pieces that are at the coordinates contained in coords.
    */
-  void removePiece();
+  void removePiece(Collection<Coordinate> coords);
 }

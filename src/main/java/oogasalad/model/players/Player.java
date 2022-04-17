@@ -30,16 +30,18 @@ public interface Player {
 
     /**
      * Players are able to make purchases from in-game shop, and items are added to their inventory
+     *
      * @param amount cost of item
-     * @param item item to be added
-      */
+     * @param item   item to be added
+     */
     public void makePurchase(int amount, Item item);
 
 
     /**
      * Players need to place their pieces at the start of the game and might be able to move them
      * during the game, so it is intrinsic to the API for players to be able to place/move pieces
-     * @param s piece to be placed
+     *
+     * @param s          piece to be placed
      * @param coordinate
      * @return
      */
@@ -49,8 +51,9 @@ public interface Player {
     /**
      * Players have currency they can spend, and because certain gameplay rewards them with coins,
      * there must be a method to increment their total amount
+     *
      * @param amount number of coins to be added to player's account
-    */
+     */
     public void addGold(int amount);
 
     public void updateEnemyBoard(Coordinate c, int id, CellState state);
@@ -68,8 +71,16 @@ public interface Player {
 
     public int getID();
 
+    String getName();
+
+    void setName(String name);
+
     boolean canBeStruck(Coordinate c);
 
     Map<Integer, MarkerBoard> getEnemyMap();
+
+    void removePiece(String id);
+
+    void removeAllPieces();
 }
 
