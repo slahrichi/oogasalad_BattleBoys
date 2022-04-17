@@ -164,8 +164,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private boolean makeShot(Coordinate c, int id, Weapon weaponUsed) {
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
-    if(weaponUsed.checkCoordinates(c, currentPlayer.getEnemyMap().get(id))){
-      Map<Coordinate, CellState> hitResults = weaponUsed.getWeaponFunction().apply(c, enemy.getBoard());
+    try{
+      Map<Coordinate, CellState> hitResults = weaponUsed.getWeaponFunction(c, enemy.getBoard()).apply(c, enemy.getBoard());
       for(Coordinate hitCoord: hitResults.keySet()){
         adjustStrategy(currentPlayer, hitResults.get(hitCoord));
         currentPlayer.updateEnemyBoard(hitCoord, id, hitResults.get(hitCoord));
@@ -173,8 +173,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       }
       applyModifiers(currentPlayer, enemy);
       return true;
+    }catch (Exception e){
+      return false;
     }
-    return false;
   }
 
   private void adjustStrategy(Player player, CellState result) {

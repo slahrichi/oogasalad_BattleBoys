@@ -1,21 +1,42 @@
 package oogasalad.model.utilities.Weapons;
 
+import java.util.ArrayList;
+import java.util.List;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.MarkerBoard;
 
 public abstract class Weapon {
 
     WeaponFunction myWeaponFunction;
+    List<Coordinate> relativeCoordShots;
     String myID;
 
-    public abstract WeaponFunction getWeaponFunction();
+    public WeaponFunction getWeaponFunction(Coordinate coord, Board enemyBoard){
+        if(enemyBoard.checkBoundedCoordinate(coord)){
+            return myWeaponFunction;
+        }else{
+            throw new NullPointerException("Coordinate Provided Out of Bounds");
+        }
+    }
 
     public String getMyID(){
         return myID;
     }
 
-
-    public boolean checkCoordinates(Coordinate c, MarkerBoard markerBoard) {
-        return false;
+    /**
+     * Method that front end can call to display the action/tiles that will be affected by this weapon
+     * if it were to be played.
+     * @param absoluteCoord the coordinate of the tile that is being hovered at the moment
+     * @param currBoard the current board that is being hovered over
+     * @return List of coordinates that should be higlighted to show where the shots will land.
+     */
+    public List<Coordinate> getHighlightedCoords(Coordinate absoluteCoord, Board currBoard){
+        List<Coordinate> highlightedCoords = new ArrayList<>();
+        for(Coordinate relCoord: relativeCoordShots){
+            if(currBoard.checkBoundedCoordinate(new Coordinate(relCoord.getRow()+absoluteCoord.getRow(), relCoord.getColumn()+absoluteCoord.getColumn())))
+                highlightedCoords.add(new Coordinate(relCoord.getRow()+absoluteCoord.getRow(),
+                    relCoord.getColumn()+absoluteCoord.getColumn()));
+        }
+        return highlightedCoords;
     }
 }

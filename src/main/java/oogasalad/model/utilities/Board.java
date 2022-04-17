@@ -161,6 +161,8 @@ public class Board {
     return myNumShipsSunk;
   }
 
+  public boolean checkBoundedCoordinate(Coordinate coord){return boardMap.containsKey(coord);}
+
   public boolean canBeStruck(Coordinate c) {
     return boardMap.get(c).getHealth() != 0;
   }
