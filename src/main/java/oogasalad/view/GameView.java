@@ -282,14 +282,13 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void changeStylesheet() {
     nightMode = !nightMode;
+    myScene.getStylesheets().clear();
 
     if (nightMode) {
-      myScene.getStylesheets().clear();
       myScene.getStylesheets()
           .add(
               getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET).toExternalForm());
     } else {
-      myScene.getStylesheets().clear();
       myScene.getStylesheets()
           .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     }
