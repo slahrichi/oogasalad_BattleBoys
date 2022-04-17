@@ -65,7 +65,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
-    dummyWinConditions.add(new LoseXShipsLossCondition(1));
+    dummyWinConditions.add(new LoseXShipsLossCondition(2));
 
 
     data = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions);

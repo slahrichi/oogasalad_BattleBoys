@@ -1,9 +1,9 @@
 package oogasalad.controller;
 
-import static jdk.jfr.internal.consumer.EventLog.update;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,6 +24,8 @@ import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
@@ -35,7 +37,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int playerIndex;
   private int numShots;
   private int allowedShots;
-  private int size;
+  private static final String INVALID_METHOD = "Invalid method name given";
+  private static final Logger LOG = LogManager.getLogger(GameView.class);
 
   public GameManager(GameData data) {
     initialize(data);
@@ -76,7 +79,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void initialize(GameData data) {
     this.playerList = data.players();
     playerIndex = 0;
-    size = playerList.size();
     numShots = 0;
     allowedShots = 1;
     createIDMap();
@@ -96,8 +98,23 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int id = ((Info)evt.getNewValue()).ID();
     int row = ((Info)evt.getNewValue()).row();
     int col = ((Info)evt.getNewValue()).col();
-    if (makeShot(new Coordinate(row, col), id)) {
-      updateConditions(id);
+    Info info = new Info(row, col, id);
+    try {
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
+      m.invoke(this, info);
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+        NullPointerException e) {
+      throw new NullPointerException(INVALID_METHOD);
+    }
+  }
+
+  private void selfBoardClicked(Info info) {
+    LOG.info("Self board clicked at "+info.row()+", "+info.col());
+  }
+
+  private void handleShot(Info info) {
+    if (makeShot(new Coordinate(info.row(), info.col()), info.ID())) {
+      updateConditions(info.ID());
     }
   }
 

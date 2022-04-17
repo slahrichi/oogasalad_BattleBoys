@@ -59,6 +59,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String IMAGES_PATH = "images/";
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
   private static final String CENTER_PANE_ID = "view-center-pane";
+  private static final String VIEW_PANE_ID = "view-pane";
 
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
@@ -94,19 +95,27 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public GameView(List<CellState[][]> firstPlayerBoards, Collection<Collection<Coordinate>> coords) {
     myPane = new BorderPane();
-    myPane.setId("view-pane");
+    myPane.setId(VIEW_PANE_ID);
     nightMode = false;
 
     myBoards = new ArrayList<>();
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
 
-    initializeFirstPlayerBoards(firstPlayerBoards);
+    initializeBoards(firstPlayerBoards, createInitialIDList(firstPlayerBoards.size()));
     createCenterPane();
     createRightPane();
     createTitlePanel();
     createPassMessageView();
     initializePiecesLeft(coords);
+  }
+
+  private List<Integer> createInitialIDList(int numPlayers) {
+    List<Integer> idList = new ArrayList<>();
+    for (int i = 0; i < numPlayers; i++) {
+      idList.add(i);
+    }
+    return idList;
   }
 
   private void createPassMessageView() {
@@ -121,10 +130,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
   }
 
-  private void initializeFirstPlayerBoards(List<CellState[][]> boards) {
-    myBoards.add(new SelfBoardView(50, boards.get(0), 0));
+  private void initializeBoards(List<CellState[][]> boards, List<Integer> idList) {
+    GameBoardView self = new SelfBoardView(50, boards.get(0), idList.get(0));
+    myBoards.add(self);
+    self.addObserver(this);
     for (int i = 1; i < boards.size(); i++) {
-      GameBoardView enemy = new EnemyBoardView(50, boards.get(i), i);
+      GameBoardView enemy = new EnemyBoardView(50, boards.get(i), idList.get(i));
       myBoards.add(enemy);
       enemy.addObserver(this);
     }
@@ -249,6 +260,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     int id = ((Info)evt.getNewValue()).ID();
     int row = ((Info)evt.getNewValue()).row();
     int col = ((Info)evt.getNewValue()).col();
+    LOG.info("Method name: " + evt.getPropertyName());
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
     notifyObserver(evt.getPropertyName(), evt.getNewValue());
   }
@@ -378,18 +390,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
-    switchPlayerMessage("Player "+(idList.get(0)+1));
+    switchPlayerMessage(""+(idList.get(0)+1));
     myBoards.clear();
     myPiecesLeft = pieceList;
     currentBoardIndex = 0;
-    CellState[][] firstBoard = boardList.get(currentBoardIndex);
     int firstID = idList.get(currentBoardIndex);
-    myBoards.add(new SelfBoardView(50, firstBoard, firstID));
-    for (int i = 1; i < boardList.size(); i++) {
-      GameBoardView enemy = new EnemyBoardView(50, boardList.get(i), idList.get(i));
-      myBoards.add(enemy);
-      enemy.addObserver(this);
-    }
+    initializeBoards(boardList, idList);
     updateTitle(firstID);
     updateDisplayedBoard();
   }
