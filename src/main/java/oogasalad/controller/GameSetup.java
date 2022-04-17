@@ -53,6 +53,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     initializeSetupView();
   }
 
+  public SetupView getSetupView() {
+    return setupView;
+  }
+
 
   private void initializeSetupView() {
     setupView = new SetupView(board);

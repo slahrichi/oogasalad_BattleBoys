@@ -127,7 +127,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if(idMap.containsKey(id)){
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
       Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
-      System.out.println("update pieces left");
       view.updatePiecesLeft(coords);
     }
     numShots++;
@@ -156,7 +155,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (engineMap.containsKey(player)) {
       DecisionEngine engine = engineMap.get(player);
       EngineRecord move = engine.makeMove();
-      System.out.println(move);
+      LOG.info(move);
       makeShot(move.shot(), move.enemyID());
       updateConditions(player.getID());
     }
