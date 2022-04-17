@@ -1,5 +1,6 @@
 package oogasalad.model.parsing;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -26,6 +27,7 @@ public class ParseDecisionEngines extends ParsedElement{
   public Object parse(Properties props) throws ParserException {
     List<String> decisionEngines = List.of(
         props.getProperty(PROPERTIES_DECISION_ENGINES_LIST).split(SPACE));
+    decisionEngines = new ArrayList<>(decisionEngines);
     List<String> players = List.of(props.getProperty(PROPERTIES_PLAYER_LIST).split(SPACE));
     if(decisionEngines.size() != players.size()) {
       throw new ParserException(exceptionMessageProperties.getProperty(MISALIGNED_ENGINES).formatted(players.size(), decisionEngines.size()));
@@ -52,6 +54,6 @@ public class ParseDecisionEngines extends ParsedElement{
 
   @Override
   public Class getParsedClass() {
-    return null;
+    return List.class;
   }
 }
