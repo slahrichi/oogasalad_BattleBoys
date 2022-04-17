@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import oogasalad.model.utilities.tiles.ShipCell;
 
-public class StaticPiece extends Piece implements Serializable {
+public class StaticPiece extends Piece {
 
   public StaticPiece(List<ShipCell> cellList, List<Coordinate> relativeCoords, String id) {
     super(cellList, relativeCoords, new ArrayList<>(), id);
