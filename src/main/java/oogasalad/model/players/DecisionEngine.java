@@ -18,6 +18,7 @@ public abstract class DecisionEngine {
   private Player myPlayer;
   private Random myRandom;
   private EngineRecord myLastShot;
+  private int pieceIndex;
 
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player) {
@@ -56,6 +57,14 @@ public abstract class DecisionEngine {
 
   protected void setLastShot(EngineRecord shot) {
     myLastShot = shot;
+  }
+
+  protected int getPieceIndex() {
+    return pieceIndex;
+  }
+
+  protected void updatePieceIndex() {
+    pieceIndex += 1;
   }
 
   protected boolean canBeRemoved(CellState result) {
