@@ -1,16 +1,27 @@
-package oogasalad.model.utilities;
+package oogasalad.model.utilities.Pieces;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.ShipCell;
 
 public class StaticPiece extends Piece {
 
+  public static final List<Coordinate> NO_MOVEMENT_PATH = Collections.unmodifiableList(new ArrayList<Coordinate>());
+
   public StaticPiece(List<ShipCell> cellList, List<Coordinate> relativeCoords, String id) {
-    super(cellList, relativeCoords, id);
+    super(cellList, relativeCoords, NO_MOVEMENT_PATH,  id);
   }
+
   public StaticPiece(String id){
     super(id);
   }
+
+  public StaticPiece(StaticPiece parent) {
+    super(parent);
+  }
+
   @Override
   public void registerDamage(ShipCell hitLocation) {
 
@@ -25,7 +36,8 @@ public class StaticPiece extends Piece {
 
   @Override
   public Piece copyOf() {
-    return new StaticPiece(List.copyOf(getCellList()), List.copyOf(getRelativeCoords()), getID());
+    //return new StaticPiece(List.copyOf(getCellList()), List.copyOf(getRelativeCoords()), getID());
+    return new StaticPiece(this);
   }
 
 

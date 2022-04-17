@@ -1,4 +1,4 @@
-package oogasalad.model.utilities;
+package oogasalad.model.utilities.Pieces;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
@@ -32,7 +32,17 @@ public abstract class Piece {
     //intializeHPList(cellList);
   }
 
-  /*
+  public Piece(Piece parent) {
+    status = "Alive";
+    pieceId = parent.pieceId;
+    cellList = List.copyOf(parent.cellList);
+    allCells = new ArrayList<>(cellList);
+    myRelativeCoords = parent.myRelativeCoords;
+    myMover = new PieceMover(parent.myMover);
+    //intializeHPList(cellList);
+  }
+
+
   public void movePiece(Map<Coordinate, CellInterface> boardMap) {
     for(ShipCell currCell: allCells) {
       boardMap.put(currCell.getCoordinates(), new WaterCell(currCell.getCoordinates()));
@@ -45,7 +55,6 @@ public abstract class Piece {
     }
   }
 
-   */
 
   public void removeFromBoard(Map<Coordinate, CellInterface> boardMap) {
     for(ShipCell currCell: allCells) {
@@ -100,7 +109,7 @@ public abstract class Piece {
 
   public abstract void registerDamage(ShipCell hitLocation);
 
-  protected boolean checkDeath() {
+  public boolean checkDeath() {
     System.out.println("Ship's hp is " + cellList.size());
     return (cellList.size() == 0);
   }
@@ -116,6 +125,7 @@ public abstract class Piece {
   protected void updateStatus(String newStatus) {
     status = newStatus;
   }
+
 
   public String getID(){return pieceId;}
 
