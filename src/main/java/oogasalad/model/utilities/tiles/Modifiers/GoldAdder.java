@@ -2,15 +2,15 @@ package oogasalad.model.utilities.tiles.Modifiers;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 import oogasalad.model.utilities.tiles.CellInterface;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
 public class GoldAdder extends PlayerModifier{
 
   private boolean hasBeenAppliedAlready = false;
   private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
       new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
+
   public GoldAdder(int gold){
     PlayerConsumer consumer = a->{
       a[0].addGold(gold);

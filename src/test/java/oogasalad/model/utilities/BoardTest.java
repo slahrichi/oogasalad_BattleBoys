@@ -4,15 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import oogasalad.GameData;
-import oogasalad.controller.GameManager;
-import oogasalad.model.players.AIPlayer;
-import oogasalad.model.players.HumanPlayer;
-import oogasalad.model.players.Player;
-import oogasalad.model.utilities.WinConditions.WinCondition;
-import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

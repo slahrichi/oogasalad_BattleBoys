@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.SetupBoardView;
 import oogasalad.view.interfaces.BoardVisualizer;

@@ -1,6 +1,6 @@
 package oogasalad.view.interfaces;
 
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
 
 /**

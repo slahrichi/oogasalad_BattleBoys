@@ -1,12 +1,9 @@
 package oogasalad.model.players;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

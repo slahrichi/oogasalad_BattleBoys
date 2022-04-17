@@ -4,7 +4,7 @@ import static oogasalad.view.GameView.CELL_STATE_RESOURCES;
 
 import java.util.List;
 import javafx.scene.paint.Color;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import oogasalad.view.CellView;
 
 public class SelfBoardView extends GameBoardView {

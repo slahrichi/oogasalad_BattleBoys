@@ -15,14 +15,13 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import oogasalad.PlayerData;
-import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.Weapons.Weapon;
+import oogasalad.model.utilities.tiles.IslandCell;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
 
 public class Parser {
@@ -41,6 +40,8 @@ public class Parser {
   private final String PROPERTIES_PLAYER_LIST = "Players";
   private final String PROPERTIES_PIECES_FILE = "PiecesFile";
   private final String PROPERTIES_BOARD_FILE = "BoardFile";
+  private final String PROPERTIES_WEAPONS_FILE = "WeaponsFile";
+  private final String PROPERTIES_ISLANDS_FILE = "IslandsFile";
   private final String PROPERTIES_DECISION_ENGINES_LIST = "DecisionEngines";
   private final String HUMAN_PLAYER = "HumanPlayer";
   private final String AI_PLAYER = "AIPlayer";
@@ -62,8 +63,12 @@ public class Parser {
     String nameOfNewFile = file.toString().replaceFirst("[.][^.]+$", "");
     String nameOfBoardFile = nameOfNewFile + "Board.json";
     String nameOfPiecesFile = nameOfNewFile + "Pieces.json";
+    String nameOfWeaponsFile = nameOfNewFile + "Weapons.json";
+    String nameOfIslandsFile = nameOfNewFile + "Islands.json";
     saveBoard(props, data.board(), nameOfBoardFile);
     savePieces(props, data.pieces(), nameOfPiecesFile);
+    saveWeapons(props, data.weapons(), nameOfWeaponsFile);
+    saveIslands(props, data.island(), nameOfIslandsFile);
     try {
       FileOutputStream outputStream = new FileOutputStream(file);
       props.store(outputStream, "generated via save");
@@ -128,17 +133,21 @@ public class Parser {
     CellState[][] cellBoard;
     List<Piece> pieces;
     List<String> decisionEngines;
-
+    List<Weapon> weapons;
+    List<IslandCell> islands;
     try {
       players = loadPlayers(props);
       cellBoard = loadBoard(props);
       pieces = loadPieces(props);
       decisionEngines = loadDecisionEngines(props, players);
+      weapons = loadWeapons(props);
+      islands = loadIslands(props);
+
     } catch (JsonSyntaxException e) {
       throw new ParserException(exceptionMessageProperties.getProperty("jsonError").formatted(pathToFile));
     }
 
-    return new PlayerData(players, pieces, cellBoard, decisionEngines);
+    return new PlayerData(players, pieces, cellBoard, decisionEngines, weapons, islands);
 
   }
 
@@ -218,12 +227,98 @@ public class Parser {
     return ret;
   }
 
+
+  private List<Weapon> loadWeapons(Properties props) {
+    String weaponsFile = props.getProperty(PROPERTIES_WEAPONS_FILE);
+    Gson gson = new GsonBuilder().registerTypeAdapter(Weapon.class, new GSONHelper()).create();
+    Type listOfMyClassObject = new TypeToken<ArrayList<Weapon>>() {
+    }.getType();
+    List<Weapon> ret = null;
+    try {
+      ret = gson.fromJson(new FileReader(weaponsFile), listOfMyClassObject);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return ret;
+  }
+
+  private List<IslandCell> loadIslands(Properties props){
+    String islandFile = props.getProperty(PROPERTIES_ISLANDS_FILE);
+    Gson gson = new GsonBuilder().registerTypeAdapter(IslandCell.class, new GSONHelper()).create();
+    Type listOfMyClassObject = new TypeToken<ArrayList<IslandCell>>() {
+    }.getType();
+    List<IslandCell> ret = null;
+    try {
+      ret = gson.fromJson(new FileReader(islandFile), listOfMyClassObject);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return ret;
+  }
+
+
   private void savePlayers(Properties props, List<String> players) {
     props.put(PROPERTIES_PLAYER_LIST, String.join(" ", players));
   }
 
   private void saveDecisionEngines(Properties props, List<String> decisionEngines) {
     props.put(PROPERTIES_DECISION_ENGINES_LIST, String.join(" ", decisionEngines));
+  }
+
+// draft method to replace saveWeapons, saveIslands, and savePieces
+  // same must be done to load()
+//  private void saveSomething(Properties props, String type, String location) throws ClassNotFoundException{
+//    Gson gson = new GsonBuilder().setPrettyPrinting().
+//        registerTypeHierarchyAdapter(Class.forName(type), new GSONHelper()).
+//        create();
+//    String json = gson.toJson(type);
+//    File myNewFile = new File(location);
+//    try {
+//      if (myNewFile.createNewFile()) { //new file created
+//        FileWriter myWriter = new FileWriter(myNewFile);
+//        myWriter.write(json);
+//        myWriter.close();
+//      }
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//    props.put(type, myNewFile.toString());
+//  }
+
+  private void saveWeapons(Properties props, List<Weapon> weapons, String location){
+    Gson gson = new GsonBuilder().setPrettyPrinting().
+        registerTypeHierarchyAdapter(Weapon.class, new GSONHelper()).
+        create();
+    String json = gson.toJson(weapons);
+    File myNewFile = new File(location);
+    try {
+      if (myNewFile.createNewFile()) { //new file created
+        FileWriter myWriter = new FileWriter(myNewFile);
+        myWriter.write(json);
+        myWriter.close();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    props.put(PROPERTIES_WEAPONS_FILE, myNewFile.toString());
+  }
+
+  private void saveIslands(Properties props, List<IslandCell> islands, String location) {
+    Gson gson = new GsonBuilder().setPrettyPrinting().
+        registerTypeHierarchyAdapter(IslandCell.class, new GSONHelper()).
+        create();
+    String json = gson.toJson(islands);
+    File myNewFile = new File(location);
+    try {
+      if (myNewFile.createNewFile()) { //new file created
+        FileWriter myWriter = new FileWriter(myNewFile);
+        myWriter.write(json);
+        myWriter.close();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    props.put(PROPERTIES_ISLANDS_FILE, myNewFile.toString());
   }
 
   private void saveBoard(Properties props, CellState[][] board, String location) {
@@ -262,5 +357,6 @@ public class Parser {
     }
     props.put(PROPERTIES_PIECES_FILE, myNewFile.toString());
   }
+
 
 }

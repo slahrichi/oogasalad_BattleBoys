@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
 public abstract class Piece {
 

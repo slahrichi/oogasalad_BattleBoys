@@ -10,10 +10,9 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
-import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

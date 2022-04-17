@@ -18,7 +18,7 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import oogasalad.view.GameView;
 import oogasalad.view.StartView;
 import org.apache.logging.log4j.LogManager;

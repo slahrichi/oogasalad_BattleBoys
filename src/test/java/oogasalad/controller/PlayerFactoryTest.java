@@ -9,7 +9,7 @@ import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.EasyDecisionEngine;
 import oogasalad.model.players.Player;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

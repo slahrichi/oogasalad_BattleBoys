@@ -3,7 +3,7 @@ package oogasalad.view.board;
 import static oogasalad.view.GameView.MARKER_RESOURCES;
 import java.util.List;
 import javafx.scene.paint.Color;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import oogasalad.view.CellView;
 
 public class EnemyBoardView extends GameBoardView {

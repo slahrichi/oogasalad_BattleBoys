@@ -1,7 +1,7 @@
 package oogasalad.view.board;
 
 
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
 public abstract class GameBoardView extends BoardView {
 

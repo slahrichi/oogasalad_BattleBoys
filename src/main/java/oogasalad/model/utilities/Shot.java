@@ -1,8 +1,7 @@
 package oogasalad.model.utilities;
 
-import javafx.scene.control.Cell;
 import oogasalad.model.utilities.tiles.CellInterface;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
 public class Shot {
 

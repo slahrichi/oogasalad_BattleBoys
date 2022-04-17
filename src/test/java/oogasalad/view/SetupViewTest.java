@@ -19,7 +19,7 @@ import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import oogasalad.view.panels.TitlePanel;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;

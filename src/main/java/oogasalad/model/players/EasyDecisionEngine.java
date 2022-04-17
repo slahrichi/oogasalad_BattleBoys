@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
 public class EasyDecisionEngine extends DecisionEngine {
 

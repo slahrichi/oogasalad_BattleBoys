@@ -7,7 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.PropertyObservable;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import oogasalad.view.CellView;
 import oogasalad.view.Info;
 

@@ -2,7 +2,7 @@ package oogasalad.view.interfaces;
 
 import java.util.Collection;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
 public interface BoardVisualizer {
 
