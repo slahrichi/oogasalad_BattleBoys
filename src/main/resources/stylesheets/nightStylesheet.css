@@ -24,6 +24,8 @@
 .button{
   -fx-font-size: 12pt;
   -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+  -fx-font-family: "Segoe UI Semibold";
+
 }
 
 #titleText{
@@ -38,7 +40,7 @@
   -fx-padding: 10;
   -fx-max-width: infinity;
   -fx-alignment: center;
-  -fx-border-color: black;
+  -fx-border-color: white;
 }
 
 #view-pane {
