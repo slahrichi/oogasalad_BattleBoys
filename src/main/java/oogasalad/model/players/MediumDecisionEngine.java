@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
+import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 
@@ -50,6 +51,11 @@ public class MediumDecisionEngine extends DecisionEngine {
     if (canBeRemoved(result)) {
       getCoordinateList().remove(getLastShot());
     }
+  }
+
+  @Override
+  public Coordinate placePiece(List<Piece> pieceList) {
+    return null;
   }
 
   private void prepareBFS() {

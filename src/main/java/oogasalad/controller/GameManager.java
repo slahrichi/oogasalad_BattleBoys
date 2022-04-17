@@ -161,7 +161,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-
   public void applyWinConditions() {
     for (WinCondition condition: winConditionsList) {
       checkCondition(condition);

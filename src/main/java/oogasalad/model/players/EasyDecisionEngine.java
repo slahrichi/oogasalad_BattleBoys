@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
+import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class EasyDecisionEngine extends DecisionEngine {
@@ -42,5 +43,9 @@ public class EasyDecisionEngine extends DecisionEngine {
     else {
       getDeque().addFirst(getLastShot());
     }
+  }
+
+  public Coordinate placePiece(List<Piece> pieceList) {
+    return null;
   }
 }

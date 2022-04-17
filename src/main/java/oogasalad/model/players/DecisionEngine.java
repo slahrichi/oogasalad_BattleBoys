@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
+import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 public abstract class DecisionEngine {
@@ -57,4 +58,5 @@ public abstract class DecisionEngine {
 
   public abstract void adjustStrategy(CellState result);
 
+  public abstract Coordinate placePiece(List<Piece> pieceList);
 }

@@ -6,9 +6,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
+import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
@@ -29,6 +31,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private List<Player> playerList;
   private int playerIndex;
   private List<Piece> pieceList;
+  private Map<Player, DecisionEngine> engineMap;
   private int pieceIndex;
 
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
@@ -46,6 +49,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     this.pieceList = data.pieces();
     this.pieceIndex = 0;
     this.playerIndex = 0;
+    this.engineMap = data.engineMap();
     setupGame();
   }
 
@@ -106,6 +110,19 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       return;
     }
     resetElements();
+    handleAI();
+  }
+
+  private void handleAI() {
+    Player player = playerList.get(playerIndex);
+    if (engineMap.containsKey(player)) {
+      DecisionEngine engine = engineMap.get(player);
+      for (int i = 0; i < playerList.size(); i++) {
+        Coordinate c = engine.placePiece(pieceList);
+        placePiece(c);
+      }
+
+    }
   }
 
   private void resetElements() {
