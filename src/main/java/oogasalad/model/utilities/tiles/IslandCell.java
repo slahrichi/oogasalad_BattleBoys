@@ -33,6 +33,11 @@ public class IslandCell extends Cell implements CellInterface {
     return false;
   }
 
+  @Override
+  public void moveCell(Coordinate nextMovement) {
+
+  }
+
   /*
   @Override
   public List<Modifiers> update() {

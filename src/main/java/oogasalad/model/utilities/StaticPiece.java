@@ -1,12 +1,13 @@
 package oogasalad.model.utilities;
 
+import java.util.ArrayList;
 import java.util.List;
 import oogasalad.model.utilities.tiles.ShipCell;
 
 public class StaticPiece extends Piece {
 
   public StaticPiece(List<ShipCell> cellList, List<Coordinate> relativeCoords, String id) {
-    super(cellList, relativeCoords, id);
+    super(cellList, relativeCoords, new ArrayList<>(), id);
   }
   public StaticPiece(String id){
     super(id);

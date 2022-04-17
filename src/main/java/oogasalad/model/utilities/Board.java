@@ -3,6 +3,7 @@ package oogasalad.model.utilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -177,5 +178,23 @@ public class Board {
       }
     }
   return retModifers;
+  }
+
+  public void removePiece(String ID) {
+    //throw exception if ID is not good ID
+    Piece pieceToRemove = myPieces.get(ID);
+    myPieces.remove(ID);
+    pieceToRemove.removeFromBoard(boardMap);
+  }
+
+  public void removeAllPieces() {
+    Iterator<String> itr = myPieces.keySet().iterator();
+    while (itr.hasNext()) {
+      myPieces.get(itr.next()).removeFromBoard(boardMap);
+      itr.remove();
+    }
+//    for(String id: myPieces.keySet()) {
+//      removePiece(id);
+//    }
   }
 }

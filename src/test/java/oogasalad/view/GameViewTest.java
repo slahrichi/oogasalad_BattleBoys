@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
@@ -69,7 +71,11 @@ public class GameViewTest extends DukeApplicationTest {
     for (Piece piece : pieces) {
       pieceCoords.add(piece.getRelativeCoords());
     }
-    view = new GameView(firstPlayerBoards, pieceCoords);
+    Map<Integer, String> idMap = new HashMap<>();
+    for (int i = 0; i < numPlayers; i++) {
+      idMap.put(i, "Player" + i);
+    }
+    view = new GameView(firstPlayerBoards, pieceCoords, idMap);
     stage.setScene(view.createScene());
     stage.show();
 
