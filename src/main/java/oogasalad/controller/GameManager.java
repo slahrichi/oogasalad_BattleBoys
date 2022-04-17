@@ -52,9 +52,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return view.createScene();
   }
 
-  public GameView getView() {
-    return view;
-  }
 
   private void initialize(GameData data) {
     this.playerList = data.players();
@@ -165,7 +162,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-  public void applyWinConditions() {
+  private void applyWinConditions() {
     for (WinCondition condition: winConditionsList) {
       checkCondition(condition);
     }
