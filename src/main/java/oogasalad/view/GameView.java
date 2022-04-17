@@ -7,8 +7,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.geometry.Insets;
 import java.util.ResourceBundle;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -16,14 +16,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.EngineRecord;
 import oogasalad.model.utilities.Coordinate;
@@ -57,7 +54,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String DAY_STYLESHEET = "stylesheets/viewStylesheet.css";
   private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
   private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
-  private static final String MARKER_RESOURCES_PATH = "/Markers";
   private static final String IMAGES_PATH = "images/";
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
   private static final String CENTER_PANE_ID = "view-center-pane";
@@ -67,9 +63,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
       CELL_STATE_RESOURCES_PATH);
-  ;
-  public static ResourceBundle MARKER_RESOURCES = ResourceBundle.getBundle(
-      MARKER_RESOURCES_PATH);
   public static final String FILL_PREFIX = "FillColor_";
 
   private TitlePanel myTitle;
@@ -85,7 +78,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private VBox myRightPane;
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
-  private LegendPane legendPane;
+  private LegendPane pieceLegendPane;
+  private LegendPane markerLegendPane;
   private ConfigPane configPane;
   private DynamicLabel shotsRemainingLabel;
   private DynamicLabel healthLabel;
@@ -162,7 +156,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText("Ships Remaining");
 
-    setupLegendPane();
+    setupPieceLegendPane();
 
     shotsRemainingLabel = LabelMaker.makeDynamicLabel("Shots Remaining: %s", "0",
         "shots-remaining-label");
@@ -174,19 +168,19 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel,
         healthLabel, goldLabel, shopButton,
-        piecesRemainingPane, legendPane, configPane);
+        piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
   }
 
 
-  private void setupLegendPane() {
+  private void setupPieceLegendPane() {
     LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
     for (CellState state : CellState.values()) {
       colorMap.put(state.name(),
           Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
-    legendPane = new LegendPane(colorMap);
+    pieceLegendPane = new LegendPane(colorMap);
   }
 
   private void createCenterPane() {
@@ -401,7 +395,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   @Override
   public void displayShotAt(int x, int y, CellState result) {
     myBoards.get(currentBoardIndex)
-        .setColorAt(x, y, Color.valueOf(MARKER_RESOURCES.getString(FILL_PREFIX + result.name())));
+        .setColorAt(x, y, Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + result.name())));
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList,
@@ -423,10 +417,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void displayAIMove(EngineRecord move, int id) {
     String message = String.format("Player %d took a show at row %d, column %d on player %d",
         id + 1, move.shot().getRow(), move.shot().getColumn(), move.enemyID() + 1);
-    Alert alert = new Alert(AlertType.ERROR, message);
+    Alert alert = new Alert(AlertType.INFORMATION, message);
     Node alertNode = alert.getDialogPane();
     alertNode.setId("alert");
-    alert.showAndWait();
+    alert.show();
   }
 
 }
