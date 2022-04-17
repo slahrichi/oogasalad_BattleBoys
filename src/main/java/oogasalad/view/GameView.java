@@ -84,7 +84,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
   private LegendPane pieceLegendPane;
-  private LegendPane markerLegendPane;
   private ConfigPane configPane;
   private DynamicLabel shotsRemainingLabel;
   private DynamicLabel healthLabel;
@@ -471,10 +470,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     updateTitle(playerIDToNames.get(firstID));
     updateDisplayedBoard();
   }
-
-//  public void updateCurrentPlayerName(String name) {
-//    updateTitle(name);
-//
 
   public void displayAIMove(EngineRecord move, int id) {
     String message = String.format("Player %d took a show at row %d, column %d on player %d",
