@@ -19,7 +19,7 @@ import oogasalad.view.Info;
  */
 public class SelfBoardView extends GameBoardView {
 
-  private static final String HANDLE_SELF = "selfBoardClicked";
+  private static final String SELF = "Self";
 
   public SelfBoardView(double size, CellState[][] arrayLayout, int id) {
     super(size, arrayLayout, id);
@@ -38,6 +38,6 @@ public class SelfBoardView extends GameBoardView {
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    notifyObserver(HANDLE_SELF, new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
+    notifyObserver(evt.getPropertyName()+SELF, new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
   }
 }

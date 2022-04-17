@@ -2,6 +2,8 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -59,9 +61,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String MARKER_RESOURCES_PATH = "/Markers";
   private static final String IMAGES_PATH = "images/";
-  private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
+  private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d, col: %d";
+  private static final String BOARD_HOVERED_LOG = "Board %d was hovered over at row: %d, col: %d";
   private static final String CENTER_PANE_ID = "view-center-pane";
   private static final String VIEW_PANE_ID = "view-pane";
+  private static final String INVALID_METHOD = "Invalid method name given";
+  private static final String SHOT_METHOD = "handleShot";
   private static final double BOARD_SIZE = 50;
 
 
@@ -272,17 +277,67 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    int id = ((Info) evt.getNewValue()).ID();
-    int row = ((Info) evt.getNewValue()).row();
-    int col = ((Info) evt.getNewValue()).col();
-    LOG.info("Method name: " + evt.getPropertyName());
+    try {
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
+      m.invoke(this, evt.getNewValue());
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+        NullPointerException e) {
+      throw new NullPointerException(INVALID_METHOD);
+    }
+  }
+
+  private void cellClickedSelf(Info info) {
+    int id = info.ID();
+    int row = info.row();
+    int col = info.col();
+    LOG.info("cellClickedSelf");
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver(evt.getPropertyName(), evt.getNewValue());
+    notifyObserver("selfBoardClicked", info);
+  }
+
+  private void cellClickedEnemy(Info info) {
+    int id = info.ID();
+    int row = info.row();
+    int col = info.col();
+    LOG.info("cellClickedEnemy");
+    LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
+    notifyObserver(SHOT_METHOD, info);
+  }
+
+  private void cellHoveredSelf(Info info) {
+//    int id = info.ID();
+//    int row = info.row();
+//    int col = info.col();
+//    LOG.info("cellHoveredSelf");
+//    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
+  }
+
+  private void cellHoveredEnemy(Info info) {
+//    int id = info.ID();
+//    int row = info.row();
+//    int col = info.col();
+//    LOG.info("cellHoveredEnemy");
+//    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
+  }
+
+  private void cellExitedSelf(Info info) {
+//    int id = info.ID();
+//    int row = info.row();
+//    int col = info.col();
+//    LOG.info("cellExitedSelf");
+//    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
+  }
+
+  private void cellExitedEnemy(Info info) {
+//    int id = info.ID();
+//    int row = info.row();
+//    int col = info.col();
+//    LOG.info("cellExitedEnemy");
+//    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
   }
 
   private void changeStylesheet() {
     nightMode = !nightMode;
-
     if (nightMode) {
       myScene.getStylesheets().clear();
       myScene.getStylesheets()
