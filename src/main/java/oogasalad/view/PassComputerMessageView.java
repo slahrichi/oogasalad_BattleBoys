@@ -10,16 +10,23 @@ import javafx.scene.text.Font;
 import oogasalad.view.maker.LabelMaker;
 
 public class PassComputerMessageView extends VBox {
-  private static String PASS_MESSAGE = "Please pass the computer to player ";
+
+  private static final String DEFAULT_RESOURCE_PACKAGE = "/";
+  private static final String STYLESHEET = "stylesheets/messageStylesheet.css";
+
+  private static String PASS_MESSAGE = "Please pass the computer to player";
   private static String BUTTON_TEXT = "OK";
   private Label messageLabel;
   private Button confirmButton;
 
   public PassComputerMessageView() {
+
     setSpacing(20);
     setAlignment(Pos.CENTER);
     createMessageLabel();
     createConfirmButton();
+    this.getStylesheets().add(DEFAULT_RESOURCE_PACKAGE + STYLESHEET);
+    setId("messageBox");
   }
 
   private void createMessageLabel() {
