@@ -84,6 +84,7 @@ public class LegendPane extends TitledPane {
       legendColor.setWidth(LEGEND_COLOR_WIDTH);
       legendColor.setHeight(LEGEND_COLOR_HEIGHT);
       legendColor.setFill(myColor);
+      legendColor.setStroke(Color.BLACK);
 
       this.getChildren().add(legendColor);
     }

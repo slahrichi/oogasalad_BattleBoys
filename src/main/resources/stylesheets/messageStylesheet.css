@@ -16,7 +16,7 @@
 }
 
 #pass-computer-message-label{
-  -fx-background-color: white;
+  -fx-background-color: grey;
   -fx-border-color: black;
   -fx-pref-height: 50;
   -fx-padding: 10;

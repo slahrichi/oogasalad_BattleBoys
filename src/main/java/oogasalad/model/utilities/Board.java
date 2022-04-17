@@ -100,7 +100,7 @@ public class Board {
     piece.initializeHPList();
   }
 
-  private boolean hasValidPlacement(Coordinate topLeft, Piece piece) {
+  public boolean hasValidPlacement(Coordinate topLeft, Piece piece) {
     for (Coordinate relative : piece.getRelativeCoords()) {
       if (!canPlaceAt(Coordinate.sum(topLeft, relative))) {
         return false;

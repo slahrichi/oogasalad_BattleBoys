@@ -5,13 +5,15 @@ import static oogasalad.view.GameView.FILL_PREFIX;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,17 +21,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import oogasalad.PropertyObservable;
-import oogasalad.controller.GameSetup;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardView;
@@ -39,6 +37,7 @@ import oogasalad.view.interfaces.ErrorDisplayer;
 import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.panels.TitlePanel;
+import oogasalad.view.panes.ConfigPane;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import org.apache.logging.log4j.LogManager;
@@ -47,42 +46,58 @@ import org.apache.logging.log4j.Logger;
 public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer,
     BoardVisualizer {
 
+  private ResourceBundle myResources;
+
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
-  private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "stylesheets/setupStylesheet.css";
+  private static final String DAY_STYLESHEET = "stylesheets/setupStylesheet.css";
+  private static final String NIGHT_STYLESHEET  = "stylesheets/nightSetupStylesheet.css";
+  private static final String INVALID_METHOD = "Invalid method name given";
+  private static final String PLACE_PIECE = "placePiece";
   private static final Logger LOG = LogManager.getLogger(SetupView.class);
 
-
   private BorderPane myPane;
-  private Button confirmButton;
   private VBox centerBox;
   private HBox bottomPanel;
   private VBox removePiecePanel;
+  private VBox configBox;
+  private Button confirmButton;
+
   private StackPane myCenterPane;
   private Collection<Coordinate> lastPlaced;
+  private Collection<Coordinate> nextToPlace;
   private BoardView setupBoard;
   private Scene myScene;
   private TitlePanel myTitle;
-  private VBox configBox;
+
   private LegendPane legendPane;
   private SetPiecePane shipPane;
+  private ConfigPane configPane;
   private PassComputerMessageView passComputerMessageView;
   private CellState[][] myCellBoard;
+
   private int currentPlayerNumber;
   private String currentPlayerName;
+  private String SCREEN_TITLE;
+  private boolean nightMode;
 
-  public SetupView(CellState[][] board) {
+  public SetupView(CellState[][] board, ResourceBundle resourceBundle) {
     myPane = new BorderPane();
-    myPane.setBackground(
-        new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
     myPane.setId("setup-view-pane");
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
+    lastPlaced = new ArrayList<>();
+
+    myResources = resourceBundle;
+    nightMode = false;
     currentPlayerNumber = 1;
     currentPlayerName = "Player";
     lastPlaced = new ArrayList<>();
+    nextToPlace = new ArrayList<>();
+
+    SCREEN_TITLE = myResources.getString("SetupTitlePrefix");
+
 
     createTitlePanel();
     createBottomPanel();
@@ -105,17 +120,19 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void displayCompletion() {
+    nextToPlace = new ArrayList<>();
     shipPane.showListCompletion();
   }
 
   public Scene getScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.getStylesheets()
-        .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + STYLESHEET).toExternalForm());
+        .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     return myScene;
   }
 
   public void setCurrentPiece(Collection<Coordinate> nextPiece) {
+    nextToPlace = nextPiece;
     shipPane.updateShownPieces(List.of(nextPiece));
   }
 
@@ -126,32 +143,37 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     shipPane = new SetPiecePane(20);
     shipPane.setText("Current Ship");
 
-    configBox = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shipPane, legendPane);
+    configPane = new ConfigPane();
+    configPane.setOnAction(e -> changeStylesheet());
+
+    configBox = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shipPane, legendPane, configPane);
     configBox.setMinWidth(300);
     myPane.setRight(configBox);
   }
 
   private void setupLegendPane() {
     LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
-    for(CellState state : CellState.values()) {
-      colorMap.put(state.name(), Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
+    for (CellState state : CellState.values()) {
+      colorMap.put(state.name(),
+          Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
     legendPane = new LegendPane(colorMap);
   }
 
   private void createBottomPanel() {
-    confirmButton = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), "Confirm");
+    confirmButton = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), myResources.getString("ConfirmButton"));
     confirmButton.setDisable(true);
-    Button removeLastPiece = ButtonMaker.makeTextButton("remove-last-button", e -> removePiece(lastPlaced), "Remove Last Placed Piece");
-    Button removeAll = ButtonMaker.makeTextButton("remove-all-button", e -> removeAllPieces(), "Remove All Pieces");
+    Button removeLastPiece = ButtonMaker.makeTextButton("remove-last-button", e -> removePiece(lastPlaced), myResources.getString("RemoveLastButton"));
+    Button removeAll = ButtonMaker.makeTextButton("remove-all-button", e -> removeAllPieces(), myResources.getString("RemoveAllButton"));
     removePiecePanel = BoxMaker.makeVBox("remove-piece-panel", 10, Pos.CENTER, removeLastPiece, removeAll);
     bottomPanel = BoxMaker.makeHBox("bottom-panel", 20, Pos.CENTER, removePiecePanel, confirmButton);
 
   }
 
-  private void handleConfirm() {
+
+  public void handleConfirm() {
     currentPlayerNumber++;
-    switchPlayerMessage(" "+ currentPlayerNumber);
+    switchPlayerMessage(" " + currentPlayerNumber);
     clearBoard();
     confirmButton.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
@@ -175,10 +197,55 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    if (confirmButton.isDisabled()) {
-      Info info = (Info) evt.getNewValue();
-      notifyObserver(evt.getPropertyName(), info.row() + " " + info.col());
+    try {
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Coordinate.class);
+      m.invoke(this, evt.getNewValue());
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+        NullPointerException e) {
+      throw new NullPointerException(INVALID_METHOD);
     }
+  }
+
+  private void cellClicked(Coordinate coordinate) {
+    if (confirmButton.isDisabled()) {
+      notifyObserver(PLACE_PIECE, coordinate.getRow() + " " + coordinate.getColumn());
+    }
+  }
+
+  private void cellHovered(Coordinate coordinate) {
+    Collection<Coordinate> coordsToHighlight = initializeCoordsToColor(coordinate);
+    for (Coordinate c : coordsToHighlight) {
+      if (checkIfValid(c.getRow(), c.getColumn())) {
+        setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(
+            CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.SHIP_HOVER.name())));
+      }
+    }
+  }
+
+  private boolean checkIfValid(int row, int col) {
+    return row >= 0 && row < myCellBoard.length && col >= 0 &&
+        col < myCellBoard[0].length && setupBoard.getColorAt(row, col) != Paint.valueOf(
+        CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.SHIP_HEALTHY.name()));
+  }
+
+  private void cellExited(Coordinate coordinate) {
+    Collection<Coordinate> coordsToReplace = initializeCoordsToColor(coordinate);
+    for (Coordinate c : coordsToReplace) {
+      if (checkIfValid(c.getRow(), c.getColumn())) {
+        setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(
+            CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
+      }
+    }
+  }
+
+  private Collection<Coordinate> initializeCoordsToColor(Coordinate coordinate) {
+    List<Coordinate> coords = new ArrayList<>();
+    for (Coordinate c : nextToPlace) {
+      int absRow = c.getRow() + coordinate.getRow();
+      int absCol = c.getColumn() + coordinate.getColumn();
+      coords.add(new Coordinate(absRow, absCol));
+    }
+    return coords;
   }
 
   public void promptForName() {
@@ -208,10 +275,25 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myTitle.changeTitle(playerName + SCREEN_TITLE);
   }
 
+  private void changeStylesheet() {
+    nightMode = !nightMode;
+    myScene.getStylesheets().clear();
+
+    if (nightMode) {
+      myScene.getStylesheets()
+          .add(
+              getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET).toExternalForm());
+    } else {
+      myScene.getStylesheets()
+          .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
+    }
+  }
+
   @Override
   public void placePiece(Collection<Coordinate> coords, CellState type) {
     for (Coordinate c : coords) {
-      setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
+      setupBoard.setColorAt(c.getRow(), c.getColumn(),
+          Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
     }
     lastPlaced = coords;
   }
@@ -223,11 +305,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   @Override
   public void removePiece(Collection<Coordinate> coords) {
     for (Coordinate c : coords) {
-      setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
+      setupBoard.setColorAt(c.getRow(), c.getColumn(),
+          Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
     }
     confirmButton.setDisable(true);
     notifyObserver("removePiece", null);
-
   }
 
   public void removeAllPieces() {

@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 import oogasalad.GameData;
 import oogasalad.model.players.AIPlayer;
 import oogasalad.model.players.HumanPlayer;
@@ -23,6 +24,8 @@ public class GameSetupTest extends DukeApplicationTest {
   private GameData gd1;
   private GameData gd2;
   private GameSetup gs;
+
+  private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
   @BeforeEach
   void setup() {
@@ -58,7 +61,7 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testBasicSetup() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
     assertEquals(gd1.players().size(), 2);
     assertEquals(gd1.players().get(0).getClass(), HumanPlayer.class);
     assertEquals(gd1.players().get(1).getClass(), AIPlayer.class);
@@ -66,14 +69,14 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testInvalidMethodName() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
     assertThrows(NullPointerException.class, () -> gs.propertyChange(new PropertyChangeEvent
-        (new SetupView(gd1.board()), null, null, new Coordinate(-1, 0)))) ;
+        (new SetupView(gd1.board(), myResources), null, null, new Coordinate(-1, 0)))) ;
   }
 
   @Test
   void testCoordinateChoice() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
        new Coordinate(0, 0))));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -87,7 +90,7 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testInvalidCoordinate() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         new Coordinate(-1, 0))));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -100,7 +103,7 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testMultiplePieces() {
-    javafxRun(() -> gs = new GameSetup(gd2));
+    javafxRun(() -> gs = new GameSetup(gd2, myResources));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         new Coordinate(0, 0))));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -121,7 +124,7 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testMoveToGame() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         new Coordinate(0, 0))));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "moveToNextPlayer", null,
