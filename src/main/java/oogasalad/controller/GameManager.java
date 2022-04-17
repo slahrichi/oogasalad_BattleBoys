@@ -156,7 +156,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       playerIndex = (playerIndex + 1) % playerList.size();
       numShots = 0;
       sendUpdatedBoardsToView();
-      //handleAI();
+      handleAI();
     }
   }
 
@@ -167,6 +167,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       EngineRecord move = engine.makeMove();
       LOG.info(move);
       makeShot(move.shot(), move.enemyID());
+      view.displayAIMove(move, player.getID());
       updateConditions(player.getID());
     }
   }

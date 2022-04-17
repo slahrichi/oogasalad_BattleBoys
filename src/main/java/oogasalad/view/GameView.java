@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import oogasalad.PropertyObservable;
+import oogasalad.model.players.EngineRecord;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -418,5 +419,15 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
 //  public void updateCurrentPlayerName(String name) {
 //    updateTitle(name);
-//  }
+//
+
+  public void displayAIMove(EngineRecord move, int id) {
+    String message = String.format("Player %d took a show at row %d, column %d on player %d",
+        id + 1, move.shot().getRow(), move.shot().getColumn(), move.enemyID() + 1);
+    Alert alert = new Alert(AlertType.ERROR, message);
+    Node alertNode = alert.getDialogPane();
+    alertNode.setId("alert");
+    alert.showAndWait();
+  }
+
 }
