@@ -152,7 +152,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     configPane = new ConfigPane();
     configPane.setOnAction(e -> changeStylesheet());
 
-    myRightPane = BoxMaker.makeVBox("configBox", 20, Pos.CENTER, shotsRemainingLabel, healthLabel, goldLabel, shopButton,
+    myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.CENTER, shotsRemainingLabel, healthLabel, goldLabel, shopButton,
         piecesRemainingPane, legendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
