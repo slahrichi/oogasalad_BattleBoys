@@ -5,6 +5,8 @@ import static oogasalad.view.GameView.FILL_PREFIX;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -51,6 +53,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String DAY_STYLESHEET = "stylesheets/setupStylesheet.css";
   private static final String NIGHT_STYLESHEET  = "stylesheets/nightSetupStylesheet.css";
+  private static final String INVALID_METHOD = "Invalid method name given";
+  private static final String PLACE_PIECE = "placePiece";
   private static final Logger LOG = LogManager.getLogger(SetupView.class);
 
   private BorderPane myPane;
@@ -62,6 +66,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private StackPane myCenterPane;
   private Collection<Coordinate> lastPlaced;
+  private Collection<Coordinate> nextToPlace;
   private BoardView setupBoard;
   private Scene myScene;
   private TitlePanel myTitle;
@@ -88,6 +93,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     nightMode = false;
     currentPlayerNumber = 1;
     currentPlayerName = "Player";
+    lastPlaced = new ArrayList<>();
+    nextToPlace = new ArrayList<>();
 
     SCREEN_TITLE = myResources.getString("SetupTitlePrefix");
 
@@ -113,6 +120,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void displayCompletion() {
+    nextToPlace = new ArrayList<>();
     shipPane.showListCompletion();
   }
 
@@ -124,6 +132,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void setCurrentPiece(Collection<Coordinate> nextPiece) {
+    nextToPlace = nextPiece;
     shipPane.updateShownPieces(List.of(nextPiece));
   }
 
@@ -144,8 +153,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void setupLegendPane() {
     LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
-    for(CellState state : CellState.values()) {
-      colorMap.put(state.name(), Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
+    for (CellState state : CellState.values()) {
+      colorMap.put(state.name(),
+          Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
     legendPane = new LegendPane(colorMap);
   }
@@ -163,7 +173,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   public void handleConfirm() {
     currentPlayerNumber++;
-    switchPlayerMessage(" "+ currentPlayerNumber);
+    switchPlayerMessage(" " + currentPlayerNumber);
     clearBoard();
     confirmButton.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
@@ -187,10 +197,55 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    if (confirmButton.isDisabled()) {
-      Info info = (Info) evt.getNewValue();
-      notifyObserver(evt.getPropertyName(), info.row() + " " + info.col());
+    try {
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Coordinate.class);
+      m.invoke(this, evt.getNewValue());
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
+        NullPointerException e) {
+      throw new NullPointerException(INVALID_METHOD);
     }
+  }
+
+  private void cellClicked(Coordinate coordinate) {
+    if (confirmButton.isDisabled()) {
+      notifyObserver(PLACE_PIECE, coordinate.getRow() + " " + coordinate.getColumn());
+    }
+  }
+
+  private void cellHovered(Coordinate coordinate) {
+    Collection<Coordinate> coordsToHighlight = initializeCoordsToColor(coordinate);
+    for (Coordinate c : coordsToHighlight) {
+      if (checkIfValid(c.getRow(), c.getColumn())) {
+        setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(
+            CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.SHIP_HOVER.name())));
+      }
+    }
+  }
+
+  private boolean checkIfValid(int row, int col) {
+    return row >= 0 && row < myCellBoard.length && col >= 0 &&
+        col < myCellBoard[0].length && setupBoard.getColorAt(row, col) != Paint.valueOf(
+        CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.SHIP_HEALTHY.name()));
+  }
+
+  private void cellExited(Coordinate coordinate) {
+    Collection<Coordinate> coordsToReplace = initializeCoordsToColor(coordinate);
+    for (Coordinate c : coordsToReplace) {
+      if (checkIfValid(c.getRow(), c.getColumn())) {
+        setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(
+            CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
+      }
+    }
+  }
+
+  private Collection<Coordinate> initializeCoordsToColor(Coordinate coordinate) {
+    List<Coordinate> coords = new ArrayList<>();
+    for (Coordinate c : nextToPlace) {
+      int absRow = c.getRow() + coordinate.getRow();
+      int absCol = c.getColumn() + coordinate.getColumn();
+      coords.add(new Coordinate(absRow, absCol));
+    }
+    return coords;
   }
 
   public void promptForName() {
@@ -237,7 +292,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   @Override
   public void placePiece(Collection<Coordinate> coords, CellState type) {
     for (Coordinate c : coords) {
-      setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
+      setupBoard.setColorAt(c.getRow(), c.getColumn(),
+          Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
     }
     lastPlaced = coords;
   }
@@ -249,11 +305,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   @Override
   public void removePiece(Collection<Coordinate> coords) {
     for (Coordinate c : coords) {
-      setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
+      setupBoard.setColorAt(c.getRow(), c.getColumn(),
+          Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
     }
     confirmButton.setDisable(true);
     notifyObserver("removePiece", null);
-
   }
 
   public void removeAllPieces() {

@@ -43,6 +43,6 @@ public class SetupBoardView extends BoardView {
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    notifyObserver(PLACE_PIECE, new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
+    notifyObserver(evt.getPropertyName(), evt.getNewValue());
   }
 }

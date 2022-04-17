@@ -116,7 +116,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       if (pieceIndex == 0) {
         setupView.setLastPlaced(new ArrayList<>());
       } else {
-        // REPLACE WITH ABSOLUTE COORDINATES
         setupView.setLastPlaced(lastPlacedAbsoluteCoords.peek());
       }
     }

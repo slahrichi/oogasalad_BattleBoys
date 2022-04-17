@@ -19,9 +19,19 @@ public class CellView extends PropertyObservable {
     myShape.setFill(color);
     myShape.getPoints().addAll(points);
     myShape.setOnMouseClicked(e -> cellClicked());
+    myShape.setOnMouseEntered(e -> cellHovered());
+    myShape.setOnMouseExited(e -> cellExited());
   }
 
-  public void cellClicked() {
+  private void cellClicked() {
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), myCoords);
+  }
+
+  private void cellHovered() {
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), myCoords);
+  }
+
+  private void cellExited() {
     notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), myCoords);
   }
 
