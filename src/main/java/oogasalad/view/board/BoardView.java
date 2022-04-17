@@ -21,7 +21,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   protected CellView[][] myLayout;
   private StackPane myBoard;
   private Group myBase;
-  private int myID;
+  protected int myID;
   protected BoardMaker myBoardMaker;
   protected static String FILL_PREFIX = "FillColor_";
 
@@ -78,7 +78,5 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   }
 
   @Override
-  public void propertyChange(PropertyChangeEvent evt) {
-    notifyObserver(BOARD_CLICKED_METHOD_NAME, new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
-  }
+  public abstract void propertyChange(PropertyChangeEvent evt);
 }

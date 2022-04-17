@@ -124,7 +124,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void handleConfirm() {
     setCurrentPlayerNum();
-    switchPlayerMessage(String.valueOf(currentPlayer));
+    switchPlayerMessage(" "+currentPlayer);
     clearBoard();
     confirmButton.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
@@ -150,7 +150,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void propertyChange(PropertyChangeEvent evt) {
     if (confirmButton.isDisabled()) {
       Info info = (Info) evt.getNewValue();
-      notifyObserver("placePiece", new Coordinate(info.row(), info.col()));
+      notifyObserver(evt.getPropertyName(), new Coordinate(info.row(), info.col()));
     }
   }
 

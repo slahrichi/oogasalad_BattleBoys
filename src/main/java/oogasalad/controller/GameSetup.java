@@ -16,6 +16,12 @@ import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
 
+/**
+ * Auxiliary class for initializing game elements, particularly allowing players to place their
+ * pieces and then send the resulting placements both to the UI and the backend
+ *
+ * @author Matthew Giglio
+ */
 public class GameSetup extends PropertyObservable implements PropertyChangeListener {
 
   private CellState[][] board;
@@ -28,6 +34,12 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
   private static final String INVALID_METHOD = "Invalid method name given";
 
+  /**
+   *
+   * @param data GameData object used to standarize elements such as a generic game board, the
+   * players involved in the game, and the pieces they are allowed to place
+   *
+   */
   public GameSetup(GameData data){
     this.playerList = data.players();
     this.board = data.board();
@@ -41,9 +53,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     initializeSetupView();
   }
 
-  public List<Player> getPlayerList() {
-    return playerList;
+  public SetupView getSetupView() {
+    return setupView;
   }
+
 
   private void initializeSetupView() {
     setupView = new SetupView(board);
@@ -51,10 +64,18 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
   }
 
+  /**
+   *
+   * @return Scene object storing the SetupView
+   */
   public Scene createScene() {
     return setupView.getScene();
   }
 
+  /**
+   * listener that takes in a Coordinate and then checks with the backend if the choice is valid
+   * @param evt PropertyChangeEvent storing the Coordinate at which a Player selected in the view
+   */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     Coordinate c = (Coordinate) evt.getNewValue();
@@ -81,7 +102,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void moveToNextPlayer(Coordinate c) {
     playerIndex++;
     if(playerIndex >= playerList.size()) {
-      notifyObserver("moveToGame", null);
+      notifyObserver("startGame", null);
       return;
     }
     resetElements();
@@ -99,8 +120,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     }
     setupView.placePiece(coords, CellState.SHIP_HEALTHY);
     pieceIndex++;
-    System.out.println(pieceIndex);
-    System.out.println(pieceList.size());
     if (pieceIndex != pieceList.size()) {
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
     }
@@ -108,9 +127,5 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       setupView.displayCompletion();
       setupView.activateConfirm();
     }
-  }
-
-  public SetupView getSetupView() {
-    return setupView;
   }
 }
