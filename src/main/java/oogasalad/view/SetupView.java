@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -55,7 +57,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private SetPiecePane shipPane;
   private PassComputerMessageView passComputerMessageView;
   private CellState[][] myCellBoard;
-  private int currentPlayer;
+  private int currentPlayerNumber;
+  private String currentPlayerName;
 
   public SetupView(CellState[][] board) {
     myPane = new BorderPane();
@@ -64,7 +67,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane.setId("setup-view-pane");
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
-    currentPlayer = 1;
+    currentPlayerNumber = 1;
+    currentPlayerName = "Player";
 
     createTitlePanel();
     createConfirmButton();
@@ -75,7 +79,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private void createPassMessageView() {
     passComputerMessageView = new PassComputerMessageView();
-    passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
+    passComputerMessageView.setButtonOnMouseClicked(e -> {
+      myScene.setRoot(myPane);
+      updateTitle("Player");
+      promptForName();
+    });
   }
 
   public void activateConfirm() {
@@ -123,8 +131,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void handleConfirm() {
-    setCurrentPlayerNum();
-    switchPlayerMessage(" "+currentPlayer);
+    currentPlayerNumber++;
+    switchPlayerMessage(" "+ currentPlayerNumber);
     clearBoard();
     confirmButton.setDisable(true);
     notifyObserver("moveToNextPlayer", null);
@@ -141,7 +149,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   private void createTitlePanel() {
-    myTitle = new TitlePanel("Player " + currentPlayer + SCREEN_TITLE);
+    myTitle = new TitlePanel("Player " + currentPlayerNumber + SCREEN_TITLE);
     myTitle.setId("setup-title");
     myPane.setTop(myTitle);
   }
@@ -150,24 +158,35 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void propertyChange(PropertyChangeEvent evt) {
     if (confirmButton.isDisabled()) {
       Info info = (Info) evt.getNewValue();
-      notifyObserver(evt.getPropertyName(), new Coordinate(info.row(), info.col()));
+      notifyObserver(evt.getPropertyName(), info.row() + " " + info.col());
     }
   }
 
-  // FIXME: Make it so that we take player number from the player's list
+  public void promptForName() {
+    TextInputDialog dialog = new TextInputDialog();
 
-  public void setCurrentPlayerNum() {
-    currentPlayer++;
-    updateTitle();
+    dialog.setTitle("Setup");
+    dialog.setHeaderText("Player " + currentPlayerNumber + ", enter your name:");
+    dialog.setContentText("Name:");
+
+    Optional<String> result = dialog.showAndWait();
+
+    result.ifPresent(name -> {
+      currentPlayerName = name;
+      updateTitle(currentPlayerName);
+      notifyObserver("assignCurrentPlayerName", name);
+    });
   }
+
+  // FIXME: Make it so that we take player number from the player's list
 
   private void switchPlayerMessage(String nextPlayer) {
     passComputerMessageView.setPlayerName(nextPlayer);
     myScene.setRoot(passComputerMessageView);
   }
 
-  private void updateTitle() {
-    myTitle.changeTitle("Player " + currentPlayer + SCREEN_TITLE);
+  private void updateTitle(String playerName) {
+    myTitle.changeTitle(playerName + SCREEN_TITLE);
   }
 
   @Override

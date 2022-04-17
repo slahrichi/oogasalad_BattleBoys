@@ -62,6 +62,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     setupView = new SetupView(board);
     setupView.addObserver(this);
     setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
+    setupView.promptForName();
   }
 
   /**
@@ -78,34 +79,41 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    Coordinate c = (Coordinate) evt.getNewValue();
+    String s = (String) evt.getNewValue();
     try {
-      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Coordinate.class);
-      m.invoke(this, c);
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), String.class);
+      m.invoke(this, s);
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
     NullPointerException e) {
       throw new NullPointerException(INVALID_METHOD);
     }
   }
 
-  private void placePiece(Coordinate c) {
+  private void placePiece(String coordinate) {
+    int row = Integer.parseInt(coordinate.substring(0, coordinate.indexOf(" ")));
+    int col = Integer.parseInt(coordinate.substring(coordinate.indexOf(" ") + 1));
     Player player = playerList.get(playerIndex);
     Piece piece = pieceList.get(pieceIndex).copyOf();
-    if (player.placePiece(piece, new Coordinate(c.getRow(), c.getColumn()))) {
+    if (player.placePiece(piece, new Coordinate(row, col))) {
       update(piece);
     }
     else {
-      setupView.showError(String.format(COORD_ERROR, c.getRow(), c.getColumn()));
+      setupView.showError(String.format(COORD_ERROR, row, col));
     }
   }
 
-  private void moveToNextPlayer(Coordinate c) {
+  private void moveToNextPlayer(String s) {
     playerIndex++;
     if(playerIndex >= playerList.size()) {
       notifyObserver("startGame", null);
       return;
     }
     resetElements();
+  }
+
+  // Assigns a new name to the current player being set up
+  private void assignCurrentPlayerName(String name) {
+    playerList.get(playerIndex).setName(name);
   }
 
   private void resetElements() {
