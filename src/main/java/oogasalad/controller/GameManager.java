@@ -36,6 +36,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private Map<Integer, Player> idMap;
   private Map<Player, DecisionEngine> engineMap;
   private GameView view;
+  private GameViewManager gameViewManager;
   //current player, separate from ID
   private int playerIndex;
   private int numShots;
@@ -45,39 +46,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   public GameManager(GameData data) {
     initialize(data);
-    setupViewElements(data);
-
-  }
-
-  private void setupViewElements(GameData data) {
-    List<CellState[][]> boards = createFirstPlayerBoards(data);
-    Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards, coords);
-    this.view.addObserver(this);
-  }
-
-  private List<CellState[][]> createFirstPlayerBoards(GameData data) {
-    List<CellState[][]> boards = new ArrayList<>();
-    Player firstPlayer = data.players().get(0);
-    boards.add(firstPlayer.getBoard().getCurrentBoardState());
-    for (int i = 0; i < firstPlayer.getEnemyMap().size(); i++) {
-      boards.add(data.board());
-    }
-    return boards;
-  }
-
-  private Collection<Collection<Coordinate>> createInitialPieces(List<Piece> pieces) {
-    Collection<Collection<Coordinate>> pieceCoords = new ArrayList<>();
-    for (Piece piece : pieces) {
-      pieceCoords.add(piece.getRelativeCoords());
-    }
-    return pieceCoords;
+    view = gameViewManager.getView();
+    view.addObserver(this);
   }
 
   public Scene createScene() {
     return view.createScene();
   }
-
 
   private void initialize(GameData data) {
     this.playerList = data.players();
@@ -87,6 +62,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     createIDMap();
     winConditionsList = data.winConditions();
     engineMap = data.engineMap();
+    gameViewManager = new GameViewManager(data);
   }
 
   private void createIDMap() {
@@ -95,7 +71,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       idMap.put(player.getID(), player);
     }
   }
-
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
