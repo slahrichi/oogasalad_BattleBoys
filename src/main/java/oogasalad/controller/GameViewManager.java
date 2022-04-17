@@ -20,9 +20,9 @@ public class GameViewManager {
   private List<Player> playerList;
 
   public GameViewManager(GameData data, Map<Integer, Player> idMap) {
-    setupGameView(data);
     this.idMap = idMap;
     playerList = data.players();
+    setupGameView(data);
   }
 
   private void setupGameView(GameData data) {
