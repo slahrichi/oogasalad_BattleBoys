@@ -1,10 +1,13 @@
 package oogasalad.controller;
 
+import java.util.ArrayList;
 import java.util.List;
-import oogasalad.FilePicker;
+import java.util.Map;
 import oogasalad.PlayerData;
 import oogasalad.model.parsing.Parser;
 import oogasalad.model.parsing.ParserException;
+import oogasalad.model.players.DecisionEngine;
+import oogasalad.model.players.EasyDecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PlayerFactoryTest {
 
-  private PlayerFactory pf;
+  private CellState[][] board;
   private List<String> playerTypes;
+  private List<String> difficulties;
 
   @BeforeEach
   void setup() {
@@ -28,20 +32,36 @@ public class PlayerFactoryTest {
       e.printStackTrace();
     }
     playerTypes = playerData.players();
-    CellState[][] notSoDummyBoard = playerData.board();
-    pf = new PlayerFactory(notSoDummyBoard);
+    board = playerData.board();
+    difficulties = new ArrayList<>(playerData.decisionEngines());
   }
 
   @Test
   void testBasicPlayerFactory() {
-    List<Player> playerList = pf.createPlayerList(playerTypes);
+    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(board, playerTypes, difficulties);
+    List<Player> playerList = pfr.playerList();
     assertEquals(playerList.size(), 3);
+    Map<Player, DecisionEngine> map = pfr.engineMap();
+    assertEquals(map.size(), 1);
+    List<DecisionEngine> list = new ArrayList<>(map.values());
+    assertEquals(list.get(0).getClass(), EasyDecisionEngine.class);
+
   }
 
   @Test
-  void testInvalidFileData() {
+  void testInvalidPlayerType() {
     playerTypes.add("Playyer");
-    assertThrows(NullPointerException.class, () -> pf.createPlayerList(playerTypes));
+    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, difficulties).
+        playerList());
   }
+
+  @Test
+  void testInvalidPlayerTyle() {
+    difficulties.set(1, "Impahssible");
+    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, difficulties).
+        playerList());
+  }
+
+
 
 }

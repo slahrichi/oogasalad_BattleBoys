@@ -14,6 +14,8 @@ import java.util.Set;
 import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
+import oogasalad.model.players.DecisionEngine;
+import oogasalad.model.players.EngineRecord;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
@@ -32,6 +34,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private List<Player> playerList;
   private List<WinCondition> winConditionsList;
   private Map<Integer, Player> idMap;
+  private Map<Player, DecisionEngine> engineMap;
   private GameView view;
   //current player, separate from ID
   private int playerIndex;
@@ -83,6 +86,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     allowedShots = 1;
     createIDMap();
     winConditionsList = data.winConditions();
+    engineMap = data.engineMap();
   }
 
   private void createIDMap() {
@@ -143,6 +147,18 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       playerIndex = (playerIndex + 1) % playerList.size();
       numShots = 0;
       sendUpdatedBoardsToView();
+      //handleAI();
+    }
+  }
+
+  private void handleAI() {
+    Player player = playerList.get(playerIndex);
+    if (engineMap.containsKey(player)) {
+      DecisionEngine engine = engineMap.get(player);
+      EngineRecord move = engine.makeMove();
+      System.out.println(move);
+      makeShot(move.shot(), move.enemyID());
+      updateConditions(player.getID());
     }
   }
 
@@ -155,6 +171,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
       CellState result = enemy.getBoard().hit(c);
+      adjustStrategy(currentPlayer, result);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
       applyModifiers(currentPlayer, enemy);
@@ -163,8 +180,15 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return false;
   }
 
+  private void adjustStrategy(Player player, CellState result) {
+    if (engineMap.containsKey(player)) {
+      DecisionEngine engine = engineMap.get(player);
+      engine.adjustStrategy(result);
+    }
+  }
+
   private void applyModifiers(Player currPlayer, Player enemyPlayer){
-    ArrayList<Modifiers> mods = (ArrayList<Modifiers>) enemyPlayer.getBoard().update();
+    List<Modifiers> mods = enemyPlayer.getBoard().update();
     for(Modifiers mod :mods){
       if(mod.getClass().getSimpleName().equals("PlayerModifier")){
         Player[] players = {currPlayer, enemyPlayer};

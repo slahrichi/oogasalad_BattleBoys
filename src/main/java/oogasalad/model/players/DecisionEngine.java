@@ -12,10 +12,10 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 public abstract class DecisionEngine {
 
   private List<Coordinate> myCoordinateList;
-  private Deque<Coordinate> myDeque;
+  private Deque<EngineRecord> myDeque;
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Random myRandom;
-  private Coordinate myLastShot;
+  private EngineRecord myLastShot;
 
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap) {
     myCoordinateList = coordinateList;
@@ -24,13 +24,13 @@ public abstract class DecisionEngine {
     myRandom = new Random(System.currentTimeMillis());
   }
 
-  public abstract Coordinate makeMove();
+  public abstract EngineRecord makeMove();
 
   protected List<Coordinate> getCoordinateList() {
     return myCoordinateList;
   }
 
-  protected Deque<Coordinate> getDeque() {
+  protected Deque<EngineRecord> getDeque() {
     return myDeque;
   }
 
@@ -42,11 +42,11 @@ public abstract class DecisionEngine {
     return myRandom;
   }
 
-  protected Coordinate getLastShot() {
+  protected EngineRecord getLastShot() {
     return myLastShot;
   }
 
-  protected void setLastShot(Coordinate shot) {
+  protected void setLastShot(EngineRecord shot) {
     myLastShot = shot;
   }
 
@@ -54,5 +54,7 @@ public abstract class DecisionEngine {
     return result == CellState.SHIP_SUNKEN || result == CellState.WATER ||
         result == CellState.ISLAND_SUNK || result == CellState.WATER_HIT;
   }
+
+  public abstract void adjustStrategy(CellState result);
 
 }

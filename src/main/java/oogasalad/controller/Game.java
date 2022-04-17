@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import javafx.stage.Stage;
 import oogasalad.FilePicker;
 import oogasalad.GameData;
@@ -16,9 +15,8 @@ import oogasalad.model.parsing.Parser;
 import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.parsing.ParserException;
+import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
@@ -62,9 +60,10 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     pieceList = playerData.pieces();
     CellState[][] notSoDummyBoard = playerData.board();
 
-    PlayerFactory pf = new PlayerFactory(notSoDummyBoard);
-    List<Player> players = pf.createPlayerList(stringPlayers);
-
+    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(notSoDummyBoard, stringPlayers,
+        playerData.decisionEngines());
+    List<Player> players = pr.playerList();
+    Map<Player, DecisionEngine> engineMap = pr.engineMap();
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
     dummyWinConditions.add(new LoseXShipsLossCondition(2));

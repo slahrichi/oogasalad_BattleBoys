@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import oogasalad.GameData;
 import oogasalad.controller.GameSetup;
 import oogasalad.controller.PlayerFactory;
+import oogasalad.controller.PlayerFactoryRecord;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
@@ -21,7 +22,6 @@ import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.panels.TitlePanel;
 import util.DukeApplicationTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SetupViewTest extends DukeApplicationTest {
@@ -60,11 +60,11 @@ public class SetupViewTest extends DukeApplicationTest {
     Piece piece2 = new StaticPiece(ships2, coords2, "1");
     pieces.add(piece1);
     pieces.add(piece2);
-    PlayerFactory pf = new PlayerFactory(board);
-    List<Player> players = pf.createPlayerList(stringPlayers);
+    PlayerFactoryRecord record = PlayerFactory.initializePlayers(board, stringPlayers, null);
+    List<Player> players = record.playerList();
     List<WinCondition> winConditions = new ArrayList<>();
     winConditions.add(new LoseXShipsLossCondition(2));
-    GameData data = new GameData(players, board, pieces, winConditions);
+    GameData data = new GameData(players, board, pieces, winConditions, null);
     GameSetup setup = new GameSetup(data);
     stage.setScene(setup.createScene());
     stage.show();
