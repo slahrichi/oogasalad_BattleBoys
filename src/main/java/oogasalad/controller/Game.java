@@ -70,7 +70,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
     myStart = new StartView();
     myStart.addObserver(this);
-    data = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions);
+    data = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions, engineMap);
     // GameManager should take in list of players and GameData
   }
 
