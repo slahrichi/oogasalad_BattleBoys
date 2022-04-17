@@ -11,6 +11,12 @@ public abstract class Weapon {
     List<Coordinate> relativeCoordShots;
     String myID;
 
+    /**
+     *
+     * @param coord The absolute coordinate of place on the board being hit (The reference point)
+     * @param enemyBoard The board that will be hit by the weapon
+     * @return
+     */
     public WeaponFunction getWeaponFunction(Coordinate coord, Board enemyBoard){
         if(enemyBoard.checkBoundedCoordinate(coord)){
             return myWeaponFunction;
@@ -19,6 +25,9 @@ public abstract class Weapon {
         }
     }
 
+    /**
+     * @return the name of the Weapon system.
+     */
     public String getMyID(){
         return myID;
     }
@@ -31,12 +40,17 @@ public abstract class Weapon {
      * @return List of coordinates that should be higlighted to show where the shots will land.
      */
     public List<Coordinate> getHighlightedCoords(Coordinate absoluteCoord, Board currBoard){
+        updateRelativeCoords(currBoard);
         List<Coordinate> highlightedCoords = new ArrayList<>();
         for(Coordinate relCoord: relativeCoordShots){
             if(currBoard.checkBoundedCoordinate(new Coordinate(relCoord.getRow()+absoluteCoord.getRow(), relCoord.getColumn()+absoluteCoord.getColumn())))
                 highlightedCoords.add(new Coordinate(relCoord.getRow()+absoluteCoord.getRow(),
                     relCoord.getColumn()+absoluteCoord.getColumn()));
+            else
+                break;
         }
         return highlightedCoords;
     }
+
+    protected abstract void updateRelativeCoords(Board currBoard);
 }

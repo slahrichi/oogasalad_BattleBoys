@@ -167,6 +167,8 @@ public class Board {
     return boardMap.get(c).getHealth() != 0;
   }
 
+  public int[] getSize(){return new int[]{myRows, myCols};}
+
   public List<Modifiers> update(){
     ArrayList<Modifiers> retModifers = new ArrayList<>();
     for(CellInterface cell: boardMap.values()){
