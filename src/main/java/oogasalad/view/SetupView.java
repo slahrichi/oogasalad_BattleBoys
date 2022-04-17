@@ -122,7 +122,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     confirmButton.setDisable(true);
   }
 
-  private void handleConfirm() {
+  public void handleConfirm() {
     setCurrentPlayerNum();
     switchPlayerMessage(" "+currentPlayer);
     clearBoard();

@@ -86,9 +86,12 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     try {
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Coordinate.class);
       m.invoke(this, c);
-    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
-    NullPointerException e) {
-      throw new NullPointerException(INVALID_METHOD);
+    } catch (NoSuchMethodException ex) {
+      throw new NullPointerException("NoSuchMethod");
+    } catch (InvocationTargetException ex) {
+      throw new NullPointerException("InvocationTarget");
+    } catch (IllegalAccessException ex) {
+      throw new NullPointerException("IllegalAccess");
     }
   }
 
@@ -96,7 +99,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     Player player = playerList.get(playerIndex);
     Piece piece = pieceList.get(pieceIndex).copyOf();
     if (player.placePiece(piece, new Coordinate(c.getRow(), c.getColumn()))) {
-      update(piece);
+      update(piece, player);
     }
     else {
       setupView.showError(String.format(COORD_ERROR, c.getRow(), c.getColumn()));
@@ -117,11 +120,12 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     Player player = playerList.get(playerIndex);
     if (engineMap.containsKey(player)) {
       DecisionEngine engine = engineMap.get(player);
-      for (int i = 0; i < playerList.size(); i++) {
+      for (int i = 0; i < pieceList.size(); i++) {
         Coordinate c = engine.placePiece(pieceList);
         placePiece(c);
       }
-
+      //have setupView show that AI has placed pieces
+      setupView.handleConfirm();
     }
   }
 
@@ -130,19 +134,18 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
   }
 
-  private void update(Piece piece) {
-    List<Coordinate> coords = new ArrayList<>();
-    for (ShipCell cell : piece.getCellList()) {
-      coords.add(cell.getCoordinates());
+  private void update(Piece piece, Player player) {
+      List<Coordinate> coords = new ArrayList<>();
+      for (ShipCell cell : piece.getCellList()) {
+        coords.add(cell.getCoordinates());
+      }
+      setupView.placePiece(coords, CellState.SHIP_HEALTHY);
+      pieceIndex++;
+      if (pieceIndex != pieceList.size()) {
+        setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
+      } else {
+        setupView.displayCompletion();
+        setupView.activateConfirm();
+      }
     }
-    setupView.placePiece(coords, CellState.SHIP_HEALTHY);
-    pieceIndex++;
-    if (pieceIndex != pieceList.size()) {
-      setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
-    }
-    else {
-      setupView.displayCompletion();
-      setupView.activateConfirm();
-    }
-  }
 }
