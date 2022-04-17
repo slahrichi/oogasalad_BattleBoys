@@ -73,7 +73,7 @@ public class GameViewTest extends DukeApplicationTest {
     }
     Map<Integer, String> idMap = new HashMap<>();
     for (int i = 0; i < numPlayers; i++) {
-      idMap.put(i, "Player" + i);
+      idMap.put(i, "Player" + (i+1));
     }
     view = new GameView(firstPlayerBoards, pieceCoords, idMap);
     stage.setScene(view.createScene());
