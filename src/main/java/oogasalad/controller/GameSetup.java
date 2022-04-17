@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
+import java.util.Map;
 import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
+import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
@@ -33,6 +35,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private List<Player> playerList;
   private int playerIndex;
   private List<Piece> pieceList;
+  private Map<Player, DecisionEngine> engineMap;
   private int pieceIndex;
   private Stack<Collection<Coordinate>> lastPlacedAbsoluteCoords;
 
@@ -53,6 +56,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     this.pieceIndex = 0;
     this.playerIndex = 0;
     this.lastPlacedAbsoluteCoords = new Stack<>();
+    this.engineMap = data.engineMap();
     setupGame();
   }
 
@@ -90,10 +94,12 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     try {
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), String.class);
       m.invoke(this, s);
-    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
-    NullPointerException e) {
-      e.printStackTrace();
-      throw new NullPointerException(INVALID_METHOD);
+    } catch (NoSuchMethodException ex) {
+      throw new NullPointerException("NoSuchMethod");
+    } catch (InvocationTargetException ex) {
+      throw new NullPointerException("InvocationTarget");
+    } catch (IllegalAccessException ex) {
+      throw new NullPointerException("IllegalAccess");
     }
   }
 
@@ -141,6 +147,21 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       return;
     }
     resetElements();
+    handleAI();
+  }
+
+  private void handleAI() {
+    Player player = playerList.get(playerIndex);
+    if (engineMap.containsKey(player)) {
+      DecisionEngine engine = engineMap.get(player);
+      for (int i = 0; i < pieceList.size(); i++) {
+        Coordinate c = engine.placePiece(pieceList);
+        String coord = c.getRow() + " " + c.getColumn();
+        placePiece(coord);
+      }
+      //have setupView show that AI has placed pieces
+      setupView.handleConfirm();
+    }
   }
 
   // Assigns a new name to the current player being set up
@@ -152,6 +173,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     pieceIndex = 0;
     setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
   }
+
 
   private void updatePiece(Piece piece) {
     List<Coordinate> coords = new ArrayList<>();

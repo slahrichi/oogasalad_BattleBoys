@@ -83,8 +83,8 @@ public class PlayerFactory {
       try {
         String difficulty = myDifficulties.get(id);
         DecisionEngine ds = (DecisionEngine) Class.forName(FILEPATH + difficulty + ENGINE)
-            .getConstructor(List.class, Map.class).newInstance(
-                player.getBoard().listCoordinates(), enemyMap);
+            .getConstructor(List.class, Map.class, Player.class).newInstance(
+                player.getBoard().listCoordinates(), enemyMap, player);
         engineMap.put(player, ds);
       }
       catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
