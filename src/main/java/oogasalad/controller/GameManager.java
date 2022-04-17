@@ -52,6 +52,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return view.createScene();
   }
 
+  public GameView getView() {
+    return view;
+  }
+
   private void initialize(GameData data) {
     this.playerList = data.players();
     playerIndex = 0;
@@ -126,10 +130,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       view.displayAIMove(move, player.getID());
       updateConditions(player.getID());
     }
-  }
-
-  public List<Player> getPlayerList() {
-    return playerList;
   }
 
   private boolean makeShot(Coordinate c, int id) {
