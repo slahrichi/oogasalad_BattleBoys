@@ -12,15 +12,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import oogasalad.PlayerData;
-import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -44,6 +42,7 @@ public class Parser {
   private final String PROPERTIES_DECISION_ENGINES_LIST = "DecisionEngines";
   private final String HUMAN_PLAYER = "HumanPlayer";
   private final String AI_PLAYER = "AIPlayer";
+  private final String PLAYERDATA_PATH = "oogasalad.PlayerData.java";
   private final List<String> REQUIRED_ARGS = List.of(PROPERTIES_PLAYER_LIST, PROPERTIES_PIECES_FILE, PROPERTIES_BOARD_FILE, PROPERTIES_DECISION_ENGINES_LIST);
   private final String MISSING_ARG = "missingArg";
   private final String DOT = ".";
@@ -123,23 +122,37 @@ public class Parser {
       checkExtension(props.getProperty(path), JSON_EXTENSION);
     }
 
+    List<ParsedElement> parsers = new ArrayList<>();
+    parsers.add(new ParseBoard()); //this is the only line that needs to be changed
 
-    List<String> players;
-    CellState[][] cellBoard;
-    List<Piece> pieces;
-    List<String> decisionEngines;
 
+
+    List<Object> parsedElements = new ArrayList<>();
     try {
-      players = loadPlayers(props);
-      cellBoard = loadBoard(props);
-      pieces = loadPieces(props);
-      decisionEngines = loadDecisionEngines(props, players);
+      for(ParsedElement p: parsers) {
+        parsedElements.add(p.parse(props));
+      }
     } catch (JsonSyntaxException e) {
       throw new ParserException(exceptionMessageProperties.getProperty("jsonError").formatted(pathToFile));
     }
+    return getPlayerData(parsedElements);
+    // return new PlayerData(players, pieces, cellBoard, decisionEngines);
 
-    return new PlayerData(players, pieces, cellBoard, decisionEngines);
 
+  }
+
+  PlayerData getPlayerData(List<Object> parsedElements) throws ParserException {
+    try {
+      Class<?> clazz = Class.forName(PLAYERDATA_PATH);
+      Constructor<?> cons = clazz.getConstructor();
+      Object[] obj = parsedElements.toArray();
+      Object newInstance = cons.newInstance(obj); //this Object could instead be a Command object
+      return (PlayerData) newInstance;
+    }
+    catch (Exception e){
+      // this catches any error while trying to use reflection
+      throw new ParserException(exceptionMessageProperties.getProperty("reflectionError"));
+    }
   }
 
   private List<String> loadDecisionEngines(Properties props, List<String> players)
@@ -181,45 +194,9 @@ public class Parser {
     return new ArrayList<>(Arrays.asList(playersData));
   }
 
-  private CellState[][] loadBoard(Properties props) throws ParserException {
-    String boardFile = props.getProperty(PROPERTIES_BOARD_FILE);
-    Gson gson = new GsonBuilder().create();
-    CellState[][] boardData;
-    try {
-      boardData = gson.fromJson(new FileReader(boardFile), CellState[][].class);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      return null;
-    }
-    checkAlignedBoard(boardData, boardFile);
-    return boardData;
-  }
 
-  private void checkAlignedBoard(CellState[][] board, String path) throws ParserException {
-    int assumedLength = board[0].length;
-    for(int i = 1; i < board.length; i++) {
-      if(board[i].length != assumedLength) {
-        throw new ParserException(exceptionMessageProperties.getProperty("missingData").formatted(path,"Board"));
-      }
-    }
-  }
 
-  private List<Piece> loadPieces(Properties props) throws ParserException {
-    String piecesFile = props.getProperty(PROPERTIES_PIECES_FILE);
-    Gson gson = new GsonBuilder().registerTypeAdapter(Piece.class, new GSONHelper()).create();
 
-    Type listOfMyClassObject = new TypeToken<ArrayList<Piece>>() {}.getType();
-    List<Piece> ret = null;
-    try {
-      ret = gson.fromJson(new FileReader(piecesFile), listOfMyClassObject);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    }
-    if (ret == null) {
-      throw new ParserException(exceptionMessageProperties.getProperty("missingData").formatted(piecesFile,"Pieces"));
-    }
-    return ret;
-  }
 
   private void savePlayers(Properties props, List<String> players) {
     props.put(PROPERTIES_PLAYER_LIST, String.join(" ", players));
@@ -229,41 +206,8 @@ public class Parser {
     props.put(PROPERTIES_DECISION_ENGINES_LIST, String.join(" ", decisionEngines));
   }
 
-  private void saveBoard(Properties props, CellState[][] board, String location) {
-    //make json for board
-    //put link to json in props file
-    Gson gson = new GsonBuilder().setPrettyPrinting().
-        create();
-    String json = gson.toJson(board);
-    File myNewFile = new File(location);
-    try {
-      FileWriter myWriter = new FileWriter(myNewFile);
-      myWriter.write(json);
-      myWriter.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    props.put(PROPERTIES_BOARD_FILE, myNewFile.toString());
-  }
 
-  private void savePieces(Properties props, List<Piece> pieces, String location) {
-    Gson gson = new GsonBuilder().setPrettyPrinting().
-        registerTypeHierarchyAdapter(Piece.class, new GSONHelper()).
-        create();
 
-    String json = gson.toJson(pieces);
 
-    File myNewFile = new File(location);
-    try {
-      if (myNewFile.createNewFile()) { //new file created
-        FileWriter myWriter = new FileWriter(myNewFile);
-        myWriter.write(json);
-        myWriter.close();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    props.put(PROPERTIES_PIECES_FILE, myNewFile.toString());
-  }
 
 }

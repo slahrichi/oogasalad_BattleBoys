@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import oogasalad.PlayerData;
+import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
@@ -85,6 +86,14 @@ public class ParserTest {
     examplePlayerData = new PlayerData(players, pieceList, dummyBoard, decisionEngines);
 
   }
+
+
+  @Test
+  void playerDataReflection() throws ParserException{
+    List<Object> parsedElements = List.of()
+
+  }
+
 
   @Test
   void loadCorrectFileExtension(){

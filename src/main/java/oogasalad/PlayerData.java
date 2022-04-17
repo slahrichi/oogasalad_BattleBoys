@@ -1,6 +1,7 @@
 package oogasalad;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -19,5 +20,7 @@ public record PlayerData(List<String> players, List<Piece> pieces, CellState[][]
     if(!Arrays.deepEquals(this.board, other.board)) return false;
     return true;
   }
+
+
 
 }
