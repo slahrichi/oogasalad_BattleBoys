@@ -15,6 +15,8 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 public class ParseBoard extends ParsedElement {
 
   private final String PROPERTIES_BOARD_FILE = "BoardFile";
+  private final String MISSING_DATA = "missingData";
+  private final String BOARD = "Board";
 
   public ParseBoard() {
   }
@@ -22,6 +24,7 @@ public class ParseBoard extends ParsedElement {
 
   @Override
   public void save(Properties props, String location, Object o) {
+    location += "Board.json";
     CellState[][] board = (CellState[][]) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().
         create();
@@ -61,7 +64,7 @@ public class ParseBoard extends ParsedElement {
     int assumedLength = board[0].length;
     for(int i = 1; i < board.length; i++) {
       if(board[i].length != assumedLength) {
-        throw new ParserException(exceptionMessageProperties.getProperty("missingData").formatted(path,"Board"));
+        throw new ParserException(exceptionMessageProperties.getProperty(MISSING_DATA).formatted(path,BOARD));
       }
     }
   }

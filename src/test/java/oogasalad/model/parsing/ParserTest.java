@@ -87,12 +87,16 @@ public class ParserTest {
 
   }
 
-
+  /*
   @Test
   void playerDataReflection() throws ParserException{
-    List<Object> parsedElements = List.of()
-
+    List<Object> parsedElements = List.of(examplePlayerData.players(),
+        examplePlayerData.pieces(), examplePlayerData.board(), examplePlayerData.decisionEngines());
+    PlayerData returnedPlayerData = parser.getPlayerData(parsedElements);
+    assertEquals(examplePlayerData, returnedPlayerData);
   }
+
+   */
 
 
   @Test

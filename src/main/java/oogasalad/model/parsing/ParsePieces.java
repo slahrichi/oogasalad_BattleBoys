@@ -21,6 +21,7 @@ public class ParsePieces extends ParsedElement {
 
   @Override
   public void save(Properties props, String location, Object o) throws ParserException {
+    location += "Pieces.json";
     List<Piece> pieces = (List<Piece>) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().
         registerTypeHierarchyAdapter(Piece.class, new GSONHelper()).
@@ -61,6 +62,6 @@ public class ParsePieces extends ParsedElement {
 
   @Override
   public Class getParsedClass() {
-    return null;
+    return List.class;
   }
 }
