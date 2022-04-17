@@ -178,4 +178,17 @@ public class Board {
     }
   return retModifers;
   }
+
+  public void removePiece(String ID) {
+    //throw exception if ID is not good ID
+    Piece pieceToRemove = myPieces.get(ID);
+    myPieces.remove(ID);
+    pieceToRemove.removeFromBoard(boardMap);
+  }
+
+  public void removeAllPieces() {
+    for(String id: myPieces.keySet()) {
+      removePiece(id);
+    }
+  }
 }
