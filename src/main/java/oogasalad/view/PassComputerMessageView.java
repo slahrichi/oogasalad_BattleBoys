@@ -9,6 +9,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * This class represents a view that tells the user to pass the computer to the next player. Its
+ * purpose is to hide any board information from other players when multiple players are playing
+ * on the same computer.
+ */
 public class PassComputerMessageView extends VBox {
   private static String PASS_MESSAGE = "Please pass the computer to player ";
   private static String BUTTON_TEXT = "OK";
