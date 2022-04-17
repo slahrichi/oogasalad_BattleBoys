@@ -10,7 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.animation.PauseTransition;
+import java.util.function.Consumer;
+import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -18,6 +19,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -57,6 +60,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
   private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String IMAGES_PATH = "images/";
+  private static final String EXPLOSION_IMAGE_NAME = "explosion-icon.png";
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d, col: %d";
   private static final String BOARD_HOVERED_LOG = "Board %d was hovered over at row: %d, col: %d";
   private static final String CENTER_PANE_ID = "view-center-pane";
@@ -64,6 +68,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String SHOT_METHOD = "handleShot";
   private static final double BOARD_SIZE = 50;
+  private static final int EXPLOSION_DURATION = 2000;
 
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
@@ -457,6 +462,22 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void displayShotAt(int x, int y, CellState result) {
     myBoards.get(currentBoardIndex)
         .setColorAt(x, y, Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + result.name())));
+  }
+
+  public void displayShotAnimation(int row, int col, Consumer<Integer> consumer, int id) {
+    ImageView explosion = new ImageView();
+    explosion.setImage(
+        new Image(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + IMAGES_PATH + EXPLOSION_IMAGE_NAME).toString(),
+            true));
+    myBoards.get(currentBoardIndex).displayExplosionOnCell(row, col, explosion);
+    FadeTransition ft = new FadeTransition(new Duration(EXPLOSION_DURATION), explosion);
+    ft.setFromValue(1);
+    ft.setToValue(0);
+    ft.setOnFinished(e -> {
+      consumer.accept(id);
+      myBoards.get(currentBoardIndex).removeExplosionImage(explosion);
+    });
+    ft.play();
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList,
