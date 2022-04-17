@@ -11,7 +11,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
+import javafx.util.Duration;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
@@ -128,7 +130,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void handleShot(Info info) {
     if (makeShot(new Coordinate(info.row(), info.col()), info.ID())) {
-      updateConditions(info.ID());
+      PauseTransition pt = new PauseTransition(new Duration(1000));
+      pt.setOnFinished(e -> updateConditions(info.ID()));
+      pt.play();
     }
   }
 
