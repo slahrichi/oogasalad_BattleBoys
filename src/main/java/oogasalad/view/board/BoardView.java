@@ -15,7 +15,6 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private static final String BOARD_ID = "board-view";
   private static final String BASE_ID = "board-view-base";
   private static final String ERROR_MESSAGE = "Row %d and column %d out of bounds";
-  private static final String BOARD_CLICKED_METHOD_NAME = "boardClicked";
   private static final String CELL_ID = "cell-view-%d-%d-%d";
 
   protected CellView[][] myLayout;

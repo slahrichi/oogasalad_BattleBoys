@@ -15,6 +15,8 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Auxiliary class for initializing game elements, particularly allowing players to place their
@@ -33,6 +35,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
   private static final String INVALID_METHOD = "Invalid method name given";
+  private static final Logger LOG = LogManager.getLogger(GameSetup.class);
 
   /**
    *
@@ -88,11 +91,33 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     }
   }
 
+  private void removePiece(Coordinate c) {
+    if (pieceIndex > 0) {
+      pieceIndex--;
+      setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
+      playerList.get(playerIndex).removePiece(pieceList.get(pieceIndex).getID());
+      // if last placed should be empty
+      if (pieceIndex == 0) {
+        setupView.setLastPlaced(new ArrayList<>());
+      } else {
+        setupView.setLastPlaced(pieceList.get(pieceIndex-1).getRelativeCoords());
+      }
+    }
+  }
+
+  private void removeAllPieces(Coordinate c) {
+    if (pieceIndex > 0) {
+      pieceIndex = 0;
+      setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
+      playerList.get(playerIndex).removeAllPieces();
+    }
+  }
+
   private void placePiece(Coordinate c) {
     Player player = playerList.get(playerIndex);
     Piece piece = pieceList.get(pieceIndex).copyOf();
     if (player.placePiece(piece, new Coordinate(c.getRow(), c.getColumn()))) {
-      update(piece);
+      updatePiece(piece);
     }
     else {
       setupView.showError(String.format(COORD_ERROR, c.getRow(), c.getColumn()));
@@ -113,7 +138,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
   }
 
-  private void update(Piece piece) {
+  private void updatePiece(Piece piece) {
     List<Coordinate> coords = new ArrayList<>();
     for (ShipCell cell : piece.getCellList()) {
       coords.add(cell.getCoordinates());

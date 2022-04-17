@@ -60,6 +60,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d col: %d";
   private static final String CENTER_PANE_ID = "view-center-pane";
   private static final String VIEW_PANE_ID = "view-pane";
+  private static final double BOARD_SIZE = 50;
 
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
@@ -131,11 +132,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void initializeBoards(List<CellState[][]> boards, List<Integer> idList) {
-    GameBoardView self = new SelfBoardView(50, boards.get(0), idList.get(0));
+    GameBoardView self = new SelfBoardView(BOARD_SIZE, boards.get(0), idList.get(0));
     myBoards.add(self);
     self.addObserver(this);
     for (int i = 1; i < boards.size(); i++) {
-      GameBoardView enemy = new EnemyBoardView(50, boards.get(i), idList.get(i));
+      GameBoardView enemy = new EnemyBoardView(BOARD_SIZE, boards.get(i), idList.get(i));
       myBoards.add(enemy);
       enemy.addObserver(this);
     }
@@ -277,6 +278,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
           Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
     }
+  }
+
+  @Override
+  public void removePiece() {
+
   }
 
   private void changeStylesheet(){

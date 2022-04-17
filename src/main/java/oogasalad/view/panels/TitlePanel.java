@@ -10,6 +10,7 @@ public class TitlePanel extends HBox {
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String TITLE_IMAGE = "images/battleshipLogo.png";
   private static final int IMAGE_DIMENSIONS = 100;
+  private static final String TITLE_TEXT_ID = "title-text";
 
   private ImageView titleImage;
   private Label titleText;
@@ -18,7 +19,7 @@ public class TitlePanel extends HBox {
 
     titleImage = new ImageView();
     titleText = new Label(inputString);
-    titleText.setId("titleText");
+    titleText.setId(TITLE_TEXT_ID);
 
     setUpImage();
 

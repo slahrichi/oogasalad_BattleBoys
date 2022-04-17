@@ -41,7 +41,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int numShots;
   private int allowedShots;
   private static final String INVALID_METHOD = "Invalid method name given";
-  private static final Logger LOG = LogManager.getLogger(GameView.class);
+  private static final Logger LOG = LogManager.getLogger(GameManager.class);
 
   public GameManager(GameData data) {
     initialize(data);

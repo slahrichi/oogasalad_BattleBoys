@@ -87,7 +87,7 @@ public class ShopView {
   }
 
   public void addShopItem(String category,String itemName, String itemInfo, int index){
-    Group  currentGroup = (Group) nameToPageMap.get(category).getContent();
+    Group currentGroup = (Group) nameToPageMap.get(category).getContent();
     currentGroup.getChildren().add(new ShopItem(itemName,itemInfo,index));
   }
 

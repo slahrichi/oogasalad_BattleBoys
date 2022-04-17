@@ -1,7 +1,11 @@
 package oogasalad.view;
 
+import static oogasalad.view.GameView.CELL_STATE_RESOURCES;
+import static oogasalad.view.GameView.FILL_PREFIX;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,10 +21,13 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import oogasalad.PropertyObservable;
+import oogasalad.controller.GameSetup;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.BoardView;
@@ -32,6 +39,8 @@ import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer,
     BoardVisualizer {
@@ -41,11 +50,15 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final String SCREEN_TITLE = ": Set Up Your Ships";
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "stylesheets/setupStylesheet.css";
+  private static final Logger LOG = LogManager.getLogger(SetupView.class);
 
 
   private BorderPane myPane;
   private Button confirmButton;
   private VBox centerBox;
+  private HBox bottomPanel;
+  private VBox removePiecePanel;
+  private Collection<Coordinate> lastPlaced;
   private StackPane myCenterPane;
   private BoardView setupBoard;
   private Scene myScene;
@@ -67,7 +80,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     currentPlayer = 1;
 
     createTitlePanel();
-    createConfirmButton();
+    createBottomPanel();
     createCenterPanel();
     createConfigPanel();
     createPassMessageView();
@@ -112,14 +125,20 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private void setupLegendPane() {
     LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
     for(CellState state : CellState.values()) {
-      colorMap.put(state.name(), Color.valueOf(GameView.CELL_STATE_RESOURCES.getString(GameView.FILL_PREFIX + state.name())));
+      colorMap.put(state.name(), Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
     legendPane = new LegendPane(colorMap);
   }
 
-  private void createConfirmButton() {
+  private void createBottomPanel() {
     confirmButton = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), "Confirm");
     confirmButton.setDisable(true);
+    lastPlaced = new ArrayList<>();
+    Button removeLastPiece = ButtonMaker.makeTextButton("remove-last-button", e -> removePiece(), "Remove Last Placed Piece");
+    Button removeAll = ButtonMaker.makeTextButton("remove-all-button", e -> removeAllPieces(), "Remove All Pieces");
+    removePiecePanel = BoxMaker.makeVBox("remove-piece-panel", 10, Pos.CENTER, removeLastPiece, removeAll);
+    bottomPanel = BoxMaker.makeHBox("bottom-panel", 20, Pos.CENTER, removePiecePanel, confirmButton);
+
   }
 
   private void handleConfirm() {
@@ -135,7 +154,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
     myCenterPane = new StackPane();
     myCenterPane.setId("boardBox");
-    centerBox = BoxMaker.makeVBox("setup-center-box", 20, Pos.CENTER, myCenterPane, confirmButton);
+    centerBox = BoxMaker.makeVBox("setup-center-box", 20, Pos.CENTER, myCenterPane, bottomPanel);
     myPane.setCenter(centerBox);
     myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }
@@ -172,19 +191,32 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   @Override
   public void placePiece(Collection<Coordinate> coords, CellState type) {
+    lastPlaced = coords;
     for (Coordinate c : coords) {
-      setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.BLACK);
+      setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
     }
+  }
+
+  public void setLastPlaced(Collection<Coordinate> coords) {
+    lastPlaced = coords;
   }
 
   @Override
-  public void removePiece(Collection<Coordinate> coords) {
-    for (Coordinate c : coords) {
-      setupBoard.setColorAt(c.getRow(), c.getColumn(), Color.LIGHTBLUE);
+  public void removePiece() {
+    for (Coordinate c : lastPlaced) {
+      setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
     }
+    confirmButton.setDisable(true);
+    notifyObserver("removePiece", null);
+  }
+
+  public void removeAllPieces() {
+    confirmButton.setDisable(true);
+    notifyObserver("removeAllPieces", null);
   }
 
   public void clearBoard() {
+    lastPlaced.clear();
     myCenterPane.getChildren().remove(setupBoard.getBoardPane());
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     setupBoard.addObserver(this);

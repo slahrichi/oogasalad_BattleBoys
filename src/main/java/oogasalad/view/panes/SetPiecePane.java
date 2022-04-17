@@ -17,15 +17,21 @@ import oogasalad.view.maker.LabelMaker;
 
 public class SetPiecePane extends TitledPane {
 
+  private static final String INDICATOR_ID = "shipBox";
+  private static final double INDICATOR_SPACING = 20;
+  private static final double PANE_WIDTH = 300;
+  private static final String PANE_ID = "shipPane";
+  private static final String LABEL_TEXT = "All ships placed. Press confirm to move on.";
+  private static final String LABEL_ID = "all-ships-placed-label";
+
   private List<ShipIndicatorView> shipViews;
   private VBox shipIndicatorsBox;
-  private boolean lastPiecePlaced = false;
   private double myShipSize;
 
   public SetPiecePane(double size) {
     myShipSize = size;
     shipViews = new ArrayList<>();
-    shipIndicatorsBox = BoxMaker.makeVBox("shipBox", 20, Pos.CENTER);
+    shipIndicatorsBox = BoxMaker.makeVBox(INDICATOR_ID, INDICATOR_SPACING, Pos.CENTER);
 //    shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
     setUpPane();
   }
@@ -37,8 +43,8 @@ public class SetPiecePane extends TitledPane {
 //      shipIndicatorsBox.getChildren().add(view.getBoardPane());
 //    }
     setContent(shipIndicatorsBox);
-    setPrefWidth(300);
-    setId("shipPane");
+    setPrefWidth(PANE_WIDTH);
+    setId(PANE_ID);
     setExpanded(true);
   }
 
@@ -54,7 +60,7 @@ public class SetPiecePane extends TitledPane {
 
   public void showListCompletion() {
     shipIndicatorsBox.getChildren().clear();
-    Label shipsPlaced = LabelMaker.makeLabel("All ships placed. Press confirm to move on.", "all-ships-placed-label");
+    Label shipsPlaced = LabelMaker.makeLabel(LABEL_TEXT, LABEL_ID);
     shipsPlaced.setMaxWidth(200);
     shipsPlaced.setWrapText(true);
     shipIndicatorsBox.getChildren().add(shipsPlaced);
