@@ -1,0 +1,69 @@
+.button{
+  -fx-font-size: 12pt;
+  -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+  -fx-font-family: "Segoe UI Semibold";
+}
+
+.label{
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-font-size: 14pt;
+}
+
+#view-pane {
+  -fx-background-color: lightblue;
+}
+
+#titleText{
+  -fx-padding: 10;
+  -fx-font-size: 30pt;
+  -fx-alignment: center;
+}
+
+#game-title{
+  -fx-border-style: hidden hidden solid hidden;
+  -fx-padding: 10;
+  -fx-max-width: infinity;
+  -fx-alignment: center;
+  -fx-border-color: black;
+}
+
+#configBox {
+  -fx-border-style: hidden hidden hidden solid;
+  -fx-border-color: BLACK;
+  -fx-padding: 10;
+  -fx-pref-width: 200;
+}
+
+#boardBox {
+  -fx-padding: 10;
+}
+
+#currentBoardLabel {
+  -fx-font-size: 20pt;
+  -fx-alignment: center;
+}
+
+#configGrid {
+  -fx-padding: 10;
+  -fx-spacing: 10;
+}
+
+#shots-remaining-label {
+  -fx-padding: 10 0;
+}
+
+#health-label {
+  -fx-padding: 10 0;
+}
+
+#gold-label {
+  -fx-padding: 10 0;
+}
+
+#view-shop {
+  -fx-padding: 10px;
+  -fx-border-insets: 10px;
+  -fx-background-insets: 10px;
+  -fx-pref-width: 110px;
+  -fx-pref-height: 50px;
+}

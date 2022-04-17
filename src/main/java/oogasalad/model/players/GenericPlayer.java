@@ -23,12 +23,16 @@ public abstract class GenericPlayer implements Player{
   private Board myBoard;
   private int myId;
 
+  private static final String PLAYER_PREFIX = "Player ";
+  private String myName;
+
   public GenericPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
     itemList = new ArrayList<>();
     myCurrency = 0;
     myEnemyMap = enemyMap;
     myId = id;
+    myName = PLAYER_PREFIX + id;
   }
 
   @Override
@@ -37,6 +41,14 @@ public abstract class GenericPlayer implements Player{
       myCurrency -= item.getPrice();
       itemList.add(item);
     }
+  }
+
+  public void removePiece(String id) {
+    myBoard.removePiece(id);
+  }
+
+  public void removeAllPieces() {
+    myBoard.removeAllPieces();
   }
 
   @Override
@@ -90,6 +102,16 @@ public abstract class GenericPlayer implements Player{
 
   public int getID() {
     return myId;
+  }
+
+  @Override
+  public String getName() {
+    return myName;
+  }
+
+  @Override
+  public void setName(String name) {
+    myName = name;
   }
 
   @Override

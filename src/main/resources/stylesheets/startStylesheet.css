@@ -1,0 +1,37 @@
+.button{
+  -fx-font-size: 12pt;
+  -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+  -fx-pref-width: 150;
+  -fx-pref-height: 75;
+  -fx-font-family: "Segoe UI Semibold";
+}
+
+.label {
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-font-size: 14pt;
+}
+
+.button:hover {background-color: #3e8e41}
+
+
+#titleBox{
+  -fx-alignment: center;
+  -fx-padding: 10;
+}
+
+#buttonBox{
+  -fx-alignment: center;
+}
+
+#startPane{
+  -fx-background-image: url("../images/battleshipBackground.jpg");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: 1200 900;
+  -fx-background-position: center center;
+}
+
+
+
+
+
+

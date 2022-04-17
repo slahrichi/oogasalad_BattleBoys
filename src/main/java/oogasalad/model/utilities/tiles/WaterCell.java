@@ -30,6 +30,11 @@ public class WaterCell extends Cell implements CellInterface {
     return true;
   }
 
+  @Override
+  public void moveCell(Coordinate nextMovement) {
+
+  }
+
   /*
   @Override
   public List<Modifiers> update() {

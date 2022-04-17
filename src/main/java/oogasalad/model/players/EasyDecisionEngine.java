@@ -1,5 +1,6 @@
 package oogasalad.model.players;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
@@ -12,16 +13,26 @@ public class EasyDecisionEngine extends DecisionEngine {
     super(coordinateList, enemyMap);
   }
 
-
-  public Coordinate makeMove() {
-    if (getDeque().size() != 0) {
+  public EngineRecord makeMove() {
+    if (!getDeque().isEmpty()) {
       return getDeque().pollFirst();
     }
     else {
-      Coordinate shot = getCoordinateList().get(getRandom().nextInt(getCoordinateList().size()));
+      int id = determineEnemy();
+      Coordinate location = determineLocation();
+      EngineRecord shot = new EngineRecord(location, id);
       setLastShot(shot);
-      return getLastShot();
+      return shot;
     }
+  }
+
+  private int determineEnemy() {
+    List<Integer> enemies = new ArrayList<>(getEnemyMap().keySet());
+    return enemies.get(getRandom().nextInt(enemies.size()));
+  }
+
+  private Coordinate determineLocation() {
+    return getCoordinateList().get(getRandom().nextInt(getCoordinateList().size()));
   }
 
   public void adjustStrategy(CellState result) {
@@ -31,6 +42,5 @@ public class EasyDecisionEngine extends DecisionEngine {
     else {
       getDeque().addFirst(getLastShot());
     }
-
   }
 }
