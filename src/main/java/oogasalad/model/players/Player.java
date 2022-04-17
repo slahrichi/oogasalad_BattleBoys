@@ -68,6 +68,10 @@ public interface Player {
 
     public int getID();
 
+    String getName();
+
+    void setName(String name);
+
     boolean canBeStruck(Coordinate c);
 
     Map<Integer, MarkerBoard> getEnemyMap();
