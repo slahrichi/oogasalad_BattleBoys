@@ -33,6 +33,7 @@ public abstract class GenericPlayer implements Player{
     myEnemyMap = enemyMap;
     myId = id;
     myName = PLAYER_PREFIX + (id + 1);
+
   }
 
   @Override

@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.Map;
 import javafx.scene.Scene;
@@ -38,6 +39,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private Map<Player, DecisionEngine> engineMap;
   private int pieceIndex;
   private Stack<Collection<Coordinate>> lastPlacedAbsoluteCoords;
+  private ResourceBundle myResources;
 
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
   private static final String INVALID_METHOD = "Invalid method name given";
@@ -49,13 +51,14 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
    * players involved in the game, and the pieces they are allowed to place
    *
    */
-  public GameSetup(GameData data){
+  public GameSetup(GameData data, ResourceBundle resourceBundle){
     this.playerList = data.players();
     this.board = data.board();
     this.pieceList = data.pieces();
     this.pieceIndex = 0;
     this.playerIndex = 0;
     this.lastPlacedAbsoluteCoords = new Stack<>();
+    this.myResources = resourceBundle;
     this.engineMap = data.engineMap();
     setupGame();
   }
@@ -70,7 +73,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
 
   private void initializeSetupView() {
-    setupView = new SetupView(board);
+    setupView = new SetupView(board, myResources);
     setupView.addObserver(this);
     setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
     setupView.promptForName();
@@ -113,7 +116,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       if (pieceIndex == 0) {
         setupView.setLastPlaced(new ArrayList<>());
       } else {
-        // REPLACE WITH ABSOLUTE COORDINATES
         setupView.setLastPlaced(lastPlacedAbsoluteCoords.peek());
       }
     }
