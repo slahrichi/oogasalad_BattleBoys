@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class RandomShot extends Weapon{
   /**

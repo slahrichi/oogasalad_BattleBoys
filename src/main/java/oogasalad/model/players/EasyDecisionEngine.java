@@ -3,14 +3,17 @@ package oogasalad.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.Piece;
 
 public class EasyDecisionEngine extends DecisionEngine {
 
-  public EasyDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap) {
-    super(coordinateList, enemyMap);
+  public EasyDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
+      Player player) {
+    super(coordinateList, enemyMap, player);
   }
 
   public EngineRecord makeMove() {
@@ -42,5 +45,16 @@ public class EasyDecisionEngine extends DecisionEngine {
     else {
       getDeque().addFirst(getLastShot());
     }
+  }
+
+  public Coordinate placePiece(List<Piece> pieceList) {
+    Board board = getPlayer().getBoard();
+    Piece piece = pieceList.get(getPieceIndex());
+    Coordinate c = determineLocation();
+    while (!board.hasValidPlacement(c, piece)) {
+      c = determineLocation();
+    }
+    updatePieceIndex();
+    return c;
   }
 }

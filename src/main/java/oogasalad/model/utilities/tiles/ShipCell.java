@@ -3,7 +3,7 @@ package oogasalad.model.utilities.tiles;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 
 public class ShipCell extends Cell implements CellInterface {
@@ -73,6 +73,11 @@ public class ShipCell extends Cell implements CellInterface {
   @Override
   public boolean canCarryObject() {
     return false;
+  }
+
+  @Override
+  public void moveCell(Coordinate nextMovement) {
+
   }
 
   public Coordinate getRelativeCoordinate(){

@@ -6,10 +6,16 @@
 .button{
   -fx-font-size: 12pt;
   -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+  -fx-font-family: "Segoe UI Semibold";
+
+}
+
+#setup-view-pane{
+  -fx-background-color: lightblue;
 }
 
 
-#titleText{
+#title-text{
   -fx-padding: 10;
   -fx-font-size: 30pt;
   -fx-alignment: center;
@@ -43,5 +49,6 @@
 }
 
 #confirm-button{
-
+  -fx-pref-width: 150;
+  -fx-pref-height: 75;
 }

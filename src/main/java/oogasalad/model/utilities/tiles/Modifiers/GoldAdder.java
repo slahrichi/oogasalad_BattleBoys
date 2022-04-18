@@ -3,7 +3,7 @@ package oogasalad.model.utilities.tiles.Modifiers;
 import java.util.Arrays;
 import java.util.HashSet;
 import oogasalad.model.utilities.tiles.CellInterface;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class GoldAdder extends PlayerModifier{
 

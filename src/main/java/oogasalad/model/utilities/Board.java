@@ -3,6 +3,7 @@ package oogasalad.model.utilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
 import org.apache.logging.log4j.LogManager;
@@ -99,7 +100,7 @@ public class Board {
     piece.initializeHPList();
   }
 
-  private boolean hasValidPlacement(Coordinate topLeft, Piece piece) {
+  public boolean hasValidPlacement(Coordinate topLeft, Piece piece) {
     for (Coordinate relative : piece.getRelativeCoords()) {
       if (!canPlaceAt(Coordinate.sum(topLeft, relative))) {
         return false;
@@ -152,12 +153,6 @@ public class Board {
     return hitState;
   }
 
-  /*
-  public void addPiece(String id, Piece newPiece){
-    myPieces.put(id, newPiece);
-  }
-   */
-
   public int getNumPiecesSunk() {
     return myNumShipsSunk;
   }
@@ -209,4 +204,19 @@ public class Board {
   return retModifers;
   }
 
+  public void removePiece(String ID) {
+    //throw exception if ID is not good ID
+    Piece pieceToRemove = myPieces.get(ID);
+    myPieces.remove(ID);
+    pieceToRemove.removeFromBoard(boardMap);
+  }
+
+  public void removeAllPieces() {
+    Iterator<String> itr = myPieces.keySet().iterator();
+    while (itr.hasNext()) {
+      myPieces.get(itr.next()).removeFromBoard(boardMap);
+      itr.remove();
+    }
+
+  }
 }

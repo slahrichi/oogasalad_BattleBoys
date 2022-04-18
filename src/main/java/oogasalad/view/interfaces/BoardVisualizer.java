@@ -2,7 +2,7 @@ package oogasalad.view.interfaces;
 
 import java.util.Collection;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public interface BoardVisualizer {
 
@@ -15,7 +15,6 @@ public interface BoardVisualizer {
 
   /**
    * Removes any Pieces that are at the coordinates contained in coords.
-   * @param coords Coordinates that contain pieces to remove
    */
   void removePiece(Collection<Coordinate> coords);
 }

@@ -8,25 +8,37 @@ import java.util.Map;
 import java.util.function.Consumer;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.WaterCell;
+
 
 public abstract class Piece {
 
   private List<ShipCell> cellList;
   private List<ShipCell> allCells;
+  private PieceMover myMover;
   private List<Coordinate> cellListHP = new ArrayList<>();
   private List<Coordinate> myRelativeCoords;
   private String status;
   private String pieceId;
 
-  public Piece(List<ShipCell> cells, List<Coordinate> relativeCoords, String id) {
+  public Piece(List<ShipCell> cells, List<Coordinate> relativeCoords, List<Coordinate> patrolPath, String id) {
     status = "Alive";
     pieceId = id;
     cellList = createNewCellListInstance(cells);
     allCells = new ArrayList<>(cellList);
     myRelativeCoords = relativeCoords;
+    myMover = new PieceMover(patrolPath);
     //intializeHPList(cellList);
   }
+
+  public void removeFromBoard(Map<Coordinate, CellInterface> boardMap) {
+    for(ShipCell currCell: allCells) {
+      boardMap.put(currCell.getCoordinates(), new WaterCell(currCell.getCoordinates()));
+    }
+    cellListHP.clear();
+  }
+
 
   private List<ShipCell> createNewCellListInstance(List<ShipCell> cells) {
     List<ShipCell> newCellList = new ArrayList<>();
@@ -39,8 +51,8 @@ public abstract class Piece {
   public Piece(String id){
     status = "Alive";
     pieceId = id;
-
   }
+
   public void initCellList(List<ShipCell> cells){
     cellList = cells;
     allCells = new ArrayList<>(cellList);
@@ -54,6 +66,14 @@ public abstract class Piece {
     for(ShipCell c: cellList) {
       c.placeAt(absoluteCoord);
     }
+  }
+
+  public Collection<Coordinate> getAbsoluteCoords() {
+    List<Coordinate> coords = new ArrayList<>();
+    for (ShipCell ship : cellList) {
+      coords.add(ship.getCoordinates());
+    }
+    return coords;
   }
 
   public List<ShipCell> getCellList() {
@@ -88,10 +108,6 @@ public abstract class Piece {
 
   protected void updateStatus(String newStatus) {
     status = newStatus;
-  }
-
-  public List<Coordinate> getHPList() {
-    return cellListHP;
   }
 
   public String getID(){return pieceId;}

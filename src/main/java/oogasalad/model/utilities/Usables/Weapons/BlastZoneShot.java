@@ -1,13 +1,9 @@
 package oogasalad.model.utilities.Usables.Weapons;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Usables.UsableFunction;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 /**
  * Has starting damage and decreases as radius increases.

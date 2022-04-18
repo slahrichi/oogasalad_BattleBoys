@@ -9,18 +9,21 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.Usables.Usables;
 import oogasalad.model.utilities.WinConditions.WinState;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
+
 
 public abstract class GenericPlayer implements Player{
 
-  private int myHealth;
+  private int myPiecesLeft;
   private int myCurrency;
   private List<Item> itemList;
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Board myBoard;
   private int myId;
+
+  private static final String PLAYER_PREFIX = "Player ";
+  private String myName;
 
   public GenericPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
@@ -28,6 +31,7 @@ public abstract class GenericPlayer implements Player{
     myCurrency = 0;
     myEnemyMap = enemyMap;
     myId = id;
+    myName = PLAYER_PREFIX + (id + 1);
   }
 
   @Override
@@ -36,6 +40,14 @@ public abstract class GenericPlayer implements Player{
       myCurrency -= item.getPrice();
       itemList.add(item);
     }
+  }
+
+  public void removePiece(String id) {
+    myBoard.removePiece(id);
+  }
+
+  public void removeAllPieces() {
+    myBoard.removeAllPieces();
   }
 
   @Override
@@ -54,15 +66,15 @@ public abstract class GenericPlayer implements Player{
   }
 
   @Override
-  public int getHealth() {
-    return myHealth;
+  public int getNumPieces() {
+    return myPiecesLeft;
   }
 
   public void determineHealth() {
-    myHealth = 0;
+    myPiecesLeft = 0;
     for (Piece p : myBoard.listPieces()) {
       if (p != null) {
-        myHealth++;
+        myPiecesLeft++;
       }
     }
   }
@@ -80,7 +92,7 @@ public abstract class GenericPlayer implements Player{
   }
 
   private PlayerRecord makeRecord() {
-    return new PlayerRecord(myHealth, myCurrency, itemList, myBoard);
+    return new PlayerRecord(myPiecesLeft, myCurrency, itemList, myBoard);
   }
 
   public Board getBoard() {
@@ -92,10 +104,25 @@ public abstract class GenericPlayer implements Player{
   }
 
   @Override
+  public String getName() {
+    return myName;
+  }
+
+  @Override
+  public void setName(String name) {
+    myName = name;
+  }
+
+  @Override
   public boolean canBeStruck(Coordinate c) {
     return myBoard.canBeStruck(c);
   }
-  public int getMyCurrency(){return myCurrency;}
+
+  @Override
+  public int getMyCurrency() {
+    return myCurrency;
+  }
+
   public Map<Integer, MarkerBoard> getEnemyMap() {
     return myEnemyMap;
   }

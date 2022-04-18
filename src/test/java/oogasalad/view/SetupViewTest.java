@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -19,7 +20,7 @@ import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.panels.TitlePanel;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ public class SetupViewTest extends DukeApplicationTest {
   private Button confirm;
   private TitlePanel title;
   private Polygon cell2_2;
+  private ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
   @Override
   public void start(Stage stage) {
@@ -65,7 +67,7 @@ public class SetupViewTest extends DukeApplicationTest {
     List<WinCondition> winConditions = new ArrayList<>();
     winConditions.add(new LoseXShipsLossCondition(2));
     GameData data = new GameData(players, board, pieces, winConditions, null);
-    GameSetup setup = new GameSetup(data);
+    GameSetup setup = new GameSetup(data, myResources);
     stage.setScene(setup.createScene());
     stage.show();
 

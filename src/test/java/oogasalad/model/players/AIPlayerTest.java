@@ -3,7 +3,7 @@ package oogasalad.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,15 +43,15 @@ class AIPlayerTest {
 
   @Test
   void initialHealthIsZero() {
-    int initialHealth = singlePlayer.getHealth();
+    int initialHealth = singlePlayer.getNumPieces();
     assertEquals(initialHealth, 0);
   }
 
   @Test
   void noDamageDoneOnEmptyBoard() {
-    int initialHealth = singlePlayer.getHealth();
+    int initialHealth = singlePlayer.getNumPieces();
 //    singlePlayer.strike(new Coordinate(0,0));
-    int finalHealth = singlePlayer.getHealth();
+    int finalHealth = singlePlayer.getNumPieces();
     assertEquals(initialHealth, finalHealth);
   }
 

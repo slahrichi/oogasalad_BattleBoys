@@ -12,7 +12,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -80,6 +80,18 @@ public class ParserTest {
     examplePlayerData = new PlayerData(players, pieceList, dummyBoard, decisionEngines);
 
   }
+
+  /*
+  @Test
+  void playerDataReflection() throws ParserException{
+    List<Object> parsedElements = List.of(examplePlayerData.players(),
+        examplePlayerData.pieces(), examplePlayerData.board(), examplePlayerData.decisionEngines());
+    PlayerData returnedPlayerData = parser.getPlayerData(parsedElements);
+    assertEquals(examplePlayerData, returnedPlayerData);
+  }
+
+   */
+
 
   @Test
   void loadCorrectFileExtension(){
@@ -183,8 +195,9 @@ public class ParserTest {
   @Test
   void loadPiecesWithMissingData() {
     String path = "src/test/resources/PiecesWithMissingData.properties";
+    String jsonPath = "src/test/resources/PiecesWithMissingData.json";
     ParserException thrown = assertThrows(ParserException.class, () -> parser.parse(path));
-    assertEquals(exceptionMessageProperties.getProperty("missingData").formatted(path,"Pieces"), thrown.getMessage());
+    assertEquals(exceptionMessageProperties.getProperty("missingData").formatted(jsonPath,"Pieces"), thrown.getMessage());
   }
 
   @Test

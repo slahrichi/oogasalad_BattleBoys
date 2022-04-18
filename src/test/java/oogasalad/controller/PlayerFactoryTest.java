@@ -9,12 +9,18 @@ import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.EasyDecisionEngine;
 import oogasalad.model.players.Player;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+/**
+ * Comprehensive testing for PlayerFactory
+ *
+ * @author Matthew Giglio
+ */
 
 public class PlayerFactoryTest {
 

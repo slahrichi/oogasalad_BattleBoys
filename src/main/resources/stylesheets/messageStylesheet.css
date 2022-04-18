@@ -1,0 +1,28 @@
+.button{
+  -fx-font-size: 12pt;
+  -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+  -fx-pref-width: 100;
+  -fx-pref-height: 50;
+  -fx-font-family: "Segoe UI Semibold";
+}
+
+
+#messageBox{
+  -fx-background-image: url("../images/battleshipSwitch.jpg");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: 1200 900;
+  -fx-background-position: center center;
+
+}
+
+#pass-computer-message-label{
+  -fx-background-color: grey;
+  -fx-border-color: black;
+  -fx-pref-height: 50;
+  -fx-padding: 10;
+}
+
+.label{
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-font-size: 20pt;
+}

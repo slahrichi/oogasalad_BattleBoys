@@ -9,7 +9,7 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

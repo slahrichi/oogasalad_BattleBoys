@@ -3,7 +3,7 @@ package oogasalad.model.utilities.tiles;
 import java.util.List;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public interface CellInterface {
 
@@ -32,4 +32,6 @@ public interface CellInterface {
    CellState getCellState();
 
    public int getHealth();
+
+   void moveCell(Coordinate nextMovement);
 }

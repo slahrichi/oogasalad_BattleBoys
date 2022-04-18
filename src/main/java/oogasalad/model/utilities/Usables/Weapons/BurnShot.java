@@ -3,7 +3,7 @@ package oogasalad.model.utilities.Usables.Weapons;
 import java.util.HashMap;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 /**
  * Hits  a tile and if its a ship, then it will apply a modifier that burns the ship overtime */

@@ -1,6 +1,14 @@
 .button{
   -fx-font-size: 12pt;
   -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+  -fx-pref-width: 150;
+  -fx-pref-height: 75;
+  -fx-font-family: "Segoe UI Semibold";
+}
+
+.label {
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-font-size: 14pt;
 }
 
 .button:hover {background-color: #3e8e41}
@@ -16,11 +24,13 @@
 }
 
 #startPane{
-  -fx-background-image: url("https://ips4-wowslegends-global.gcdn.co/monthly_2021_06/Georgia_US_T7_BB_Promoslides_Update-3-4_1920x1080_WG_SPb_WoWSL.jpg.5ab4186047f66be030b5a25047760f1c.jpg");
+  -fx-background-image: url("../images/battleshipBackground.jpg");
   -fx-background-repeat: no-repeat;
   -fx-background-size: 1200 900;
   -fx-background-position: center center;
 }
+
+
 
 
 

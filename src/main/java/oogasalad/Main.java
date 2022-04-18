@@ -3,7 +3,6 @@ package oogasalad;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import oogasalad.controller.Game;
-import oogasalad.view.StartView;
 
 /**
  * Feel free to completely change this code or delete it entirely. 

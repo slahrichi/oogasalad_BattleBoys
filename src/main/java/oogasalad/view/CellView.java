@@ -19,13 +19,19 @@ public class CellView extends PropertyObservable {
     myShape.setFill(color);
     myShape.getPoints().addAll(points);
     myShape.setOnMouseClicked(e -> cellClicked());
+    myShape.setOnMouseEntered(e -> cellHovered());
+    myShape.setOnMouseExited(e -> cellExited());
   }
 
-  public void cellClicked() {
-    // gets the name of the current method being executed - in this case it is "cellClicked"
-    // may not need if cells are the only thing on the board that can be clicked on
-//    System.out.print(myCoords.getRow() + ",");
-//    System.out.println(myCoords.getColumn());
+  private void cellClicked() {
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), myCoords);
+  }
+
+  private void cellHovered() {
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), myCoords);
+  }
+
+  private void cellExited() {
     notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), myCoords);
   }
 

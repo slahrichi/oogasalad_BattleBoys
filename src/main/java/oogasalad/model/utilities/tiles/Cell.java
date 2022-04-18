@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public abstract class Cell implements CellInterface{
   private Coordinate myCoordinate;

@@ -22,11 +22,16 @@ public class LegendPane extends TitledPane {
 
   private static final int PANE_PADDING = 10;
   private static final int PANE_GAP = PANE_PADDING / 2;
+  private static final String LEGEND_PANE_ID = "legendPane";
+  private static final String LEGEND_TEXT = "Piece Legend";
+  private static final double LEGEND_COLOR_WIDTH = 30;
+  private static final double LEGEND_COLOR_HEIGHT = 30;
+  private static final String LABEL_SPACING = "   ";
+  private static final double PANE_MAX_HEIGHT = 250;
 
 
   public LegendPane(LinkedHashMap<String, Color> colors){
     colorMap = colors;
-
     setUpGrid();
     setUpPane();
   }
@@ -49,11 +54,11 @@ public class LegendPane extends TitledPane {
 
   private void setUpPane(){
 
-    this.setId("legendPane");
-    this.setText("Piece Legend");
+    this.setId(LEGEND_PANE_ID);
+    this.setText(LEGEND_TEXT);
     this.setContent(myScroller);
     this.setExpanded(false);
-    this.setMaxHeight(150);
+    this.setMaxHeight(PANE_MAX_HEIGHT);
 
   }
 
@@ -76,16 +81,17 @@ public class LegendPane extends TitledPane {
     // Creates rectangle of the specified color
     private void createColorIndicator() {
       Rectangle legendColor = new Rectangle();
-      legendColor.setWidth(30);
-      legendColor.setHeight(30);
+      legendColor.setWidth(LEGEND_COLOR_WIDTH);
+      legendColor.setHeight(LEGEND_COLOR_HEIGHT);
       legendColor.setFill(myColor);
+      legendColor.setStroke(Color.BLACK);
 
       this.getChildren().add(legendColor);
     }
 
     // Creates label for colored rectangle and places it to the right of the rectangle
     private void setUpLabel() {
-      Label name = new Label("   " + myName);
+      Label name = new Label(LABEL_SPACING + myName);
       this.getChildren().add(name);
     }
   }

@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 import oogasalad.GameData;
 import oogasalad.model.players.AIPlayer;
 import oogasalad.model.players.HumanPlayer;
@@ -11,7 +12,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import util.DukeApplicationTest;
 
+/**
+ * Comprehensive testing for GameSetup
+ *
+ * @author Matthew Giglio
+ */
+
 public class GameSetupTest extends DukeApplicationTest {
   private GameData gd1;
   private GameData gd2;
   private GameSetup gs;
+
+  private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
   @BeforeEach
   void setup() {
@@ -58,7 +67,7 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testBasicSetup() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
     assertEquals(gd1.players().size(), 2);
     assertEquals(gd1.players().get(0).getClass(), HumanPlayer.class);
     assertEquals(gd1.players().get(1).getClass(), AIPlayer.class);
@@ -66,16 +75,18 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testInvalidMethodName() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
     assertThrows(NullPointerException.class, () -> gs.propertyChange(new PropertyChangeEvent
-        (new SetupView(gd1.board()), null, null, new Coordinate(-1, 0)))) ;
+        (new SetupView(gd1.board(), myResources), null, null, new Coordinate(-1, 0)))) ;
   }
 
   @Test
   void testCoordinateChoice() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
-       new Coordinate(0, 0))));
+       "0 0")));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
         CellState.SHIP_HEALTHY);
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
@@ -87,9 +98,11 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testInvalidCoordinate() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
-        new Coordinate(-1, 0))));
+        "-1 0")));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
         CellState.WATER);
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
@@ -100,9 +113,11 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testMultiplePieces() {
-    javafxRun(() -> gs = new GameSetup(gd2));
+    javafxRun(() -> gs = new GameSetup(gd2, myResources));
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
-        new Coordinate(0, 0))));
+        "0 0")));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
         CellState.SHIP_HEALTHY);
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
@@ -110,7 +125,7 @@ public class GameSetupTest extends DukeApplicationTest {
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
         CellState.SHIP_HEALTHY);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
-        new Coordinate(0, 2))));
+        "0 2")));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][3],
         CellState.SHIP_HEALTHY);
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][2],
@@ -121,13 +136,14 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @Test
   void testMoveToGame() {
-    javafxRun(() -> gs = new GameSetup(gd1));
+    javafxRun(() -> {
+      gs = new GameSetup(gd1, myResources);
+      gs.createScene();
+    });
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
-        new Coordinate(0, 0))));
-    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "moveToNextPlayer", null,
-        null)));
-    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
-        new Coordinate(0, 0))));
+        "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "moveToNextPlayer", null,
         null)));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -136,13 +152,73 @@ public class GameSetupTest extends DukeApplicationTest {
         CellState.SHIP_HEALTHY);
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
         CellState.SHIP_HEALTHY);
-    assertEquals(gd1.players().get(1).getBoard().getCurrentBoardState()[0][1],
-        CellState.SHIP_HEALTHY);
-    assertEquals(gd1.players().get(1).getBoard().getCurrentBoardState()[1][0],
-        CellState.SHIP_HEALTHY);
-    assertEquals(gd1.players().get(1).getBoard().getCurrentBoardState()[1][1],
-        CellState.SHIP_HEALTHY);
+  }
 
+  @Test
+  void testRemovePiece() {
+    javafxRun(() -> gs = new GameSetup(gd1, myResources));
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        "0 0")));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "removePiece", null,
+        null)));
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
+        CellState.WATER);
+  }
+
+  @Test
+  void testRemoveAllPieces() {
+    javafxRun(() -> gs = new GameSetup(gd2, myResources));
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        "0 0")));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        "0 2")));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "removeAllPieces", null,
+        null)));
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][3],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][2],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][3],
+        CellState.WATER);
+  }
+
+  @Test
+  void testRemoveOnePieceOutOfMultiple() {
+    javafxRun(() -> gs = new GameSetup(gd2, myResources));
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        "0 0")));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
+        "0 2")));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "removePiece", null,
+        null)));
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][0],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][1],
+        CellState.SHIP_HEALTHY);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][3],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][2],
+        CellState.WATER);
+    assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[1][3],
+        CellState.WATER);
   }
 
 }

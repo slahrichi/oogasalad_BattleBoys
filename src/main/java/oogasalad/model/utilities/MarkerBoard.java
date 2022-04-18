@@ -1,6 +1,6 @@
 package oogasalad.model.utilities;
 
-import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class MarkerBoard {
 
