@@ -10,9 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
-import javafx.util.Duration;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
@@ -95,10 +93,12 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void handleShot(Info info) {
-    if (numShots < allowedShots && makeShot(new Coordinate(info.row(), info.col()), info.ID())) {
+    Coordinate coordinate = new Coordinate(info.row(), info.col());
+    if (numShots < allowedShots && makeShot(coordinate, info.ID())) {
       Player player = playerList.get(playerIndex);
       view.updateLabels(allowedShots-numShots, player.getNumPieces(), player.getMyCurrency());
-      updateConditions(info.ID());
+      view.displayShotAnimation(coordinate.getRow(), coordinate.getColumn(), e -> updateConditions(info.ID()),
+          info.ID());
 //      PauseTransition pt = new PauseTransition(new Duration(1000));
 //      pt.setOnFinished(e -> updateConditions(info.ID()));
 //      pt.play();
