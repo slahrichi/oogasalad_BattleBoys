@@ -193,8 +193,11 @@ public class Board {
       myPieces.get(itr.next()).removeFromBoard(boardMap);
       itr.remove();
     }
-//    for(String id: myPieces.keySet()) {
-//      removePiece(id);
-//    }
+  }
+
+  public void moveAllPieces() {
+    for(String key: myPieces.keySet()) {
+      myPieces.get(key).movePiece(boardMap);
+    }
   }
 }

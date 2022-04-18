@@ -32,20 +32,10 @@ public abstract class Piece {
     //intializeHPList(cellList);
   }
 
-  /*
   public void movePiece(Map<Coordinate, CellInterface> boardMap) {
-    for(ShipCell currCell: allCells) {
-      boardMap.put(currCell.getCoordinates(), new WaterCell(currCell.getCoordinates()));
-    }
-
     myMover.moveCells(cellList, boardMap);
-
-    for(ShipCell currCell: allCells) {
-      boardMap.put(currCell.getCoordinates(), currCell);
-    }
   }
 
-   */
 
   public void removeFromBoard(Map<Coordinate, CellInterface> boardMap) {
     for(ShipCell currCell: allCells) {
