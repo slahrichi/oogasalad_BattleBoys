@@ -20,6 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import util.DukeApplicationTest;
 
+/**
+ * Comprehensive testing for GameSetup
+ *
+ * @author Matthew Giglio
+ */
+
 public class GameSetupTest extends DukeApplicationTest {
   private GameData gd1;
   private GameData gd2;

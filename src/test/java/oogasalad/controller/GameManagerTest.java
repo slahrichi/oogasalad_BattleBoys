@@ -37,6 +37,12 @@ import util.DukeApplicationTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Comprehensive testing for GameManager
+ *
+ * @author Matthew Giglio
+ */
+
 public class GameManagerTest extends DukeApplicationTest {
 
   private List<Player> playerList;
