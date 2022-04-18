@@ -54,12 +54,12 @@ public class ColorSelectionStage extends BuilderStage{
     return result;
   }
 
-  protected void saveAndContinue(){
+  protected List<Color> saveAndContinue(){
     for(ColorPicker cp : colorPickers){
       colorList.add(cp.getValue());
     }
     myStage.close();
-
+    return colorList;
   }
 
 }

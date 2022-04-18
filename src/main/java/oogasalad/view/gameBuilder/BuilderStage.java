@@ -128,5 +128,5 @@ public abstract class BuilderStage {
 
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);
 
-  protected abstract void saveAndContinue();
+  protected abstract Object saveAndContinue();
 }

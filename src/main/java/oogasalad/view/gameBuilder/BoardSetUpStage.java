@@ -146,15 +146,19 @@ public class BoardSetUpStage extends BuilderStage {
     for( int i=0;i<width;i++){
       for( int j=0;j<width;j++){
         board[i][j]=CellState.of(stateMap[i][j]);
+        System.out.print(board[i][j]);
       }
+      System.out.println();
     }
   }
 
 
-  protected void saveAndContinue() {
+  protected CellState[][] saveAndContinue() {
     //write to file FIXME
     convertToCellStates();
     myStage.close();
     PieceDesignStage p = new PieceDesignStage();
+
+    return board;
   }
 }

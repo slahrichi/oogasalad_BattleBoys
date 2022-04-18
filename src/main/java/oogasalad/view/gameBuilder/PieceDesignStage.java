@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import oogasalad.model.utilities.Piece;
 
 public class PieceDesignStage extends BuilderStage {
 
@@ -30,9 +31,9 @@ public class PieceDesignStage extends BuilderStage {
   private String availablePieceTypes;
   private final ListView<String> listView = new ListView<>();
   private ObservableList<String> items = FXCollections.observableArrayList();
-  private final int MAX_LIST_WIDTH=100;
-  private final int MAX_LIST_HEIGHT=400;
-  private final double CELL_SIZE=20;
+  private final int MAX_LIST_WIDTH = 100;
+  private final int MAX_LIST_HEIGHT = 400;
+  private final double CELL_SIZE = 20;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
@@ -55,13 +56,12 @@ public class PieceDesignStage extends BuilderStage {
     myStage.showAndWait();
   }
 
-  private void resetCustomization(){
+  private void resetCustomization() {
     myPane.setCenter(null);
     stateMap = initializeBlankMap(MAX_DIMENSION, MAX_DIMENSION);
     items.clear();
     myPane.setLeft(null);
   }
-
 
 
   @Override
@@ -80,7 +80,7 @@ public class PieceDesignStage extends BuilderStage {
   @Override
   protected Object saveAndContinue() {
     findReferencePoint();
-  return null;
+    return null;
   }
 
   private VBox makePieceSelectionBox(String[] options) {
@@ -88,7 +88,6 @@ public class PieceDesignStage extends BuilderStage {
     ComboBox comboBox = makeComboBox(options);
     result.getChildren().add(comboBox);
     result.getChildren().add(makeButton("Select", e -> selectPieceType(result, comboBox)));
-
     return result;
   }
 
@@ -97,7 +96,7 @@ public class PieceDesignStage extends BuilderStage {
     pieceType = comboBox.getValue();
     if (!pieceType.equals(null)) {
       resetCustomization();
-      result=makePieceSelectionBox(availablePieceTypes.split(","));
+      result = makePieceSelectionBox(availablePieceTypes.split(","));
       myPane.setTop(result);
       String[] reqVars = getMyBuilderResources().getString(pieceType + "PieceRequiredInfo")
           .split(",");
@@ -105,7 +104,7 @@ public class PieceDesignStage extends BuilderStage {
         result.getChildren().add(makeComboBoxWithVariable(reqVars));
       }
       myPane.setLeft(listView);
-      myPane.setCenter(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, CELL_SIZE,CELL_SIZE, stateMap));
+      myPane.setCenter(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, CELL_SIZE, CELL_SIZE, stateMap));
     }
   }
 
@@ -113,22 +112,26 @@ public class PieceDesignStage extends BuilderStage {
     items.add(path);
   }
 
-  private void findReferencePoint(){
-    int minX=MAX_DIMENSION;
-    int minY=MAX_DIMENSION;
-    for(int i=0;i<stateMap.length;i++){
-      for(int j=0;j<stateMap[0].length;j++){
-        if(i<=minX && j<=minY && stateMap[i][j]!=0){
-          minX=i;
-          minY=j;
+  private void findReferencePoint() {
+    int minX = MAX_DIMENSION;
+    int minY = MAX_DIMENSION;
+    int maxX = 0;
+    int maxY = 0;
+    for (int i = 0; i < stateMap.length; i++) {
+      for (int j = 0; j < stateMap[0].length; j++) {
+        if (stateMap[i][j] != 0) {
+          if (i <= minX && j <= minY) {
+            minX = i;
+            minY = j;
+          }
+          if (i >= minX && j >= minY) {
+            maxX = i;
+            maxY = j;
+          }
         }
-        System.out.print(stateMap[i][j]);
       }
-      System.out.println();
     }
-    System.out.println(minX+" "+minY);
   }
-
 
   private HBox makeComboBoxWithVariable(String[] options) {
 
