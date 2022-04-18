@@ -89,17 +89,13 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     lastPlaced = new ArrayList<>();
-
     myResources = resourceBundle;
     nightMode = false;
     currentPlayerNumber = 1;
     currentPlayerName = "Player";
-    lastPlaced = new ArrayList<>();
     nextToPlace = new ArrayList<>();
 
     SCREEN_TITLE = myResources.getString("SetupTitlePrefix");
-
-
     createTitlePanel();
     createBottomPanel();
     createCenterPanel();
@@ -143,7 +139,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     setupLegendPane();
     shipPane = new SetPiecePane(20);
     shipPane.setText("Current Ship");
-
     configPane = new ConfigPane();
     configPane.setOnAction(e -> changeStylesheet());
 
@@ -168,7 +163,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     Button removeAll = ButtonMaker.makeTextButton("remove-all-button", e -> removeAllPieces(), myResources.getString("RemoveAllButton"));
     removePiecePanel = BoxMaker.makeVBox("remove-piece-panel", 10, Pos.CENTER, removeLastPiece, removeAll);
     bottomPanel = BoxMaker.makeHBox("bottom-panel", 20, Pos.CENTER, removePiecePanel, confirmButton);
-
   }
 
 

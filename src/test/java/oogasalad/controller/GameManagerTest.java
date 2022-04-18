@@ -18,13 +18,10 @@ import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.WinConditions.HaveXGoldWinCondition;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
-<<<<<<< HEAD
 import oogasalad.model.utilities.tiles.enums.CellState;
-=======
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.view.GameView;
 import oogasalad.view.Info;
->>>>>>> master
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
