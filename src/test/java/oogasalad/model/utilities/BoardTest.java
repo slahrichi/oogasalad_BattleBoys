@@ -4,13 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import oogasalad.GameData;
-import oogasalad.controller.GameManager;
-import oogasalad.model.players.AIPlayer;
-import oogasalad.model.players.HumanPlayer;
-import oogasalad.model.players.Player;
-import oogasalad.model.utilities.WinConditions.WinCondition;
-import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,7 +94,7 @@ class BoardTest {
   @Test
   void hitShipTest() {
     testBoard.placePiece(new Coordinate(0,1), ship1);
-    testBoard.hit(new Coordinate(1,1));
+    testBoard.hit(new Coordinate(1,1), 1);
     testBoard.listPieces().get(0).updateShipHP();
     assertEquals(testBoard.listPieces().get(0).getCellList().size(),2);
   }
@@ -109,9 +102,9 @@ class BoardTest {
   @Test
   void sinkShipTest() {
     testBoard.placePiece(new Coordinate(0,1), ship1);
-    testBoard.hit(new Coordinate(0,1));
-    testBoard.hit(new Coordinate(1,1));
-    testBoard.hit(new Coordinate(2,1));
+    testBoard.hit(new Coordinate(0,1),1);
+    testBoard.hit(new Coordinate(1,1),1);
+    testBoard.hit(new Coordinate(2,1),1);
     assertEquals(testBoard.listPieces().size(), 0);
   }
 }

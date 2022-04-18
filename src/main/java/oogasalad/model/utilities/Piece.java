@@ -6,11 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
-import oogasalad.model.utilities.tiles.WaterCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.tiles.WaterCell;
+
 
 public abstract class Piece {
 
@@ -31,21 +31,6 @@ public abstract class Piece {
     myMover = new PieceMover(patrolPath);
     //intializeHPList(cellList);
   }
-
-  /*
-  public void movePiece(Map<Coordinate, CellInterface> boardMap) {
-    for(ShipCell currCell: allCells) {
-      boardMap.put(currCell.getCoordinates(), new WaterCell(currCell.getCoordinates()));
-    }
-
-    myMover.moveCells(cellList, boardMap);
-
-    for(ShipCell currCell: allCells) {
-      boardMap.put(currCell.getCoordinates(), currCell);
-    }
-  }
-
-   */
 
   public void removeFromBoard(Map<Coordinate, CellInterface> boardMap) {
     for(ShipCell currCell: allCells) {

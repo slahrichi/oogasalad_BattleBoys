@@ -5,19 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 import oogasalad.GameData;
-import oogasalad.model.players.AIPlayer;
 import oogasalad.model.players.DecisionEngine;
-import oogasalad.model.players.EasyDecisionEngine;
-import oogasalad.model.players.HumanPlayer;
 import oogasalad.model.players.Player;
-import oogasalad.model.players.PlayerRecord;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
@@ -25,12 +18,13 @@ import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.WinConditions.HaveXGoldWinCondition;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
-import oogasalad.model.utilities.WinConditions.WinState;
-import oogasalad.model.utilities.tiles.Cell;
-import oogasalad.model.utilities.tiles.ShipCell;
+<<<<<<< HEAD
 import oogasalad.model.utilities.tiles.enums.CellState;
+=======
+import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.view.GameView;
 import oogasalad.view.Info;
+>>>>>>> master
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;

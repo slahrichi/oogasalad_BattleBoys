@@ -12,6 +12,7 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+
 public abstract class GenericPlayer implements Player{
 
   private int myPiecesLeft;

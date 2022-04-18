@@ -6,8 +6,8 @@ import java.util.Map;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
-import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.Piece;
 
 public class EasyDecisionEngine extends DecisionEngine {
 

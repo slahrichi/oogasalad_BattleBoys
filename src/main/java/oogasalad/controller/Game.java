@@ -23,7 +23,6 @@ import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.GameView;
-import oogasalad.view.Info;
 import oogasalad.view.StartView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
