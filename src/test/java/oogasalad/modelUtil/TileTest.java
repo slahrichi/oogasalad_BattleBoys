@@ -28,10 +28,10 @@ public class TileTest {
   void testBasic() {
     assertEquals(2,cell.getHealth());
     assertEquals(CellState.SHIP_HEALTHY, cell.getCellState());
-    cell.hit();
+    cell.hit(1);
     assertEquals(1,cell.getHealth());
     assertEquals(CellState.SHIP_DAMAGED, cell.getCellState());
-    cell.hit();
+    cell.hit(1);
     assertEquals(0,cell.getHealth());
     assertEquals(CellState.SHIP_SUNKEN, cell.getCellState());
     assertEquals(null, cell.getAssignedShip());

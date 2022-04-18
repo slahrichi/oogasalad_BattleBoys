@@ -1,31 +1,19 @@
-package oogasalad.model.utilities.Weapons;
+package oogasalad.model.utilities.Usables.Weapons;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Usables.UsableFunction;
+import oogasalad.model.utilities.Usables.Usables;
 
-public abstract class Weapon {
+public abstract class Weapon extends Usables {
 
-    WeaponFunction myWeaponFunction;
-    List<Coordinate> relativeCoordShots;
-    String myID;
-
-    /**
-     *
-     * @param coord The absolute coordinate of place on the board being hit (The reference point)
-     * @param enemyBoard The board that will be hit by the weapon
-     * @return
-     */
-    public WeaponFunction getWeaponFunction(Coordinate coord, Board enemyBoard){
-        if(enemyBoard.checkBoundedCoordinate(coord)){
-            return myWeaponFunction;
-        }else{
-            throw new NullPointerException("Coordinate Provided Out of Bounds");
-        }
+    public Weapon(String id, int gold){
+        super(id, gold);
     }
-
-
+    Map<Coordinate,Integer> relativeCoordShots;
 
     /**
      * Method that front end can call to display the action/tiles that will be affected by this weapon
@@ -35,9 +23,8 @@ public abstract class Weapon {
      * @return List of coordinates that should be higlighted to show where the shots will land.
      */
     public List<Coordinate> getHighlightedCoords(Coordinate absoluteCoord, Board currBoard){
-        updateRelativeCoords(currBoard);
         List<Coordinate> highlightedCoords = new ArrayList<>();
-        for(Coordinate relCoord: relativeCoordShots){
+        for(Coordinate relCoord: relativeCoordShots.keySet()){
             if(currBoard.checkBoundedCoordinate(new Coordinate(relCoord.getRow()+absoluteCoord.getRow(), relCoord.getColumn()+absoluteCoord.getColumn())))
                 highlightedCoords.add(new Coordinate(relCoord.getRow()+absoluteCoord.getRow(),
                     relCoord.getColumn()+absoluteCoord.getColumn()));
@@ -46,15 +33,11 @@ public abstract class Weapon {
         }
         return highlightedCoords;
     }
-
-    protected abstract void updateRelativeCoords(Board currBoard);
+    public void setRelativeCoordShots(Map<Coordinate, Integer> relCoords){
+        relativeCoordShots = relCoords;
+    }
+    public Map<Coordinate, Integer> getRelativeCoordShots(){return relativeCoordShots;}
+    protected void addRelativePosition(Coordinate coord, Integer dmg){relativeCoordShots.put(coord, dmg);}
 
     protected abstract void makeWeaponFunction();
-
-    /**
-     * @return the name of the Weapon system.
-     */
-    public String getMyID(){
-        return myID;
-    }
 }
