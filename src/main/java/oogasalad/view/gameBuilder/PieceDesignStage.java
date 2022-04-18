@@ -78,8 +78,9 @@ public class PieceDesignStage extends BuilderStage {
   }
 
   @Override
-  protected void saveAndContinue() {
-
+  protected Object saveAndContinue() {
+    findReferencePoint();
+  return null;
   }
 
   private VBox makePieceSelectionBox(String[] options) {
@@ -111,6 +112,23 @@ public class PieceDesignStage extends BuilderStage {
   private void updatePath(String path) {
     items.add(path);
   }
+
+  private void findReferencePoint(){
+    int minX=MAX_DIMENSION;
+    int minY=MAX_DIMENSION;
+    for(int i=0;i<stateMap.length;i++){
+      for(int j=0;j<stateMap[0].length;j++){
+        if(i<=minX && j<=minY && stateMap[i][j]!=0){
+          minX=i;
+          minY=j;
+        }
+        System.out.print(stateMap[i][j]);
+      }
+      System.out.println();
+    }
+    System.out.println(minX+" "+minY);
+  }
+
 
   private HBox makeComboBoxWithVariable(String[] options) {
 

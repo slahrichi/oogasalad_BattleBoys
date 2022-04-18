@@ -12,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import oogasalad.model.parsing.Parser;
+import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.maker.LabelMaker;
 
 public class BoardSetUpStage extends BuilderStage {
@@ -35,6 +37,7 @@ public class BoardSetUpStage extends BuilderStage {
   private static final Color DEFAULT_INACTIVE_COLOR = Color.GRAY;
   private static final Color DEFAULT_ACTIVE_COLOR = Color.BLUE;
   private static final String[] DEFAULT_STATE_OPTIONS = {"Inactive", "Active"};
+  CellState[][] board;
 
   private Consumer<Integer> widthChange;
   private Consumer<Integer> heightChange;
@@ -119,8 +122,9 @@ public class BoardSetUpStage extends BuilderStage {
     return result;
   }
 
-  private void makeInputBox() {
-
+  private void writeToFile(){
+    Parser p = new Parser();
+    //p.save();
   }
 
 
@@ -137,9 +141,19 @@ public class BoardSetUpStage extends BuilderStage {
     return newCell;
   }
 
+  private void convertToCellStates(){
+    board = new CellState[width][height];
+    for( int i=0;i<width;i++){
+      for( int j=0;j<width;j++){
+        board[i][j]=CellState.of(stateMap[i][j]);
+      }
+    }
+  }
+
 
   protected void saveAndContinue() {
     //write to file FIXME
+    convertToCellStates();
     myStage.close();
     PieceDesignStage p = new PieceDesignStage();
   }

@@ -31,7 +31,7 @@ public class ColorSelectionStage extends BuilderStage{
 
     Scene myScene =  new Scene(myPane, 900, 500);
     myStage.setScene(myScene);
-    myStage.show();
+    myStage.showAndWait();
 
   }
 
@@ -59,8 +59,7 @@ public class ColorSelectionStage extends BuilderStage{
       colorList.add(cp.getValue());
     }
     myStage.close();
-    BoardSetUpStage bb = new BoardSetUpStage();
-    myStage.close();
+
   }
 
 }
