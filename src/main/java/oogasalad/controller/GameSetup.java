@@ -16,6 +16,7 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.MovingPiece;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -55,6 +56,18 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     this.playerList = data.players();
     this.board = data.board();
     this.pieceList = data.pieces();
+
+    List<ShipCell> movingShipCells = new ArrayList<ShipCell>();
+    List<Coordinate> relativeCoordinates = new ArrayList<Coordinate>();
+    List<Coordinate> patrolPath = new ArrayList<Coordinate>();
+    movingShipCells.add(new ShipCell(1,new Coordinate(0,0), 2, "5"));
+    movingShipCells.add(new ShipCell(1,new Coordinate(1,0), 2, "5"));
+    relativeCoordinates.add(new Coordinate(0,0));
+    relativeCoordinates.add(new Coordinate(1,0));
+    patrolPath.add(new Coordinate(0,1));
+    pieceList.add(new MovingPiece(movingShipCells, relativeCoordinates, patrolPath, "5"));
+
+
     this.pieceIndex = 0;
     this.playerIndex = 0;
     this.lastPlacedAbsoluteCoords = new Stack<>();

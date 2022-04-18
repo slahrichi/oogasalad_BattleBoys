@@ -82,5 +82,7 @@ public interface Player {
     void removePiece(String id);
 
     void removeAllPieces();
+
+    void movePieces(); //new method for moving pieces
 }
 
