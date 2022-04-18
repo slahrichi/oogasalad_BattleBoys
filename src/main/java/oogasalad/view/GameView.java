@@ -10,7 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,7 +21,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.EngineRecord;
 import oogasalad.model.utilities.Coordinate;
@@ -79,15 +77,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private HBox boardButtonBox;
   private Button leftButton;
   private Button rightButton;
-
+  private Button endTurnButton;
   private VBox myRightPane;
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
   private LegendPane pieceLegendPane;
-  private LegendPane markerLegendPane;
   private ConfigPane configPane;
   private DynamicLabel shotsRemainingLabel;
-  private DynamicLabel healthLabel;
+  private DynamicLabel numPiecesLabel;
   private DynamicLabel goldLabel;
   private PassComputerMessageView passComputerMessageView;
   private boolean nightMode;
@@ -103,18 +100,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;
-
     myBoards = new ArrayList<>();
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
     playerIDToNames = idToNames;
+    initialize(firstPlayerBoards, initialPiecesLeft);
 
-    initializeBoards(firstPlayerBoards, createInitialIDList(firstPlayerBoards.size()));
-    createCenterPane();
-    createRightPane();
-    createTitlePanel();
-    createPassMessageView();
-    initializePiecesLeft(initialPiecesLeft);
   }
 
   private List<Integer> createInitialIDList(int numPlayers) {
@@ -123,6 +114,22 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       idList.add(i);
     }
     return idList;
+  }
+
+  private void initialize(List<CellState[][]> firstPlayerBoards,
+      Collection<Collection<Coordinate>> initialPiecesLeft) {
+    initializeBoards(firstPlayerBoards, createInitialIDList(firstPlayerBoards.size()));
+    createCenterPane();
+    createRightPane();
+    createTitlePanel();
+    createPassMessageView();
+    initializePiecesLeft(initialPiecesLeft);
+  }
+
+  public void updateLabels(int shots, int numPieces, int gold) {
+    shotsRemainingLabel.changeDynamicText(String.valueOf(shots));
+    numPiecesLabel.changeDynamicText(String.valueOf(numPieces));
+    goldLabel.changeDynamicText(String.valueOf(gold));
   }
 
   private void createPassMessageView() {
@@ -163,16 +170,16 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     setupPieceLegendPane();
 
-    shotsRemainingLabel = LabelMaker.makeDynamicLabel("Shots Remaining: %s", "0",
+    shotsRemainingLabel = LabelMaker.makeDynamicLabel("Shots Remaining: %s", "",
         "shots-remaining-label");
-    healthLabel = LabelMaker.makeDynamicLabel("Health: %s", "0", "health-label");
-    goldLabel = LabelMaker.makeDynamicLabel("Gold: %s", "0", "gold-label");
+    numPiecesLabel = LabelMaker.makeDynamicLabel("Number of Pieces Left: %s", "", "num-pieces-label");
+    goldLabel = LabelMaker.makeDynamicLabel("Gold: %s", "", "gold-label");
 
     configPane = new ConfigPane();
     configPane.setOnAction(e -> changeStylesheet());
 
     myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel,
-        healthLabel, goldLabel, shopButton,
+        numPiecesLabel, goldLabel, shopButton,
         piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
@@ -219,9 +226,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         IMAGES_PATH + "arrow-right.png", 50, 50);
     rightButton.getStyleClass().add("arrow-button");
 
-    boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER, leftButton, rightButton);
+    endTurnButton = ButtonMaker.makeTextButton("end-turn-button", e -> endTurn(), "End Turn");
+    endTurnButton.setDisable(true);
+    boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER, leftButton, rightButton, endTurnButton);
 
     myCenterPane.getChildren().add(boardButtonBox);
+  }
+
+  public void allowEndTurn() {
+    endTurnButton.setDisable(false);
+  }
+
+  private void endTurn() {
+    endTurnButton.setDisable(true);
+    notifyObserver("endTurn", new Info(0, 0, 0));
   }
 
   // Decrements currentBoardIndex and updates the shown board
@@ -434,7 +452,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    */
   @Override
   public void setHealthRemaining(int healthRemaining) {
-    healthLabel.changeDynamicText(String.valueOf(healthRemaining));
+    numPiecesLabel.changeDynamicText(String.valueOf(healthRemaining));
   }
 
   @Override
@@ -476,9 +494,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 //    updateTitle(name);
 //
 
-  public void displayAIMove(EngineRecord move, int id) {
-    String message = String.format("Player %d took a show at row %d, column %d on player %d",
-        id + 1, move.shot().getRow(), move.shot().getColumn(), move.enemyID() + 1);
+  public void displayAIMove(int id, List<Info> shots) {
+    String message = "";
+    for (int i = 0; i < shots.size(); i++) {
+      message += String.format("Player %d took a shot at row %d, column %d on player %d",
+          id+1, shots.get(i).row(), shots.get(i).col(), shots.get(i).ID()+1)+"\n";
+    }
     Alert alert = new Alert(AlertType.INFORMATION, message);
     Node alertNode = alert.getDialogPane();
     alertNode.setId("alert");
