@@ -1,5 +1,5 @@
 package oogasalad.model.utilities.Usables.Weapons;
 
-public class ScanShot {
+public class SonarShot {
 
 }
