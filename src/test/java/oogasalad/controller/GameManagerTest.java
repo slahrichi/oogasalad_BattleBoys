@@ -19,11 +19,14 @@ import oogasalad.model.players.Player;
 import oogasalad.model.players.PlayerRecord;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
+import oogasalad.model.utilities.WinConditions.HaveXGoldWinCondition;
 import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.WinConditions.WinState;
+import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.GameView;
@@ -45,6 +48,7 @@ public class GameManagerTest extends DukeApplicationTest {
   private List<WinCondition> wc;
   private GameSetup gs;
   private GameManager gm;
+  private Info info = new Info(0, 1, 1);
 
   private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
@@ -73,11 +77,10 @@ public class GameManagerTest extends DukeApplicationTest {
     dummyShipCellList2.add(new ShipCell(1, new Coordinate(1,1), 0, "2"));
     StaticPiece dummyShip1 = new StaticPiece(dummyShipCellList, coordinateList, "0");
     StaticPiece dummyShip2 = new StaticPiece(dummyShipCellList2, coordinateList, "0");
-    pieceList = new ArrayList<>();
-    pieceList2 = new ArrayList<>();
-    pieceList.add(dummyShip1);
-    pieceList2.add(dummyShip2);
-    list = new ArrayList<>();
+
+    pieceList = new ArrayList<>(Arrays.asList(dummyShip1));
+    pieceList2 = new ArrayList<>(Arrays.asList(dummyShip2));
+    list = new ArrayList<>(Arrays.<CellState[][]>asList(cellBoard));
     list.add(cellBoard);
   }
 
@@ -100,7 +103,6 @@ public class GameManagerTest extends DukeApplicationTest {
       gm.createScene();
     });
     assertEquals(gd.engineMap().size(), 0);
-    Info info = new Info(0, 1, 1);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>()), "handleShot", null, info)));
@@ -119,7 +121,7 @@ public class GameManagerTest extends DukeApplicationTest {
     assertThrows(NullPointerException.class, () -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>()),
-        "invalidMethod", null, new Info(1, 2, 3))));
+        "invalidMethod", null, info)));
   }
 
   @Test
@@ -141,14 +143,82 @@ public class GameManagerTest extends DukeApplicationTest {
       gm.createScene();
     });
     assertEquals(gd.engineMap().size(), 0);
-    Info info = new Info(0, 1, 1);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>()), "handleShot", null, info)));
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
-
   }
+
+  @Test
+  void testAI() throws InterruptedException {
+    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
+        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
+    GameData gd = new GameData(pfr.playerList(), cellBoard, pieceList2, wc, pfr.engineMap());
+    javafxRun(() -> {
+      gs = new GameSetup(gd, myResources);
+      gs.createScene();
+        }
+    );
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
+        "placePiece", null, "0 0")));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
+        "moveToNextPlayer", null, null)));
+    javafxRun(() -> {
+      gm = new GameManager(gd);
+      gm.createScene();
+    });
+    javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
+        list, new ArrayList<Collection<Coordinate>>(),
+        new HashMap<>()), "handleShot", null, info)));
+    Thread.sleep(3000);
+    assertEquals(wasStruckByAI(gd.players().get(0)), true);
+  }
+
+  @Test
+  void testWinStateCondition() throws InterruptedException {
+    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(Arrays.asList(
+        new HaveXGoldWinCondition(0))), engineMap);
+    javafxRun(() -> gs = new GameSetup(gd, myResources));
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
+        "placePiece", null, "0 0")));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
+        "moveToNextPlayer", null, null)));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
+        "placePiece", null, "0 0")));
+    javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
+        "moveToNextPlayer", null, null)));
+    javafxRun(() -> {
+      gm = new GameManager(gd);
+      gm.createScene();
+    });
+    assertEquals(gd.engineMap().size(), 0);
+    javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
+        list, new ArrayList<Collection<Coordinate>>(),
+        new HashMap<>()), "handleShot", null, info)));
+    Thread.sleep(2000);
+    assertEquals(gd.players().size(), 2);
+  }
+
+  private boolean wasStruckByAI(Player player) {
+    Map<Integer, MarkerBoard> enemyMap = player.getEnemyMap();
+    MarkerBoard b = enemyMap.get(1);
+    CellState[][] board = b.getBoard();
+      for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board[0].length; j++) {
+          System.out.println(board[i][j]);
+          if (board[i][j] == CellState.WATER_HIT || board[i][j] == CellState.SHIP_SUNKEN) {
+            return true;
+          }
+        }
+      }
+      return false;
+  }
+
 
 }
