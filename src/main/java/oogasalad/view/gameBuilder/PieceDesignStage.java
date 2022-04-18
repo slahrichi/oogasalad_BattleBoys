@@ -70,7 +70,7 @@ public class PieceDesignStage extends BuilderStage {
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {
-      stateMap[i][j] = 1;
+      stateMap[i][j] = getSelectedType();
       newCell.setFill(colorList.get(getSelectedType()));
     });
 
