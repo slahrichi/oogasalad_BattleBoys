@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
@@ -22,10 +23,10 @@ public class Board {
   private Map<Coordinate, CellInterface> boardMap;
   private CellState[][] myBoardSetup;
   private Map<String, Piece> myPieces;
+  private List<IslandCell> islandsInPlay;
   private ResourceBundle exceptions;
   private ResourceBundle logMessages;
   private static AtomicInteger nextID = new AtomicInteger();
-  private int id;
   //private static final Logger LOG = LogManager.getLogger(Board.class.getName());
   private static final String RESOURCES_PACKAGE = "/";
   private static final String EXCEPTIONS = "BoardExceptions";
@@ -169,6 +170,32 @@ public class Board {
 
   public int[] getSize(){return new int[]{myRows, myCols};}
 
+  public CellInterface getCell(Coordinate c){
+    return boardMap.get(c);
+  }
+
+  public boolean setIslandsInPlay(List<IslandCell> islands){
+    if(islandsInPlay == null)
+      return false;
+    else{
+      this.islandsInPlay = islands;
+      for(IslandCell island: islands){
+        boardMap.replace(island.getCoordinates(), island);
+      }
+      return true;
+    }
+  }
+
+  public boolean addIsland(Coordinate c, IslandCell island){
+    if(boardMap.containsKey(c)&& boardMap.get(c).canCarryObject()){
+      boardMap.replace(c, island);
+      island.updateCoordinates(c.getRow(), c.getColumn());
+      islandsInPlay.add(island);
+      return true;
+    }
+    return false;
+  }
+
   public List<Modifiers> update(){
     ArrayList<Modifiers> retModifers = new ArrayList<>();
     for(CellInterface cell: boardMap.values()){
@@ -181,4 +208,5 @@ public class Board {
     }
   return retModifers;
   }
+
 }
