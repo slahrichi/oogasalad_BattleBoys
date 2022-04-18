@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Properties;
 import oogasalad.PlayerData;
 import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.Weapons.Weapon;
+import oogasalad.model.utilities.Usables.Weapons.Weapon;
 import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.enums.CellState;
 
