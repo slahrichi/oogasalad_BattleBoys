@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -250,11 +251,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   public void promptForName() {
     TextInputDialog dialog = new TextInputDialog();
-
     dialog.setTitle("Setup");
     dialog.setHeaderText("Player " + currentPlayerNumber + ", enter your name:");
     dialog.setContentText("Name:");
-
+    dialog.getEditor().setId("player-name");
+    dialog.getDialogPane().lookupButton(ButtonType.OK).setId("ok-button");
     Optional<String> result = dialog.showAndWait();
 
     result.ifPresent(name -> {

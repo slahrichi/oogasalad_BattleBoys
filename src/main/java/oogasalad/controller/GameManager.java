@@ -52,6 +52,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return view.createScene();
   }
 
+
   private void initialize(GameData data) {
     this.playerList = data.players();
     playerIndex = 0;
@@ -128,10 +129,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-  public List<Player> getPlayerList() {
-    return playerList;
-  }
-
   private boolean makeShot(Coordinate c, int id) {
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
@@ -165,7 +162,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-  public void applyWinConditions() {
+  private void applyWinConditions() {
     for (WinCondition condition: winConditionsList) {
       checkCondition(condition);
     }
