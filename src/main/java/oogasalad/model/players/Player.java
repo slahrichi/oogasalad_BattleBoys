@@ -7,7 +7,6 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -58,7 +57,7 @@ public interface Player {
 
     public void updateEnemyBoard(Coordinate c, int id, CellState state);
 
-    public int getHealth();
+    public int getNumPieces();
 
 
     public WinState applyWinCondition(Function<PlayerRecord, WinState> lambda);
@@ -82,5 +81,7 @@ public interface Player {
     void removePiece(String id);
 
     void removeAllPieces();
+
+    int getMyCurrency();
 }
 
