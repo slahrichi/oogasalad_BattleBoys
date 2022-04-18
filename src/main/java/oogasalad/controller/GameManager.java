@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
@@ -41,11 +42,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int allowedShots;
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
+  private ResourceBundle myResources;
 
-  public GameManager(GameData data) {
+  public GameManager(GameData data, ResourceBundle resourceBundle) {
     initialize(data);
     view = gameViewManager.getView();
     view.addObserver(this);
+    myResources = resourceBundle;
   }
 
   public Scene createScene() {
@@ -60,7 +63,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     createIDMap();
     winConditionsList = data.winConditions();
     engineMap = data.engineMap();
-    gameViewManager = new GameViewManager(data, idMap);
+    gameViewManager = new GameViewManager(data, idMap, myResources);
   }
 
   private void createIDMap() {

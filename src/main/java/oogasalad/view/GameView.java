@@ -84,12 +84,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
   private LegendPane pieceLegendPane;
-  private LegendPane markerLegendPane;
   private ConfigPane configPane;
   private DynamicLabel shotsRemainingLabel;
   private DynamicLabel healthLabel;
   private DynamicLabel goldLabel;
   private PassComputerMessageView passComputerMessageView;
+  private ResourceBundle myResources;
   private boolean nightMode;
 
   private Scene myScene;
@@ -99,7 +99,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Map<Integer, String> playerIDToNames;
 
   public GameView(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;
@@ -108,6 +108,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
     playerIDToNames = idToNames;
+    myResources = resourceBundle;
 
     initializeBoards(firstPlayerBoards, createInitialIDList(firstPlayerBoards.size()));
     createCenterPane();
@@ -185,7 +186,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       colorMap.put(state.name(),
           Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
-    pieceLegendPane = new LegendPane(colorMap);
+    pieceLegendPane = new LegendPane(colorMap, myResources);
   }
 
   private void createCenterPane() {
@@ -256,7 +257,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void updateTitle(String playerName) {
-    myTitle.changeTitle(playerName + "'s turn");
+    myTitle.changeTitle(playerName + myResources.getString("TurnSuffix"));
   }
 
   private void switchPlayerMessage(String nextPlayer) {
@@ -332,22 +333,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void changeStylesheet() {
     nightMode = !nightMode;
+    myScene.getStylesheets().clear();
     if (nightMode) {
-      myScene.getStylesheets().clear();
-      myScene.getStylesheets().clear();
-
-      if (nightMode) {
-        myScene.getStylesheets()
-            .add(
-                getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET)
-                    .toExternalForm());
-      } else {
-        myScene.getStylesheets()
-            .add(
-                getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
-      }
+      myScene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET).toExternalForm());
+    } else {
+      myScene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     }
-
   }
 
   /**
@@ -379,11 +370,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void displayWinningMessage(int id) {
-    LOG.info("Player " + (id + 1) + " Won!");
+    LOG.info("Player " + (id + 1) + myResources.getString("WonSuffix"));
   }
 
   public void displayLosingMessage(int id) {
-    LOG.info("Player " + (id + 1) + " Lost!");
+    LOG.info("Player " + (id + 1) + myResources.getString("LostSuffix"));
   }
 
   /**

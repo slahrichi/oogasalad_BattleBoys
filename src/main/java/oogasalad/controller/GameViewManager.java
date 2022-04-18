@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import oogasalad.GameData;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
@@ -18,17 +19,19 @@ public class GameViewManager {
   private GameView view;
   private Map<Integer, Player> idMap;
   private List<Player> playerList;
+  private ResourceBundle myResources;
 
-  public GameViewManager(GameData data, Map<Integer, Player> idMap) {
+  public GameViewManager(GameData data, Map<Integer, Player> idMap, ResourceBundle resourceBundle) {
     this.idMap = idMap;
-    playerList = data.players();
+    this.playerList = data.players();
+    this.myResources = resourceBundle;
     setupGameView(data);
   }
 
   private void setupGameView(GameData data) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards, coords, generateIDToNames());
+    view = new GameView(boards, coords, generateIDToNames(), myResources);
   }
 
   private Map<Integer, String> generateIDToNames() {

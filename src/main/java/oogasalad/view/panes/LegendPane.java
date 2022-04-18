@@ -19,19 +19,24 @@ public class LegendPane extends TitledPane {
   private ScrollPane myScroller;
   private GridPane myGrid;
   private LinkedHashMap<String, Color> colorMap;
+  private ResourceBundle myResources;
 
+  private static final String LEGEND_PANE_ID = "legendPane";
   private static final int PANE_PADDING = 10;
   private static final int PANE_GAP = PANE_PADDING / 2;
-  private static final String LEGEND_PANE_ID = "legendPane";
-  private static final String LEGEND_TEXT = "Piece Legend";
   private static final double LEGEND_COLOR_WIDTH = 30;
   private static final double LEGEND_COLOR_HEIGHT = 30;
   private static final String LABEL_SPACING = "   ";
   private static final double PANE_MAX_HEIGHT = 250;
 
 
-  public LegendPane(LinkedHashMap<String, Color> colors){
+  private String LEGEND_TEXT;
+
+
+  public LegendPane(LinkedHashMap<String, Color> colors, ResourceBundle resourceBundle){
     colorMap = colors;
+    myResources = resourceBundle;
+    LEGEND_TEXT = "Legend Key";
     setUpGrid();
     setUpPane();
   }

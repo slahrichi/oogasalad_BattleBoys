@@ -2,6 +2,7 @@ package oogasalad.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import oogasalad.GameData;
 import oogasalad.model.players.AIPlayer;
 import oogasalad.model.players.HumanPlayer;
@@ -19,6 +20,7 @@ public class GameManagerTest {
   private Player p1;
   private Player p2;
   private CellState[][] cellBoard;
+  private ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
   @BeforeEach
   void setup() {
@@ -37,7 +39,7 @@ public class GameManagerTest {
 
   @Test
   void testGameManager() {
-    GameManager gm = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>(), new ArrayList<WinCondition>(), null));
+    GameManager gm = new GameManager(new GameData(List.of(p1, p2), cellBoard, new ArrayList<Piece>(), new ArrayList<WinCondition>(), null), myResources);
 //    gm.executeMove(1, new Coordinate(0, 0));
     assertEquals(gm.getPlayerList().get(0), p1);
   }

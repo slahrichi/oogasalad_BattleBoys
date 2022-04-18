@@ -52,7 +52,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String DAY_STYLESHEET = "stylesheets/setupStylesheet.css";
-  private static final String NIGHT_STYLESHEET  = "stylesheets/nightSetupStylesheet.css";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String PLACE_PIECE = "placePiece";
   private static final Logger LOG = LogManager.getLogger(SetupView.class);
@@ -73,14 +72,12 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private LegendPane legendPane;
   private SetPiecePane shipPane;
-  private ConfigPane configPane;
   private PassComputerMessageView passComputerMessageView;
   private CellState[][] myCellBoard;
 
   private int currentPlayerNumber;
   private String currentPlayerName;
   private String SCREEN_TITLE;
-  private boolean nightMode;
 
   public SetupView(CellState[][] board, ResourceBundle resourceBundle) {
     myPane = new BorderPane();
@@ -90,7 +87,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     lastPlaced = new ArrayList<>();
 
     myResources = resourceBundle;
-    nightMode = false;
     currentPlayerNumber = 1;
     currentPlayerName = "Player";
     lastPlaced = new ArrayList<>();
@@ -141,12 +137,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
     setupLegendPane();
     shipPane = new SetPiecePane(20);
-    shipPane.setText("Current Ship");
+    shipPane.setText(myResources.getString("CurrentShip"));
 
-    configPane = new ConfigPane();
-    configPane.setOnAction(e -> changeStylesheet());
 
-    configBox = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shipPane, legendPane, configPane);
+
+    configBox = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shipPane, legendPane);
     configBox.setMinWidth(300);
     myPane.setRight(configBox);
   }
@@ -157,7 +152,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
       colorMap.put(state.name(),
           Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
-    legendPane = new LegendPane(colorMap);
+    legendPane = new LegendPane(colorMap, myResources);
   }
 
   private void createBottomPanel() {
@@ -252,8 +247,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     TextInputDialog dialog = new TextInputDialog();
 
     dialog.setTitle("Setup");
-    dialog.setHeaderText("Player " + currentPlayerNumber + ", enter your name:");
-    dialog.setContentText("Name:");
+    dialog.setHeaderText(myResources.getString("PromptPrefix") + currentPlayerNumber +  myResources.getString("PromptSuffix"));
+    dialog.setContentText(myResources.getString("PromptLabel"));
 
     Optional<String> result = dialog.showAndWait();
 
@@ -275,19 +270,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myTitle.changeTitle(playerName + SCREEN_TITLE);
   }
 
-  private void changeStylesheet() {
-    nightMode = !nightMode;
-    myScene.getStylesheets().clear();
-
-    if (nightMode) {
-      myScene.getStylesheets()
-          .add(
-              getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET).toExternalForm());
-    } else {
-      myScene.getStylesheets()
-          .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
-    }
-  }
 
   @Override
   public void placePiece(Collection<Coordinate> coords, CellState type) {

@@ -100,7 +100,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   }
 
   private void startGame() {
-    GameManager manager = new GameManager(data);
+    GameManager manager = new GameManager(data, myResources);
     myStage.setScene(manager.createScene());
   }
 
