@@ -1,17 +1,12 @@
 package oogasalad.model.parsing;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import oogasalad.PlayerData;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
@@ -85,6 +80,18 @@ public class ParserTest {
     examplePlayerData = new PlayerData(players, pieceList, dummyBoard, decisionEngines);
 
   }
+
+  /*
+  @Test
+  void playerDataReflection() throws ParserException{
+    List<Object> parsedElements = List.of(examplePlayerData.players(),
+        examplePlayerData.pieces(), examplePlayerData.board(), examplePlayerData.decisionEngines());
+    PlayerData returnedPlayerData = parser.getPlayerData(parsedElements);
+    assertEquals(examplePlayerData, returnedPlayerData);
+  }
+
+   */
+
 
   @Test
   void loadCorrectFileExtension(){
@@ -188,8 +195,9 @@ public class ParserTest {
   @Test
   void loadPiecesWithMissingData() {
     String path = "src/test/resources/PiecesWithMissingData.properties";
+    String jsonPath = "src/test/resources/PiecesWithMissingData.json";
     ParserException thrown = assertThrows(ParserException.class, () -> parser.parse(path));
-    assertEquals(exceptionMessageProperties.getProperty("missingData").formatted(path,"Pieces"), thrown.getMessage());
+    assertEquals(exceptionMessageProperties.getProperty("missingData").formatted(jsonPath,"Pieces"), thrown.getMessage());
   }
 
   @Test

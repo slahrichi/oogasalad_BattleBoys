@@ -1,9 +1,6 @@
 package oogasalad.model.utilities.tiles;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -11,7 +8,7 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 public interface CellInterface {
 
 
-   CellState hit();
+   CellState hit(int dmg);
 
    List<Modifiers> update();
 

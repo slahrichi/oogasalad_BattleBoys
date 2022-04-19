@@ -1,5 +1,6 @@
 package oogasalad.view;
 
+import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,10 +24,14 @@ public class StartView extends PropertyObservable {
   private Scene myScene;
   private BorderPane myPane;
   private ImageView myTitle;
+  private ResourceBundle myResources;
 
-  public StartView() {
+  public StartView(ResourceBundle resourceBundle) {
+
     myPane = new BorderPane();
     myPane.setId("startPane");
+
+    myResources = resourceBundle;
 
     setUpTitle();
     setUpButtons();
@@ -55,9 +60,9 @@ public class StartView extends PropertyObservable {
   }
 
   private void setUpButtons() {
-    Button startBtn = ButtonMaker.makeTextButton("start-button", e -> handleClicked("start"), "Start");
-    Button loadBtn = ButtonMaker.makeTextButton("load-button", e -> handleClicked("load"), "Load");
-    Button createBtn = ButtonMaker.makeTextButton("create-button", e -> handleClicked("create"), "Create");
+    Button startBtn = ButtonMaker.makeTextButton("start-button", e -> handleClicked("start"), myResources.getString("StartButton"));
+    Button loadBtn = ButtonMaker.makeTextButton("load-button", e -> handleClicked("load"), myResources.getString("LoadButton"));
+    Button createBtn = ButtonMaker.makeTextButton("create-button", e -> handleClicked("create"), myResources.getString("CreateButton"));
     VBox buttonBox = BoxMaker.makeVBox("buttonBox", 50, Pos.CENTER, startBtn, loadBtn, createBtn);
     myPane.setCenter(buttonBox);
   }

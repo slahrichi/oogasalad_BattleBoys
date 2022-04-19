@@ -5,10 +5,8 @@ import static oogasalad.view.GameView.CELL_STATE_RESOURCES;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 import javafx.scene.paint.Color;
-import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.CellView;
-import oogasalad.view.Info;
 
 /**
  * This class represents a BoardView that appears during the setup phase of the game. It allows
@@ -43,6 +41,6 @@ public class SetupBoardView extends BoardView {
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    notifyObserver(PLACE_PIECE, new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
+    notifyObserver(evt.getPropertyName(), evt.getNewValue());
   }
 }

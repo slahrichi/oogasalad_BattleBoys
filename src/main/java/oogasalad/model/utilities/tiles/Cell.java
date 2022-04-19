@@ -36,7 +36,7 @@ public abstract class Cell implements CellInterface{
   }
 
   @Override
-  public abstract CellState hit();
+  public abstract CellState hit(int dmg);
 
   @Override
   public List<Modifiers> update() {
@@ -67,8 +67,7 @@ public abstract class Cell implements CellInterface{
 
   @Override
   public void moveCoordinate(Coordinate amtToMove) {
-    myCoordinate = new Coordinate(
-        myCoordinate.getRow()+amtToMove.getRow(), myCoordinate.getColumn()+ amtToMove.getColumn());
+    myCoordinate = Coordinate.sum(myCoordinate, amtToMove);
   }
 
   @Override

@@ -10,6 +10,10 @@
 
 }
 
+#setup-view-pane{
+  -fx-background-color: lightblue;
+}
+
 
 #title-text{
   -fx-padding: 10;

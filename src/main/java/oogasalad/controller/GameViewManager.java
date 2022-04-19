@@ -19,16 +19,17 @@ public class GameViewManager {
   private Map<Integer, Player> idMap;
   private List<Player> playerList;
 
-  public GameViewManager(GameData data, Map<Integer, Player> idMap) {
-    setupGameView(data);
+  public GameViewManager(GameData data, Map<Integer, Player> idMap, int allowedShots) {
     this.idMap = idMap;
     playerList = data.players();
+    setupGameView(data, allowedShots);
   }
 
-  private void setupGameView(GameData data) {
+  private void setupGameView(GameData data, int allowedShots) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
     view = new GameView(boards, coords, generateIDToNames());
+    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
   private Map<Integer, String> generateIDToNames() {
