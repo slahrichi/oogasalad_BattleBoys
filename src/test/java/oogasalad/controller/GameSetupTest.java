@@ -75,8 +75,10 @@ public class GameSetupTest extends DukeApplicationTest {
   @Test
   void testInvalidMethodName() {
     javafxRun(() -> gs = new GameSetup(gd1, myResources));
+    writeTo(lookup("#player-name").query(), "Matthew");
+    clickOn(lookup("#ok-button").query());
     assertThrows(NullPointerException.class, () -> gs.propertyChange(new PropertyChangeEvent
-        (new SetupView(gd1.board(), myResources), null, null, new Coordinate(-1, 0)))) ;
+        (new SetupView(gd1.board(), myResources), "meow", null, "0 0"))) ;
   }
 
   @Test

@@ -6,10 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
@@ -19,8 +17,6 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.Usables.Weapons.Weapon;
-import oogasalad.model.utilities.WinConditions.WinCondition;
-import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.Info;
@@ -31,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
-  private List<WinCondition> winConditionsList;
+  private ConditionHandler conditionHandler;
   private Map<Integer, Player> idMap;
   private Map<Player, DecisionEngine> engineMap;
   private GameView view;
@@ -51,6 +47,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view = gameViewManager.getView();
     view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
     view.addObserver(this);
+    conditionHandler = new ConditionHandler(playerList, idMap, data.winConditions(), view);
   }
 
   public Scene createScene() {
@@ -66,7 +63,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     whenToMovePieces = 1; //should change this to use gamedata from parser
     allowedShots = 1;
     createIDMap();
-    winConditionsList = data.winConditions();
     engineMap = data.engineMap();
     gameViewManager = new GameViewManager(data, idMap, allowedShots);
   }
@@ -104,16 +100,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (numShots < allowedShots && makeShot(coordinate, info.ID())) {
       Player player = playerList.get(playerIndex);
       view.updateLabels(allowedShots-numShots, player.getNumPieces(), player.getMyCurrency());
-      view.displayShotAnimation(coordinate.getRow(), coordinate.getColumn(), e -> updateConditions(info.ID()),
-          info.ID());
-//      PauseTransition pt = new PauseTransition(new Duration(1000));
-//      pt.setOnFinished(e -> updateConditions(info.ID()));
-//      pt.play();
+      view.displayShotAnimation(coordinate.getRow(), coordinate.getColumn(), e ->
+              updateConditions(info.ID()), info.ID());
     }
   }
 
   private void updateConditions(int id) {
-    applyWinConditions();
+    conditionHandler.applyWinConditions();
     if(idMap.containsKey(id)){
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
       gameViewManager.updatePiecesLeft(piecesLeft);
@@ -181,7 +174,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       adjustStrategy(currentPlayer, result);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
-      applyModifiers(currentPlayer, enemy);
+      conditionHandler.applyModifiers(currentPlayer, enemy);
       numShots++;
       return true;
     }
@@ -198,7 +191,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         currentPlayer.updateEnemyBoard(hitCoord, id, hitResults.get(hitCoord));
         view.displayShotAt(hitCoord.getRow(), hitCoord.getColumn(), hitResults.get(hitCoord));
       }
-      applyModifiers(currentPlayer, enemy);
+      conditionHandler.applyModifiers(currentPlayer, enemy);
       return true;
     }catch (Exception e){
       return false;
@@ -209,61 +202,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (engineMap.containsKey(player)) {
       DecisionEngine engine = engineMap.get(player);
       engine.adjustStrategy(result);
-    }
-  }
-
-  private void applyModifiers(Player currPlayer, Player enemyPlayer){
-    List<Modifiers> mods = enemyPlayer.getBoard().update();
-    for(Modifiers mod :mods){
-      if(mod.getClass().getSimpleName().equals("PlayerModifier")){
-        Player[] players = {currPlayer, enemyPlayer};
-        try{
-          mod.modifierFunction().accept(players);
-        }catch(Exception e){}
-      }
-    }
-  }
-
-  private void applyWinConditions() {
-    for (WinCondition condition: winConditionsList) {
-      checkCondition(condition);
-    }
-    if(playerList.size()==1) {
-      moveToWinGame(playerList.get(0));
-    }
-  }
-
-  private void checkCondition(WinCondition condition) {
-    Set<Integer> playerIds = new HashSet<>(idMap.keySet());
-    for(int id: playerIds) {
-      Player currPlayer = idMap.get(id);
-      WinState currPlayerWinState = condition.updateWinner(currPlayer);
-      LOG.info(String.format("Player %d's WinState %s", id, currPlayerWinState));
-      checkWinState(currPlayer, currPlayerWinState, id);
-    }
-  }
-
-  private void checkWinState(Player player, WinState state, int id) {
-    if (state.equals(WinState.LOSE)) {
-      removePlayer(player, id);
-      view.displayLosingMessage(id);
-    } else if (state.equals(WinState.WIN)) {
-      LOG.info(String.format("Player %d wins!", id));
-      moveToWinGame(player);
-    }
-  }
-
-  private void moveToWinGame(Player player) {
-    int id = player.getID();
-    view.displayWinningMessage(id);
-  }
-
-  private void removePlayer(Player player, int id) {
-    LOG.info("Player " + id + " lost");
-    playerList.remove(player);
-    idMap.remove(id);
-    for (Player p : playerList) {
-      p.getEnemyMap().remove(id);
     }
   }
 }
