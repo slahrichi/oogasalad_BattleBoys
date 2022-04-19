@@ -26,7 +26,11 @@ import util.DukeApplicationTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+/**
+ * Tests for checking functionality of EasyDecisionEngine
+ *
+ * @author Matthew Giglio
+ */
 public class EasyDecisionEngineTest extends DukeApplicationTest {
 
   private DecisionEngine engine;
