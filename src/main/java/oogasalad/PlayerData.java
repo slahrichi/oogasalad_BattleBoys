@@ -74,3 +74,4 @@ public record PlayerData(List<String> players, List<Piece> pieces, CellState[][]
 
 
 }
+

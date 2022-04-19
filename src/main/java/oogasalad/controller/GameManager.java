@@ -19,6 +19,7 @@ import oogasalad.model.players.EngineRecord;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.Usables.Weapons.Weapon;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
@@ -159,7 +160,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-      CellState result = enemy.getBoard().hit(c);
+      CellState result = enemy.getBoard().hit(c,1);
       adjustStrategy(currentPlayer, result);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
@@ -168,6 +169,23 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       return true;
     }
     return false;
+  }
+
+  private boolean makeShot(Coordinate c, int id, Weapon weaponUsed) {
+    Player currentPlayer = playerList.get(playerIndex);
+    Player enemy = idMap.get(id);
+    try{
+      Map<Coordinate, CellState> hitResults = weaponUsed.getFunction().apply(c, enemy.getBoard());
+      for(Coordinate hitCoord: hitResults.keySet()){
+        adjustStrategy(currentPlayer, hitResults.get(hitCoord));
+        currentPlayer.updateEnemyBoard(hitCoord, id, hitResults.get(hitCoord));
+        view.displayShotAt(hitCoord.getRow(), hitCoord.getColumn(), hitResults.get(hitCoord));
+      }
+      applyModifiers(currentPlayer, enemy);
+      return true;
+    }catch (Exception e){
+      return false;
+    }
   }
 
   private void adjustStrategy(Player player, CellState result) {
