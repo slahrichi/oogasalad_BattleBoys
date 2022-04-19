@@ -82,6 +82,9 @@ public interface Player {
 
     void removeAllPieces();
 
+    void movePieces(); //new method for moving pieces
+
     int getMyCurrency();
+
 }
 
