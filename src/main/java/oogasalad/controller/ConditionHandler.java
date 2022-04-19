@@ -12,6 +12,12 @@ import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Class for checking win/loss conditions and applying modifiers to given Players. The GameManager
+ * calls upon the ConditionHandler after each move to determine if the game can be ended
+ *
+ * @author Matthew Giglio, Brandon Bae
+ */
 public class ConditionHandler {
 
   private List<Player> playerList;
@@ -19,9 +25,15 @@ public class ConditionHandler {
   private List<WinCondition> winConditions;
   private GameView view;
 
+  private static final String PLAYER_MODIFIER = "PlayerModifier";
   private static final Logger LOG = LogManager.getLogger(ConditionHandler.class);
 
-
+  /**
+   * @param playerList    list of players
+   * @param idMap         map relating player id to Player object
+   * @param winConditions list of win conditions
+   * @param view          GameView object displaying the game
+   */
   public ConditionHandler(List<Player> playerList, Map<Integer, Player> idMap,
       List<WinCondition> winConditions, GameView view) {
     this.playerList = playerList;
@@ -30,30 +42,41 @@ public class ConditionHandler {
     this.view = view;
   }
 
-  void applyModifiers(Player currPlayer, Player enemyPlayer){
+  /**
+   * GameManager calls upon the method after each move has been made to apply modifiers to both the
+   * player who made the move and the player who had the move made against them
+   *
+   * @param currPlayer  current Player
+   * @param enemyPlayer enemy Player
+   */
+  void applyModifiers(Player currPlayer, Player enemyPlayer) {
     List<Modifiers> mods = enemyPlayer.getBoard().update();
-    for(Modifiers mod :mods){
-      if(mod.getClass().getSimpleName().equals("PlayerModifier")){
+    for (Modifiers mod : mods) {
+      if (mod.getClass().getSimpleName().equals(PLAYER_MODIFIER)) {
         Player[] players = {currPlayer, enemyPlayer};
-        try{
+        try {
           mod.modifierFunction().accept(players);
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
       }
     }
   }
 
+  /**
+   * method to check whether any of the win conditions have been satisfied
+   */
   void applyWinConditions() {
-    for (WinCondition condition: winConditions) {
+    for (WinCondition condition : winConditions) {
       checkCondition(condition);
     }
-    if(playerList.size()==1) {
+    if (playerList.size() == 1) {
       moveToWinGame(playerList.get(0));
     }
   }
 
   private void checkCondition(WinCondition condition) {
     Set<Integer> playerIds = new HashSet<>(idMap.keySet());
-    for(int id: playerIds) {
+    for (int id : playerIds) {
       Player currPlayer = idMap.get(id);
       WinState currPlayerWinState = condition.updateWinner(currPlayer);
       LOG.info(String.format("Player %d's WinState %s", id, currPlayerWinState));
