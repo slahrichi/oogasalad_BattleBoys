@@ -56,7 +56,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     this.playerList = data.players();
     this.board = data.board();
     this.pieceList = data.pieces();
-
+    /*
     List<ShipCell> movingShipCells = new ArrayList<ShipCell>();
     List<Coordinate> relativeCoordinates = new ArrayList<Coordinate>();
     List<Coordinate> patrolPath = new ArrayList<Coordinate>();
@@ -66,6 +66,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     relativeCoordinates.add(new Coordinate(1,0));
     patrolPath.add(new Coordinate(0,1));
     pieceList.add(new MovingPiece(movingShipCells, relativeCoordinates, patrolPath, "5"));
+     */
 
 
     this.pieceIndex = 0;

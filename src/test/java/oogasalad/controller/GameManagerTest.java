@@ -78,7 +78,6 @@ public class GameManagerTest extends DukeApplicationTest {
     pieceList = new ArrayList<>(Arrays.asList(dummyShip1));
     pieceList2 = new ArrayList<>(Arrays.asList(dummyShip2));
     list = new ArrayList<>(Arrays.<CellState[][]>asList(cellBoard));
-    list.add(cellBoard);
   }
 
   @Test
