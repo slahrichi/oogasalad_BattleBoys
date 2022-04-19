@@ -39,7 +39,8 @@ public class EasyDecisionEngine extends DecisionEngine {
     }
     else {
       int id = determineEnemy();
-      Coordinate location = determineLocation();
+      List<Coordinate> list = getCoordinateMap().get(id);
+      Coordinate location = determineLocation(list);
       EngineRecord shot = new EngineRecord(location, id);
       setLastShot(shot);
       return shot;
@@ -51,8 +52,8 @@ public class EasyDecisionEngine extends DecisionEngine {
     return enemies.get(getRandom().nextInt(enemies.size()));
   }
 
-  private Coordinate determineLocation() {
-    return getCoordinateList().get(getRandom().nextInt(getCoordinateList().size()));
+  private Coordinate determineLocation(List<Coordinate> coordinateList) {
+    return coordinateList.get(getRandom().nextInt(coordinateList.size()));
   }
 
   /**
@@ -77,9 +78,9 @@ public class EasyDecisionEngine extends DecisionEngine {
   public Coordinate placePiece(List<Piece> pieceList) {
     Board board = getPlayer().getBoard();
     Piece piece = pieceList.get(getPieceIndex());
-    Coordinate c = determineLocation();
+    Coordinate c = determineLocation(getCoordinateList());
     while (!board.hasValidPlacement(c, piece)) {
-      c = determineLocation();
+      c = determineLocation(getCoordinateList());
     }
     updatePieceIndex();
     return c;
