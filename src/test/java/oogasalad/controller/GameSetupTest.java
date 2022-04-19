@@ -11,6 +11,7 @@ import oogasalad.model.players.HumanPlayer;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
+import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
@@ -35,12 +36,10 @@ public class GameSetupTest extends DukeApplicationTest {
 
   @BeforeEach
   void setup() {
-    int[][] dummyBoard = new int[][]{{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1}};
-    CellState[][] cellBoard = new CellState[dummyBoard.length][dummyBoard[0].length];
+    CellState[][] cellBoard = new CellState[8][8];
     for (int i = 0; i < cellBoard.length; i++) {
       for (int j = 0; j < cellBoard[0].length; j++) {
-        cellBoard[i][j] = CellState.of(dummyBoard[i][j]);
+        cellBoard[i][j] = CellState.WATER;
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
