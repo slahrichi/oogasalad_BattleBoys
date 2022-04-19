@@ -17,13 +17,19 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.Usables.Weapons.Weapon;
-import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Controller module for managing the game's resources and regulations. The class mainly focuses on
+ * the turn-based logic of the game and relaying the results of a given player's move. The class
+ * utilizes auxiliary classes to handle checking win conditions and updating view elements.
+ *
+ * @author Matthew Giglio
+ */
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private List<Player> playerList;
@@ -42,14 +48,22 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private static final Info DUMMY_INFO = new Info(0, 0, 0);
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
 
+  /**
+   * @param data GameData object storing all pertinent resources for managing the game such as the
+   *             players and the decision engines for the AI
+   */
   public GameManager(GameData data) {
     initialize(data);
     view = gameViewManager.getView();
-    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
+    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(),
+        playerList.get(0).getMyCurrency());
     view.addObserver(this);
     conditionHandler = new ConditionHandler(playerList, idMap, data.winConditions(), view);
   }
 
+  /**
+   * @return Scene object storing the elements of the game view
+   */
   public Scene createScene() {
     return view.createScene();
   }
@@ -75,11 +89,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
+  /**
+   * Listener method for executing handling of game moves/shots
+   *
+   * @param evt Event from the GameView such as a cell having been clicked
+   */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    int id = ((Info)evt.getNewValue()).ID();
-    int row = ((Info)evt.getNewValue()).row();
-    int col = ((Info)evt.getNewValue()).col();
+    int id = ((Info) evt.getNewValue()).ID();
+    int row = ((Info) evt.getNewValue()).row();
+    int col = ((Info) evt.getNewValue()).col();
     Info info = new Info(row, col, id);
     try {
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
@@ -92,22 +111,22 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void selfBoardClicked(Info info) {
-    LOG.info("Self board clicked at "+info.row()+", "+info.col());
+    LOG.info("Self board clicked at " + info.row() + ", " + info.col());
   }
 
   private void handleShot(Info info) {
     Coordinate coordinate = new Coordinate(info.row(), info.col());
     if (numShots < allowedShots && makeShot(coordinate, info.ID())) {
       Player player = playerList.get(playerIndex);
-      view.updateLabels(allowedShots-numShots, player.getNumPieces(), player.getMyCurrency());
+      view.updateLabels(allowedShots - numShots, player.getNumPieces(), player.getMyCurrency());
       view.displayShotAnimation(coordinate.getRow(), coordinate.getColumn(), e ->
-              updateConditions(info.ID()), info.ID());
+          updateConditions(info.ID()), info.ID());
     }
   }
 
   private void updateConditions(int id) {
     conditionHandler.applyWinConditions();
-    if(idMap.containsKey(id)){
+    if (idMap.containsKey(id)) {
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
       gameViewManager.updatePiecesLeft(piecesLeft);
     }
@@ -136,7 +155,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void checkIfEndSet() {
-    if(playerIndex == 0) {
+    if (playerIndex == 0) {
       setNumber++;
       checkIfMovePieces();
     }
@@ -170,7 +189,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-      CellState result = enemy.getBoard().hit(c,1);
+      CellState result = enemy.getBoard().hit(c, 1);
       adjustStrategy(currentPlayer, result);
       currentPlayer.updateEnemyBoard(c, id, result);
       view.displayShotAt(c.getRow(), c.getColumn(), result);
@@ -184,16 +203,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private boolean makeShot(Coordinate c, int id, Weapon weaponUsed) {
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
-    try{
+    try {
       Map<Coordinate, CellState> hitResults = weaponUsed.getFunction().apply(c, enemy.getBoard());
-      for(Coordinate hitCoord: hitResults.keySet()){
+      for (Coordinate hitCoord : hitResults.keySet()) {
         adjustStrategy(currentPlayer, hitResults.get(hitCoord));
         currentPlayer.updateEnemyBoard(hitCoord, id, hitResults.get(hitCoord));
         view.displayShotAt(hitCoord.getRow(), hitCoord.getColumn(), hitResults.get(hitCoord));
       }
       conditionHandler.applyModifiers(currentPlayer, enemy);
       return true;
-    }catch (Exception e){
+    } catch (Exception e) {
       return false;
     }
   }
