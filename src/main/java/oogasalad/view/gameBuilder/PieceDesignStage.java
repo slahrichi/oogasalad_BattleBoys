@@ -1,44 +1,55 @@
 package oogasalad.view.gameBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import oogasalad.model.utilities.Piece;
 
 public class PieceDesignStage extends BuilderStage {
 
   private final int MAX_DIMENSION = 5;
 
   private int[][] stateMap;
+  private Map<String, int[][]> editableStats;
   private BorderPane myPane;
   private Object pieceType;
-  private List<String> piecePath = new ArrayList<>();
   private List<Color> colorList = new ArrayList<>();
   private final String[] DEFAULT_STATE_OPTIONS = {"Inactive", "Active"};
   private final Color DEFAULT_INACTIVE_COLOR = Color.GRAY;
   private final Color DEFAULT_ACTIVE_COLOR = Color.LIME;
+  private Consumer<String> pathUpdateConsumer;
   private String availablePieceTypes;
   private final ListView<String> listView = new ListView<>();
   private ObservableList<String> items = FXCollections.observableArrayList();
   private final int MAX_LIST_WIDTH = 100;
   private final int MAX_LIST_HEIGHT = 400;
   private final double CELL_SIZE = 20;
+  private String[] customizable;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
-    stateMap = initializeBlankMap(MAX_DIMENSION, MAX_DIMENSION);
+    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     availablePieceTypes = getMyBuilderResources().getString("possiblePieceType");
+    customizable = getMyBuilderResources().getString("pieceCellCustomParameters")
+        .split(",");
+    initializeCharacteristicMatrix();
+    pathUpdateConsumer = e -> updatePath(e);
 
     listView.setItems(items);
     listView.setMaxSize(MAX_LIST_WIDTH, MAX_LIST_HEIGHT);
@@ -56,9 +67,34 @@ public class PieceDesignStage extends BuilderStage {
     myStage.showAndWait();
   }
 
+  private void initializeCharacteristicMatrix() {
+
+    editableStats = new HashMap<>();
+    for (String charactristic : customizable) {
+      editableStats.put(charactristic,
+          initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 1));
+    }
+  }
+
+  private void makePopUpDialog(int i, int j) {
+
+    for (String characteristic : customizable) {
+      TextInputDialog td = new TextInputDialog(
+          String.valueOf(editableStats.get(characteristic)[i][j]));
+      td.setTitle(characteristic);
+      Optional<String> result = td.showAndWait();
+      result.ifPresent(input -> {
+        if (checkIntConversion(input)) {
+          editableStats.get(characteristic)[i][j] = Integer.parseInt(input);
+        }
+      });
+    }
+
+  }
+
   private void resetCustomization() {
     myPane.setCenter(null);
-    stateMap = initializeBlankMap(MAX_DIMENSION, MAX_DIMENSION);
+    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     items.clear();
     myPane.setLeft(null);
   }
@@ -69,9 +105,14 @@ public class PieceDesignStage extends BuilderStage {
     Rectangle newCell = new Rectangle(xPos, yPos, 20, 20);
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
-    newCell.setOnMouseClicked(e -> {
+    newCell.setOnMouseClicked(mouseEvent -> {
       stateMap[i][j] = getSelectedType();
       newCell.setFill(colorList.get(getSelectedType()));
+      if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+        if (mouseEvent.getClickCount() == 2) {
+          makePopUpDialog(i, j);
+        }
+      }
     });
 
     return newCell;
@@ -101,7 +142,8 @@ public class PieceDesignStage extends BuilderStage {
       String[] reqVars = getMyBuilderResources().getString(pieceType + "PieceRequiredInfo")
           .split(",");
       if (!reqVars[0].isEmpty()) {
-        result.getChildren().add(makeComboBoxWithVariable(reqVars));
+        result.getChildren()
+            .add(makeComboBoxWithVariable(reqVars, "Add to Path", pathUpdateConsumer));
       }
       myPane.setLeft(listView);
       myPane.setCenter(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, CELL_SIZE, CELL_SIZE, stateMap));
@@ -133,7 +175,13 @@ public class PieceDesignStage extends BuilderStage {
     }
   }
 
-  private HBox makeComboBoxWithVariable(String[] options) {
+  // private Piece makePiece(){
+  //   Piece result = new StaticPiece();
+  //       ShipCell a = new
+  // }
+
+  private HBox makeComboBoxWithVariable(String[] options, String buttonText,
+      Consumer<String> consumer) {
 
     TextArea infoBox = new TextArea();
     ComboBox comboBox = makeComboBox(options);
@@ -141,7 +189,7 @@ public class PieceDesignStage extends BuilderStage {
     HBox result = new HBox(comboBox);
     result.getChildren().add(infoBox);
     result.getChildren()
-        .add(makeButton("Add to Path", e -> updatePath(comboBox.getValue() + infoBox.getText())));
+        .add(makeButton(buttonText, e -> consumer.accept(comboBox.getValue() + infoBox.getText())));
     return result;
   }
 
