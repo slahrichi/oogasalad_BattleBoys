@@ -102,6 +102,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Info info = new Info(row, col, id);
     try {
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
+      System.out.println(m);
       m.invoke(this, info);
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {

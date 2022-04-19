@@ -1,6 +1,7 @@
 package oogasalad.model.players;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +37,7 @@ public abstract class DecisionEngine {
   private Map<Integer, List<Coordinate>> makeCoordinateMap(List<Coordinate> list) {
     Map<Integer, List<Coordinate>> map = new HashMap<>();
     for (Integer id : myEnemyMap.keySet()) {
-      map.put(id, List.copyOf(list));
+      map.put(id, new ArrayList<>(List.copyOf(list)));
     }
     return map;
   }
