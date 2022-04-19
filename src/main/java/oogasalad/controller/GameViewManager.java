@@ -21,17 +21,19 @@ public class GameViewManager {
   private List<Player> playerList;
   private ResourceBundle myResources;
 
-  public GameViewManager(GameData data, Map<Integer, Player> idMap, ResourceBundle resourceBundle) {
+  public GameViewManager(GameData data, Map<Integer, Player> idMap, int allowedShots, ResourceBundle resourceBundle) {
     this.idMap = idMap;
     this.playerList = data.players();
     this.myResources = resourceBundle;
-    setupGameView(data);
+    setupGameView(data, allowedShots);
+
   }
 
-  private void setupGameView(GameData data) {
+  private void setupGameView(GameData data, int allowedShots) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
     view = new GameView(boards, coords, generateIDToNames(), myResources);
+    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
   private Map<Integer, String> generateIDToNames() {

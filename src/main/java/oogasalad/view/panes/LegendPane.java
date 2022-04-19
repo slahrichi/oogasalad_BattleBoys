@@ -22,6 +22,8 @@ public class LegendPane extends TitledPane {
   private ResourceBundle myResources;
 
   private static final String LEGEND_PANE_ID = "legendPane";
+  private static final String LEGEND_TEXT = "Legend Key";
+
   private static final int PANE_PADDING = 10;
   private static final int PANE_GAP = PANE_PADDING / 2;
   private static final double LEGEND_COLOR_WIDTH = 30;
@@ -30,13 +32,8 @@ public class LegendPane extends TitledPane {
   private static final double PANE_MAX_HEIGHT = 250;
 
 
-  private String LEGEND_TEXT;
-
-
-  public LegendPane(LinkedHashMap<String, Color> colors, ResourceBundle resourceBundle){
+  public LegendPane(LinkedHashMap<String, Color> colors){
     colorMap = colors;
-    myResources = resourceBundle;
-    LEGEND_TEXT = "Legend Key";
     setUpGrid();
     setUpPane();
   }

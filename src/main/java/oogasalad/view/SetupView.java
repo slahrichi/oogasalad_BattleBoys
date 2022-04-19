@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -152,7 +153,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
       colorMap.put(state.name(),
           Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
-    legendPane = new LegendPane(colorMap, myResources);
+    legendPane = new LegendPane(colorMap);
   }
 
   private void createBottomPanel() {
@@ -245,11 +246,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   public void promptForName() {
     TextInputDialog dialog = new TextInputDialog();
-
     dialog.setTitle("Setup");
     dialog.setHeaderText(myResources.getString("PromptPrefix") + currentPlayerNumber +  myResources.getString("PromptSuffix"));
     dialog.setContentText(myResources.getString("PromptLabel"));
-
+    dialog.getEditor().setId("player-name");
+    dialog.getDialogPane().lookupButton(ButtonType.OK).setId("ok-button");
     Optional<String> result = dialog.showAndWait();
 
     result.ifPresent(name -> {
