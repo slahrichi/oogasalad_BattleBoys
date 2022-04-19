@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -88,17 +89,13 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myCellBoard = board;
     setupBoard = new SetupBoardView(50, myCellBoard, 0);
     lastPlaced = new ArrayList<>();
-
     myResources = resourceBundle;
     nightMode = false;
     currentPlayerNumber = 1;
     currentPlayerName = "Player";
-    lastPlaced = new ArrayList<>();
     nextToPlace = new ArrayList<>();
 
     SCREEN_TITLE = myResources.getString("SetupTitlePrefix");
-
-
     createTitlePanel();
     createBottomPanel();
     createCenterPanel();
@@ -142,7 +139,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     setupLegendPane();
     shipPane = new SetPiecePane(20);
     shipPane.setText("Current Ship");
-
     configPane = new ConfigPane();
     configPane.setOnAction(e -> changeStylesheet());
 
@@ -167,7 +163,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     Button removeAll = ButtonMaker.makeTextButton("remove-all-button", e -> removeAllPieces(), myResources.getString("RemoveAllButton"));
     removePiecePanel = BoxMaker.makeVBox("remove-piece-panel", 10, Pos.CENTER, removeLastPiece, removeAll);
     bottomPanel = BoxMaker.makeHBox("bottom-panel", 20, Pos.CENTER, removePiecePanel, confirmButton);
-
   }
 
 
@@ -250,11 +245,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   public void promptForName() {
     TextInputDialog dialog = new TextInputDialog();
-
     dialog.setTitle("Setup");
     dialog.setHeaderText("Player " + currentPlayerNumber + ", enter your name:");
     dialog.setContentText("Name:");
-
+    dialog.getEditor().setId("player-name");
+    dialog.getDialogPane().lookupButton(ButtonType.OK).setId("ok-button");
     Optional<String> result = dialog.showAndWait();
 
     result.ifPresent(name -> {

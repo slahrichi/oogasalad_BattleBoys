@@ -10,11 +10,11 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.CellInterface;
+import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
-import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,10 +24,10 @@ public class Board {
   private Map<Coordinate, CellInterface> boardMap;
   private CellState[][] myBoardSetup;
   private Map<String, Piece> myPieces;
+  private List<IslandCell> islandsInPlay;
   private ResourceBundle exceptions;
   private ResourceBundle logMessages;
   private static AtomicInteger nextID = new AtomicInteger();
-  private int id;
   //private static final Logger LOG = LogManager.getLogger(Board.class.getName());
   private static final String RESOURCES_PACKAGE = "/";
   private static final String EXCEPTIONS = "BoardExceptions";
@@ -135,9 +135,9 @@ public class Board {
     return currStateArray;
   }
 
-  public CellState hit(Coordinate c) {
+  public CellState hit(Coordinate c, int dmg) {
     int numStartPieces = myPieces.keySet().size();
-    CellState hitState = boardMap.get(c).hit();
+    CellState hitState = boardMap.get(c).hit(dmg);
 
     Set<String> ogKeySet = new HashSet<String>(myPieces.keySet());
     for(String key: ogKeySet) {
@@ -153,18 +153,42 @@ public class Board {
     return hitState;
   }
 
-  /*
-  public void addPiece(String id, Piece newPiece){
-    myPieces.put(id, newPiece);
-  }
-   */
-
   public int getNumPiecesSunk() {
     return myNumShipsSunk;
   }
 
+  public boolean checkBoundedCoordinate(Coordinate coord){return boardMap.containsKey(coord);}
+
   public boolean canBeStruck(Coordinate c) {
     return boardMap.get(c).getHealth() != 0;
+  }
+
+  public int[] getSize(){return new int[]{myRows, myCols};}
+
+  public CellInterface getCell(Coordinate c){
+    return boardMap.get(c);
+  }
+
+  public boolean setIslandsInPlay(List<IslandCell> islands){
+    if(islandsInPlay == null)
+      return false;
+    else{
+      this.islandsInPlay = islands;
+      for(IslandCell island: islands){
+        boardMap.replace(island.getCoordinates(), island);
+      }
+      return true;
+    }
+  }
+
+  public boolean addIsland(Coordinate c, IslandCell island){
+    if(boardMap.containsKey(c)&& boardMap.get(c).canCarryObject()){
+      boardMap.replace(c, island);
+      island.updateCoordinates(c.getRow(), c.getColumn());
+      islandsInPlay.add(island);
+      return true;
+    }
+    return false;
   }
 
   public List<Modifiers> update(){
@@ -199,5 +223,6 @@ public class Board {
     for(String key: myPieces.keySet()) {
       myPieces.get(key).movePiece(boardMap);
     }
+
   }
 }

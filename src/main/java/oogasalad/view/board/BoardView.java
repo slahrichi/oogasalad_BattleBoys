@@ -3,13 +3,13 @@ package oogasalad.view.board;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javafx.scene.Group;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
-import oogasalad.model.utilities.Coordinate;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.CellView;
-import oogasalad.view.Info;
 
 public abstract class BoardView extends PropertyObservable implements PropertyChangeListener {
   private static final String BOARD_ID = "board-view";
@@ -18,7 +18,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private static final String CELL_ID = "cell-view-%d-%d-%d";
 
   protected CellView[][] myLayout;
-  private StackPane myBoard;
+  private Pane myBoard;
   private Group myBase;
   protected int myID;
   protected BoardMaker myBoardMaker;
@@ -75,7 +75,35 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     myBoard.getChildren().add(myBase);
   }
 
-  public StackPane getBoardPane() {
+  public void displayExplosionOnCell(int row, int col, ImageView explosionImage) {
+    getBoardPane().getChildren().add(explosionImage);
+    double cellX = myLayout[row][col].getCell().getBoundsInParent().getMinX();
+    double cellY = myLayout[row][col].getCell().getBoundsInParent().getMinY();
+    double width = myLayout[row][col].getCell().getBoundsInParent().getWidth();
+    double height = myLayout[row][col].getCell().getBoundsInParent().getHeight();
+
+    explosionImage.setFitWidth(width * 2);
+    explosionImage.setFitHeight(height * 2);
+    explosionImage.setTranslateX(width / 2.0 - (getWidth() / 2 - cellX));
+    explosionImage.setTranslateY(height / 2.0 - (getHeight() / 2 - cellY));
+  }
+
+  protected double getWidth() {
+    return myLayout[0][myLayout[0].length - 1].getCell().getBoundsInParent().getMaxX() -
+        myLayout[0][0].getCell().getBoundsInParent().getMinX();
+  }
+
+  protected double getHeight() {
+    return myLayout[myLayout.length - 1][0].getCell().getBoundsInParent().getMaxY() -
+        myLayout[0][0].getCell().getBoundsInParent().getMinY();
+  }
+
+
+  public void removeExplosionImage(ImageView explosionImage) {
+    getBoardPane().getChildren().remove(explosionImage);
+  }
+
+  public Pane getBoardPane() {
     return myBoard;
   }
 
