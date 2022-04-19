@@ -21,6 +21,7 @@ public abstract class DecisionEngine {
   private Random myRandom;
   private EngineRecord myLastShot;
   private int pieceIndex;
+  private int currentPlayer;
 
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player) {
@@ -90,4 +91,12 @@ public abstract class DecisionEngine {
   public abstract void adjustStrategy(CellState result);
 
   public abstract Coordinate placePiece(List<Piece> pieceList);
+
+  protected int getCurrentPlayer() {
+    return currentPlayer;
+  }
+
+  protected void setCurrentPlayer(int id) {
+    currentPlayer = id;
+  }
 }

@@ -39,6 +39,7 @@ public class EasyDecisionEngine extends DecisionEngine {
     }
     else {
       int id = determineEnemy();
+      setCurrentPlayer(id);
       List<Coordinate> list = getCoordinateMap().get(id);
       Coordinate location = determineLocation(list);
       EngineRecord shot = new EngineRecord(location, id);
@@ -62,7 +63,7 @@ public class EasyDecisionEngine extends DecisionEngine {
    */
   public void adjustStrategy(CellState result) {
     if (canBeRemoved(result)) {
-      getCoordinateList().remove(getLastShot());
+      getCoordinateMap().get(getCurrentPlayer()).remove(getLastShot());
     }
     else {
       getDeque().addFirst(getLastShot());
