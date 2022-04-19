@@ -39,11 +39,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int playerIndex;
   private int numShots;
   private int allowedShots;
-
-  private int setNumber; // new instance variable for ship movement
-  private int whenToMovePieces; //new instance variable for ship movement
+  private int setNumber;
+  private int whenToMovePieces;
   private List<Info> AIShots;
   private static final String INVALID_METHOD = "Invalid method name given";
+  private static final Info DUMMY_INFO = new Info(0, 0, 0);
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
 
   public GameManager(GameData data) {
@@ -125,7 +125,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (numShots == allowedShots) {
       if (engineMap.containsKey(playerList.get(playerIndex))) {
         view.displayAIMove(playerList.get(playerIndex).getID(), AIShots);
-        endTurn(new Info(0, 0, 0));
+        endTurn(DUMMY_INFO);
       } else {
         view.allowEndTurn();
       }
@@ -174,8 +174,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private boolean makeShot(Coordinate c, int id) {
-    // check for whether a player lost in a previous shot
-    // THROWS AN ERROR when playerList becomes smaller, but we are still trying to grab the same index
     Player currentPlayer = playerList.get(playerIndex);
     Player enemy = idMap.get(id);
     if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
@@ -240,7 +238,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     for(int id: playerIds) {
       Player currPlayer = idMap.get(id);
       WinState currPlayerWinState = condition.updateWinner(currPlayer);
-      System.out.format("Player %d's WinState %s\n", id, currPlayerWinState);
+      LOG.info(String.format("Player %d's WinState %s", id, currPlayerWinState));
       checkWinState(currPlayer, currPlayerWinState, id);
     }
   }
@@ -250,7 +248,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       removePlayer(player, id);
       view.displayLosingMessage(id);
     } else if (state.equals(WinState.WIN)) {
-      System.out.format("Player %d wins!", id);
+      LOG.info(String.format("Player %d wins!", id));
       moveToWinGame(player);
     }
   }
@@ -261,7 +259,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void removePlayer(Player player, int id) {
-    System.out.println("player " + id + " lost");
+    LOG.info("Player " + id + " lost");
     playerList.remove(player);
     idMap.remove(id);
     for (Player p : playerList) {
