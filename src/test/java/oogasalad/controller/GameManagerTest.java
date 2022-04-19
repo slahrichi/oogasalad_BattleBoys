@@ -171,6 +171,9 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>()), "handleShot", null, info)));
+    javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
+        list, new ArrayList<Collection<Coordinate>>(),
+        new HashMap<>()), "endTurn", null, info)));
     Thread.sleep(3000);
     assertEquals(wasStruckByAI(gd.players().get(0)), true);
   }

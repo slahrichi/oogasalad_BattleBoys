@@ -64,7 +64,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     numShots = 0;
     setNumber = 0;
     whenToMovePieces = 1; //should change this to use gamedata from parser
-    allowedShots = 2;
+    allowedShots = 1;
     createIDMap();
     winConditionsList = data.winConditions();
     engineMap = data.engineMap();
