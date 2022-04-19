@@ -53,7 +53,7 @@ public class BoardSetUpStage extends BuilderStage {
     widthChange = i -> setWidth(i);
     heightChange = i -> setHeight(i);
 
-    stateMap = initializeBlankMap(height, width);
+    stateMap = initializeMatrixWithValue(height, width,0);
     drawGrid();
     myPane.setTop(makeInfoInput());
     myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
@@ -105,7 +105,7 @@ public class BoardSetUpStage extends BuilderStage {
     if (!s.isEmpty() && checkIntConversion(s)) {
       changeConsumer.accept(Integer.valueOf(s));
 
-      stateMap = initializeBlankMap(height, width);
+      stateMap = initializeMatrixWithValue(height, width,0);
       drawGrid();
     } else {
       widthInput.clear();

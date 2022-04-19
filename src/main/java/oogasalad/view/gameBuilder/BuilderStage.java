@@ -28,11 +28,11 @@ public abstract class BuilderStage {
     return myBuilderResources;
   }
 
-  protected int[][] initializeBlankMap(int height, int width) {
+  protected int[][] initializeMatrixWithValue(int height, int width,int initialValue) {
     int[][] stateMap = new int[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        stateMap[i][j] = 0;
+        stateMap[i][j] = initialValue;
       }
     }
     return stateMap;
