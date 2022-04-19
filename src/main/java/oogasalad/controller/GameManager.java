@@ -39,6 +39,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int playerIndex;
   private int numShots;
   private int allowedShots;
+
+  private int setNumber; // new instance variable for ship movement
+  private int whenToMovePieces; //new instance variable for ship movement
   private List<Info> AIShots;
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
@@ -59,6 +62,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     this.playerList = data.players();
     playerIndex = 0;
     numShots = 0;
+    setNumber = 0;
+    whenToMovePieces = 1; //should change this to use gamedata from parser
     allowedShots = 2;
     createIDMap();
     winConditionsList = data.winConditions();
@@ -129,11 +134,28 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void endTurn(Info info) {
     playerIndex = (playerIndex + 1) % playerList.size();
+    checkIfEndSet();
     Player player = playerList.get(playerIndex);
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
     gameViewManager.sendUpdatedBoardsToView(playerIndex);
     handleAI();
+  }
+
+  private void checkIfEndSet() {
+    if(playerIndex == 0) {
+      setNumber++;
+      checkIfMovePieces();
+    }
+  }
+
+  //new private method for moving pieces
+  private void checkIfMovePieces() {
+    if (setNumber % whenToMovePieces == 0) {
+      for (Player currPlayer : playerList) {
+        currPlayer.movePieces();
+      }
+    }
   }
 
   private void handleAI() {
