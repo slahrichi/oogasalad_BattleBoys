@@ -1,11 +1,8 @@
-package oogasalad.model.utilities.WinConditions;
+package oogasalad.model.utilities.winconditions;
 
-import java.util.Collection;
 import java.util.function.Function;
 import oogasalad.model.players.Player;
 import oogasalad.model.players.PlayerRecord;
-import oogasalad.model.utilities.Board;
-import oogasalad.model.utilities.WinConditions.WinConditionInterface;
 
 public abstract class WinCondition implements WinConditionInterface {
 

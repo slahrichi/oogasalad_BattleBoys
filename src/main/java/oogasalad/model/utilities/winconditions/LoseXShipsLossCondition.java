@@ -1,4 +1,4 @@
-package oogasalad.model.utilities.WinConditions;
+package oogasalad.model.utilities.winconditions;
 
 import java.util.function.Function;
 import oogasalad.model.players.PlayerRecord;
