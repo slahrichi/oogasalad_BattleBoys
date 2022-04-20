@@ -63,7 +63,7 @@ public class PieceDesignStage extends BuilderStage {
 
     Scene myScene = new Scene(myPane, 1000, 500);
     myStage.setScene(myScene);
-    myStage.showAndWait();
+    myStage.show();
   }
 
   private void initializeCharacteristicMatrix() {

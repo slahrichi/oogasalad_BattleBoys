@@ -7,14 +7,17 @@ import java.util.function.Consumer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import oogasalad.view.maker.LabelMaker;
 
 public abstract class BuilderStage {
@@ -23,6 +26,7 @@ public abstract class BuilderStage {
   private int selectedType;
   private List<Rectangle> colorOptionList = new ArrayList<>();
   private String itemID;
+  private Stage myStage;
 
   private static final int DEFAULT_INPUT_BOX_WIDTH = 60;
   private static final int DEFAULT_INPUT_BOX_HEIGHT = 20;
@@ -33,6 +37,18 @@ public abstract class BuilderStage {
 
   protected ResourceBundle getMyBuilderResources() {
     return myBuilderResources;
+  }
+
+  protected void setUpStage(BorderPane myPane) {
+    myStage = new Stage();
+    myStage.setScene(getScene(myPane));
+    myStage.showAndWait();
+  }
+
+  protected void closeWindow(){myStage.close();}
+
+  public Scene getScene(BorderPane myPane) {
+    return new Scene(myPane, 900, 500);
   }
 
   protected int[][] initializeMatrixWithValue(int height, int width,int initialValue) {
