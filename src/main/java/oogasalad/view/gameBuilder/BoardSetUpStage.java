@@ -22,8 +22,6 @@ public class BoardSetUpStage extends BuilderStage {
   private int width;
   private int height;
   private static final int DEFAULT_DIMENSION = 10;
-  private static final int DEFAULT_INPUT_BOX_WIDTH = 60;
-  private static final int DEFAULT_INPUT_BOX_HEIGHT = 20;
   private double MAX_GRID_WIDTH = 400;
   private double MAX_GRID_HEIGHT = 400;
 
@@ -53,14 +51,14 @@ public class BoardSetUpStage extends BuilderStage {
     widthChange = i -> setWidth(i);
     heightChange = i -> setHeight(i);
 
-    stateMap = initializeMatrixWithValue(height, width,0);
+    stateMap = initializeMatrixWithValue(height, width, 0);
     drawGrid();
     myPane.setTop(makeInfoInput());
     myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
     myPane.setBottom(makeContinueButton());
     myStage = new Stage();
     myStage.setScene(getScene());
-    myStage.show();
+    myStage.showAndWait();
   }
 
   private void setWidth(int newWidth) {
@@ -105,7 +103,7 @@ public class BoardSetUpStage extends BuilderStage {
     if (!s.isEmpty() && checkIntConversion(s)) {
       changeConsumer.accept(Integer.valueOf(s));
 
-      stateMap = initializeMatrixWithValue(height, width,0);
+      stateMap = initializeMatrixWithValue(height, width, 0);
       drawGrid();
     } else {
       widthInput.clear();
@@ -115,14 +113,7 @@ public class BoardSetUpStage extends BuilderStage {
   }
 
 
-  private TextArea makeTextArea() {
-    TextArea result = new TextArea();
-    result.setMaxSize(DEFAULT_INPUT_BOX_WIDTH, DEFAULT_INPUT_BOX_HEIGHT);
-
-    return result;
-  }
-
-  private void writeToFile(){
+  private void writeToFile() {
     Parser p = new Parser();
     //p.save();
   }
@@ -130,7 +121,7 @@ public class BoardSetUpStage extends BuilderStage {
 
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
     Rectangle newCell = new Rectangle(xPos, yPos,
-        MAX_GRID_WIDTH / width,MAX_GRID_HEIGHT / height);
+        MAX_GRID_WIDTH / width, MAX_GRID_HEIGHT / height);
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {
@@ -141,11 +132,11 @@ public class BoardSetUpStage extends BuilderStage {
     return newCell;
   }
 
-  private void convertToCellStates(){
+  private void convertToCellStates() {
     board = new CellState[width][height];
-    for( int i=0;i<width;i++){
-      for( int j=0;j<width;j++){
-        board[i][j]=CellState.of(stateMap[i][j]);
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < width; j++) {
+        board[i][j] = CellState.of(stateMap[i][j]);
       }
     }
   }

@@ -11,11 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -40,13 +38,14 @@ public class PieceDesignStage extends BuilderStage {
   private final int MAX_LIST_WIDTH = 100;
   private final int MAX_LIST_HEIGHT = 400;
   private final double CELL_SIZE = 20;
-  private String[] customizable;
+  private String[] customizableStats;
+  private Stage myStage;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     availablePieceTypes = getMyBuilderResources().getString("possiblePieceType");
-    customizable = getMyBuilderResources().getString("pieceCellCustomParameters")
+    customizableStats = getMyBuilderResources().getString("pieceCellCustomParameters")
         .split(",");
     initializeCharacteristicMatrix();
     pathUpdateConsumer = e -> updatePath(e);
@@ -57,10 +56,10 @@ public class PieceDesignStage extends BuilderStage {
     colorList.add(DEFAULT_INACTIVE_COLOR);
     colorList.add(DEFAULT_ACTIVE_COLOR);
 
-    myPane.setTop(makePieceSelectionBox(availablePieceTypes.split(",")));
+    myPane.setTop(makeSelectionComboBox(availablePieceTypes.split(",")));
     myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
     myPane.setBottom(makeContinueButton());
-    Stage myStage = new Stage();
+    myStage = new Stage();
 
     Scene myScene = new Scene(myPane, 1000, 500);
     myStage.setScene(myScene);
@@ -70,15 +69,23 @@ public class PieceDesignStage extends BuilderStage {
   private void initializeCharacteristicMatrix() {
 
     editableStats = new HashMap<>();
-    for (String charactristic : customizable) {
+    for (String charactristic : customizableStats) {
       editableStats.put(charactristic,
           initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 1));
     }
   }
 
+  private VBox makeSelectionComboBox(String[] options) {
+    VBox result = new VBox();
+    ComboBox comboBox = makeComboBox(options);
+    result.getChildren().add(comboBox);
+    result.getChildren().add(makeButton("Select", e -> selectPieceType(result, comboBox)));
+    return result;
+  }
+
   private void makePopUpDialog(int i, int j) {
 
-    for (String characteristic : customizable) {
+    for (String characteristic : customizableStats) {
       TextInputDialog td = new TextInputDialog(
           String.valueOf(editableStats.get(characteristic)[i][j]));
       td.setTitle(characteristic);
@@ -121,15 +128,9 @@ public class PieceDesignStage extends BuilderStage {
   @Override
   protected Object saveAndContinue() {
     findReferencePoint();
+    myStage.close();
+    WeaponDesignStage wds = new WeaponDesignStage();
     return null;
-  }
-
-  private VBox makePieceSelectionBox(String[] options) {
-    VBox result = new VBox();
-    ComboBox comboBox = makeComboBox(options);
-    result.getChildren().add(comboBox);
-    result.getChildren().add(makeButton("Select", e -> selectPieceType(result, comboBox)));
-    return result;
   }
 
 
@@ -137,7 +138,7 @@ public class PieceDesignStage extends BuilderStage {
     pieceType = comboBox.getValue();
     if (!pieceType.equals(null)) {
       resetCustomization();
-      result = makePieceSelectionBox(availablePieceTypes.split(","));
+      result = makeSelectionComboBox(availablePieceTypes.split(","));
       myPane.setTop(result);
       String[] reqVars = getMyBuilderResources().getString(pieceType + "PieceRequiredInfo")
           .split(",");
@@ -179,19 +180,6 @@ public class PieceDesignStage extends BuilderStage {
   //   Piece result = new StaticPiece();
   //       ShipCell a = new
   // }
-
-  private HBox makeComboBoxWithVariable(String[] options, String buttonText,
-      Consumer<String> consumer) {
-
-    TextArea infoBox = new TextArea();
-    ComboBox comboBox = makeComboBox(options);
-    infoBox.setMaxSize(50, 20);
-    HBox result = new HBox(comboBox);
-    result.getChildren().add(infoBox);
-    result.getChildren()
-        .add(makeButton(buttonText, e -> consumer.accept(comboBox.getValue() + infoBox.getText())));
-    return result;
-  }
 
 
 }

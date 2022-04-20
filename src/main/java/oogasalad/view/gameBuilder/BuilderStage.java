@@ -3,22 +3,29 @@ package oogasalad.view.gameBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import oogasalad.view.maker.LabelMaker;
 
 public abstract class BuilderStage {
 
   private ResourceBundle myBuilderResources;
   private int selectedType;
   private List<Rectangle> colorOptionList = new ArrayList<>();
+  private String itemID;
+
+  private static final int DEFAULT_INPUT_BOX_WIDTH = 60;
+  private static final int DEFAULT_INPUT_BOX_HEIGHT = 20;
 
   public BuilderStage() {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
@@ -45,6 +52,31 @@ public abstract class BuilderStage {
     return result;
   }
 
+  protected TextArea makeTextArea() {
+    TextArea result = new TextArea();
+    result.setMaxSize(DEFAULT_INPUT_BOX_WIDTH, DEFAULT_INPUT_BOX_HEIGHT);
+
+    return result;
+  }
+
+  protected TextArea makeTextAreaWithDefaultValue(String text){
+    TextArea result = makeTextArea();
+    result.setText(text);
+    return  result;
+  }
+
+  protected HBox makeComboBoxWithVariable(String[] options, String buttonText,
+      Consumer<String> consumer) {
+
+    TextArea infoBox = new TextArea();
+    ComboBox comboBox = makeComboBox(options);
+    infoBox.setMaxSize(50, 20);
+    HBox result = new HBox(comboBox);
+    result.getChildren().add(infoBox);
+    result.getChildren()
+        .add(makeButton(buttonText, e -> consumer.accept(comboBox.getValue() + infoBox.getText())));
+    return result;
+  }
 
   protected Group arrangeCells(int height, int width, double cellHeight,double cellWidth, int[][] stateMap) {
     Group cellGroup = new Group();
@@ -54,7 +86,6 @@ public abstract class BuilderStage {
       xPos = 0;
       for (int j = 0; j < width; j++) {
         cellGroup.getChildren().add(createCell(xPos, yPos, i, j, stateMap[i][j]));
-
         xPos = xPos + cellWidth;
       }
       yPos = yPos + cellHeight;
@@ -124,6 +155,10 @@ public abstract class BuilderStage {
     }
 
     return comboBox;
+  }
+
+  protected HBox makeIdInput(){
+    return new HBox(LabelMaker.makeLabel("id:", "id" + "_label"), makeTextArea());
   }
 
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);
