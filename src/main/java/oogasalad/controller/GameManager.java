@@ -208,7 +208,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     for (WinCondition condition: winConditionsList) {
       checkCondition(condition);
     }
-    if(playerList.size()==1) {
+    if(playerList.size() == 1) {
       moveToWinGame(playerList.get(0));
     }
   }
@@ -226,7 +226,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void checkWinState(Player player, WinState state, int id) {
     if (state.equals(WinState.LOSE)) {
       removePlayer(player, id);
-      view.displayLosingMessage(id);
+      view.displayLosingMessage(idMap.get(id).getName());
     } else if (state.equals(WinState.WIN)) {
       System.out.format("Player %d wins!", id);
       moveToWinGame(player);
@@ -235,7 +235,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void moveToWinGame(Player player) {
     int id = player.getID();
-    view.displayWinningMessage(id);
+    view.displayWinningMessage(idMap.get(id).getName());
   }
 
   private void removePlayer(Player player, int id) {
