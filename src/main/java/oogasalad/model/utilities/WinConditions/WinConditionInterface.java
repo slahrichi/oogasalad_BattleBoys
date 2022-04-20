@@ -1,10 +1,13 @@
 package oogasalad.model.utilities.WinConditions;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import oogasalad.model.players.Player;
 import oogasalad.model.players.PlayerRecord;
 import oogasalad.model.utilities.Board;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 /**
  * WinCondition API analyzes the board state for every player in order to check/determine if a player has
@@ -26,4 +29,8 @@ public interface WinConditionInterface {
    * @return Function lambda that takes in the old PlayerRecord as a parameter and returns an updated PlayerRecord
    */
   public abstract Function<PlayerRecord, WinState> getWinLambda();
+
+  public Set<CellState> getDesirableCellStates();
+
+  public Set<CellState> getNonDesirableCellStates();
 }
