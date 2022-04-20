@@ -44,6 +44,7 @@ public class WeaponDesignStage extends BuilderStage {
     needAOEMapList = getMyBuilderResources().getString("needsAOEMapWeapon").split(",");
     myStage = new Stage();
     myPane.setTop(makeWeaponSelectionPrompt(availableWeaponTypes.split(",")));
+    myPane.setBottom(makeContinueButton());
     centerPane = new VBox();
 
     Scene myScene = new Scene(myPane, 1000, 500);
@@ -84,6 +85,8 @@ public class WeaponDesignStage extends BuilderStage {
 
   @Override
   protected Object saveAndContinue() {
+    myStage.close();
+    BasicGameSetupStage bgds = new BasicGameSetupStage();
     return null;
   }
 
