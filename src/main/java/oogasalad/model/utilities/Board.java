@@ -217,6 +217,12 @@ public class Board {
       myPieces.get(itr.next()).removeFromBoard(boardMap);
       itr.remove();
     }
+  }
+
+  public void moveAllPieces() {
+    for(String key: myPieces.keySet()) {
+      myPieces.get(key).movePiece(boardMap);
+    }
 
   }
 }
