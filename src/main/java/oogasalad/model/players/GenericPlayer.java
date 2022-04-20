@@ -1,6 +1,7 @@
 package oogasalad.model.players;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -19,6 +20,7 @@ public abstract class GenericPlayer implements Player{
   private int myCurrency;
   private List<Item> itemList;
   private Map<Integer, MarkerBoard> myEnemyMap;
+  private Map<CellState, Integer> myHitsMap; //new instance variable
   private Board myBoard;
   private int myId;
 
@@ -30,6 +32,7 @@ public abstract class GenericPlayer implements Player{
     itemList = new ArrayList<>();
     myCurrency = 0;
     myEnemyMap = enemyMap;
+    myHitsMap = new HashMap<CellState, Integer>();
     myId = id;
     myName = PLAYER_PREFIX + (id + 1);
   }
@@ -97,7 +100,7 @@ public abstract class GenericPlayer implements Player{
   }
 
   private PlayerRecord makeRecord() {
-    return new PlayerRecord(myPiecesLeft, myCurrency, itemList, myBoard);
+    return new PlayerRecord(myPiecesLeft, myCurrency, itemList, myHitsMap, myBoard);
   }
 
   public Board getBoard() {
@@ -130,5 +133,12 @@ public abstract class GenericPlayer implements Player{
 
   public Map<Integer, MarkerBoard> getEnemyMap() {
     return myEnemyMap;
+  }
+
+  //new Method for updating hits map
+  @Override
+  public void updateShot(CellState hitResult) {
+    myHitsMap.putIfAbsent(hitResult, 0);
+    myHitsMap.put(hitResult, myHitsMap.get(hitResult)+1);
   }
 }

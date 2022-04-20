@@ -8,6 +8,7 @@ import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.WinState;
+import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
 /**
@@ -86,5 +87,6 @@ public interface Player {
 
     int getMyCurrency();
 
+    void updateShot(CellState hitResult); // new method for updating hitsMap
 }
 
