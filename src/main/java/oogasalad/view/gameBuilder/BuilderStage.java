@@ -1,5 +1,8 @@
 package oogasalad.view.gameBuilder;
 
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -61,6 +64,18 @@ public abstract class BuilderStage {
     return stateMap;
   }
 
+  protected Object createInstance(String className, Class<?>[] parameterTypes, Object[] parameters) throws IOException {
+
+    try {
+      Class<?> clazz = Class.forName(className);
+      Constructor<?> constructor =clazz.getConstructor(parameterTypes);
+      return constructor.newInstance(parameters);
+    } catch (Error | Exception e) {
+      e.printStackTrace();
+      throw new IOException(String.format("Class parsing failed: %s className"));
+    }
+
+  }
   protected Button makeButton(String name, EventHandler<ActionEvent> handler) {
     Button result = new Button(name);
     result.setOnAction(handler);
