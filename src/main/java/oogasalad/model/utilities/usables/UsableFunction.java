@@ -1,4 +1,4 @@
-package oogasalad.model.utilities.Usables;
+package oogasalad.model.utilities.usables;
 
 import java.util.Map;
 import oogasalad.model.utilities.Board;

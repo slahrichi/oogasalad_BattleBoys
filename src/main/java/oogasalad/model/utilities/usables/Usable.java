@@ -1,12 +1,17 @@
-package oogasalad.model.utilities.Usables;
+package oogasalad.model.utilities.usables;
 
-public abstract class Usables {
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import oogasalad.controller.GameManager;
+import oogasalad.view.Info;
+
+public abstract class Usable {
 
   String myID;
   UsableFunction myFunction;
   int goldCost;
 
-  public Usables(String ID, int gold){
+  public Usable(String ID, int gold){
     this.myID = ID;
     this.goldCost = gold;
 
@@ -21,8 +26,8 @@ public abstract class Usables {
   protected void setMyID(String myID) {
     this.myID = myID;
   }
+  public int getPrice(){return goldCost;}
 
-  public int getPrice() {
-    return goldCost;
-  }
+  public abstract BiConsumer<Info, GameManager> handleUsage();
+
 }

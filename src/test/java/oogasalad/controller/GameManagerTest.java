@@ -22,6 +22,7 @@ import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.view.GameView;
 import oogasalad.view.Info;
 import org.junit.jupiter.api.BeforeEach;

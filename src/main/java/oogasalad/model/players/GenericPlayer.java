@@ -1,6 +1,7 @@
 package oogasalad.model.players;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,13 +12,14 @@ import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
 
 
 public abstract class GenericPlayer implements Player{
 
   private int myPiecesLeft;
   private int myCurrency;
-  private List<Item> itemList;
+  private Map<Usable, Integer> inventory;
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Board myBoard;
   private int myId;
@@ -27,7 +29,7 @@ public abstract class GenericPlayer implements Player{
 
   public GenericPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
-    itemList = new ArrayList<>();
+    inventory = new HashMap<>();
     myCurrency = 0;
     myEnemyMap = enemyMap;
     myId = id;
@@ -35,10 +37,9 @@ public abstract class GenericPlayer implements Player{
   }
 
   @Override
-  public void makePurchase(int amount, Item item) {
-    if (item.getPrice() <= myCurrency) {
-      myCurrency -= item.getPrice();
-      itemList.add(item);
+  public void makePurchase(int amount, Usable usable) {
+    if (usable.getPrice() <= myCurrency) {
+      inventory.put(usable, inventory.getOrDefault(usable, 0) + 1);
     }
   }
 
@@ -97,7 +98,7 @@ public abstract class GenericPlayer implements Player{
   }
 
   private PlayerRecord makeRecord() {
-    return new PlayerRecord(myPiecesLeft, myCurrency, itemList, myBoard);
+    return new PlayerRecord(myPiecesLeft, myCurrency, inventory, myBoard);
   }
 
   public Board getBoard() {

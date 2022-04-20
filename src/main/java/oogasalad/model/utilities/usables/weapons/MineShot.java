@@ -1,4 +1,4 @@
-package oogasalad.model.utilities.Usables.Weapons;
+package oogasalad.model.utilities.usables.weapons;
 
 public class MineShot extends Weapon {
   /**
