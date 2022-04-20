@@ -86,8 +86,8 @@ public class ConditionHandler {
 
   private void checkWinState(Player player, WinState state, int id) {
     if (state.equals(WinState.LOSE)) {
-      removePlayer(player, id);
       view.displayLosingMessage(idMap.get(id).getName());
+      removePlayer(player, id);
     } else if (state.equals(WinState.WIN)) {
       LOG.info(String.format("Player %d wins!", id));
       moveToWinGame(player);
