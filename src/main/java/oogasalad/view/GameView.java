@@ -397,12 +397,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
   }
 
-  public void displayWinningMessage(int id) {
-    LOG.info("Player " + (id + 1) + myResources.getString("WonSuffix"));
+  public void displayWinningMessage(String name) {
+    LOG.info(name + " " + myResources.getString("WonSuffix"));
   }
 
-  public void displayLosingMessage(int id) {
-    LOG.info("Player " + (id + 1) + myResources.getString("LostSuffix"));
+  public void displayLosingMessage(String name) {
+    LOG.info(name + " " + myResources.getString("LostSuffix"));
   }
 
   /**

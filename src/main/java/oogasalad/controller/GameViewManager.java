@@ -14,6 +14,15 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.GameView;
 
+/**
+ * A manager that handles the updating of individual Piece objects and how they appear on the board.
+ * The class received information from the GameManager and exists so that the GameManager can focus
+ * primarily on the rules of the game as opposed to having to deal with procuring all necessary
+ * information for visual updates.
+ *
+ * @author Matthew Giglio, Minjun Kwak
+ */
+
 public class GameViewManager {
 
   private GameView view;
@@ -22,6 +31,11 @@ public class GameViewManager {
   private ResourceBundle myResources;
 
   public GameViewManager(GameData data, Map<Integer, Player> idMap, int allowedShots, ResourceBundle resourceBundle) {
+  /**
+   * @param data         GameData object storing information pertinent to game rules
+   * @param idMap        Map relating a player id to the Player themselves
+   * @param allowedShots the number of shots a player can make per turn
+   */
     this.idMap = idMap;
     this.playerList = data.players();
     this.myResources = resourceBundle;
@@ -38,7 +52,7 @@ public class GameViewManager {
 
   private Map<Integer, String> generateIDToNames() {
     Map<Integer, String> idToName = new HashMap<>();
-    for(Player p : playerList) {
+    for (Player p : playerList) {
       idToName.put(p.getID(), p.getName());
     }
     return idToName;
@@ -75,7 +89,8 @@ public class GameViewManager {
         currentPlayer, boardList, idList, pieceList);
     Map<Integer, MarkerBoard> enemyMap = currentPlayer.getEnemyMap();
     for (int id : currentPlayer.getEnemyMap().keySet()) {
-      addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList, pieceList);
+      addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList,
+          pieceList);
     }
     view.moveToNextPlayer(boardList, idList, pieceList);
   }
@@ -95,6 +110,9 @@ public class GameViewManager {
     return coords;
   }
 
+  /**
+   * @param piecesLeft list of remaining pieces that the player has left
+   */
   void updatePiecesLeft(List<Piece> piecesLeft) {
     Collection<Collection<Coordinate>> coords = convertPiecesToCoords(piecesLeft);
     view.updatePiecesLeft(coords);

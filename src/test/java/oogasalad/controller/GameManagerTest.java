@@ -80,7 +80,6 @@ public class GameManagerTest extends DukeApplicationTest {
     pieceList = new ArrayList<>(Arrays.asList(dummyShip1));
     pieceList2 = new ArrayList<>(Arrays.asList(dummyShip2));
     list = new ArrayList<>(Arrays.<CellState[][]>asList(cellBoard));
-    list.add(cellBoard);
   }
 
   @Test
@@ -173,6 +172,9 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), myResources), "handleShot", null, info)));
+    javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
+        list, new ArrayList<Collection<Coordinate>>(),
+        new HashMap<>(), myResources), "endTurn", null, info)));
     Thread.sleep(3000);
     assertEquals(wasStruckByAI(gd.players().get(0)), true);
   }

@@ -13,7 +13,6 @@ public class MediumDecisionEngine extends DecisionEngine {
 
   private static final int[] ROW_DELTA = new int[]{-1, 0, 1, 1, -1, -1, 0, 1};
   private static final int[] COL_DELTA = new int[]{-1, 1, 0, 1, 0, 1, -1, -1};
-  private int currentEnemyID;
 
   public MediumDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player) {
@@ -26,8 +25,9 @@ public class MediumDecisionEngine extends DecisionEngine {
     }
     else {
       int id = determineEnemy();
-      currentEnemyID = id;
-      Coordinate location = determineLocation();
+      setCurrentPlayer(id);
+      List<Coordinate> list = getCoordinateMap().get(id);
+      Coordinate location = determineLocation(list);
       EngineRecord shot = new EngineRecord(location, id);
       setLastShot(shot);
       return shot;
@@ -39,8 +39,8 @@ public class MediumDecisionEngine extends DecisionEngine {
     return enemies.get(getRandom().nextInt(enemies.size()));
   }
 
-  private Coordinate determineLocation() {
-    return getCoordinateList().get(getRandom().nextInt(getCoordinateList().size()));
+  private Coordinate determineLocation(List<Coordinate> list) {
+    return list.get(getRandom().nextInt(list.size()));
   }
 
 
@@ -50,7 +50,7 @@ public class MediumDecisionEngine extends DecisionEngine {
       prepareBFS();
     }
     if (canBeRemoved(result)) {
-      getCoordinateList().remove(getLastShot());
+      getCoordinateMap().get(getCurrentPlayer()).remove(getLastShot());
     }
   }
 
@@ -63,7 +63,7 @@ public class MediumDecisionEngine extends DecisionEngine {
     for (int i = 0; i < ROW_DELTA.length; i++) {
       Coordinate c = new Coordinate(ROW_DELTA[i], COL_DELTA[i]);
       if (getCoordinateList().contains(c)) {
-        getDeque().addLast(new EngineRecord(c, currentEnemyID));
+        getDeque().addLast(new EngineRecord(c, getCurrentPlayer()));
       }
     }
   }

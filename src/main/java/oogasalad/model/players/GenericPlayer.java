@@ -91,6 +91,11 @@ public abstract class GenericPlayer implements Player{
     return lambda.apply(makeRecord());
   }
 
+  //new method for moving pieces
+  public void movePieces() {
+    myBoard.moveAllPieces();
+  }
+
   private PlayerRecord makeRecord() {
     return new PlayerRecord(myPiecesLeft, myCurrency, itemList, myBoard);
   }

@@ -1,7 +1,9 @@
 package oogasalad.model.players;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -12,6 +14,7 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 
 public abstract class DecisionEngine {
 
+  private Map<Integer, List<Coordinate>> myCoordinateMap;
   private List<Coordinate> myCoordinateList;
   private Deque<EngineRecord> myDeque;
   private Map<Integer, MarkerBoard> myEnemyMap;
@@ -19,20 +22,34 @@ public abstract class DecisionEngine {
   private Random myRandom;
   private EngineRecord myLastShot;
   private int pieceIndex;
+  private int currentPlayer;
 
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player) {
-    myCoordinateList = coordinateList;
     myDeque = new ArrayDeque<>();
     myEnemyMap = enemyMap;
+    myCoordinateList = coordinateList;
+    myCoordinateMap = makeCoordinateMap(coordinateList);
     myPlayer = player;
     myRandom = new Random(System.currentTimeMillis());
+  }
+
+  private Map<Integer, List<Coordinate>> makeCoordinateMap(List<Coordinate> list) {
+    Map<Integer, List<Coordinate>> map = new HashMap<>();
+    for (Integer id : myEnemyMap.keySet()) {
+      map.put(id, new ArrayList<>(List.copyOf(list)));
+    }
+    return map;
   }
 
   public abstract EngineRecord makeMove();
 
   protected List<Coordinate> getCoordinateList() {
     return myCoordinateList;
+  }
+
+  protected Map<Integer, List<Coordinate>> getCoordinateMap() {
+    return myCoordinateMap;
   }
 
   protected Deque<EngineRecord> getDeque() {
@@ -75,4 +92,12 @@ public abstract class DecisionEngine {
   public abstract void adjustStrategy(CellState result);
 
   public abstract Coordinate placePiece(List<Piece> pieceList);
+
+  protected int getCurrentPlayer() {
+    return currentPlayer;
+  }
+
+  protected void setCurrentPlayer(int id) {
+    currentPlayer = id;
+  }
 }

@@ -101,7 +101,7 @@ class BoardTest {
   @Test
   void hitShipTest() {
     testBoard.placePiece(new Coordinate(0,1), ship1);
-    testBoard.hit(new Coordinate(1,1));
+    testBoard.hit(new Coordinate(1,1),1);
     testBoard.listPieces().get(0).updateShipHP();
     assertEquals(testBoard.listPieces().get(0).getCellList().size(),2);
   }
@@ -109,9 +109,9 @@ class BoardTest {
   @Test
   void sinkShipTest() {
     testBoard.placePiece(new Coordinate(0,1), ship1);
-    testBoard.hit(new Coordinate(0,1));
-    testBoard.hit(new Coordinate(1,1));
-    testBoard.hit(new Coordinate(2,1));
+    testBoard.hit(new Coordinate(0,1),1);
+    testBoard.hit(new Coordinate(1,1),1);
+    testBoard.hit(new Coordinate(2,1),1);
     assertEquals(testBoard.listPieces().size(), 0);
   }
 }
