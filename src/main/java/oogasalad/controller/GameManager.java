@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.scene.Scene;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
@@ -47,17 +49,19 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final Info DUMMY_INFO = new Info(0, 0, 0);
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
+  private ResourceBundle myResources;
 
+  public GameManager(GameData data, ResourceBundle resourceBundle) {
   /**
    * @param data GameData object storing all pertinent resources for managing the game such as the
    *             players and the decision engines for the AI
    */
-  public GameManager(GameData data) {
-    initialize(data);
+    initialize(data, resourceBundle);
     view = gameViewManager.getView();
     view.updateLabels(allowedShots, playerList.get(0).getNumPieces(),
         playerList.get(0).getMyCurrency());
     view.addObserver(this);
+
     conditionHandler = new ConditionHandler(playerList, idMap, data.winConditions(), view);
   }
 
@@ -69,7 +73,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
 
-  private void initialize(GameData data) {
+  private void initialize(GameData data, ResourceBundle resources) {
+    myResources = resources;
     this.playerList = data.players();
     playerIndex = 0;
     numShots = 0;
@@ -78,7 +83,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     allowedShots = 1;
     createIDMap();
     engineMap = data.engineMap();
-    gameViewManager = new GameViewManager(data, idMap, allowedShots);
+    gameViewManager = new GameViewManager(data, idMap, allowedShots, myResources);
   }
 
   private void createIDMap() {
@@ -102,7 +107,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Info info = new Info(row, col, id);
     try {
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
-      System.out.println(m);
       m.invoke(this, info);
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {

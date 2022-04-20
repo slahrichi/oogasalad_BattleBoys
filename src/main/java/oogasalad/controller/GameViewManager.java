@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import oogasalad.GameData;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
@@ -27,24 +28,26 @@ public class GameViewManager {
   private GameView view;
   private Map<Integer, Player> idMap;
   private List<Player> playerList;
+  private ResourceBundle myResources;
 
+  public GameViewManager(GameData data, Map<Integer, Player> idMap, int allowedShots, ResourceBundle resourceBundle) {
   /**
    * @param data         GameData object storing information pertinent to game rules
    * @param idMap        Map relating a player id to the Player themselves
    * @param allowedShots the number of shots a player can make per turn
    */
-  public GameViewManager(GameData data, Map<Integer, Player> idMap, int allowedShots) {
     this.idMap = idMap;
-    playerList = data.players();
+    this.playerList = data.players();
+    this.myResources = resourceBundle;
     setupGameView(data, allowedShots);
+
   }
 
   private void setupGameView(GameData data, int allowedShots) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards, coords, generateIDToNames());
-    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(),
-        playerList.get(0).getMyCurrency());
+    view = new GameView(boards, coords, generateIDToNames(), myResources);
+    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
   private Map<Integer, String> generateIDToNames() {

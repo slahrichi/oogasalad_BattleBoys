@@ -1,5 +1,6 @@
 package oogasalad;
 
+import java.util.ResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,6 +21,8 @@ class MainTest {
 
     @Test
     void testVersionIsReady () {
+        ResourceBundle resources = ResourceBundle.getBundle("languages/English");
+        assertNotEquals(resources, null);
 //        // how close do real valued numbers need to be to count as the same
 //        final double TOLERANCE = 0.0005;
 //

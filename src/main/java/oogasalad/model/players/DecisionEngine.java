@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Random;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
-import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
 public abstract class DecisionEngine {
 

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.function.Function;
+import java.util.ResourceBundle;
 import oogasalad.GameData;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
@@ -39,6 +41,7 @@ public class GameManagerTest extends DukeApplicationTest {
   private List<Player> playerList;
   private Map<Player, DecisionEngine> engineMap;
   private CellState[][] cellBoard;
+  private ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
   private List<Piece> pieceList;
   private List<Piece> pieceList2;
   private List<CellState[][]> list;
@@ -47,7 +50,6 @@ public class GameManagerTest extends DukeApplicationTest {
   private GameManager gm;
   private Info info = new Info(0, 1, 1);
 
-  private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
   @BeforeEach
   void setup() {
@@ -95,13 +97,13 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "moveToNextPlayer", null, null)));
     javafxRun(() -> {
-      gm = new GameManager(gd);
+      gm = new GameManager(gd, myResources);
       gm.createScene();
     });
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "handleShot", null, info)));
+        new HashMap<>(), myResources), "handleShot", null, info)));
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 1);
@@ -111,12 +113,12 @@ public class GameManagerTest extends DukeApplicationTest {
   void testInvalidInputs() {
     GameData gd = new GameData(playerList, cellBoard, pieceList, wc, engineMap);
     javafxRun(() -> {
-      gm = new GameManager(gd);
+      gm = new GameManager(gd, myResources);
       gm.createScene();
     });
     assertThrows(NullPointerException.class, () -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()),
+        new HashMap<>(), myResources),
         "invalidMethod", null, info)));
   }
 
@@ -135,13 +137,13 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "moveToNextPlayer", null, null)));
     javafxRun(() -> {
-      gm = new GameManager(gd);
+      gm = new GameManager(gd, myResources);
       gm.createScene();
     });
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "handleShot", null, info)));
+        new HashMap<>(), myResources), "handleShot", null, info)));
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
@@ -164,15 +166,15 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "moveToNextPlayer", null, null)));
     javafxRun(() -> {
-      gm = new GameManager(gd);
+      gm = new GameManager(gd, myResources);
       gm.createScene();
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "handleShot", null, info)));
+        new HashMap<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "endTurn", null, info)));
+        new HashMap<>(), myResources), "endTurn", null, info)));
     Thread.sleep(3000);
     assertEquals(wasStruckByAI(gd.players().get(0)), true);
   }
@@ -193,13 +195,13 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "moveToNextPlayer", null, null)));
     javafxRun(() -> {
-      gm = new GameManager(gd);
+      gm = new GameManager(gd, myResources);
       gm.createScene();
     });
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "handleShot", null, info)));
+        new HashMap<>(), myResources), "handleShot", null, info)));
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
   }

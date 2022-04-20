@@ -23,6 +23,7 @@ import oogasalad.model.utilities.WinConditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.WinConditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.GameView;
+import oogasalad.view.Info;
 import oogasalad.view.StartView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +33,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private static final Logger LOG = LogManager.getLogger(GameView.class);
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String INVALID_METHOD = "Invalid method name given";
-  private static final String DEFAULT_LANGUAGE_PACKAGE = "/languages/";
+  private static final String DEFAULT_LANGUAGE_PACKAGE = "languages/";
   private static final String LANGUAGE = "English";
 
   private StartView myStart;
@@ -46,7 +47,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private ResourceBundle myResources;
 
   //TODO: Remove this variable, it's for testing only
-  private List<Piece> pieceList = new ArrayList<>();
+  private List<Piece> pieceList;
 
   public Game(Stage stage) {
     myStage = stage;
@@ -99,7 +100,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   }
 
   private void startGame() {
-    GameManager manager = new GameManager(data);
+    GameManager manager = new GameManager(data, myResources);
     myStage.setScene(manager.createScene());
   }
 

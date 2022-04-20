@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
@@ -26,6 +27,7 @@ public class GameViewTest extends DukeApplicationTest {
   private Button leftButton;
   private Label currentBoardLabel;
   private GameView view;
+  private ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
   @Override
   public void start(Stage stage) {
@@ -75,7 +77,7 @@ public class GameViewTest extends DukeApplicationTest {
     for (int i = 0; i < numPlayers; i++) {
       idMap.put(i, "Player" + (i+1));
     }
-    view = new GameView(firstPlayerBoards, pieceCoords, idMap);
+    view = new GameView(firstPlayerBoards, pieceCoords, idMap, myResources);
     stage.setScene(view.createScene());
     stage.show();
 

@@ -122,23 +122,23 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
     Player ai = playerList.get(1);
     CellState[][] board = ai.getBoard().getCurrentBoardState();
     javafxRun(() -> {
-      gm = new GameManager(gd);
+      gm = new GameManager(gd, myResources);
       gm.createScene();
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "handleShot", null, info)));
+        new HashMap<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "endTurn", null, info)));
+        new HashMap<>(), myResources), "endTurn", null, info)));
     Thread.sleep(1500);
     Coordinate c = findCoordinateStruck();
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "handleShot", null, info)));
+        new HashMap<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>()), "endTurn", null, info)));
+        new HashMap<>(), myResources), "endTurn", null, info)));
     CellState[][] enemyBoard = playerList.get(0).getBoard().getCurrentBoardState();
     Thread.sleep(1500);
     assertEquals(CellState.SHIP_SUNKEN, enemyBoard[c.getRow()][c.getColumn()]);
