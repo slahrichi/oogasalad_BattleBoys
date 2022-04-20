@@ -19,7 +19,6 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
-import oogasalad.model.utilities.usables.weapons.Weapon;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
@@ -87,7 +86,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     numShots = 0;
     setNumber = 0;
     whenToMovePieces = 1; //should change this to use gamedata from parser
-    allowedShots = 1;
+    allowedShots = 2;
     createIDMap();
     engineMap = data.engineMap();
     gameViewManager = new GameViewManager(data, idMap, allowedShots, myResources);
