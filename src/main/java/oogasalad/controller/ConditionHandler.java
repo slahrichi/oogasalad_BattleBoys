@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import oogasalad.model.players.Player;
-import oogasalad.model.utilities.WinConditions.WinCondition;
-import oogasalad.model.utilities.WinConditions.WinState;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
+import oogasalad.model.utilities.winconditions.WinCondition;
+import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -87,7 +87,7 @@ public class ConditionHandler {
   private void checkWinState(Player player, WinState state, int id) {
     if (state.equals(WinState.LOSE)) {
       removePlayer(player, id);
-      view.displayLosingMessage(idMap.get(id).getName());
+      view.displayLosingMessage(player.getName());
     } else if (state.equals(WinState.WIN)) {
       LOG.info(String.format("Player %d wins!", id));
       moveToWinGame(player);
