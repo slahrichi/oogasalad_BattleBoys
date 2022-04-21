@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.maker.LabelMaker;
 
 public class WeaponDesignStage extends BuilderStage {
@@ -35,6 +36,10 @@ public class WeaponDesignStage extends BuilderStage {
   private List<Color> colorList = new ArrayList<>();
   private String[] needAOEMapList;
   private int[][] damageMatrix;
+  private final String DEFAULT_WEAPON_ID = "CustomWeapon";
+  private TextArea idInputBox;
+  private List<Integer> weaponStats;
+
   public WeaponDesignStage() {
     colorList.add(DEFAULT_INACTIVE_COLOR);
     colorList.add(DEFAULT_ACTIVE_COLOR);
@@ -45,6 +50,7 @@ public class WeaponDesignStage extends BuilderStage {
     myStage = new Stage();
     myPane.setTop(makeWeaponSelectionPrompt(availableWeaponTypes.split(",")));
     myPane.setBottom(makeContinueButton());
+    myPane.setRight(setUpObjectView());
     centerPane = new VBox();
 
     Scene myScene = new Scene(myPane, 1000, 500);
@@ -60,20 +66,19 @@ public class WeaponDesignStage extends BuilderStage {
     newCell.setOnMouseClicked(mouseEvent -> {
       stateMap[i][j] = getSelectedType();
       newCell.setFill(colorList.get(getSelectedType()));
-      damageMatrix[i][j]=getSelectedType();
-      if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-        if (mouseEvent.getClickCount() == 2) {
-          makePopUpDialog(i, j);
-        }
+      damageMatrix[i][j] = getSelectedType();
+      if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+        makePopUpDialog(i, j);
       }
     });
 
     return newCell;
   }
 
-  private void makePopUpDialog(int i,int j){
+  private void makePopUpDialog(int i, int j) {
     TextInputDialog td = new TextInputDialog(
         String.valueOf(damageMatrix[i][j]));
+    td.setHeaderText("Set Damage");
     td.setTitle("Damage");
     Optional<String> result = td.showAndWait();
     result.ifPresent(input -> {
@@ -111,18 +116,24 @@ public class WeaponDesignStage extends BuilderStage {
       String selection = comboBox.getValue().toString();
       String[] variables = getMyBuilderResources().getString(selection + "Variables").split(",");
       varInputBoxes = new HashMap<>();
-      centerPane.getChildren().add(makeIdInput());
+      idInputBox = makeTextAreaWithDefaultValue(DEFAULT_WEAPON_ID);
+      centerPane.getChildren()
+          .add(new HBox(LabelMaker.makeLabel("id", "id" + "_label"), idInputBox));
       makeStatEditor(variables);
-      if (Arrays.stream(needAOEMapList).anyMatch(selection::equals)) {
+      if (needsGridDesignOption(selection)) {
         addGridDesignOption();
       }
+      centerPane.getChildren().add(makeButton("Save Weapon",e->saveWeapon(selection)));
       myPane.setCenter(centerPane);
 
-      System.out.println(selection + checkAllInput());
     } catch (NullPointerException e) {
       System.out.println("Please Make Selection");
       e.printStackTrace();
     }
+  }
+
+  private Boolean needsGridDesignOption(String selection){
+    return Arrays.stream(needAOEMapList).anyMatch(selection::equals);
   }
 
   private void makeStatEditor(String[] variables) {
@@ -135,21 +146,57 @@ public class WeaponDesignStage extends BuilderStage {
 
 
   private Boolean checkAllInput() {
+    Boolean allInputsValid = true;
     for (String variable : varInputBoxes.keySet()) {
       if (!checkIntConversion(varInputBoxes.get(variable).getText())) {
-        return false;
+        allInputsValid = false;
       }
     }
-    return true;
+    if (idInputBox.getText().isEmpty()) {
+      allInputsValid = false;
+    }
+    return allInputsValid;
   }
 
-  private void setValue(String t) {
+  private void getWeaponStats(){
+    weaponStats = new ArrayList<>();
+    for (String variable : varInputBoxes.keySet()) {
+      int currentBoxInput = Integer.parseInt(varInputBoxes.get(variable).getText());
+      weaponStats.add(currentBoxInput);
+    }
+  }
+
+  private void saveWeapon(String selectedWeapon) {
+    if (checkAllInput()) {
+      System.out.println(selectedWeapon);
+      System.out.println(idInputBox.getText());
+      getWeaponStats();
+      for(int i : weaponStats){
+        System.out.println(i);
+      }
+      if(needsGridDesignOption(selectedWeapon)){
+        translateGridToMap();
+      }
+      addToObjectList(idInputBox.getText()+"_"+selectedWeapon);
+      resetSelection();
+    }
+    //Weapon test= createInstance(selectedWeapon,);
+  }
+
+  private void translateGridToMap(){
+    Map<Coordinate,Integer> relativeCoordinatesMap = new HashMap<>();
+    for(int i=0; i<MAX_DIMENSION;i++){
+      for(int j=0;j<MAX_DIMENSION;j++){
+        relativeCoordinatesMap.put(new Coordinate(i,j),stateMap[i][j]);
+      }
+    }
 
   }
 
   private void addGridDesignOption() {
-    damageMatrix=initializeMatrixWithValue(MAX_DIMENSION,MAX_DIMENSION,0);
+    damageMatrix = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
+    stateMap[5][5]=1;
     centerPane.getChildren().add(new HBox(
         arrangeCells(MAX_DIMENSION, MAX_DIMENSION, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE, stateMap),
         displayColorChoice(DEFAULT_STATE_OPTIONS, colorList)));
