@@ -24,7 +24,7 @@ import oogasalad.model.utilities.tiles.enums.CellState;
  *
  * Author: Matt Knox
  */
-public record PlayerData(List<String> players, List<Piece> pieces, CellState[][] board, List<String> decisionEngines)  {
+public record ParserData(List<String> players, List<Piece> pieces, CellState[][] board, List<String> decisionEngines)  {
 
   @Override
   public boolean equals(Object o) {
