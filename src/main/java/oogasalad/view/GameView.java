@@ -87,6 +87,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button leftButton;
   private Button rightButton;
   private Button endTurnButton;
+  private Button stripeButton;
   private VBox myRightPane;
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
@@ -175,6 +176,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createRightPane() {
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
+    stripeButton = ButtonMaker.makeTextButton("stripe", e -> openShop(), "Stripe");
 
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText("Ships Remaining");
@@ -190,7 +192,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     configPane.setOnAction(e -> changeStylesheet());
 
     myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel,
-        numPiecesLabel, goldLabel, shopButton,
+        numPiecesLabel, goldLabel, shopButton, stripeButton,
         piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
