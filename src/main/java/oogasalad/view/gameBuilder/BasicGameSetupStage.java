@@ -23,6 +23,7 @@ public class BasicGameSetupStage extends BuilderStage {
     availablePlayerTypes = getMyBuilderResources().getString("possiblePlayerType");
     needEngineTypes = getMyBuilderResources().getString("needsEngineSelection");
     myPane.setTop(makePlayerSelectionBox());
+    myPane.setRight(setUpObjectView());
     selectedEngineType = getMyBuilderResources().getString("BlankEngineState");
 
     makeContinueButton();
@@ -30,16 +31,19 @@ public class BasicGameSetupStage extends BuilderStage {
   }
 
   private HBox makePlayerSelectionBox() {
+    HBox result = new HBox();
     playerSelectionBox = new HBox();
     ComboBox comboBox = makeComboBox(availablePlayerTypes.split(","));
-    playerSelectionBox.getChildren().add(comboBox);
-    playerSelectionBox.getChildren().add(makeButton("Select", e -> handlePlayerSelection(comboBox)));
+    result.getChildren().add(comboBox);
+    result.getChildren()
+        .addAll(makeButton("Select", e -> handlePlayerSelection(comboBox)), playerSelectionBox);
 
-    return playerSelectionBox;
+    return result;
   }
 
   private void resetSelection() {
-    engineTypeComboBox=null;
+    playerSelectionBox.getChildren().clear();
+    engineTypeComboBox = null;
   }
 
   private void handlePlayerSelection(ComboBox comboBox) {
@@ -51,7 +55,7 @@ public class BasicGameSetupStage extends BuilderStage {
         addEngineSelectionOption(playerSelectionBox, selection);
       }
       playerSelectionBox.getChildren()
-          .add(makeButton("Add Player", e->addSavePlayerButton(selection, engineTypeComboBox)));
+          .add(makeButton("Add Player", e -> addSavePlayerButton(selection, engineTypeComboBox)));
 
 
     } catch (NullPointerException e) {
@@ -62,18 +66,20 @@ public class BasicGameSetupStage extends BuilderStage {
 
   private void addSavePlayerButton(String selectedPlayerType,
       ComboBox engineTypeComboBox) {
-    if (engineTypeComboBox!=null) {
+    if (engineTypeComboBox != null) {
       try {
         selectedEngineType = engineTypeComboBox.getValue().toString();
       } catch (NullPointerException e) {
 
       }
     }
-    System.out.println(selectedPlayerType+selectedEngineType);
+    addToObjectList(selectedPlayerType + selectedEngineType);
+
 
   }
 
   private void addEngineSelectionOption(HBox result, String selection) {
+    resetSelection();
     String[] engineOptions = getMyBuilderResources().getString(selection + "EngineOption")
         .split(",");
     engineTypeComboBox = makeComboBox(engineOptions);
