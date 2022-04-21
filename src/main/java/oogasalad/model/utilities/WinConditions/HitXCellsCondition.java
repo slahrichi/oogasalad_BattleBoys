@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class HitXCellsCondition extends WinCondition{
 
-  private static final Logger LOG = LogManager.getLogger(HaveXGoldWinCondition.class);
+  private static final Logger LOG = LogManager.getLogger(HitXCellsCondition.class);
   private CellState myCellToHit;
   private int myNumToHit;
   private WinState myConditionType;
@@ -28,7 +28,13 @@ public class HitXCellsCondition extends WinCondition{
   public Function<PlayerRecord, WinState> getWinLambda() {
     return (PlayerRecord playerInfo) -> {
       Map<CellState, Integer> playerHitsMap = playerInfo.hitsMap();
-      int playerNumHit = playerHitsMap.get(myCellToHit);
+      int playerNumHit;
+      if(playerHitsMap.containsKey(myCellToHit)) {
+        playerNumHit = playerHitsMap.get(myCellToHit);
+      }
+      else {
+        playerNumHit = 0;
+      }
       LOG.info(String.format("Player has %d out of %d %s to %s", playerNumHit, myNumToHit, myCellToHit, myConditionType));
       if(playerNumHit >= myNumToHit){
         return myConditionType;
