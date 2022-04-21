@@ -11,9 +11,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -33,11 +35,14 @@ public class PieceDesignStage extends BuilderStage {
   private final Color DEFAULT_ACTIVE_COLOR = Color.LIME;
   private Consumer<String> pathUpdateConsumer;
   private String availablePieceTypes;
-  private final ListView<String> listView = new ListView<>();
-  private ObservableList<String> items = FXCollections.observableArrayList();
+  private final ListView<String> pathListView = new ListView<>();
+  private ObservableList<String> piecePathList = FXCollections.observableArrayList();
   private final int MAX_LIST_WIDTH = 100;
   private final int MAX_LIST_HEIGHT = 400;
   private final double CELL_SIZE = 20;
+  private TextArea idInputBox;
+  private final String DEFAULT_PIECE_NAME = "Custom Piece";
+
   private String[] customizableStats;
   private Stage myStage;
 
@@ -50,14 +55,15 @@ public class PieceDesignStage extends BuilderStage {
     initializeCharacteristicMatrix();
     pathUpdateConsumer = e -> updatePath(e);
 
-    listView.setItems(items);
-    listView.setMaxSize(MAX_LIST_WIDTH, MAX_LIST_HEIGHT);
+    pathListView.setItems(piecePathList);
+    pathListView.setMaxSize(MAX_LIST_WIDTH, MAX_LIST_HEIGHT);
+
+    myPane.setRight(setUpObjectView());
 
     colorList.add(DEFAULT_INACTIVE_COLOR);
     colorList.add(DEFAULT_ACTIVE_COLOR);
 
     myPane.setTop(makeSelectionComboBox(availablePieceTypes.split(",")));
-    myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
     myPane.setBottom(makeContinueButton());
     myStage = new Stage();
 
@@ -102,7 +108,7 @@ public class PieceDesignStage extends BuilderStage {
   private void resetCustomization() {
     myPane.setCenter(null);
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
-    items.clear();
+    piecePathList.clear();
     myPane.setLeft(null);
   }
 
@@ -146,13 +152,23 @@ public class PieceDesignStage extends BuilderStage {
         result.getChildren()
             .add(makeComboBoxWithVariable(reqVars, "Add to Path", pathUpdateConsumer));
       }
-      myPane.setLeft(listView);
-      myPane.setCenter(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, CELL_SIZE, CELL_SIZE, stateMap));
+      myPane.setLeft(pathListView);
+      idInputBox = makeTextAreaWithDefaultValue(DEFAULT_PIECE_NAME);
+      myPane.setCenter(
+          new VBox(idInputBox,
+              new HBox(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, CELL_SIZE, CELL_SIZE, stateMap),
+                  displayColorChoice(DEFAULT_STATE_OPTIONS, colorList)),
+              makeButton("Save Piece", e -> savePiece())));
     }
   }
 
+  private void savePiece() {
+    addToObjectList(idInputBox.getText());
+    resetCustomization();
+  }
+
   private void updatePath(String path) {
-    items.add(path);
+    piecePathList.add(path);
   }
 
   private void findReferencePoint() {
