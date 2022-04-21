@@ -90,7 +90,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     currentPlayerNumber = 1;
     currentPlayerName = "Player";
     nextToPlace = new ArrayList<>();
-
+    myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     SCREEN_TITLE = myResources.getString("SetupTitlePrefix");
     createTitlePanel();
     createBottomPanel();
@@ -103,7 +103,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     passComputerMessageView = new PassComputerMessageView();
     passComputerMessageView.setButtonOnMouseClicked(e -> {
       myScene.setRoot(myPane);
-      updateTitle("Player");
+      updateTitle("Player " + currentPlayerNumber);
       promptForName();
     });
   }
@@ -118,7 +118,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public Scene getScene() {
-    myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     myScene.getStylesheets()
         .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     return myScene;
@@ -244,20 +243,25 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     dialog.setTitle("Setup");
     dialog.setHeaderText(myResources.getString("PromptPrefix") + currentPlayerNumber +  myResources.getString("PromptSuffix"));
     dialog.setContentText(myResources.getString("PromptLabel"));
+    dialog.getEditor().setText("Player "+ currentPlayerNumber);
+    dialog.getEditor().textProperty().addListener(e -> updateTitle(dialog.getEditor().getText()));
     dialog.getEditor().setId("player-name");
     dialog.getDialogPane().lookupButton(ButtonType.OK).setId("ok-button");
     Optional<String> result = dialog.showAndWait();
-
-    result.ifPresent(name -> {
-      currentPlayerName = name;
-      updateTitle(currentPlayerName);
-      notifyObserver("assignCurrentPlayerName", name);
-    });
+    String name;
+    if(result.isPresent()) {
+      name = dialog.getEditor().getText();
+    } else {
+      name = "Player " + currentPlayerNumber;
+    }
+    currentPlayerName = name;
+    updateTitle(currentPlayerName);
+    notifyObserver("assignCurrentPlayerName", name);
   }
 
   // FIXME: Make it so that we take player number from the player's list
 
-  private void switchPlayerMessage(String nextPlayer) {
+  public void displayPassComputerMessage(String nextPlayer) {
     passComputerMessageView.setPlayerName(nextPlayer);
     myScene.setRoot(passComputerMessageView);
   }
@@ -265,7 +269,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private void updateTitle(String playerName) {
     myTitle.changeTitle(playerName + SCREEN_TITLE);
   }
-
 
   @Override
   public void placePiece(Collection<Coordinate> coords, CellState type) {

@@ -136,13 +136,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     createPassMessageView();
     initializePiecesLeft(initialPiecesLeft);
   }
-
-  public void updateLabels(int shots, int numPieces, int gold) {
-    shotsRemainingLabel.changeDynamicText(String.valueOf(shots));
-    numPiecesLabel.changeDynamicText(String.valueOf(numPieces));
-    goldLabel.changeDynamicText(String.valueOf(gold));
-  }
-
   private void createPassMessageView() {
     passComputerMessageView = new PassComputerMessageView();
     passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
@@ -405,6 +398,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     LOG.info(name + " " + myResources.getString("LostSuffix"));
   }
 
+  public void updateLabels(int shotsRemaining, int numPiecesRemaining, int amountOfGold) {
+    setNumShotsRemaining(shotsRemaining);
+    setNumPiecesRemaining(numPiecesRemaining);
+    setGold(amountOfGold);
+  }
+
   /**
    * Updates the user's side-view to show which of the opponent's ships are still alive.
    *
@@ -436,24 +435,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     goldLabel.changeDynamicText(String.valueOf(amountOfGold));
   }
 
-//  /**
-//   * Updates the text that shows the user whose turn it currently is.
-//   *
-//   * @param playerName name or ID of player whose turn it is
-//   */
-//  @Override
-//  public void setPlayerTurnIndicator(String playerName) {
-//
-//  }
-
   /**
    * Updates the text that shows how much health the current player has left.
    *
-   * @param healthRemaining amount of health points remaiing
+   * @param numPiecesRemaining number of pieces remaiing
    */
   @Override
-  public void setHealthRemaining(int healthRemaining) {
-    numPiecesLabel.changeDynamicText(String.valueOf(healthRemaining));
+  public void setNumPiecesRemaining(int numPiecesRemaining) {
+    numPiecesLabel.changeDynamicText(String.valueOf(numPiecesRemaining));
   }
 
   @Override
