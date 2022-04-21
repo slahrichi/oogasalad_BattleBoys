@@ -1,8 +1,7 @@
-package oogasalad.model.utilities.WinConditions;
+package oogasalad.model.utilities.winconditions;
 
 import java.util.function.Function;
 import oogasalad.model.players.PlayerRecord;
-import oogasalad.model.utilities.Board;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

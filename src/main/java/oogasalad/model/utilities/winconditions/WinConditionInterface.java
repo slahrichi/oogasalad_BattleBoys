@@ -1,10 +1,8 @@
-package oogasalad.model.utilities.WinConditions;
+package oogasalad.model.utilities.winconditions;
 
-import java.util.Collection;
 import java.util.function.Function;
 import oogasalad.model.players.Player;
 import oogasalad.model.players.PlayerRecord;
-import oogasalad.model.utilities.Board;
 
 /**
  * WinCondition API analyzes the board state for every player in order to check/determine if a player has

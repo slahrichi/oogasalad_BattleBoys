@@ -315,7 +315,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     int col = info.col();
     LOG.info("cellClickedSelf");
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver("selfBoardClicked", info);
+    notifyObserver("applyUsable", info);
   }
 
   private void cellClickedEnemy(Info info) {

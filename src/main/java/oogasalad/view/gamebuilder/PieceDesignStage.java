@@ -1,4 +1,4 @@
-package oogasalad.view.gameBuilder;
+package oogasalad.view.gamebuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
