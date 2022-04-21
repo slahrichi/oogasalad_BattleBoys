@@ -140,13 +140,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     createPassMessageView();
     initializePiecesLeft(initialPiecesLeft);
   }
-
-  public void updateLabels(int shots, int numPieces, int gold) {
-    shotsRemainingLabel.changeDynamicText(String.valueOf(shots));
-    numPiecesLabel.changeDynamicText(String.valueOf(numPieces));
-    goldLabel.changeDynamicText(String.valueOf(gold));
-  }
-
   private void createPassMessageView() {
     passComputerMessageView = new PassComputerMessageView();
     passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
@@ -229,7 +222,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createTitlePanel() {
-    myTitle = new TitlePanel("Player 1's Turn");
+    myTitle = new TitlePanel("");
+    updateTitle(playerIDToNames.get(myBoards.get(currentBoardIndex).getID()));
     myTitle.setId("game-title");
     myPane.setTop(myTitle);
   }
@@ -418,6 +412,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     LOG.info(name + " " + myResources.getString("LostSuffix"));
   }
 
+  public void updateLabels(int shotsRemaining, int numPiecesRemaining, int amountOfGold) {
+    setNumShotsRemaining(shotsRemaining);
+    setNumPiecesRemaining(numPiecesRemaining);
+    setGold(amountOfGold);
+  }
+
   /**
    * Updates the user's side-view to show which of the opponent's ships are still alive.
    *
@@ -449,24 +449,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     goldLabel.changeDynamicText(String.valueOf(amountOfGold));
   }
 
-//  /**
-//   * Updates the text that shows the user whose turn it currently is.
-//   *
-//   * @param playerName name or ID of player whose turn it is
-//   */
-//  @Override
-//  public void setPlayerTurnIndicator(String playerName) {
-//
-//  }
-
   /**
-   * Updates the text that shows how much health the current player has left.
+   * Updates the text that shows how many living pieces the current player has left.
    *
-   * @param healthRemaining amount of health points remaiing
+   * @param numPiecesRemaining number of pieces remaiing
    */
   @Override
-  public void setHealthRemaining(int healthRemaining) {
-    numPiecesLabel.changeDynamicText(String.valueOf(healthRemaining));
+  public void setNumPiecesRemaining(int numPiecesRemaining) {
+    numPiecesLabel.changeDynamicText(String.valueOf(numPiecesRemaining));
   }
 
   @Override
@@ -510,7 +500,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList,
       List<Collection<Collection<Coordinate>>> pieceList) {
-    switchPlayerMessage(" " + (idList.get(0) + 1));
+    switchPlayerMessage(playerIDToNames.get(idList.get(0)));
     myBoards.clear();
     myPiecesLeft = pieceList;
     currentBoardIndex = 0;
@@ -519,10 +509,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     updateTitle(playerIDToNames.get(firstID));
     updateDisplayedBoard();
   }
-
-//  public void updateCurrentPlayerName(String name) {
-//    updateTitle(name);
-//
 
   public void displayAIMove(int id, List<Info> shots) {
     String message = "";

@@ -41,11 +41,11 @@ public interface GameDataVisualizer {
 //  void setPlayerTurnIndicator(String playerName);
 
   /**
-   * Updates the text that shows how much health the current player has left.
+   * Updates the text that shows how many living pieces the current player has left.
    *
-   * @param healthRemaining amount of health points remaiing
+   * @param numPiecesRemaining number of pieces remaining
    */
-  void setHealthRemaining(int healthRemaining);
+  void setNumPiecesRemaining(int numPiecesRemaining);
 
 
 
