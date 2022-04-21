@@ -4,12 +4,11 @@ import java.util.Map;
 import java.util.function.Function;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.WinConditions.WinState;
-import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
 
 /**
  * Whether an AI or an actual player, participants in a game have fundamental moves they can make.
@@ -32,9 +31,9 @@ public interface Player {
      * Players are able to make purchases from in-game shop, and items are added to their inventory
      *
      * @param amount cost of item
-     * @param item   item to be added
+     * @param usable   usable to be added
      */
-    public void makePurchase(int amount, Item item);
+    public void makePurchase(int amount, Usable usable);
 
 
     /**

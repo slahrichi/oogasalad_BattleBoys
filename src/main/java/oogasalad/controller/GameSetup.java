@@ -48,11 +48,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   /**
    *
-   * @param data GameData object used to standarize elements such as a generic game board, the
+   * @param data GameData object used to standardize elements such as a generic game board, the
    * players involved in the game, and the pieces they are allowed to place
    *
    */
-  public GameSetup(GameData data, ResourceBundle resourceBundle){
+  public GameSetup(GameData data, ResourceBundle resourceBundle) {
     this.playerList = data.players();
     this.board = data.board();
     this.pieceList = data.pieces();
@@ -68,9 +68,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     pieceList.add(new MovingPiece(movingShipCells, relativeCoordinates, patrolPath, "5"));
      */
 
-
     this.pieceIndex = 0;
-    this.playerIndex = 0;
+    this.playerIndex = -1;
     this.lastPlacedAbsoluteCoords = new Stack<>();
     this.myResources = resourceBundle;
     this.engineMap = data.engineMap();
@@ -89,12 +88,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private void initializeSetupView() {
     setupView = new SetupView(board, myResources);
     setupView.addObserver(this);
+    moveToNextPlayer("");
     setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
-    setupView.promptForName();
   }
 
   /**
-   *
    * @return Scene object storing the SetupView
    */
   public Scene createScene() {
@@ -103,6 +101,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   /**
    * listener that takes in a Coordinate and then checks with the backend if the choice is valid
+   *
    * @param evt PropertyChangeEvent storing the Coordinate at which a Player selected in the view
    */
   @Override
@@ -151,15 +150,15 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     Piece piece = pieceList.get(pieceIndex).copyOf();
     if (player.placePiece(piece, new Coordinate(row, col))) {
       updatePiece(piece);
-    }
-    else {
+    } else {
       setupView.showError(String.format(COORD_ERROR, row, col));
     }
   }
 
   private void moveToNextPlayer(String s) {
     playerIndex++;
-    if(playerIndex >= playerList.size()) {
+    setupView.displayPassComputerMessage("Player " + (playerIndex + 1));
+    if (playerIndex >= playerList.size()) {
       notifyObserver("startGame", null);
       return;
     }
@@ -177,6 +176,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
         placePiece(coord);
       }
       //have setupView show that AI has placed pieces
+
       setupView.handleConfirm();
     }
   }
@@ -202,8 +202,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     pieceIndex++;
     if (pieceIndex != pieceList.size()) {
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
-    }
-    else {
+    } else {
       setupView.displayCompletion();
       setupView.activateConfirm();
     }
