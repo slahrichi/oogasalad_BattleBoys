@@ -45,7 +45,7 @@ public interface GameDataVisualizer {
    *
    * @param healthRemaining amount of health points remaiing
    */
-  void setHealthRemaining(int healthRemaining);
+  void setNumPiecesRemaining(int numPiecesRemaining);
 
 
 
