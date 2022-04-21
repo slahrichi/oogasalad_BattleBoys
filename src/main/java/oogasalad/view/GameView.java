@@ -209,7 +209,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createTitlePanel() {
-    myTitle = new TitlePanel("Player 1's Turn");
+    myTitle = new TitlePanel("");
+    updateTitle(playerIDToNames.get(myBoards.get(currentBoardIndex).getID()));
     myTitle.setId("game-title");
     myPane.setTop(myTitle);
   }
@@ -436,7 +437,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   /**
-   * Updates the text that shows how much health the current player has left.
+   * Updates the text that shows how many living pieces the current player has left.
    *
    * @param numPiecesRemaining number of pieces remaiing
    */
@@ -486,7 +487,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList,
       List<Collection<Collection<Coordinate>>> pieceList) {
-    switchPlayerMessage(" " + (idList.get(0) + 1));
+    switchPlayerMessage(playerIDToNames.get(idList.get(0)));
     myBoards.clear();
     myPiecesLeft = pieceList;
     currentBoardIndex = 0;
@@ -495,10 +496,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     updateTitle(playerIDToNames.get(firstID));
     updateDisplayedBoard();
   }
-
-//  public void updateCurrentPlayerName(String name) {
-//    updateTitle(name);
-//
 
   public void displayAIMove(int id, List<Info> shots) {
     String message = "";

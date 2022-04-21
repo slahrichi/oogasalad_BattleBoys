@@ -90,7 +90,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     setupView.addObserver(this);
     moveToNextPlayer("");
     setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
-    setupView.promptForName();
   }
 
   /**

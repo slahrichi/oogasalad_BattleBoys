@@ -19,7 +19,7 @@ public class PassComputerMessageView extends VBox {
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "stylesheets/messageStylesheet.css";
 
-  private static String PASS_MESSAGE = "Please pass the computer to player";
+  private static String PASS_MESSAGE = "Please pass the computer to ";
   private static String BUTTON_TEXT = "OK";
   private Label messageLabel;
   private Button confirmButton;
