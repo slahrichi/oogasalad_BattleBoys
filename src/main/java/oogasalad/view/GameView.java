@@ -2,8 +2,10 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -33,6 +35,7 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+import oogasalad.com.stripe.StripeIntegration;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -176,7 +179,15 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createRightPane() {
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
-    stripeButton = ButtonMaker.makeTextButton("stripe", e -> openShop(), "Stripe");
+    stripeButton = ButtonMaker.makeTextButton("stripe", e -> {
+      try {
+        new StripeIntegration();
+      } catch (URISyntaxException ex) {
+        ex.printStackTrace();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+    }, "Stripe");
 
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText("Ships Remaining");

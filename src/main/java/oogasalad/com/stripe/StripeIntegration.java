@@ -1,4 +1,4 @@
-package oogasalad.stripe;
+package oogasalad.com.stripe;
 
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
