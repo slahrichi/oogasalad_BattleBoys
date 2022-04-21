@@ -8,4 +8,5 @@ import oogasalad.model.utilities.usables.Usable;
 
 public record PlayerRecord(int myHealth, int myCurrency, Map<Usable, Integer> itemList, Board myBoard) {
 
+
 }

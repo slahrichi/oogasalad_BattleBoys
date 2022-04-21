@@ -86,5 +86,6 @@ public interface Player {
 
     int getMyCurrency();
 
+    void updateShot(CellState hitResult); // new method for updating hitsMap
 }
 

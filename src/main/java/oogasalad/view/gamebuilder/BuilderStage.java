@@ -1,41 +1,103 @@
 package oogasalad.view.gamebuilder;
 
+import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import oogasalad.view.maker.LabelMaker;
 
 public abstract class BuilderStage {
 
   private ResourceBundle myBuilderResources;
   private int selectedType;
   private List<Rectangle> colorOptionList = new ArrayList<>();
+  private String itemID;
+  private Stage myStage;
+  private final ListView<String> objectsListView = new ListView<>();
+  private ObservableList<String> objectList = FXCollections.observableArrayList();
+
+  private static final int DEFAULT_INPUT_BOX_WIDTH = 120;
+  private static final int DEFAULT_INPUT_BOX_HEIGHT = 30;
+  private static final int MAX_OBJECT_LIST_WIDTH = 100;
+  private static final int MAX_OBJECT_LIST_HEIGHT = 400;
 
   public BuilderStage() {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
+  }
+
+  protected ListView setUpObjectView() {
+    objectsListView.setItems(objectList);
+    objectsListView.setMaxSize(MAX_OBJECT_LIST_WIDTH, MAX_OBJECT_LIST_HEIGHT);
+    return objectsListView;
+  }
+
+  protected void addToObjectList(String s) {
+    objectList.add(s);
+  }
+
+  protected void clearObjectList() {
+    objectList.clear();
   }
 
   protected ResourceBundle getMyBuilderResources() {
     return myBuilderResources;
   }
 
-  protected int[][] initializeBlankMap(int height, int width) {
+  protected void setUpStage(BorderPane myPane) {
+    myStage = new Stage();
+    myStage.setScene(getScene(myPane));
+    myStage.showAndWait();
+  }
+
+  protected void closeWindow() {
+    myStage.close();
+  }
+
+  public Scene getScene(BorderPane myPane) {
+    return new Scene(myPane, 900, 500);
+  }
+
+  protected int[][] initializeMatrixWithValue(int height, int width, int initialValue) {
     int[][] stateMap = new int[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        stateMap[i][j] = 0;
+        stateMap[i][j] = initialValue;
       }
     }
     return stateMap;
+  }
+
+  protected Object createInstance(String className, Class<?>[] parameterTypes, Object[] parameters)
+      throws IOException {
+
+    try {
+      Class<?> clazz = Class.forName(className);
+      Constructor<?> constructor = clazz.getConstructor(parameterTypes);
+      return constructor.newInstance(parameters);
+    } catch (Error | Exception e) {
+      e.printStackTrace();
+      throw new IOException(String.format("Class parsing failed: %s className"));
+    }
+
   }
 
   protected Button makeButton(String name, EventHandler<ActionEvent> handler) {
@@ -45,8 +107,34 @@ public abstract class BuilderStage {
     return result;
   }
 
+  protected TextArea makeTextArea() {
+    TextArea result = new TextArea();
+    result.setMaxSize(DEFAULT_INPUT_BOX_WIDTH, DEFAULT_INPUT_BOX_HEIGHT);
 
-  protected Group arrangeCells(int height, int width, double cellHeight,double cellWidth, int[][] stateMap) {
+    return result;
+  }
+
+  protected TextArea makeTextAreaWithDefaultValue(String text) {
+    TextArea result = makeTextArea();
+    result.setText(text);
+    return result;
+  }
+
+  protected HBox makeComboBoxWithVariable(String[] options, String buttonText,
+      Consumer<String> consumer) {
+
+    TextArea infoBox = new TextArea();
+    ComboBox comboBox = makeComboBox(options);
+    infoBox.setMaxSize(50, 20);
+    HBox result = new HBox(comboBox);
+    result.getChildren().add(infoBox);
+    result.getChildren()
+        .add(makeButton(buttonText, e -> consumer.accept(comboBox.getValue() + infoBox.getText())));
+    return result;
+  }
+
+  protected Group arrangeCells(int height, int width, double cellHeight, double cellWidth,
+      int[][] stateMap) {
     Group cellGroup = new Group();
     double xPos;
     double yPos = 0;
@@ -54,7 +142,6 @@ public abstract class BuilderStage {
       xPos = 0;
       for (int j = 0; j < width; j++) {
         cellGroup.getChildren().add(createCell(xPos, yPos, i, j, stateMap[i][j]));
-
         xPos = xPos + cellWidth;
       }
       yPos = yPos + cellHeight;
@@ -126,7 +213,12 @@ public abstract class BuilderStage {
     return comboBox;
   }
 
+  protected HBox makeIdInput(String defaultId) {
+    return new HBox(LabelMaker.makeLabel("id:", "id" + "_label"),
+        makeTextAreaWithDefaultValue(defaultId));
+  }
+
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);
 
-  protected abstract void saveAndContinue();
+  protected abstract Object saveAndContinue();
 }

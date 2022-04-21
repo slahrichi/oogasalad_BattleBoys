@@ -14,6 +14,6 @@ public class GameSetupView extends Application{
   public void start(Stage stage) throws Exception {
     Stage nstage= new Stage();
     ColorSelectionStage b =new ColorSelectionStage();
-    //BoardSetUpStage bb = new BoardSetUpStage();
+    BoardSetUpStage bb = new BoardSetUpStage();
   }
 }
