@@ -2,17 +2,19 @@ package oogasalad.view.gameBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -30,12 +32,30 @@ public abstract class BuilderStage {
   private List<Rectangle> colorOptionList = new ArrayList<>();
   private String itemID;
   private Stage myStage;
+  private final ListView<String> objectsListView = new ListView<>();
+  private ObservableList<String> objectList = FXCollections.observableArrayList();
 
-  private static final int DEFAULT_INPUT_BOX_WIDTH = 60;
-  private static final int DEFAULT_INPUT_BOX_HEIGHT = 20;
+  private static final int DEFAULT_INPUT_BOX_WIDTH = 120;
+  private static final int DEFAULT_INPUT_BOX_HEIGHT = 30;
+  private static final int MAX_OBJECT_LIST_WIDTH = 100;
+  private static final int MAX_OBJECT_LIST_HEIGHT = 400;
 
   public BuilderStage() {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
+  }
+
+  protected ListView setUpObjectView() {
+    objectsListView.setItems(objectList);
+    objectsListView.setMaxSize(MAX_OBJECT_LIST_WIDTH, MAX_OBJECT_LIST_HEIGHT);
+    return objectsListView;
+  }
+
+  protected void addToObjectList(String s) {
+    objectList.add(s);
+  }
+
+  protected void clearObjectList() {
+    objectList.clear();
   }
 
   protected ResourceBundle getMyBuilderResources() {
@@ -48,13 +68,15 @@ public abstract class BuilderStage {
     myStage.showAndWait();
   }
 
-  protected void closeWindow(){myStage.close();}
+  protected void closeWindow() {
+    myStage.close();
+  }
 
   public Scene getScene(BorderPane myPane) {
     return new Scene(myPane, 900, 500);
   }
 
-  protected int[][] initializeMatrixWithValue(int height, int width,int initialValue) {
+  protected int[][] initializeMatrixWithValue(int height, int width, int initialValue) {
     int[][] stateMap = new int[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
@@ -64,11 +86,12 @@ public abstract class BuilderStage {
     return stateMap;
   }
 
-  protected Object createInstance(String className, Class<?>[] parameterTypes, Object[] parameters) throws IOException {
+  protected Object createInstance(String className, Class<?>[] parameterTypes, Object[] parameters)
+      throws IOException {
 
     try {
       Class<?> clazz = Class.forName(className);
-      Constructor<?> constructor =clazz.getConstructor(parameterTypes);
+      Constructor<?> constructor = clazz.getConstructor(parameterTypes);
       return constructor.newInstance(parameters);
     } catch (Error | Exception e) {
       e.printStackTrace();
@@ -76,6 +99,7 @@ public abstract class BuilderStage {
     }
 
   }
+
   protected Button makeButton(String name, EventHandler<ActionEvent> handler) {
     Button result = new Button(name);
     result.setOnAction(handler);
@@ -90,10 +114,10 @@ public abstract class BuilderStage {
     return result;
   }
 
-  protected TextArea makeTextAreaWithDefaultValue(String text){
+  protected TextArea makeTextAreaWithDefaultValue(String text) {
     TextArea result = makeTextArea();
     result.setText(text);
-    return  result;
+    return result;
   }
 
   protected HBox makeComboBoxWithVariable(String[] options, String buttonText,
@@ -109,7 +133,8 @@ public abstract class BuilderStage {
     return result;
   }
 
-  protected Group arrangeCells(int height, int width, double cellHeight,double cellWidth, int[][] stateMap) {
+  protected Group arrangeCells(int height, int width, double cellHeight, double cellWidth,
+      int[][] stateMap) {
     Group cellGroup = new Group();
     double xPos;
     double yPos = 0;
@@ -188,8 +213,9 @@ public abstract class BuilderStage {
     return comboBox;
   }
 
-  protected HBox makeIdInput(){
-    return new HBox(LabelMaker.makeLabel("id:", "id" + "_label"), makeTextArea());
+  protected HBox makeIdInput(String defaultId) {
+    return new HBox(LabelMaker.makeLabel("id:", "id" + "_label"),
+        makeTextAreaWithDefaultValue(defaultId));
   }
 
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);
