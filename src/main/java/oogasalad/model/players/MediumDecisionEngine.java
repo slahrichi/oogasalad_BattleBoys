@@ -11,9 +11,6 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class MediumDecisionEngine extends DecisionEngine {
 
-  private static final int[] ROW_DELTA = new int[]{-1, 0, 1, 1, -1, -1, 0, 1};
-  private static final int[] COL_DELTA = new int[]{-1, 1, 0, 1, 0, 1, -1, -1};
-
   public MediumDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player) {
     super(coordinateList, enemyMap, player);
@@ -65,8 +62,7 @@ public class MediumDecisionEngine extends DecisionEngine {
   }
 
   private void prepareBFS() {
-    for (int i = 0; i < ROW_DELTA.length; i++) {
-      Coordinate c = new Coordinate(ROW_DELTA[i], COL_DELTA[i]);
+    for (Coordinate c : generateCoordinates()) {
       if (getCoordinateList().contains(c)) {
         getDeque().addLast(new EngineRecord(c, getCurrentPlayer()));
       }

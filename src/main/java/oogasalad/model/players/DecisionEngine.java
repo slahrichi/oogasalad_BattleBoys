@@ -2,6 +2,7 @@ package oogasalad.model.players;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,10 @@ public abstract class DecisionEngine {
   private EngineRecord myLastShot;
   private int pieceIndex;
   private int currentPlayer;
+
+  private static final int[] ROW_DELTA = new int[]{-1, 0, 1, 1, -1, -1, 0, 1};
+  private static final int[] COL_DELTA = new int[]{-1, 1, 0, 1, 0, 1, -1, -1};
+
 
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player) {
@@ -102,4 +107,13 @@ public abstract class DecisionEngine {
   }
 
   public abstract void resetStrategy();
+
+  protected List<Coordinate> generateCoordinates() {
+    List<Coordinate> coordinates = new ArrayList<>();
+    for (int i = 0; i < ROW_DELTA.length; i++) {
+      coordinates.add(new Coordinate(ROW_DELTA[i], COL_DELTA[i]));
+    }
+    Collections.shuffle(coordinates);
+    return coordinates;
+  }
 }
