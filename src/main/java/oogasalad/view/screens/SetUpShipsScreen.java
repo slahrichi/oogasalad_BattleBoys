@@ -1,5 +1,6 @@
 package oogasalad.view.screens;
 
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -9,18 +10,21 @@ import oogasalad.view.maker.LabelMaker;
 
 public class SetUpShipsScreen extends AbstractScreen {
 
-  private static final String SETUP_SHIPS_MESSAGE = "Get ready to set up your pieces!";
+  private static final String SETUP_SHIPS_RESOURCE = "SetupShipsMessage";
+  private static final double SPACING = 20;
+  private static final String SETUP_SHIPS_SCREEN_ID = "setup-ships-screen";
+  private static final String SETUP_SHIPS_LABEL_ID = "setup-ships-screen-label";
 
   /**
    * Class constructor.
    */
-  public SetUpShipsScreen() {
-    super(20, Pos.CENTER, null);
+  public SetUpShipsScreen(ResourceBundle resourceBundle) {
+    super(SPACING, Pos.CENTER, null, resourceBundle);
 
     // Remove the button reference from children nodes
     getChildren().remove(getChildren().size() - 1);
 
-    setId("setup-ships-screen");
+    setId(SETUP_SHIPS_SCREEN_ID);
   }
 
   /**
@@ -30,7 +34,7 @@ public class SetUpShipsScreen extends AbstractScreen {
    */
   @Override
   protected Label createMainLabel() {
-    return LabelMaker.makeLabel(SETUP_SHIPS_MESSAGE, "setup-ships-screen-label");
+    return LabelMaker.makeLabel(myResources.getString(SETUP_SHIPS_RESOURCE), SETUP_SHIPS_LABEL_ID);
   }
 
   /**

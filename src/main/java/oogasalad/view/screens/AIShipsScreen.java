@@ -1,5 +1,6 @@
 package oogasalad.view.screens;
 
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -19,8 +20,8 @@ public class AIShipsScreen extends AbstractScreen{
    * @param handler   On click handler for main button
    */
   public AIShipsScreen(double spacing, Pos alignment,
-      EventHandler<ActionEvent> handler) {
-    super(spacing, alignment, handler);
+      EventHandler<ActionEvent> handler, ResourceBundle resourceBundle) {
+    super(spacing, alignment, handler, resourceBundle);
 
     setId("ai-ships-screen");
   }

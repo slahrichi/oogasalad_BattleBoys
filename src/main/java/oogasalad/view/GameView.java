@@ -50,7 +50,6 @@ import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.screens.AbstractScreen;
-import oogasalad.view.screens.LoserScreen;
 import oogasalad.view.screens.PassComputerScreen;
 import oogasalad.view.screens.WinnerScreen;
 import org.apache.logging.log4j.LogManager;
@@ -78,6 +77,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String SHOT_METHOD = "handleShot";
   private static final double BOARD_SIZE = 50;
   private static final int EXPLOSION_DURATION = 1000;
+
+  private static final String BOARD_INDEX_LOG = "Current board index: ";
+  private static final String BOARD_SHOW_LOG = "Showing board ";
+  private static final String CELL_CLICKED_SELF_LOG = "cellClickedSelf";
 
   // ResourceBundle Strings
 
@@ -160,7 +163,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     initializePiecesLeft(initialPiecesLeft);
   }
   private void createPassMessageView() {
-    passComputerMessageView = new PassComputerScreen(e -> myScene.setRoot(myPane));
+    passComputerMessageView = new PassComputerScreen(e -> myScene.setRoot(myPane), myResources);
   }
 
   public void initializePiecesLeft(Collection<Collection<Coordinate>> piecesLeft) {
@@ -201,7 +204,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     numPiecesLabel = LabelMaker.makeDynamicLabel(myResources.getString(PIECES_LEFT_RESOURCE), "", "num-pieces-label");
     goldLabel = LabelMaker.makeDynamicLabel(myResources.getString(GOLD_LEFT_RESOURCE), "", "gold-label");
 
-    configPane = new ConfigPane();
+    configPane = new ConfigPane(myResources);
     configPane.setText(myResources.getString(CONFIG_TEXT_RESOURCE));
 
     configPane.setOnAction(e -> changeStylesheet());
@@ -287,14 +290,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
-    LOG.info("Current board index: " + currentBoardIndex);
+    LOG.info(BOARD_INDEX_LOG + currentBoardIndex);
     currentBoardLabel.setText(currentBoardIndex == 0 ? myResources.getString(YOUR_BOARD_RESOURCE)
         : myResources.getString(SHOTS_AGAINST_RESOURCE) + playerIDToNames.getOrDefault(
             myBoards.get(currentBoardIndex).getID(), myResources.getString(PLAYER_PREFIX_RESOURCE) + (myBoards.get(currentBoardIndex).getID() + 1)));
     refreshCenterPane();
     updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
-    LOG.info("Current board index: " + currentBoardIndex);
-    LOG.info("Showing board " + (myBoards.get(currentBoardIndex).getID() + 1));
+    LOG.info(BOARD_INDEX_LOG + currentBoardIndex);
+    LOG.info(BOARD_SHOW_LOG + (myBoards.get(currentBoardIndex).getID() + 1));
   }
 
   private void refreshCenterPane() {
@@ -331,7 +334,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     int id = info.ID();
     int row = info.row();
     int col = info.col();
-    LOG.info("cellClickedSelf");
+    LOG.info(CELL_CLICKED_SELF_LOG);
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
     notifyObserver("applyUsable", info);
   }
@@ -416,7 +419,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void displayWinningScreen(String name) {
-    WinnerScreen winnerScreen = new WinnerScreen(name);
+    WinnerScreen winnerScreen = new WinnerScreen(myResources, name);
     myScene.setRoot(winnerScreen);
   }
 

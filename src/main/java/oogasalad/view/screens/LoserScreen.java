@@ -1,5 +1,6 @@
 package oogasalad.view.screens;
 
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -20,8 +21,8 @@ public class LoserScreen extends AbstractScreen{
   private static final String LOSE_MESSAGE = " lost the game!";
   private static final String BUTTON_MESSAGE = "Continue";
 
-  public LoserScreen(EventHandler<ActionEvent> buttonHandler, String loserName) {
-    super(20, Pos.CENTER, buttonHandler);
+  public LoserScreen(EventHandler<ActionEvent> buttonHandler, ResourceBundle resourceBundle, String loserName) {
+    super(20, Pos.CENTER, buttonHandler, resourceBundle);
 
     setId("loser-screen");
     mainLabel.setText(loserName + LOSE_MESSAGE);
