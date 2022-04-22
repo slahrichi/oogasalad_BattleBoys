@@ -52,7 +52,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     parser = new Parser();
     ParserData parserData;
     try {
-      parserData = parser.parse("src/main/resources/ExampleDataFile.properties");
+      parserData = parser.parse("data/ExampleDataFile.properties");
     } catch (ParserException e) {
       LOG.error(e);
       parserData = null;
