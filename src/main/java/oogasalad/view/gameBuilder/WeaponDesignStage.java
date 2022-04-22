@@ -1,5 +1,6 @@
 package oogasalad.view.gameBuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Usables.Weapons.Weapon;
 import oogasalad.view.maker.LabelMaker;
 
 public class WeaponDesignStage extends BuilderStage {
@@ -39,6 +41,11 @@ public class WeaponDesignStage extends BuilderStage {
   private final String DEFAULT_WEAPON_ID = "CustomWeapon";
   private TextArea idInputBox;
   private List<Integer> weaponStats;
+  private List<Object> parameterList;
+  private Object[] parameters;
+  private Class<?>[] parameterTypes;
+  private List<Class<?>> parameterTypesList;
+  private List<Weapon> weaponList = new ArrayList<>();
 
   public WeaponDesignStage() {
     colorList.add(DEFAULT_INACTIVE_COLOR);
@@ -55,7 +62,6 @@ public class WeaponDesignStage extends BuilderStage {
 
     Scene myScene = new Scene(myPane, 1000, 500);
     myStage.setScene(myScene);
-    myStage.show();
   }
 
   @Override
@@ -75,6 +81,12 @@ public class WeaponDesignStage extends BuilderStage {
     return newCell;
   }
 
+  @Override
+  protected Object launch() {
+    myStage.showAndWait();
+    return null;
+  }
+
   private void makePopUpDialog(int i, int j) {
     TextInputDialog td = new TextInputDialog(
         String.valueOf(damageMatrix[i][j]));
@@ -91,7 +103,7 @@ public class WeaponDesignStage extends BuilderStage {
   @Override
   protected Object saveAndContinue() {
     myStage.close();
-    BasicGameSetupStage bgds = new BasicGameSetupStage();
+    PlayerSetupStage bgds = new PlayerSetupStage();
     return null;
   }
 
@@ -123,7 +135,7 @@ public class WeaponDesignStage extends BuilderStage {
       if (needsGridDesignOption(selection)) {
         addGridDesignOption();
       }
-      centerPane.getChildren().add(makeButton("Save Weapon",e->saveWeapon(selection)));
+      centerPane.getChildren().add(makeButton("Save Weapon", e -> saveWeapon(selection)));
       myPane.setCenter(centerPane);
 
     } catch (NullPointerException e) {
@@ -132,7 +144,7 @@ public class WeaponDesignStage extends BuilderStage {
     }
   }
 
-  private Boolean needsGridDesignOption(String selection){
+  private Boolean needsGridDesignOption(String selection) {
     return Arrays.stream(needAOEMapList).anyMatch(selection::equals);
   }
 
@@ -158,7 +170,7 @@ public class WeaponDesignStage extends BuilderStage {
     return allInputsValid;
   }
 
-  private void getWeaponStats(){
+  private void getWeaponStats() {
     weaponStats = new ArrayList<>();
     for (String variable : varInputBoxes.keySet()) {
       int currentBoxInput = Integer.parseInt(varInputBoxes.get(variable).getText());
@@ -167,36 +179,57 @@ public class WeaponDesignStage extends BuilderStage {
   }
 
   private void saveWeapon(String selectedWeapon) {
+    parameterList = new ArrayList<>();
+    parameterTypesList = new ArrayList<>();
     if (checkAllInput()) {
-      System.out.println(selectedWeapon);
-      System.out.println(idInputBox.getText());
+      String weaponID = idInputBox.getText();
+      parameterList.add(weaponID);
       getWeaponStats();
-      for(int i : weaponStats){
-        System.out.println(i);
+      for (int i : weaponStats) {
+        parameterList.add(i);
       }
-      if(needsGridDesignOption(selectedWeapon)){
-        translateGridToMap();
+      if (needsGridDesignOption(selectedWeapon)) {
+        parameterList.add(translateGridToMap());
+
       }
-      addToObjectList(idInputBox.getText()+"_"+selectedWeapon);
+      getParameterClasses();
+      addToObjectList(idInputBox.getText() + "_" + selectedWeapon);
       resetSelection();
+      parameters = new Object[parameterList.size()];
+      parameterList.toArray(parameters);
+
+      parameterTypes = new Class<?>[parameterTypesList.size()];
+      parameterTypesList.toArray(parameterTypes);
+      String selectedWeaponClass = "oogasalad.model.utilities.Usables.Weapons."+selectedWeapon;
+      try {
+        weaponList.add((Weapon) createInstance(selectedWeaponClass, parameterTypes, parameters));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
-    //Weapon test= createInstance(selectedWeapon,);
+
   }
 
-  private void translateGridToMap(){
-    Map<Coordinate,Integer> relativeCoordinatesMap = new HashMap<>();
-    for(int i=0; i<MAX_DIMENSION;i++){
-      for(int j=0;j<MAX_DIMENSION;j++){
-        relativeCoordinatesMap.put(new Coordinate(i,j),stateMap[i][j]);
+  private void getParameterClasses() {
+    for (Object param : parameterList) {
+      parameterTypesList.add(param.getClass());
+    }
+  }
+
+  private Map<Coordinate, Integer> translateGridToMap() {
+    Map<Coordinate, Integer> relativeCoordinatesMap = new HashMap<>();
+    for (int i = 0; i < MAX_DIMENSION; i++) {
+      for (int j = 0; j < MAX_DIMENSION; j++) {
+        relativeCoordinatesMap.put(new Coordinate(i, j), stateMap[i][j]);
       }
     }
-
+    return relativeCoordinatesMap;
   }
 
   private void addGridDesignOption() {
     damageMatrix = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
-    stateMap[5][5]=1;
+    stateMap[5][5] = 1;
     centerPane.getChildren().add(new HBox(
         arrangeCells(MAX_DIMENSION, MAX_DIMENSION, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE, stateMap),
         displayColorChoice(DEFAULT_STATE_OPTIONS, colorList)));

@@ -94,6 +94,11 @@ public class BasicGameSetupStage extends BuilderStage {
   }
 
   @Override
+  protected Object launch() {
+    return null;
+  }
+
+  @Override
   protected Object saveAndContinue() {
     closeWindow();
     return null;
