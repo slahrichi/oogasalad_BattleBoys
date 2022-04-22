@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import oogasalad.PlayerData;
+import oogasalad.ParserData;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 public class ParserTest {
 
-  PlayerData examplePlayerData;
+  ParserData exampleParserData;
   Parser parser;
   String PROPERTIES_EXTENSION = "properties";
   private final String DOT = ".";
@@ -77,7 +77,7 @@ public class ParserTest {
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER}};
 
-    examplePlayerData = new PlayerData(players, pieceList, dummyBoard, decisionEngines);
+    exampleParserData = new ParserData(players, pieceList, dummyBoard, decisionEngines);
 
   }
 
@@ -108,8 +108,8 @@ public class ParserTest {
   @Test
   void loadAll() {
     try {
-      PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
-      assertEquals(examplePlayerData, generatedData);
+      ParserData generatedData = parser.parse("src/test/resources/Test.properties");
+      assertEquals(exampleParserData, generatedData);
     } catch(Exception e) {
       fail(String.format("Exception thrown: %s",e.getMessage()));
     }
@@ -118,8 +118,8 @@ public class ParserTest {
   @Test
   void loadBoard()  {
     try {
-      PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
-      assertTrue(Arrays.deepEquals(examplePlayerData.board(), generatedData.board()));
+      ParserData generatedData = parser.parse("src/test/resources/Test.properties");
+      assertTrue(Arrays.deepEquals(exampleParserData.board(), generatedData.board()));
     } catch(Exception e) {
       fail(String.format("Exception thrown: %s",e.getMessage()));
     }
@@ -128,8 +128,8 @@ public class ParserTest {
   @Test
   void loadPlayers()  {
     try {
-      PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
-      assertEquals(examplePlayerData.players(), generatedData.players());
+      ParserData generatedData = parser.parse("src/test/resources/Test.properties");
+      assertEquals(exampleParserData.players(), generatedData.players());
     } catch(Exception e) {
       fail(String.format("Exception thrown: %s",e.getMessage()));
     }
@@ -138,8 +138,8 @@ public class ParserTest {
   @Test
   void loadPieces()  {
     try {
-      PlayerData generatedData = parser.parse("src/test/resources/Test.properties");
-      assertEquals(examplePlayerData.pieces(), generatedData.pieces());
+      ParserData generatedData = parser.parse("src/test/resources/Test.properties");
+      assertEquals(exampleParserData.pieces(), generatedData.pieces());
     } catch(Exception e) {
       fail(String.format("Exception thrown: %s",e.getMessage()));
     }
@@ -211,9 +211,9 @@ public class ParserTest {
   void basicSave() {
     String path = "src/test/resources/BasicSave.properties";
     try {
-      parser.save(examplePlayerData, path);
-      PlayerData check = parser.parse(path);
-      assertEquals(examplePlayerData, check);
+      parser.save(exampleParserData, path);
+      ParserData check = parser.parse(path);
+      assertEquals(exampleParserData, check);
     } catch (ParserException e) {
       fail(e.getMessage());
     }
