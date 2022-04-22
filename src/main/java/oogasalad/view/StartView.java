@@ -20,6 +20,8 @@ public class StartView extends PropertyObservable {
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "stylesheets/startStylesheet.css";
   private static final String TITLE_IMAGE = "images/battleshipTitle.png";
+  private static final double TITLE_WIDTH = 600;
+  private static final double TITLE_HEIGHT = 200;
 
   private Scene myScene;
   private BorderPane myPane;
@@ -49,8 +51,8 @@ public class StartView extends PropertyObservable {
     Image myImage = new Image(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + TITLE_IMAGE).toString(), true);
     myTitle = new ImageView(myImage);
     myTitle.setPreserveRatio(true);
-    myTitle.setFitHeight(200);
-    myTitle.setFitWidth(600);
+    myTitle.setFitHeight(TITLE_HEIGHT);
+    myTitle.setFitWidth(TITLE_WIDTH);
 
     HBox titleBox = new HBox();
     titleBox.getChildren().add(myTitle);
@@ -60,10 +62,9 @@ public class StartView extends PropertyObservable {
   }
 
   private void setUpButtons() {
-    Button startBtn = ButtonMaker.makeTextButton("start-button", e -> handleClicked("start"), myResources.getString("StartButton"));
-    Button loadBtn = ButtonMaker.makeTextButton("load-button", e -> handleClicked("load"), myResources.getString("LoadButton"));
-    Button createBtn = ButtonMaker.makeTextButton("create-button", e -> handleClicked("create"), myResources.getString("CreateButton"));
-    VBox buttonBox = BoxMaker.makeVBox("buttonBox", 50, Pos.CENTER, startBtn, loadBtn, createBtn);
+    Button startBtn = ButtonMaker.makeTextButton("start-button", e -> handleClicked("loadFile"), myResources.getString("StartButton"));
+    Button createBtn = ButtonMaker.makeTextButton("create-button", e -> handleClicked("createGame"), myResources.getString("CreateButton"));
+    VBox buttonBox = BoxMaker.makeVBox("buttonBox", 50, Pos.CENTER, startBtn, createBtn);
     myPane.setCenter(buttonBox);
   }
   private void handleClicked(String operation) {

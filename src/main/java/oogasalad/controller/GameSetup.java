@@ -189,7 +189,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
         placePiece(coord);
       }
       //have setupView show that AI has placed pieces
-
+      setupView.displayAIShipsPlaced();
       setupView.handleConfirm();
     }
   }

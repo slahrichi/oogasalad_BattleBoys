@@ -16,7 +16,6 @@ public class FilePicker {
   }
 
   public File getFile() {
-
     chooser.setTitle(FILE_CHOOSER_TITLE);
     Stage dialogStage = new Stage();
     return chooser.showOpenDialog(dialogStage);

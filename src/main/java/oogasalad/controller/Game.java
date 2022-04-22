@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import oogasalad.FilePicker;
 import oogasalad.GameData;
@@ -24,6 +25,7 @@ import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.GameView;
 import oogasalad.view.StartView;
+import oogasalad.view.maker.DialogMaker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,8 +44,8 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private FilePicker fileChooser;
   private Parser parser;
   private List<String> stringPlayers;
-  private GameData data;
   private ResourceBundle myResources;
+  private GameData gameData;
 
   //TODO: Remove this variable, it's for testing only
   private List<Piece> pieceList;
@@ -52,30 +54,9 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     myStage = stage;
     parser = new Parser();
     fileChooser = new FilePicker();
-    PlayerData playerData;
     myResources = ResourceBundle.getBundle(DEFAULT_LANGUAGE_PACKAGE + LANGUAGE);
-    try {
-      playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
-    } catch (ParserException e) {
-      LOG.error(e);
-      playerData = null;
-    }
-    stringPlayers = playerData.players();
-    pieceList = playerData.pieces();
-    CellState[][] notSoDummyBoard = playerData.board();
-
-    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(notSoDummyBoard, stringPlayers,
-        playerData.decisionEngines());
-    List<Player> players = pr.playerList();
-    Map<Player, DecisionEngine> engineMap = pr.engineMap();
-    //testing win condition code
-    List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
-    dummyWinConditions.add(new LoseXShipsLossCondition(2));
-
     myStart = new StartView(myResources);
     myStart.addObserver(this);
-    data = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions, engineMap);
-    // GameManager should take in list of players and GameData
   }
 
   public File chooseDataFile() {
@@ -99,22 +80,49 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   }
 
   private void startGame() {
-    GameManager manager = new GameManager(data, myResources);
+    GameManager manager = new GameManager(gameData, myResources);
     myStage.setScene(manager.createScene());
   }
 
-  private void start() {
-    LOG.info("Start");
-    setup = new GameSetup(data, myResources);
-    setup.addObserver(this);
-    myStage.setScene(setup.createScene());
+  private void loadFile() {
+    LOG.info("loadFile");
+    PlayerData playerData;
+    try {
+      playerData = parser.parse(chooseDataFile().getAbsolutePath());
+      createGameData(playerData);
+      setup = new GameSetup(gameData, myResources);
+      setup.addObserver(this);
+      myStage.setScene(setup.createScene());
+    } catch (NullPointerException e) {
+      return;
+    }
+    catch (ParserException e) {
+      showError(e.getMessage());
+      return;
+    }
   }
 
-  private void load() {
-    LOG.info("Load");
+  private void createGameData(PlayerData data) {
+    stringPlayers = data.players();
+    pieceList = data.pieces();
+    CellState[][] notSoDummyBoard = data.board();
+
+    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(notSoDummyBoard, stringPlayers,
+        data.decisionEngines());
+    List<Player> players = pr.playerList();
+    Map<Player, DecisionEngine> engineMap = pr.engineMap();
+    //testing win condition code
+    List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
+    dummyWinConditions.add(new LoseXShipsLossCondition(1));
+    gameData = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions, engineMap);
   }
 
-  private void create() {
+  private void createGame() {
     LOG.info("Create");
+  }
+
+  private void showError(String message) {
+    Alert alert = DialogMaker.makeAlert(message, "game-alert");
+    alert.showAndWait();
   }
 }
