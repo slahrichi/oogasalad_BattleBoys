@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 public class ColorSelectionStage extends BuilderStage{
   private BorderPane myPane = new BorderPane();
   private String[] optionList;
-  private List<Color> colorList=new ArrayList<>();
+  private List<Color> colorList;
   private List<ColorPicker> colorPickers=new ArrayList<>();
   private Stage myStage;
 
@@ -25,19 +25,22 @@ public class ColorSelectionStage extends BuilderStage{
     myStage =  new Stage();
     optionList= getMyBuilderResources().getString("possibleCellState").split(",");
     myPane.setCenter(buildOptionDisplay());
-    Button continueButton = new Button("Continue");
-    continueButton.setOnAction(e->saveAndContinue());
-    myPane.setRight(continueButton);
+    myPane.setRight(makeContinueButton());
 
     Scene myScene =  new Scene(myPane, 900, 500);
     myStage.setScene(myScene);
-    myStage.showAndWait();
 
   }
 
   @Override
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
     return null;
+  }
+
+  @Override
+  protected Object launch() {
+    myStage.showAndWait();
+    return colorList;
   }
 
   private VBox buildOptionDisplay(){
@@ -55,6 +58,7 @@ public class ColorSelectionStage extends BuilderStage{
   }
 
   protected List<Color> saveAndContinue(){
+    colorList=new ArrayList<>();
     for(ColorPicker cp : colorPickers){
       colorList.add(cp.getValue());
     }
