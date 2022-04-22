@@ -1,4 +1,4 @@
-package oogasalad.view;
+package oogasalad.view.screens;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,22 +7,41 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+/**
+ * This class represents temporary screens that are display some sort of information to the player
+ * until they dismiss it, similar to an alert. Examples include a screen telling the player to pass
+ * the computer, a winner/loser screen, and a screen showing what moves an AI player has made.
+ *
+ * The default implementation includes one label on top of one button, however Nodes can be added as
+ * needed because AbstractScreens are VBoxes.
+ *
+ * @author Edison Ooi
+ */
 public abstract class AbstractScreen extends VBox {
+
+  // File path constants
+  protected static final String DEFAULT_RESOURCE_PACKAGE = "/";
+  protected static final String STYLESHEET = "stylesheets/screenStylesheet.css";
+
+  // Default components
   protected Label mainLabel;
   protected Button mainButton;
 
   /**
    * Class constructor. Lays out the screen with one label and one button.
    *
-   * @param spacing Spacing between nodes on screen
+   * @param spacing   Spacing between nodes on screen
    * @param alignment Alignment of nodes on screen
-   * @param handler On click handler for main button
+   * @param handler   On click handler for main button
    */
   public AbstractScreen(double spacing, Pos alignment, EventHandler<ActionEvent> handler) {
     setSpacing(spacing);
     setAlignment(alignment);
+    getStylesheets().add(DEFAULT_RESOURCE_PACKAGE + STYLESHEET);
+
     mainLabel = createMainLabel();
     getChildren().add(mainLabel);
+
     mainButton = createMainButton(handler);
     getChildren().add(mainButton);
   }
@@ -43,11 +62,13 @@ public abstract class AbstractScreen extends VBox {
   protected abstract Button createMainButton(EventHandler<ActionEvent> handler);
 
   /**
-   * Sets the text of the main label on the screen in a customized manner. Allows subclasses to take advantage of
-   * static and dynamic parts of the main label's text.
+   * Sets the text of the main label on the screen in a customized manner. Allows subclasses to take
+   * advantage of static and dynamic parts of the main label's text.
    *
    * @param text new text to appear on Label
    */
-  public abstract void setLabelText(String text);
+  public void setLabelText(String text) {
+    mainLabel.setText(text);
+  }
 
 }
