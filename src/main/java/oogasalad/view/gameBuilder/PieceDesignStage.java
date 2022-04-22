@@ -43,6 +43,7 @@ public class PieceDesignStage extends BuilderStage {
   private TextArea idInputBox;
   private final String DEFAULT_PIECE_NAME = "Custom Piece";
 
+
   private String[] customizableStats;
   private Stage myStage;
 
@@ -69,7 +70,7 @@ public class PieceDesignStage extends BuilderStage {
 
     Scene myScene = new Scene(myPane, 1000, 500);
     myStage.setScene(myScene);
-    myStage.show();
+
   }
 
   private void initializeCharacteristicMatrix() {
@@ -132,8 +133,13 @@ public class PieceDesignStage extends BuilderStage {
   }
 
   @Override
+  protected Object launch() {
+    myStage.showAndWait();
+    return null;
+  }
+
+  @Override
   protected Object saveAndContinue() {
-    findReferencePoint();
     myStage.close();
     WeaponDesignStage wds = new WeaponDesignStage();
     return null;
@@ -164,6 +170,8 @@ public class PieceDesignStage extends BuilderStage {
 
   private void savePiece() {
     addToObjectList(idInputBox.getText());
+
+    findReferencePoint(stateMap);
     resetCustomization();
   }
 
@@ -171,26 +179,7 @@ public class PieceDesignStage extends BuilderStage {
     piecePathList.add(path);
   }
 
-  private void findReferencePoint() {
-    int minX = MAX_DIMENSION;
-    int minY = MAX_DIMENSION;
-    int maxX = 0;
-    int maxY = 0;
-    for (int i = 0; i < stateMap.length; i++) {
-      for (int j = 0; j < stateMap[0].length; j++) {
-        if (stateMap[i][j] != 0) {
-          if (i <= minX && j <= minY) {
-            minX = i;
-            minY = j;
-          }
-          if (i >= minX && j >= minY) {
-            maxX = i;
-            maxY = j;
-          }
-        }
-      }
-    }
-  }
+
 
   // private Piece makePiece(){
   //   Piece result = new StaticPiece();
