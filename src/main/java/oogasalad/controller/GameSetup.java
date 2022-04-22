@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.Map;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
+import javafx.util.Duration;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
@@ -42,6 +44,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private Stack<Collection<Coordinate>> lastPlacedAbsoluteCoords;
   private ResourceBundle myResources;
 
+  private static final int INTRO_SCREEN_DURATION = 2000;
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final Logger LOG = LogManager.getLogger(GameSetup.class);
@@ -87,9 +90,19 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private void initializeSetupView() {
     setupView = new SetupView(board, myResources);
-    setupView.addObserver(this);
-    moveToNextPlayer("");
-    setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
+
+    setupView.displayIntroScreen();
+
+    PauseTransition pt = new PauseTransition(new Duration(INTRO_SCREEN_DURATION));
+    pt.setOnFinished(e -> {
+      setupView.addObserver(this);
+      moveToNextPlayer("");
+      setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
+    });
+
+    pt.play();
+
+
   }
 
   /**
@@ -181,7 +194,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     }
   }
 
-  // Assigns a new name to the current player being set up
+  // Assigns a new name to the current player being set up. This method is called through reflection from this class'
+  // property change listener
   private void assignCurrentPlayerName(String name) {
     playerList.get(playerIndex).setName(name);
   }
