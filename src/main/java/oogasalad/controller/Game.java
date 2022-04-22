@@ -12,8 +12,8 @@ import java.util.ResourceBundle;
 import javafx.stage.Stage;
 import oogasalad.FilePicker;
 import oogasalad.GameData;
+import oogasalad.ParserData;
 import oogasalad.model.parsing.Parser;
-import oogasalad.PlayerData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
@@ -52,20 +52,20 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     myStage = stage;
     parser = new Parser();
     fileChooser = new FilePicker();
-    PlayerData playerData;
+    ParserData parserData;
     myResources = ResourceBundle.getBundle(DEFAULT_LANGUAGE_PACKAGE + LANGUAGE);
     try {
-      playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
+      parserData = parser.parse("src/main/resources/ExampleDataFile.properties");
     } catch (ParserException e) {
       LOG.error(e);
-      playerData = null;
+      parserData = null;
     }
-    stringPlayers = playerData.players();
-    pieceList = playerData.pieces();
-    CellState[][] notSoDummyBoard = playerData.board();
+    stringPlayers = parserData.players();
+    pieceList = parserData.pieces();
+    CellState[][] notSoDummyBoard = parserData.board();
 
     PlayerFactoryRecord pr = PlayerFactory.initializePlayers(notSoDummyBoard, stringPlayers,
-        playerData.decisionEngines());
+        parserData.decisionEngines());
     List<Player> players = pr.playerList();
     Map<Player, DecisionEngine> engineMap = pr.engineMap();
     //testing win condition code

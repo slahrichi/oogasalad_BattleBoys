@@ -20,7 +20,7 @@ public class ParseDecisionEngines extends ParsedElement{
   @Override
   public void save(Properties props, String location, Object o) throws ParserException {
     List<String> decisionEngines = (List<String>) o;
-    props.put(PROPERTIES_DECISION_ENGINES_LIST, String.join(" ", decisionEngines));
+    props.put(PROPERTIES_DECISION_ENGINES_LIST, String.join(SPACE, decisionEngines));
   }
 
   @Override

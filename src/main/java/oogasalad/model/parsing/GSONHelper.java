@@ -14,17 +14,22 @@ import java.lang.reflect.Type;
 
 public class GSONHelper<T> implements
     JsonSerializer<T>, JsonDeserializer<T> {
+  private final String TYPE = "type";
+  private final String PROPERTIES = "properties";
+  private final String UNKNOWN_TYPE = "Unknown element type: ";
+
+
 
   @Override
   public JsonElement serialize(T src, Type type,
       JsonSerializationContext context) {
 
     JsonObject result = new JsonObject();
-    result.add("type", new JsonPrimitive(src.getClass().getName()));
+    result.add(TYPE, new JsonPrimitive(src.getClass().getName()));
 
     Gson gson = new GsonBuilder().create();
     JsonElement jelement = gson.toJsonTree(src);
-    result.add("properties", jelement);
+    result.add(PROPERTIES, jelement);
 
     return result;
 
@@ -35,13 +40,13 @@ public class GSONHelper<T> implements
       JsonDeserializationContext context) throws JsonParseException {
 
     JsonObject jsonObject = json.getAsJsonObject();
-    String type = jsonObject.get("type").getAsString();
-    JsonElement element = jsonObject.get("properties");
+    String type = jsonObject.get(TYPE).getAsString();
+    JsonElement element = jsonObject.get(PROPERTIES);
 
     try {
       return context.deserialize(element, Class.forName(type));
     } catch (ClassNotFoundException cnfe) {
-      throw new JsonParseException("Unknown element type: " + type, cnfe);
+      throw new JsonParseException( UNKNOWN_TYPE + type, cnfe);
     }
 
   }

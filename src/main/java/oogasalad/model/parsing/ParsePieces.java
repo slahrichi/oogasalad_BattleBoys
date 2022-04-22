@@ -14,8 +14,6 @@ public class ParsePieces extends ParsedElement {
   private final String PROPERTIES_PIECES_FILE = "PiecesFile";
   private final String PIECES_JSON = "Pieces.json";
   private final String PIECES = "Pieces";
-  private final String MISSING_DATA =  "missingData";
-
 
 
   @Override

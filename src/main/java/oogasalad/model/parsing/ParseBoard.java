@@ -33,12 +33,7 @@ public class ParseBoard extends ParsedElement {
     String boardFile = props.getProperty(PROPERTIES_BOARD_FILE);
     Gson gson = new GsonBuilder().create();
     CellState[][] boardData;
-    try {
-      boardData = gson.fromJson(new FileReader(boardFile), CellState[][].class);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      return null;
-    }
+    boardData = (CellState[][]) getElementFromJson(boardFile, gson, getParsedClass());
     checkAlignedBoard(boardData, boardFile);
     return boardData;
   }

@@ -17,15 +17,28 @@ public abstract class ParsedElement {
 
   Properties exceptionMessageProperties;
   private final String MISSING_DATA =  "missingData";
+  private final String MISSING_FILE = "missingFile";
+  private final String EXCEPTIONS_PATH = "src/main/resources/ParserExceptions.properties";
 
   public ParsedElement() {
     exceptionMessageProperties = new Properties();
     try {
-      InputStream is = new FileInputStream("src/main/resources/ParserExceptions.properties");
+      InputStream is = new FileInputStream(EXCEPTIONS_PATH);
       exceptionMessageProperties.load(is);
       is.close();
     } catch (IOException ignored) {
     }
+  }
+
+  Object getElementFromJson(String File, Gson gson, Class myClass) throws ParserException {
+    Object element;
+    try{
+      element = gson.fromJson(new FileReader(File), myClass);
+    }
+    catch(FileNotFoundException e){
+      throw new ParserException(exceptionMessageProperties.getProperty(MISSING_FILE));
+    }
+    return element;
   }
 
   List getParsedObject(String parsedObjectFile, Gson gson,
