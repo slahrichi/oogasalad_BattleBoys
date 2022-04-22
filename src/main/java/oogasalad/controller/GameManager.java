@@ -182,10 +182,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void checkIfMovePieces() {
     if (conditionHandler.canMovePieces()) {
       conditionHandler.resetTurnMap();
-      for (int i = 0; i < playerQueue.size(); i++) {
-        Player p = playerQueue.poll();
+      for (Player p : playerQueue) {
         p.movePieces();
-        playerQueue.add(p);
+      }
+      for (DecisionEngine engine : engineMap.values()) {
+        engine.resetStrategy();
       }
     }
   }
@@ -204,21 +205,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       }
     }
   }
-
-//  private boolean makeShot(Coordinate c, int id) {
-//    Player currentPlayer = playerList.get(playerIndex);
-//    Player enemy = idMap.get(id);
-//    if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-//      CellState result = enemy.getBoard().hit(c, 1);
-//      adjustStrategy(currentPlayer, result);
-//      currentPlayer.updateEnemyBoard(c, id, result);
-//      view.displayShotAt(c.getRow(), c.getColumn(), result);
-//      conditionHandler.applyModifiers(currentPlayer, enemy);
-//      numShots++;
-//      return true;
-//    }
-//    return false;
-//  }
 
   private boolean makeShot(Coordinate c, int id, Usable weaponUsed) {
     Player currentPlayer = playerQueue.peek();

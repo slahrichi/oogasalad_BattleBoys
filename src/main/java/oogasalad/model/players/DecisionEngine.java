@@ -100,4 +100,6 @@ public abstract class DecisionEngine {
   protected void setCurrentPlayer(int id) {
     currentPlayer = id;
   }
+
+  public abstract void resetStrategy();
 }

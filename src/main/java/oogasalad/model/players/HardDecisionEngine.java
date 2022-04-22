@@ -28,4 +28,9 @@ public class HardDecisionEngine extends DecisionEngine {
   public Coordinate placePiece(List<Piece> pieceList) {
     return null;
   }
+
+  @Override
+  public void resetStrategy() {
+
+  }
 }

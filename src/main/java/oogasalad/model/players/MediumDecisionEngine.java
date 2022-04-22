@@ -59,6 +59,11 @@ public class MediumDecisionEngine extends DecisionEngine {
     return null;
   }
 
+  @Override
+  public void resetStrategy() {
+    getDeque().clear();
+  }
+
   private void prepareBFS() {
     for (int i = 0; i < ROW_DELTA.length; i++) {
       Coordinate c = new Coordinate(ROW_DELTA[i], COL_DELTA[i]);
