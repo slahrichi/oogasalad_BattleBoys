@@ -65,7 +65,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         playerQueue.peek().getMyCurrency());
     view.addObserver(this);
 
-    conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view);
+    conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view,
+        whenToMovePieces);
   }
 
   /**
@@ -168,12 +169,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void endTurn(Info info) {
-    System.out.println(playerQueue);
     Player p = playerQueue.poll();
-    System.out.println(p);
+    conditionHandler.updateTurns(p);
     playerQueue.add(p);
-    System.out.println(playerQueue);
-    checkIfEndSet();
+    checkIfMovePieces();
     Player player = playerQueue.peek();
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
@@ -181,16 +180,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     handleAI();
   }
 
-  private void checkIfEndSet() {
-    if (playerIndex == 0) {
-      setNumber++;
-      checkIfMovePieces();
-    }
-  }
-
   //new private method for moving pieces
   private void checkIfMovePieces() {
-    if (setNumber % whenToMovePieces == 0) {
+    if (conditionHandler.canMovePieces()) {
+      conditionHandler.resetTurnMap();
       for (int i = 0; i < playerQueue.size(); i++) {
         Player p = playerQueue.poll();
         p.movePieces();

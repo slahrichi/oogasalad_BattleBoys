@@ -1,5 +1,6 @@
 package oogasalad.controller;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ public class ConditionHandler {
   private Map<Integer, Player> idMap;
   private List<WinCondition> winConditions;
   private GameView view;
+  private int movePieces;
+  private Map<Player, Integer> turnMap;
 
   private static final String PLAYER_MODIFIER = "PlayerModifier";
   private static final Logger LOG = LogManager.getLogger(ConditionHandler.class);
@@ -36,11 +39,20 @@ public class ConditionHandler {
    * @param view          GameView object displaying the game
    */
   public ConditionHandler(Queue<Player> playerQueue, Map<Integer, Player> idMap,
-      List<WinCondition> winConditions, GameView view) {
+      List<WinCondition> winConditions, GameView view, int movePieces) {
     this.playerQueue = playerQueue;
     this.idMap = idMap;
     this.winConditions = winConditions;
     this.view = view;
+    this.movePieces = movePieces;
+    createTurnMap();
+  }
+
+  private void createTurnMap() {
+    turnMap = new HashMap<>();
+    for (Player p : playerQueue) {
+      turnMap.put(p, 0);
+    }
   }
 
   /**
@@ -104,10 +116,31 @@ public class ConditionHandler {
     LOG.info("Player " + id + " lost");
     playerQueue.remove(player);
     idMap.remove(id);
+    turnMap.remove(player);
     for (int i = 0; i < playerQueue.size(); i++) {
       Player p = playerQueue.poll();
       p.getEnemyMap().remove(id);
       playerQueue.add(p);
     }
+  }
+
+  void updateTurns(Player player) {
+    turnMap.put(player, turnMap.get(player) + 1);
+  }
+
+  void resetTurnMap() {
+    for (Player p : turnMap.keySet()) {
+      turnMap.put(p, 0);
+    }
+  }
+
+  boolean canMovePieces() {
+    int turnCount = 0;
+    for (Player p : turnMap.keySet()) {
+      if (turnMap.get(p) == movePieces) {
+        turnCount++;
+      }
+    }
+    return turnCount == turnMap.size();
   }
 }
