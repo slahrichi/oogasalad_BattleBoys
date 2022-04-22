@@ -59,6 +59,8 @@ import org.apache.logging.log4j.Logger;
 public class GameView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer,
     ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
+  // FIXME: Need to identify and add strings below to resourcebundle
+
   private static final Logger LOG = LogManager.getLogger(GameView.class);
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
@@ -77,7 +79,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final double BOARD_SIZE = 50;
   private static final int EXPLOSION_DURATION = 1000;
 
-  private static final String LOST_SUFFIX_RESOURCE = "LostSuffix";
+  // ResourceBundle Strings
+
   private static final String TURN_SUFFIX_RESOURCE = "TurnSuffix";
   private static final String YOUR_BOARD_RESOURCE = "YourBoard";
   private static final String SHOTS_AGAINST_RESOURCE = "YourShotsAgainst";
@@ -87,6 +90,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String CONFIG_TEXT_RESOURCE = "ConfigText";
   private static final String LEGEND_TEXT_RESOURCE = "LegendText";
   private static final String SHOTS_REMAINING_RESOURCE = "ShotsRemainingText";
+  private static final String END_TURN_RESOURCE = "EndTurn";
+  private static final String PIECES_LEFT_RESOURCE = "PiecesLeft";
+  private static final String GOLD_LEFT_RESOURCE = "GoldLeft";
 
 
 
@@ -192,8 +198,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     shotsRemainingLabel = LabelMaker.makeDynamicLabel(myResources.getString(SHOTS_REMAINING_RESOURCE), "",
         "shots-remaining-label");
-    numPiecesLabel = LabelMaker.makeDynamicLabel("Number of Pieces Left: %s", "", "num-pieces-label");
-    goldLabel = LabelMaker.makeDynamicLabel("Gold: %s", "", "gold-label");
+    numPiecesLabel = LabelMaker.makeDynamicLabel(myResources.getString(PIECES_LEFT_RESOURCE), "", "num-pieces-label");
+    goldLabel = LabelMaker.makeDynamicLabel(myResources.getString(GOLD_LEFT_RESOURCE), "", "gold-label");
 
     configPane = new ConfigPane();
     configPane.setText(myResources.getString(CONFIG_TEXT_RESOURCE));
@@ -209,6 +215,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
 
   private void setupPieceLegendPane() {
+
     LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
     for (CellState state : CellState.values()) {
       colorMap.put(state.name(),
@@ -250,7 +257,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         IMAGES_PATH + "arrow-right.png", 50, 50);
     rightButton.getStyleClass().add("arrow-button");
 
-    endTurnButton = ButtonMaker.makeTextButton("end-turn-button", e -> endTurn(), "End Turn");
+    endTurnButton = ButtonMaker.makeTextButton("end-turn-button", e -> endTurn(), myResources.getString(END_TURN_RESOURCE));
     endTurnButton.setDisable(true);
     boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER, leftButton, rightButton, endTurnButton);
 
