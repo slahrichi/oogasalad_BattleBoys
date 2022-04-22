@@ -3,6 +3,7 @@ package oogasalad.controller;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
@@ -20,7 +21,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class ConditionHandler {
 
-  private List<Player> playerList;
+  private Queue<Player> playerQueue;
   private Map<Integer, Player> idMap;
   private List<WinCondition> winConditions;
   private GameView view;
@@ -29,14 +30,14 @@ public class ConditionHandler {
   private static final Logger LOG = LogManager.getLogger(ConditionHandler.class);
 
   /**
-   * @param playerList    list of players
+   * @param playerQueue    queue of players
    * @param idMap         map relating player id to Player object
    * @param winConditions list of win conditions
    * @param view          GameView object displaying the game
    */
-  public ConditionHandler(List<Player> playerList, Map<Integer, Player> idMap,
+  public ConditionHandler(Queue<Player> playerQueue, Map<Integer, Player> idMap,
       List<WinCondition> winConditions, GameView view) {
-    this.playerList = playerList;
+    this.playerQueue = playerQueue;
     this.idMap = idMap;
     this.winConditions = winConditions;
     this.view = view;
@@ -69,8 +70,8 @@ public class ConditionHandler {
     for (WinCondition condition : winConditions) {
       checkCondition(condition);
     }
-    if (playerList.size() == 1) {
-      moveToWinGame(playerList.get(0));
+    if (playerQueue.size() == 1) {
+      moveToWinGame(playerQueue.peek());
     }
   }
 
@@ -101,10 +102,12 @@ public class ConditionHandler {
 
   private void removePlayer(Player player, int id) {
     LOG.info("Player " + id + " lost");
-    playerList.remove(player);
+    playerQueue.remove(player);
     idMap.remove(id);
-    for (Player p : playerList) {
+    for (int i = 0; i < playerQueue.size(); i++) {
+      Player p = playerQueue.poll();
       p.getEnemyMap().remove(id);
+      playerQueue.add(p);
     }
   }
 }
