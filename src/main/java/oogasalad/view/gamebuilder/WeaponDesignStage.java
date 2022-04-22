@@ -231,7 +231,6 @@ public class WeaponDesignStage extends BuilderStage {
         relativeCoordinatesMap.put(new Coordinate(i, j), stateMap[i][j]);
       }
     }
-    relativeCoordinatesMap = (Map<Coordinate,Integer>) relativeCoordinatesMap;
     return relativeCoordinatesMap;
   }
 
