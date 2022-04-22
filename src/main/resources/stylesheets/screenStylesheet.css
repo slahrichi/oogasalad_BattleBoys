@@ -7,7 +7,7 @@
 }
 
 
-#messageBox{
+#pass-computer-message-view{
   -fx-background-image: url("../images/battleshipSwitch.jpg");
   -fx-background-repeat: no-repeat;
   -fx-background-size: 1200 900;

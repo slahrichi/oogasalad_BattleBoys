@@ -13,14 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -37,10 +33,13 @@ import oogasalad.view.interfaces.BoardVisualizer;
 import oogasalad.view.interfaces.ErrorDisplayer;
 import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.ButtonMaker;
+import oogasalad.view.maker.DialogMaker;
 import oogasalad.view.panels.TitlePanel;
-import oogasalad.view.panes.ConfigPane;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
+import oogasalad.view.screens.AbstractScreen;
+import oogasalad.view.screens.PassComputerScreen;
+import oogasalad.view.screens.SetUpShipsScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -73,7 +72,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   private LegendPane legendPane;
   private SetPiecePane shipPane;
-  private PassComputerMessageView passComputerMessageView;
+  private AbstractScreen passComputerMessageView;
   private CellState[][] myCellBoard;
 
   private int currentPlayerNumber;
@@ -99,13 +98,21 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     createPassMessageView();
   }
 
+  public void displayIntroScreen() {
+    SetUpShipsScreen screen = new SetUpShipsScreen();
+    myScene.setRoot(screen);
+  }
+
   private void createPassMessageView() {
-    passComputerMessageView = new PassComputerMessageView();
-    passComputerMessageView.setButtonOnMouseClicked(e -> {
+    passComputerMessageView = new PassComputerScreen(e -> {
       myScene.setRoot(myPane);
       updateTitle("Player " + currentPlayerNumber);
       promptForName();
     });
+  }
+
+  public void displayAIShipsPlaced() {
+
   }
 
   public void activateConfirm() {
@@ -238,14 +245,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void promptForName() {
-    TextInputDialog dialog = new TextInputDialog();
-    dialog.setTitle("Setup");
-    dialog.setHeaderText(myResources.getString("PromptPrefix") + currentPlayerNumber +  myResources.getString("PromptSuffix"));
-    dialog.setContentText(myResources.getString("PromptLabel"));
-    dialog.getEditor().setText("Player "+ currentPlayerNumber);
+    TextInputDialog dialog = DialogMaker.makeTextInputDialog("Enter name", myResources.getString("PromptPrefix") + currentPlayerNumber + myResources.getString("PromptSuffix"), myResources.getString("PromptLabel"), "Player "+ currentPlayerNumber, "player-name", "ok-button");
     dialog.getEditor().textProperty().addListener(e -> updateTitle(dialog.getEditor().getText()));
-    dialog.getEditor().setId("player-name");
-    dialog.getDialogPane().lookupButton(ButtonType.OK).setId("ok-button");
     Optional<String> result = dialog.showAndWait();
     String name;
     if(result.isPresent()) {
@@ -258,10 +259,13 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     notifyObserver("assignCurrentPlayerName", name);
   }
 
-  // FIXME: Make it so that we take player number from the player's list
-
+  /**
+   * Displays a screen that tells the current player to pass the computer to the next player
+   *
+   * @param nextPlayer Name of next player that should receive computer
+   */
   public void displayPassComputerMessage(String nextPlayer) {
-    passComputerMessageView.setPlayerName(nextPlayer);
+    passComputerMessageView.setLabelText(nextPlayer);
     myScene.setRoot(passComputerMessageView);
   }
 
@@ -269,6 +273,11 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myTitle.changeTitle(playerName + SCREEN_TITLE);
   }
 
+  /**
+   * Places a Piece of a certain type at the specified coordinates
+   * @param coords Coordinates to place Piece at
+   * @param type Type of piece being placed
+   */
   @Override
   public void placePiece(Collection<Coordinate> coords, CellState type) {
     for (Coordinate c : coords) {
@@ -282,6 +291,9 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     lastPlaced = coords;
   }
 
+  /**
+   * Removes any Pieces that are at the coordinates contained in coords.
+   */
   @Override
   public void removePiece(Collection<Coordinate> coords) {
     for (Coordinate c : coords) {
@@ -306,22 +318,31 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }
 
+  /**
+   * Displays an error with a message in a user-friendly way.
+   *
+   * @param errorMsg message to appear on error
+   */
   @Override
   public void showError(String errorMsg) {
-    Alert alert = new Alert(AlertType.ERROR, errorMsg);
-    Node alertNode = alert.getDialogPane();
-    alertNode.setId("alert");
+    Alert alert = DialogMaker.makeAlert(errorMsg, "setupview-alert");
     alert.showAndWait();
   }
 
-  @Override
-  public void showErrorAndQuit(String errorMsg) {
-    Alert alert = new Alert(AlertType.ERROR, errorMsg);
-    Node alertNode = alert.getDialogPane();
-    alertNode.setId("alert");
-
-    alert.showAndWait();
-    Platform.exit();
-    System.exit(0);
-  }
+  // THIS METHOD SHOULD BE IN THE PARSER!
+//  /**
+//   * Displays a (fatal) error with a message in a user-friendly way.
+//   *
+//   * @param errorMsg message to appear on error
+//   */
+//  @Override
+//  public void showErrorAndQuit(String errorMsg) {
+//    Alert alert = new Alert(AlertType.ERROR, errorMsg);
+//    Node alertNode = alert.getDialogPane();
+//    alertNode.setId("alert");
+//
+//    alert.showAndWait();
+//    Platform.exit();
+//    System.exit(0);
+//  }
 }

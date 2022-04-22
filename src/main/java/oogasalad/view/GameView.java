@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -43,11 +46,15 @@ import oogasalad.view.interfaces.ShopVisualizer;
 import oogasalad.view.interfaces.ShotVisualizer;
 import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.ButtonMaker;
+import oogasalad.view.maker.DialogMaker;
 import oogasalad.view.maker.LabelMaker;
 import oogasalad.view.panes.ConfigPane;
 import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import oogasalad.view.panels.TitlePanel;
+import oogasalad.view.screens.AbstractScreen;
+import oogasalad.view.screens.PassComputerScreen;
+import oogasalad.view.screens.WinnerScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -62,7 +69,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
   private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String IMAGES_PATH = "images/";
-  private static final String EXPLOSION_IMAGE_NAME = "explosion-icon.png";
+  private static final String EXPLOSION_IMAGE_NAME = "explosion-icon.png"; // TODO: Get explosion image from resource bundle
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d, col: %d";
   private static final String BOARD_HOVERED_LOG = "Board %d was hovered over at row: %d, col: %d";
   private static final String CENTER_PANE_ID = "view-center-pane";
@@ -70,7 +77,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String SHOT_METHOD = "handleShot";
   private static final double BOARD_SIZE = 50;
-  private static final int EXPLOSION_DURATION = 2000;
+  private static final int EXPLOSION_DURATION = 1000;
 
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
@@ -95,7 +102,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private DynamicLabel shotsRemainingLabel;
   private DynamicLabel numPiecesLabel;
   private DynamicLabel goldLabel;
-  private PassComputerMessageView passComputerMessageView;
+  private AbstractScreen passComputerMessageView;
   private ResourceBundle myResources;
   private boolean nightMode;
 
@@ -137,8 +144,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     initializePiecesLeft(initialPiecesLeft);
   }
   private void createPassMessageView() {
-    passComputerMessageView = new PassComputerMessageView();
-    passComputerMessageView.setButtonOnMouseClicked(e -> myScene.setRoot(myPane));
+    passComputerMessageView = new PassComputerScreen(e -> myScene.setRoot(myPane));
   }
 
   public void initializePiecesLeft(Collection<Collection<Coordinate>> piecesLeft) {
@@ -283,10 +289,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void switchPlayerMessage(String nextPlayer) {
-    passComputerMessageView.setPlayerName(nextPlayer);
+    passComputerMessageView.setLabelText(nextPlayer);
     myScene.setRoot(passComputerMessageView);
   }
-
 
   public int getCurrentBoardIndex() {
     return currentBoardIndex;
@@ -391,12 +396,16 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
   }
 
-  public void displayWinningMessage(String name) {
-    LOG.info(name + " " + myResources.getString("WonSuffix"));
+  public void displayWinningScreen(String name) {
+    WinnerScreen winnerScreen = new WinnerScreen(name);
+    myScene.setRoot(winnerScreen);
   }
 
-  public void displayLosingMessage(String name) {
+  public void displayLosingDialog(String name) {
     LOG.info(name + " " + myResources.getString("LostSuffix"));
+    Alert playerLost = DialogMaker.makeAlert(name + " " + myResources.getString("LostSuffix"), "player-lost-alert");
+    playerLost.showAndWait();
+
   }
 
   public void updateLabels(int shotsRemaining, int numPiecesRemaining, int amountOfGold) {
@@ -457,9 +466,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void showError(String errorMsg) {
-    Alert alert = new Alert(AlertType.ERROR, errorMsg);
-    Node alertNode = alert.getDialogPane();
-    alertNode.setId("alert");
+    Alert alert = DialogMaker.makeAlert(errorMsg, "gameview-alert");
     alert.showAndWait();
   }
 
