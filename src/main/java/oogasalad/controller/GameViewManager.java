@@ -80,15 +80,14 @@ public class GameViewManager {
     return view;
   }
 
-  void sendUpdatedBoardsToView(int playerIndex) {
+  void sendUpdatedBoardsToView(Player player) {
     List<CellState[][]> boardList = new ArrayList<>();
     List<Integer> idList = new ArrayList<>();
     List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
-    Player currentPlayer = playerList.get(playerIndex);
-    addToBoardElements(currentPlayer.getBoard().getCurrentBoardState(), currentPlayer.getID(),
-        currentPlayer, boardList, idList, pieceList);
-    Map<Integer, MarkerBoard> enemyMap = currentPlayer.getEnemyMap();
-    for (int id : currentPlayer.getEnemyMap().keySet()) {
+    addToBoardElements(player.getBoard().getCurrentBoardState(), player.getID(),
+        player, boardList, idList, pieceList);
+    Map<Integer, MarkerBoard> enemyMap = player.getEnemyMap();
+    for (int id : player.getEnemyMap().keySet()) {
       addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList,
           pieceList);
     }

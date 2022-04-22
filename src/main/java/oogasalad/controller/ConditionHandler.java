@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javafx.application.Platform;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.model.utilities.winconditions.WinState;
@@ -24,6 +25,7 @@ public class ConditionHandler {
   private Map<Integer, Player> idMap;
   private List<WinCondition> winConditions;
   private GameView view;
+  private GameViewManager manager;
 
   private static final String PLAYER_MODIFIER = "PlayerModifier";
   private static final Logger LOG = LogManager.getLogger(ConditionHandler.class);
@@ -35,11 +37,12 @@ public class ConditionHandler {
    * @param view          GameView object displaying the game
    */
   public ConditionHandler(List<Player> playerList, Map<Integer, Player> idMap,
-      List<WinCondition> winConditions, GameView view) {
+      List<WinCondition> winConditions, GameView view, GameViewManager manager) {
     this.playerList = playerList;
     this.idMap = idMap;
     this.winConditions = winConditions;
     this.view = view;
+    this.manager = manager;
   }
 
   /**
@@ -79,28 +82,29 @@ public class ConditionHandler {
     for (int id : playerIds) {
       Player currPlayer = idMap.get(id);
       WinState currPlayerWinState = condition.updateWinner(currPlayer);
-      LOG.info(String.format("Player %d's WinState %s", id, currPlayerWinState));
+      LOG.info(String.format("Player %d's WinState %s", id+1, currPlayerWinState));
       checkWinState(currPlayer, currPlayerWinState, id);
     }
   }
 
   private void checkWinState(Player player, WinState state, int id) {
     if (state.equals(WinState.LOSE)) {
-      view.displayLosingMessage(idMap.get(id).getName());
       removePlayer(player, id);
+      manager.sendUpdatedBoardsToView(player);
+      Platform.runLater(() -> view.displayLosingDialog(player.getName()));
     } else if (state.equals(WinState.WIN)) {
-      LOG.info(String.format("Player %d wins!", id));
       moveToWinGame(player);
     }
   }
 
   private void moveToWinGame(Player player) {
     int id = player.getID();
-    view.displayWinningMessage(idMap.get(id).getName());
+    LOG.info(String.format("Player %d wins!", id+1));
+    view.displayWinningScreen(idMap.get(id).getName());
   }
 
   private void removePlayer(Player player, int id) {
-    LOG.info("Player " + id + " lost");
+    LOG.info("Player " + (id+1) + " lost");
     playerList.remove(player);
     idMap.remove(id);
     for (Player p : playerList) {

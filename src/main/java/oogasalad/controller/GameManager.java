@@ -63,7 +63,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         playerList.get(0).getMyCurrency());
     view.addObserver(this);
 
-    conditionHandler = new ConditionHandler(playerList, idMap, data.winConditions(), view);
+    conditionHandler = new ConditionHandler(playerList, idMap, data.winConditions(), view, gameViewManager);
   }
 
   /**
@@ -170,7 +170,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player player = playerList.get(playerIndex);
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
-    gameViewManager.sendUpdatedBoardsToView(playerIndex);
+    gameViewManager.sendUpdatedBoardsToView(player);
     handleAI();
   }
 
