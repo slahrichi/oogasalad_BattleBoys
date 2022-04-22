@@ -17,27 +17,15 @@ public class ParseBoard extends ParsedElement {
   private final String PROPERTIES_BOARD_FILE = "BoardFile";
   private final String MISSING_DATA = "missingData";
   private final String BOARD = "Board";
-
-  public ParseBoard() {
-  }
-
+  private final String BOARD_JSON = "Board.json";
 
   @Override
   public void save(Properties props, String location, Object o) {
-    location += "Board.json";
+    location += BOARD_JSON;
     CellState[][] board = (CellState[][]) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().
         create();
-    String json = gson.toJson(board);
-    File myNewFile = new File(location);
-    try {
-      FileWriter myWriter = new FileWriter(myNewFile);
-      myWriter.write(json);
-      myWriter.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    props.put(PROPERTIES_BOARD_FILE, myNewFile.toString());
+    putJsonInProp(props, location, board, gson, PROPERTIES_BOARD_FILE);
   }
 
   @Override
