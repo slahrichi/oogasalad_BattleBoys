@@ -12,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import oogasalad.model.parsing.Parser;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.maker.LabelMaker;
 
@@ -58,7 +57,6 @@ public class BoardSetUpStage extends BuilderStage {
     myPane.setBottom(makeContinueButton());
     myStage = new Stage();
     myStage.setScene(getScene());
-    myStage.showAndWait();
   }
 
   private void setWidth(int newWidth) {
@@ -113,12 +111,6 @@ public class BoardSetUpStage extends BuilderStage {
   }
 
 
-  private void writeToFile() {
-    Parser p = new Parser();
-    //p.save();
-  }
-
-
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
     Rectangle newCell = new Rectangle(xPos, yPos,
         MAX_GRID_WIDTH / width, MAX_GRID_HEIGHT / height);
@@ -132,6 +124,12 @@ public class BoardSetUpStage extends BuilderStage {
     return newCell;
   }
 
+  @Override
+  protected Object launch() {
+    myStage.showAndWait();
+    return board;
+  }
+
   private void convertToCellStates() {
     board = new CellState[width][height];
     for (int i = 0; i < width; i++) {
@@ -143,10 +141,11 @@ public class BoardSetUpStage extends BuilderStage {
 
 
   protected CellState[][] saveAndContinue() {
-    //write to file FIXME
+    findReferencePoint(stateMap);
+    stateMap = cropToActiveGrid(stateMap);
+
     convertToCellStates();
     myStage.close();
-    PieceDesignStage p = new PieceDesignStage();
 
     return board;
   }
