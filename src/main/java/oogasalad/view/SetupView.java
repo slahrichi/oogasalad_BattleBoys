@@ -56,6 +56,16 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final String PLACE_PIECE = "placePiece";
   private static final Logger LOG = LogManager.getLogger(SetupView.class);
 
+  private static final String SETUP_TITLE_RESOURCE = "SetupTitlePrefix";
+  private static final String CURRENT_SHIP_RESOURCE = "CurrentShip";
+  private static final String CONFIRM_BUTTON_RESOURCE = "ConfirmButton";
+  private static final String REMOVE_LAST_RESOURCE = "RemoveLastButton";
+  private static final String REMOVE_ALL_RESOURCE = "RemoveAllButton";
+  private static final String PROMPT_PREFIX_RESOURCE = "PromptPrefix";
+  private static final String PROMPT_SUFFIX_RESOURCE = "PromptSuffix";
+  private static final String ENTER_NAME_RESOURCE = "EnterName";
+  private static final String LEGEND_KEY_RESOURCE = "LegendText";
+
   private BorderPane myPane;
   private VBox centerBox;
   private HBox bottomPanel;
@@ -90,7 +100,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     currentPlayerName = "Player";
     nextToPlace = new ArrayList<>();
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
-    SCREEN_TITLE = myResources.getString("SetupTitlePrefix");
+    SCREEN_TITLE = myResources.getString(SETUP_TITLE_RESOURCE);
     createTitlePanel();
     createBottomPanel();
     createCenterPanel();
@@ -140,7 +150,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
     setupLegendPane();
     shipPane = new SetPiecePane(20);
-    shipPane.setText(myResources.getString("CurrentShip"));
+    shipPane.setText(myResources.getString(CURRENT_SHIP_RESOURCE));
 
 
 
@@ -156,13 +166,14 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
           Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
     legendPane = new LegendPane(colorMap);
+    legendPane.setText(myResources.getString(LEGEND_KEY_RESOURCE));
   }
 
   private void createBottomPanel() {
-    confirmButton = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), myResources.getString("ConfirmButton"));
+    confirmButton = ButtonMaker.makeTextButton("confirm-button", e -> handleConfirm(), myResources.getString(CONFIRM_BUTTON_RESOURCE));
     confirmButton.setDisable(true);
-    Button removeLastPiece = ButtonMaker.makeTextButton("remove-last-button", e -> removePiece(lastPlaced), myResources.getString("RemoveLastButton"));
-    Button removeAll = ButtonMaker.makeTextButton("remove-all-button", e -> removeAllPieces(), myResources.getString("RemoveAllButton"));
+    Button removeLastPiece = ButtonMaker.makeTextButton("remove-last-button", e -> removePiece(lastPlaced), myResources.getString(REMOVE_LAST_RESOURCE));
+    Button removeAll = ButtonMaker.makeTextButton("remove-all-button", e -> removeAllPieces(), myResources.getString(REMOVE_ALL_RESOURCE));
     removePiecePanel = BoxMaker.makeVBox("remove-piece-panel", 10, Pos.CENTER, removeLastPiece, removeAll);
     bottomPanel = BoxMaker.makeHBox("bottom-panel", 20, Pos.CENTER, removePiecePanel, confirmButton);
   }
@@ -245,7 +256,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   }
 
   public void promptForName() {
-    TextInputDialog dialog = DialogMaker.makeTextInputDialog("Enter name", myResources.getString("PromptPrefix") + currentPlayerNumber + myResources.getString("PromptSuffix"), myResources.getString("PromptLabel"), "Player "+ currentPlayerNumber, "player-name", "ok-button");
+    TextInputDialog dialog = DialogMaker.makeTextInputDialog(myResources.getString(ENTER_NAME_RESOURCE), myResources.getString(PROMPT_PREFIX_RESOURCE) + currentPlayerNumber + myResources.getString(PROMPT_SUFFIX_RESOURCE), myResources.getString("PromptLabel"),
+        myResources.getString(PROMPT_PREFIX_RESOURCE) + currentPlayerNumber, "player-name", "ok-button");
     dialog.getEditor().textProperty().addListener(e -> updateTitle(dialog.getEditor().getText()));
     Optional<String> result = dialog.showAndWait();
     String name;

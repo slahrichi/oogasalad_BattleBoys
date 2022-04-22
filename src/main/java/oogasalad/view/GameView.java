@@ -12,10 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
-import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -53,6 +50,7 @@ import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.screens.AbstractScreen;
+import oogasalad.view.screens.LoserScreen;
 import oogasalad.view.screens.PassComputerScreen;
 import oogasalad.view.screens.WinnerScreen;
 import org.apache.logging.log4j.LogManager;
@@ -78,6 +76,18 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String SHOT_METHOD = "handleShot";
   private static final double BOARD_SIZE = 50;
   private static final int EXPLOSION_DURATION = 1000;
+
+  private static final String LOST_SUFFIX_RESOURCE = "LostSuffix";
+  private static final String TURN_SUFFIX_RESOURCE = "TurnSuffix";
+  private static final String YOUR_BOARD_RESOURCE = "YourBoard";
+  private static final String SHOTS_AGAINST_RESOURCE = "YourShotsAgainst";
+  private static final String PLAYER_PREFIX_RESOURCE = "PlayerPrefix";
+  private static final String OPEN_SHOP_RESOURCE = "OpenShop";
+  private static final String SHIPS_REMAINING_RESOURCE = "ShipsRemaining";
+  private static final String CONFIG_TEXT_RESOURCE = "ConfigText";
+  private static final String LEGEND_TEXT_RESOURCE = "LegendText";
+  private static final String SHOTS_REMAINING_RESOURCE = "ShotsRemainingText";
+
 
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
@@ -173,19 +183,21 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createRightPane() {
-    shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
+    shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
 
     piecesRemainingPane = new SetPiecePane(20);
-    piecesRemainingPane.setText("Ships Remaining");
+    piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
 
     setupPieceLegendPane();
 
-    shotsRemainingLabel = LabelMaker.makeDynamicLabel("Shots Remaining: %s", "",
+    shotsRemainingLabel = LabelMaker.makeDynamicLabel(myResources.getString(SHOTS_REMAINING_RESOURCE), "",
         "shots-remaining-label");
     numPiecesLabel = LabelMaker.makeDynamicLabel("Number of Pieces Left: %s", "", "num-pieces-label");
     goldLabel = LabelMaker.makeDynamicLabel("Gold: %s", "", "gold-label");
 
     configPane = new ConfigPane();
+    configPane.setText(myResources.getString(CONFIG_TEXT_RESOURCE));
+
     configPane.setOnAction(e -> changeStylesheet());
 
     myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel,
@@ -203,6 +215,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
           Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
     }
     pieceLegendPane = new LegendPane(colorMap);
+    pieceLegendPane.setText(myResources.getString(LEGEND_TEXT_RESOURCE));
   }
 
   private void createCenterPane() {
@@ -223,7 +236,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
 
   private void setupBoardLabel() {
-    currentBoardLabel = LabelMaker.makeLabel("Your Board", "board-label");
+    currentBoardLabel = LabelMaker.makeLabel(myResources.getString(YOUR_BOARD_RESOURCE), "board-label");
     currentBoardLabel.setId("currentBoardLabel");
     myCenterPane.getChildren().add(currentBoardLabel);
   }
@@ -268,10 +281,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   // Displays the board indicated by the updated value of currentBoardIndex
   private void updateDisplayedBoard() {
     LOG.info("Current board index: " + currentBoardIndex);
-    currentBoardLabel.setText(currentBoardIndex == 0 ? "Your Board"
-        : "Your Shots Against " + playerIDToNames.getOrDefault(
-            myBoards.get(currentBoardIndex).getID(),
-            "Player " + (myBoards.get(currentBoardIndex).getID() + 1)));
+    currentBoardLabel.setText(currentBoardIndex == 0 ? myResources.getString(YOUR_BOARD_RESOURCE)
+        : myResources.getString(SHOTS_AGAINST_RESOURCE) + playerIDToNames.getOrDefault(
+            myBoards.get(currentBoardIndex).getID(), myResources.getString(PLAYER_PREFIX_RESOURCE) + (myBoards.get(currentBoardIndex).getID() + 1)));
     refreshCenterPane();
     updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
     LOG.info("Current board index: " + currentBoardIndex);
@@ -285,7 +297,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void updateTitle(String playerName) {
-    myTitle.changeTitle(playerName + myResources.getString("TurnSuffix"));
+    myTitle.changeTitle(playerName + myResources.getString(TURN_SUFFIX_RESOURCE));
   }
 
   private void switchPlayerMessage(String nextPlayer) {
@@ -402,9 +414,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void displayLosingDialog(String name) {
-    LOG.info(name + " " + myResources.getString("LostSuffix"));
-    Alert playerLost = DialogMaker.makeAlert(name + " " + myResources.getString("LostSuffix"), "player-lost-alert");
-    playerLost.showAndWait();
+    //LoserScreen loserScreen = new LoserScreen(name);
+    //myScene.setRoot(loserScreen);
 
   }
 

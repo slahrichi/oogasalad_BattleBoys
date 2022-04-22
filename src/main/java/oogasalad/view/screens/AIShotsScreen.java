@@ -5,8 +5,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import oogasalad.view.maker.LabelMaker;
 
 public class AIShotsScreen extends AbstractScreen {
+
+  private static String AI_SHOTS_MESSAGE = "The AI Mastermind is taking their shots...";
+
 
   /**
    * Class constructor. Lays out the screen with one label and one button.
@@ -24,8 +28,7 @@ public class AIShotsScreen extends AbstractScreen {
 
   @Override
   protected Label createMainLabel() {
-    return null;
-  }
+    return LabelMaker.makeLabel(AI_SHOTS_MESSAGE, "ai-shots-screen-label");  }
 
   @Override
   protected Button createMainButton(EventHandler<ActionEvent> handler) {

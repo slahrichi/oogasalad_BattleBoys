@@ -23,6 +23,9 @@ public class StartView extends PropertyObservable {
   private static final double TITLE_WIDTH = 600;
   private static final double TITLE_HEIGHT = 200;
 
+  private static final String START_BTN_RESOURCE = "StartButton";
+  private static final String CREATE_BTN_RESOURCE = "CreateButton";
+
   private Scene myScene;
   private BorderPane myPane;
   private ImageView myTitle;
@@ -62,8 +65,8 @@ public class StartView extends PropertyObservable {
   }
 
   private void setUpButtons() {
-    Button startBtn = ButtonMaker.makeTextButton("start-button", e -> handleClicked("loadFile"), myResources.getString("StartButton"));
-    Button createBtn = ButtonMaker.makeTextButton("create-button", e -> handleClicked("createGame"), myResources.getString("CreateButton"));
+    Button startBtn = ButtonMaker.makeTextButton("start-button", e -> handleClicked("loadFile"), myResources.getString(START_BTN_RESOURCE));
+    Button createBtn = ButtonMaker.makeTextButton("create-button", e -> handleClicked("createGame"), myResources.getString(CREATE_BTN_RESOURCE));
     VBox buttonBox = BoxMaker.makeVBox("buttonBox", 50, Pos.CENTER, startBtn, createBtn);
     myPane.setCenter(buttonBox);
   }

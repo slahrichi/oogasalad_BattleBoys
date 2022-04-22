@@ -10,7 +10,6 @@ import oogasalad.view.maker.ButtonMaker;
 
 public class ConfigPane extends TitledPane {
 
-  private static final String CONFIG_TEXT = "Configuration";
   private static final String CONFIG_ID = "configPane";
   private static final String GRID_ID = "configGrid";
   private static final String NIGHT_MODE_ID = "night-mode";
@@ -20,7 +19,6 @@ public class ConfigPane extends TitledPane {
   private GridPane myGrid;
 
   public ConfigPane(){
-    setText(CONFIG_TEXT);
     setId(CONFIG_ID);
     setExpanded(false);
 
