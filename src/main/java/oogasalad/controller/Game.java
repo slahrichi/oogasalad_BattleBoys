@@ -85,7 +85,8 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     LOG.info("loadFile");
     ParserData parserData;
     try {
-      parserData = parser.parse(chooseDataFile().getAbsolutePath());
+      String path = chooseDataFile().getAbsolutePath();
+      parserData = parser.parse(path);
       createGameData(parserData);
       setup = new GameSetup(gameData, myResources);
       setup.addObserver(this);

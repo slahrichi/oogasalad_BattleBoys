@@ -45,7 +45,7 @@ public class GameManagerTest extends DukeApplicationTest {
   private List<WinCondition> wc;
   private GameSetup gs;
   private GameManager gm;
-  private String info = "0 0 1";
+  private String info = "0 1 1";
 
 
   @BeforeEach
@@ -100,7 +100,7 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
-    assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_HEALTHY);
+    assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(2, gd.players().size());
   }
@@ -136,7 +136,7 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
-    assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_HEALTHY);
+    assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
   }
