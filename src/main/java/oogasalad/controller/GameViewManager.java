@@ -31,8 +31,9 @@ public class GameViewManager {
   private Map<Integer, Player> idMap;
   private List<Player> playerList;
   private ResourceBundle myResources;
+  private Map<String, Usable> usablesIDMap;
 
-  public GameViewManager(GameData data, Map<Integer, Player> idMap, int allowedShots, ResourceBundle resourceBundle) {
+  public GameViewManager(GameData data, Map<String, Usable> usablesIDMap, Map<Integer, Player> idMap, int allowedShots, ResourceBundle resourceBundle) {
   /**
    * @param data         GameData object storing information pertinent to game rules
    * @param idMap        Map relating a player id to the Player themselves
@@ -41,6 +42,7 @@ public class GameViewManager {
     this.idMap = idMap;
     this.playerList = data.players();
     this.myResources = resourceBundle;
+    this.usablesIDMap = usablesIDMap;
     setupGameView(data, allowedShots);
 
   }
@@ -48,7 +50,7 @@ public class GameViewManager {
   private void setupGameView(GameData data, int allowedShots) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards, coords, generateIDToNames(), getFirstPlayerInventory(), myResources);
+    view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getInventory()), myResources);
     view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
@@ -60,8 +62,19 @@ public class GameViewManager {
     return idToName;
   }
 
-  private List<UsableRecord> getFirstPlayerInventory() {
-    return new ArrayList<>();
+  private List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> inventoryMap) {
+    List<UsableRecord> inventory = new ArrayList<>();
+    String basicShotID = "Basic Shot";
+    String basicShotClassName = "BasicShot";
+    int basicShotStock = Integer.MAX_VALUE;
+    inventory.add(new UsableRecord(basicShotID, basicShotClassName, basicShotStock));
+    for (String id : inventoryMap.keySet()) {
+      if (!id.equals("Basic Shot")) {
+        System.out.println(usablesIDMap.get(id).getClass().getSimpleName());
+        inventory.add(new UsableRecord(id, usablesIDMap.get(id).getClass().getSimpleName(), inventoryMap.get(id)));
+      }
+    }
+    return inventory;
   }
 
   private List<CellState[][]> createFirstPlayerBoards(GameData data) {
@@ -97,8 +110,8 @@ public class GameViewManager {
       addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList,
           pieceList);
     }
-    Map<String, Integer> inventory = player.getInventory();
-    view.update(boardList, idList, pieceList, new ArrayList<>());
+    List<UsableRecord> inventory = convertMapToUsableRecord(player.getInventory());
+    view.update(boardList, idList, pieceList, inventory);
   }
 
   private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
@@ -114,14 +127,6 @@ public class GameViewManager {
       coords.add(piece.getRelativeCoords());
     }
     return coords;
-  }
-
-  private List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> map) {
-    List<UsableRecord> usables = new ArrayList<>();
-    String basicID = "Basic Shot";
-//    String basicClassName = map.
-//    usables.add(new UsableRecord())
-    return usables;
   }
 
   /**

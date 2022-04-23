@@ -63,12 +63,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
    */
     initialize(data, resourceBundle);
     view = gameViewManager.getView();
-    view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
-        playerQueue.peek().getMyCurrency());
     view.addObserver(this);
-
     conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view, gameViewManager,
         whenToMovePieces);
+    if (engineMap.containsKey(playerQueue.peek())) {
+      handleAI();
+    } else {
+      view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
+          playerQueue.peek().getMyCurrency());
+    }
+
   }
 
   /**
@@ -93,16 +97,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     allowedShots = 2;
     createIDMap(data.players());
     engineMap = data.engineMap();
-    List<Usable> dummyUsables = new ArrayList<Usable>();
-    dummyUsables.add(new BasicShot());
-    dummyUsables.add(new EmpoweredShot("Double Damage", 1, 2));
-
-    usablesIDMap = new HashMap<String, Usable>();
-    for(Usable currUsable: dummyUsables) {
+    usablesIDMap = new HashMap<>();
+    for(Usable currUsable: data.usables()) {
       usablesIDMap.put(currUsable.getMyID(), currUsable);
     }
-
-    gameViewManager = new GameViewManager(data, idMap, allowedShots, myResources);
+    gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
   }
 
   private void createIDMap(List<Player> playerList) {

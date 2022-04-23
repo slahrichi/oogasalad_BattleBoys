@@ -81,7 +81,7 @@ public class GameManagerTest extends DukeApplicationTest {
 
   @Test
   void testGameManagerBasic() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -107,7 +107,7 @@ public class GameManagerTest extends DukeApplicationTest {
 
   @Test
   void testInvalidInputs() {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> gm = new GameManager(gd, myResources));
     assertThrows(NullPointerException.class, () -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
@@ -117,7 +117,7 @@ public class GameManagerTest extends DukeApplicationTest {
 
   @Test
   void testMultiplePieces() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList2, wc, engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList2, wc, new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -145,7 +145,7 @@ public class GameManagerTest extends DukeApplicationTest {
   void testAI() throws InterruptedException {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
         Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
-    GameData gd = new GameData(pfr.playerList(), cellBoard, pieceList2, wc, pfr.engineMap());
+    GameData gd = new GameData(pfr.playerList(), cellBoard, pieceList2, wc, new ArrayList<>(), new HashMap<>(), pfr.engineMap());
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -169,7 +169,7 @@ public class GameManagerTest extends DukeApplicationTest {
   @Test
   void testWinStateCondition() throws InterruptedException {
     GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(Arrays.asList(
-        new HaveXGoldWinCondition(0))), engineMap);
+        new HaveXGoldWinCondition(0))), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),

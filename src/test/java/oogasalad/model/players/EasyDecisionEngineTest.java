@@ -86,7 +86,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testPlacePiece() {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
           gs.createScene();
@@ -107,7 +107,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustment() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>(), engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
           gs.createScene();
