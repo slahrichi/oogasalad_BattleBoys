@@ -34,17 +34,16 @@ public abstract class DecisionEngine {
     myDeque = new ArrayDeque<>();
     myEnemyMap = enemyMap;
     myCoordinateList = coordinateList;
-    myCoordinateMap = makeCoordinateMap(coordinateList);
+    makeCoordinateMap();
     myPlayer = player;
     myRandom = new Random(System.currentTimeMillis());
   }
 
-  private Map<Integer, List<Coordinate>> makeCoordinateMap(List<Coordinate> list) {
-    Map<Integer, List<Coordinate>> map = new HashMap<>();
+  protected void makeCoordinateMap() {
+    myCoordinateMap = new HashMap<>();
     for (Integer id : myEnemyMap.keySet()) {
-      map.put(id, new ArrayList<>(List.copyOf(list)));
+      myCoordinateMap.put(id, new ArrayList<>(List.copyOf(myCoordinateList)));
     }
-    return map;
   }
 
   public abstract EngineRecord makeMove();
@@ -116,4 +115,5 @@ public abstract class DecisionEngine {
     Collections.shuffle(coordinates);
     return coordinates;
   }
+
 }

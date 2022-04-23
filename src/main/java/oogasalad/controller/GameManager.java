@@ -62,10 +62,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
    */
     initialize(data, resourceBundle);
     view = gameViewManager.getView();
+    view.addObserver(this);
     view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
         playerQueue.peek().getMyCurrency());
-    view.addObserver(this);
-
     conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view, gameViewManager,
         whenToMovePieces);
   }
@@ -95,8 +94,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
 
     numShots = 0;
-    whenToMovePieces = 1; //should change this to use gamedata from parser
-    allowedShots = 2;
+    whenToMovePieces = -1; //should change this to use gamedata from parser
+    allowedShots = 1;
     createIDMap(data.players());
     engineMap = data.engineMap();
 
