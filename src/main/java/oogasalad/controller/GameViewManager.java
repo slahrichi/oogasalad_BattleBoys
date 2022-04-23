@@ -40,6 +40,9 @@ public class GameViewManager {
     this.idMap = idMap;
     this.playerList = data.players();
     this.myResources = resourceBundle;
+
+    //Dummy Data
+
     setupGameView(data, allowedShots);
 
   }
@@ -60,6 +63,7 @@ public class GameViewManager {
   }
 
   private Map<String, Integer> getFirstPlayerInventory() {
+
     return playerList.get(0).getInventory();
   }
 

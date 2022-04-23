@@ -78,6 +78,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private void startGame() {
     GameManager manager = new GameManager(gameData, myResources);
     myStage.setScene(manager.createScene());
+    manager.makeFirstAIPlayersMove();
   }
 
   private void loadFile() {

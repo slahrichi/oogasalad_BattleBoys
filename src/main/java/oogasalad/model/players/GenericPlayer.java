@@ -30,6 +30,7 @@ public abstract class GenericPlayer implements Player{
   public GenericPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
     inventory = new HashMap<>();
+    inventory.put("BasicShot", Integer.MAX_VALUE);
     myCurrency = 0;
     myEnemyMap = enemyMap;
     myHitsMap = new HashMap<CellState, Integer>();
