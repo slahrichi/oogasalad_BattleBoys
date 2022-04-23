@@ -107,6 +107,11 @@ public class ConditionHandler {
     } else if (state.equals(WinState.LOSE)) {
       removePlayer(player, id);
       view.displayLosingScreen(player.getName());
+      try {
+        TimeUnit.SECONDS.sleep(2);
+      } catch (Exception e) {
+        LOG.info("Sleeping failed");
+      }
       manager.sendUpdatesToView(playerQueue.peek());
       view.switchToMainScreen();
     }
