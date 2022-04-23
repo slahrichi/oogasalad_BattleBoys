@@ -41,11 +41,11 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
    * Replaces all InventoryElements in this view with new ones generated from the given Map of Usables.
    * @param usables new set of Usables with which to populate this InventoryView
    */
-  public void updateElements(Map<Usable, Integer> usables) {
+  public void updateElements(Map<String, Integer> usables) {
     clearElements();
 
-    for(Usable usable : usables.keySet()) {
-      addElementToHBox(usables.get(usable), "", usable.getMyID()); //TODO: Get image path and integer ID from usable
+    for(String usable : usables.keySet()) {
+      addElementToHBox(usables.get(usable), "", usable); //TODO: Get image path and integer ID from usable
     }
   }
 

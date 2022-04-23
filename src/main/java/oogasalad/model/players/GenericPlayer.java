@@ -45,7 +45,7 @@ public abstract class GenericPlayer implements Player{
     }
   }
 
-  public Map<Usable, Integer> getInventory() {
+  public Map<String, Integer> getInventory() {
     return inventory;
   }
 
