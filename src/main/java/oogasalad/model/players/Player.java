@@ -35,6 +35,7 @@ public interface Player {
      */
     public void makePurchase(int amount, Usable usable);
 
+    Map<Usable, Integer> getInventory();
 
     /**
      * Players need to place their pieces at the start of the game and might be able to move them

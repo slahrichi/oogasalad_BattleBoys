@@ -16,6 +16,7 @@ import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -24,18 +25,24 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -76,7 +83,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String VIEW_PANE_ID = "view-pane";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String SHOT_METHOD = "handleShot";
-  private static final double BOARD_SIZE = 50;
+  private static final double BOARD_SIZE = 40;
   private static final int EXPLOSION_DURATION = 1000;
 
 
@@ -104,6 +111,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private DynamicLabel goldLabel;
   private AbstractScreen passComputerMessageView;
   private ResourceBundle myResources;
+  private InventoryView inventory;
   private boolean nightMode;
 
   private Scene myScene;
@@ -113,7 +121,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Map<Integer, String> playerIDToNames;
 
   public GameView(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, ResourceBundle resourceBundle) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, Map<Usable, Integer> firstPlayerInventory, ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;
@@ -122,9 +130,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     currentBoardIndex = 0;
     playerIDToNames = idToNames;
     myResources = resourceBundle;
-    initialize(firstPlayerBoards, initialPiecesLeft);
-
+    initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerInventory);
   }
+
+
 
   private List<Integer> createInitialIDList(int numPlayers) {
     List<Integer> idList = new ArrayList<>();
@@ -135,14 +144,26 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void initialize(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Usable, Integer> firstPlayerInventory) {
     initializeBoards(firstPlayerBoards, createInitialIDList(firstPlayerBoards.size()));
     createCenterPane();
     createRightPane();
     createTitlePanel();
     createPassMessageView();
     initializePiecesLeft(initialPiecesLeft);
+    createInventory();
+    updateInventory(firstPlayerInventory);
   }
+
+  private void createInventory() {
+    inventory = new InventoryView();
+    myCenterPane.getChildren().add(inventory.getPane());
+  }
+
+  private void updateInventory(Map<Usable, Integer> playerInventory) {
+    inventory.updateElements(playerInventory);
+  }
+
   private void createPassMessageView() {
     passComputerMessageView = new PassComputerScreen(e -> myScene.setRoot(myPane));
   }
@@ -214,6 +235,26 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     setupBoardButtons();
   }
 
+//  private void setupInventory() {
+//    inventory = new ScrollPane();
+//    inventory.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//    HBox box = BoxMaker.makeHBox("inventory-box", 3, Pos.CENTER);
+//    box.setStyle("-fx-background-color: lightblue;");
+//    for (int i = 0; i < 6; i++) {
+//      StackPane pane = new StackPane();
+//      pane.setId("inventory-usable");
+//      pane.setPrefSize(75, 75);
+//      pane.setStyle("-fx-background-color: white;");
+//      Label stock = new Label("x 2");
+//      pane.getChildren().add(stock);
+//      StackPane.setAlignment(stock, Pos.TOP_RIGHT);
+//      box.getChildren().add(pane);
+//    }
+//    inventory.setMaxWidth(400);
+//    inventory.setContent(box);
+//    myCenterPane.getChildren().add(inventory);
+//  }
+
   private void createTitlePanel() {
     myTitle = new TitlePanel("");
     updateTitle(playerIDToNames.get(myBoards.get(currentBoardIndex).getID()));
@@ -281,7 +322,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void refreshCenterPane() {
     myCenterPane.getChildren().clear();
     myCenterPane.getChildren()
-        .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox);
+        .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox, inventory.getPane());
   }
 
   private void updateTitle(String playerName) {
@@ -300,7 +341,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     try {
-      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), String.class);
       m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
@@ -308,25 +349,30 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     }
   }
 
-  private void cellClickedSelf(Info info) {
-    int id = info.ID();
-    int row = info.row();
-    int col = info.col();
+  private void equipUsable(String id) {
+    // this is the ID of the Usable
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), id);
+  }
+
+  private void cellClickedSelf(String clickInfo) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
     LOG.info("cellClickedSelf");
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver("applyUsable", info);
+    notifyObserver("applyUsable", clickInfo);
   }
 
-  private void cellClickedEnemy(Info info) {
-    int id = info.ID();
-    int row = info.row();
-    int col = info.col();
+  private void cellClickedEnemy(String clickInfo) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
     LOG.info("cellClickedEnemy");
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver(SHOT_METHOD, info);
+    notifyObserver(SHOT_METHOD, clickInfo);
   }
 
-  private void cellHoveredSelf(Info info) {
+  private void cellHoveredSelf(String info) {
 //    int id = info.ID();
 //    int row = info.row();
 //    int col = info.col();
@@ -334,7 +380,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 //    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
   }
 
-  private void cellHoveredEnemy(Info info) {
+  private void cellHoveredEnemy(String info) {
 //    int id = info.ID();
 //    int row = info.row();
 //    int col = info.col();
@@ -342,7 +388,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 //    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
   }
 
-  private void cellExitedSelf(Info info) {
+  private void cellExitedSelf(String info) {
 //    int id = info.ID();
 //    int row = info.row();
 //    int col = info.col();
@@ -350,7 +396,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 //    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
   }
 
-  private void cellExitedEnemy(Info info) {
+  private void cellExitedEnemy(String info) {
 //    int id = info.ID();
 //    int row = info.row();
 //    int col = info.col();
@@ -493,7 +539,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList,
-      List<Collection<Collection<Coordinate>>> pieceList) {
+      List<Collection<Collection<Coordinate>>> pieceList, Map<Usable, Integer> inventory) {
     switchPlayerMessage(playerIDToNames.get(idList.get(0)));
     myBoards.clear();
     myPiecesLeft = pieceList;
@@ -501,6 +547,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     int firstID = idList.get(currentBoardIndex);
     initializeBoards(boardList, idList);
     updateTitle(playerIDToNames.get(firstID));
+    updateInventory(inventory);
     updateDisplayedBoard();
   }
 
