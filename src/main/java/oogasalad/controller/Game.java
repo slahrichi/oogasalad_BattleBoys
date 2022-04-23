@@ -41,32 +41,25 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private Stage myStage;
   private FilePicker fileChooser;
   private Parser parser;
-  private List<String> stringPlayers;
   private GameData data;
   private ResourceBundle myResources;
 
-  //TODO: Remove this variable, it's for testing only
-  private List<Piece> pieceList;
 
   public Game(Stage stage) {
     myStage = stage;
-    parser = new Parser();
     fileChooser = new FilePicker();
-    ParserData parserData;
     myResources = ResourceBundle.getBundle(DEFAULT_LANGUAGE_PACKAGE + LANGUAGE);
+    parser = new Parser();
+    ParserData parserData;
     try {
-      parserData = parser.parse("src/main/resources/ExampleDataFile.properties");
+      parserData = parser.parse("data/ExampleDataFile.properties");
     } catch (ParserException e) {
       LOG.error(e);
       parserData = null;
     }
-    stringPlayers = parserData.players();
-    pieceList = parserData.pieces();
-    CellState[][] notSoDummyBoard = parserData.board();
 
-    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(notSoDummyBoard, stringPlayers,
+    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(parserData.board(), parserData.players(),
         parserData.decisionEngines());
-    List<Player> players = pr.playerList();
     Map<Player, DecisionEngine> engineMap = pr.engineMap();
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
@@ -74,7 +67,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
     myStart = new StartView(myResources);
     myStart.addObserver(this);
-    data = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions, engineMap);
+    data = new GameData(pr.playerList(), parserData.board(), parserData.pieces(), dummyWinConditions, engineMap);
     // GameManager should take in list of players and GameData
   }
 
@@ -111,6 +104,8 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   }
 
   private void load() {
+    File loadedFile = chooseDataFile();
+
     LOG.info("Load");
   }
 

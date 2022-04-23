@@ -40,8 +40,11 @@ public record ParserData(List<String> players,
                          List<WinCondition> winConditions,
                          Map<CellState, Color> cellStateColorMap,
                          List<Weapon> weapons){
-//                         List<SpecialIslands> specialIslands,
-//                         List<PowerUps> powerUps)  {
+  //TODO: implement these four parsers
+  //                         List<SpecialIslands> specialIslands,
+  //                         List<PowerUps> powerUps)  {
+  //Map<String,Integer> playerInventory,
+  //Collection<Usable> allUsables;
 
   @Override
   public boolean equals(Object o) {

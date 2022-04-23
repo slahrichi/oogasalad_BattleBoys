@@ -43,7 +43,7 @@ public abstract class ParsedElement {
 
   List getParsedObject(String parsedObjectFile, Gson gson,
       Type listOfMyClassObject, String missingClass) throws ParserException {
-    List ret = null;
+    List<?> ret = null;
     //List<?> ret= null; not sure which one makes more sense
     try {
       ret = gson.fromJson(new FileReader(parsedObjectFile), listOfMyClassObject);

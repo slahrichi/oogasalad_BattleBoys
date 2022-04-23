@@ -5,12 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0fa17cab-4655-4569-b9df-ec7bbbc0b8e7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/ExampleDataFile.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/board.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/pieces.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/HitXCellsCondition.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/AbstractScreen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/maker/DialogMaker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/oogasalad/model/utilities/winconditions/HitXCellsConditionTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/oogasalad/model/utilities/winconditions/LoseXShipsLossConditionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/FilePicker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/FilePicker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/ParserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/ParserData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/controller/ConditionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/controller/ConditionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/controller/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/controller/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/controller/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/controller/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/model/parsing/ParsedElement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/model/parsing/ParsedElement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/model/players/GenericPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/model/players/GenericPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/model/players/PlayerRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/model/players/PlayerRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/HaveXGoldWinCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/HaveXGoldWinCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/LoseXShipsLossCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/LoseXShipsLossCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/WinCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/WinCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/WinConditionInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/model/utilities/winconditions/WinConditionInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/BasicGameSetupStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/PlayerSetupStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/BoardSetUpStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/BoardSetUpStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/BuilderStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/BuilderStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/ColorSelectionStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/ColorSelectionStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/GameSetupView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/GameSetupView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/PieceDesignStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/PieceDesignStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/WeaponDesignStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/oogasalad/view/gamebuilder/WeaponDesignStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/BuilderInfo.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/BuilderInfo.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/BasicSave.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/BasicSave.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +195,7 @@
       <workItem from="1650316711552" duration="2053000" />
       <workItem from="1650334045864" duration="1189000" />
       <workItem from="1650575932335" duration="15312000" />
-      <workItem from="1650656744209" duration="9009000" />
+      <workItem from="1650656744209" duration="11519000" />
     </task>
     <servers />
   </component>

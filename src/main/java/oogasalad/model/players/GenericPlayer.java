@@ -98,7 +98,7 @@ public abstract class GenericPlayer implements Player{
   }
 
   private PlayerRecord makeRecord() {
-    return new PlayerRecord(myPiecesLeft, myCurrency, inventory, myBoard);
+    return new PlayerRecord(myPiecesLeft, myCurrency, myHitsMap, inventory, myBoard);
   }
 
   public Board getBoard() {
