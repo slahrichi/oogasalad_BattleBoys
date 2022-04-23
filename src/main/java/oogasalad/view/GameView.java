@@ -43,11 +43,8 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
-<<<<<<< HEAD
 import oogasalad.model.utilities.usables.Usable;
-=======
 import oogasalad.com.stripe.StripeIntegration;
->>>>>>> master
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -222,10 +219,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createRightPane() {
-<<<<<<< HEAD
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
-=======
-    shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
     stripeButton = ButtonMaker.makeTextButton("stripe", e -> {
       try {
         new StripeIntegration();
@@ -235,7 +229,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
         ex.printStackTrace();
       }
     }, "Stripe");
->>>>>>> master
 
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
