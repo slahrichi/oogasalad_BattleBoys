@@ -57,8 +57,9 @@ public class GameManagerTest extends DukeApplicationTest {
         cellBoard[i][j] = CellState.WATER;
       }
     }
+    Map<String, Integer> inventory = new HashMap<String, Integer>();
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "HumanPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "HumanPlayer")),inventory, new ArrayList<>(Arrays.asList("None", "Easy")));
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
     WinCondition c = new LoseXShipsLossCondition(1);
@@ -144,7 +145,7 @@ public class GameManagerTest extends DukeApplicationTest {
   @Test
   void testAI() throws InterruptedException {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "AIPlayer")),new HashMap<String, Integer>(), new ArrayList<>(Arrays.asList("None", "Easy")));
     GameData gd = new GameData(pfr.playerList(), cellBoard, pieceList2, wc, new ArrayList<>(), new HashMap<>(), pfr.engineMap());
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);

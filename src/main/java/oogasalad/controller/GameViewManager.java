@@ -50,7 +50,7 @@ public class GameViewManager {
   private void setupGameView(GameData data, int allowedShots) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getInventory()), myResources);
+    view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getMyInventory()), myResources);
     view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
@@ -110,7 +110,7 @@ public class GameViewManager {
       addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList,
           pieceList);
     }
-    List<UsableRecord> inventory = convertMapToUsableRecord(player.getInventory());
+    List<UsableRecord> inventory = convertMapToUsableRecord(player.getMyInventory());
     view.update(boardList, idList, pieceList, inventory);
   }
 

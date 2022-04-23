@@ -55,7 +55,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<String, Integer>(), new ArrayList<>(Arrays.asList("None", "Easy")));
     List<Player> engineList = new ArrayList<>(pfr.engineMap().keySet());
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();

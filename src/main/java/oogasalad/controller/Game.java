@@ -106,9 +106,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   }
 
   private void createGameData(ParserData data) {
-    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(data.board(), data.players(),
-        data.decisionEngines());
-    Map<Player, DecisionEngine> engineMap = pr.engineMap();
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
     dummyWinConditions.add(new LoseXShipsLossCondition(2));
@@ -127,6 +124,10 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     Map<String, Integer> startingInventory = new HashMap<>();
     startingInventory.put("Basic Shot", Integer.MAX_VALUE);
     startingInventory.put("Cluster Shot", 2);
+
+    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(data.board(), data.players(),
+        startingInventory, data.decisionEngines());
+    Map<Player, DecisionEngine> engineMap = pr.engineMap();
     gameData = new GameData(pr.playerList(), data.board(), data.pieces(), dummyWinConditions, dummyUsables, startingInventory, engineMap);
   }
 
