@@ -3,7 +3,7 @@ package oogasalad.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import oogasalad.PlayerData;
+import oogasalad.ParserData;
 import oogasalad.model.parsing.Parser;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
@@ -31,15 +31,15 @@ public class PlayerFactoryTest {
   @BeforeEach
   void setup() {
     Parser parser = new Parser();
-    PlayerData playerData = null;
+    ParserData parserData = null;
     try {
-      playerData = parser.parse("src/main/resources/ExampleDataFile.properties");
+      parserData = parser.parse("src/main/resources/ExampleDataFile.properties");
     } catch (ParserException e) {
       e.printStackTrace();
     }
-    playerTypes = playerData.players();
-    board = playerData.board();
-    difficulties = new ArrayList<>(playerData.decisionEngines());
+    playerTypes = parserData.players();
+    board = parserData.board();
+    difficulties = new ArrayList<>(parserData.decisionEngines());
   }
 
   @Test

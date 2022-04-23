@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import oogasalad.PlayerData;
+import oogasalad.ParserData;
 
 
 public class Parser {
@@ -29,7 +29,7 @@ public class Parser {
   }
 
   private void makeParsers() {
-    parsers = PlayerData.makeParsers();
+    parsers = ParserData.makeParsers();
   }
 
   private final String PROPERTIES_PLAYER_LIST = "Players";
@@ -52,13 +52,13 @@ public class Parser {
   private final List<String> jsonPaths = List.of("PiecesFile", "BoardFile");
   private Properties exceptionMessageProperties;
 
-  public void save(PlayerData data, String pathToNewFile) throws ParserException  {
+  public void save(ParserData data, String pathToNewFile) throws ParserException  {
 
     File file = new File(pathToNewFile);
     Properties props = new Properties();
 
     String nameOfNewFile = file.toString().replaceFirst(REGEX, EMPTY);
-    List<Object> elementsOfPlayerData = PlayerData.getItems(data);
+    List<Object> elementsOfPlayerData = ParserData.getItems(data);
 
     for(int i = 0; i < parsers.size(); i++) {
       ParsedElement parser = parsers.get(i);
@@ -79,7 +79,7 @@ public class Parser {
    * @return a parser Player Data
    * @throws FileNotFoundException
    */
-  public PlayerData parse(String pathToFile) throws ParserException {
+  public ParserData parse(String pathToFile) throws ParserException {
     Properties props = getProperties(pathToFile);
     List<Object> parsedElements = new ArrayList<>();
     try {
@@ -89,7 +89,7 @@ public class Parser {
     } catch (JsonSyntaxException e) {
       throw new ParserException(exceptionMessageProperties.getProperty(JSON_ERROR).formatted(pathToFile));
     }
-    return PlayerData.make(parsedElements);
+    return ParserData.make(parsedElements);
   }
 
   private Properties getProperties(String pathToFile) throws ParserException {

@@ -31,10 +31,11 @@ public interface Player {
      * Players are able to make purchases from in-game shop, and items are added to their inventory
      *
      * @param amount cost of item
-     * @param usable   usable to be added
+     * @param id   id string of usable to be added
      */
-    public void makePurchase(int amount, Usable usable);
+    public void makePurchase(int amount, String id);
 
+    Map<String, Integer> getInventory();
 
     /**
      * Players need to place their pieces at the start of the game and might be able to move them

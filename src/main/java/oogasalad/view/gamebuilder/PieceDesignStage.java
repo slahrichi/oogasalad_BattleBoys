@@ -202,7 +202,7 @@ public class PieceDesignStage extends BuilderStage {
     if (needsPath) {
       parametersList.add(patrolPath);
     }
-    parametersList.add(makeRelativeCoordinateMap(pieceMap));
+    //parametersList.add(makeRelativeCoordinateMap(pieceMap));
     parametersList.add(idInputBox.getText());
 
     Object[] parameters = new Object[parametersList.size()];
