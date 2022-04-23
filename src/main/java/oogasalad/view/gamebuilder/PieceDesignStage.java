@@ -30,7 +30,7 @@ public class PieceDesignStage extends BuilderStage {
   private final int MAX_DIMENSION = 5;
 
   private int[][] stateMap;
-  private List<Piece> pieceList;
+  private List<Object> pieceList;
   private Map<String, int[][]> editableStats;
   private BorderPane myPane;
   private Object pieceType;
@@ -210,7 +210,7 @@ public class PieceDesignStage extends BuilderStage {
     pieceList = new ArrayList<>();
     try {
       pieceList.add(
-          (Piece) createInstance(selectedPieceClass, getParameterType(parameters), parameters));
+          createInstance(selectedPieceClass, getParameterType(parameters), parameters));
 
       addToObjectList(idInputBox.getText());
     } catch (IOException e) {

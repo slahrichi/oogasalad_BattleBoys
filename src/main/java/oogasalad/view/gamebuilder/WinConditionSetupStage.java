@@ -29,7 +29,7 @@ public class WinConditionSetupStage extends BuilderStage {
   private Map<String, TextArea> varInputBoxes;
   private ComboBox cellToHitOptionBox;
   private ComboBox winStateOptionBox;
-  private List<WinCondition> winConditions;
+  private List<Object> winConditions;
 
   public WinConditionSetupStage() {
     possibleWinTypes = getMyBuilderResources().getString("possibleWinConditionType").split(",");
@@ -82,7 +82,7 @@ public class WinConditionSetupStage extends BuilderStage {
 
   private void saveWinCondition(String selection, Boolean needsCellToHit,
       Boolean needsWinCondition) {
-    winConditions=new ArrayList<>();
+    winConditions = new ArrayList<>();
     String entryName = selection;
     List<Object> parameterList = new ArrayList<>();
     if (needsCellToHit) {
@@ -99,9 +99,8 @@ public class WinConditionSetupStage extends BuilderStage {
     Class<?>[] parameterTypes = getParameterTypes(parameters);
 
     try {
-      winConditions.add(
-          (WinCondition) createInstance("oogasalad.model.utilities.winconditions." + selection,
-              parameterTypes, parameters));
+      winConditions.add(createInstance("oogasalad.model.utilities.winconditions." + selection,
+          parameterTypes, parameters));
       resetSelection();
       addToObjectList(entryName);
     } catch (IOException e) {
