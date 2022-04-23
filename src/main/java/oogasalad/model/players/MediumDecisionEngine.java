@@ -63,6 +63,7 @@ public class MediumDecisionEngine extends DecisionEngine {
     }
     if (canBeRemoved(result)) {
       getCoordinateMap().get(getCurrentPlayer()).remove(getLastShot());
+      getDeque().remove(getLastShot());
     }
   }
 
@@ -93,14 +94,18 @@ public class MediumDecisionEngine extends DecisionEngine {
   }
 
   private void prepareBFS() {
+    Coordinate lastShot = getLastShot().shot();
     for (Coordinate c : generateCoordinates()) {
-      if (getCoordinateList().contains(c)) {
-        getDeque().addLast(new EngineRecord(c, getCurrentPlayer()));
+      Coordinate neighbor = new Coordinate(lastShot.getRow() + c.getRow(),
+          lastShot.getColumn() + c.getColumn());
+      if (getCoordinateList().contains(neighbor)) {
+        getDeque().addLast(new EngineRecord(neighbor, getCurrentPlayer()));
       }
     }
   }
 
   private boolean wasSuccess(CellState result) {
-    return result == CellState.ISLAND_DAMAGED || result == CellState.SHIP_DAMAGED;
+    return result == CellState.ISLAND_DAMAGED || result == CellState.SHIP_DAMAGED ||
+        result == CellState.SHIP_SUNKEN || result == CellState.ISLAND_SUNK;
   }
 }

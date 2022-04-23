@@ -61,15 +61,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     initialize(data, resourceBundle);
     view = gameViewManager.getView();
     view.addObserver(this);
+    view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
+        playerQueue.peek().getMyCurrency());
     conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view, gameViewManager,
         whenToMovePieces);
-    if (engineMap.containsKey(playerQueue.peek())) {
-      handleAI();
-    }
-    else {
-      view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
-          playerQueue.peek().getMyCurrency());
-    }
   }
 
   /**
@@ -90,8 +85,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
     numShots = 0;
-    whenToMovePieces = 1; //should change this to use gamedata from parser
-    allowedShots = 2;
+    whenToMovePieces = -1; //should change this to use gamedata from parser
+    allowedShots = 1;
     createIDMap(data.players());
     engineMap = data.engineMap();
     gameViewManager = new GameViewManager(data, idMap, allowedShots, myResources);

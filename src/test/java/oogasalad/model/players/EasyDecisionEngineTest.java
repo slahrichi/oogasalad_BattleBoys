@@ -127,7 +127,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
-    Thread.sleep(1500);
+    Thread.sleep(2500);
     Coordinate c = findCoordinateStruck();
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
@@ -136,7 +136,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
     CellState[][] enemyBoard = playerList.get(0).getBoard().getCurrentBoardState();
-    Thread.sleep(1500);
+    Thread.sleep(2000);
     assertEquals(CellState.SHIP_SUNKEN, enemyBoard[c.getRow()][c.getColumn()]);
   }
 
@@ -144,7 +144,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
     CellState[][] board = playerList.get(0).getBoard().getCurrentBoardState();
     for (int i = 0; i < board.length; i++) {
       for (int j = 0; j < board[0].length; j++) {
-        if (board[i][j] == CellState.SHIP_SUNKEN) {
+        if (board[i][j] == CellState.SHIP_SUNKEN || board[i][j] == CellState.SHIP_DAMAGED) {
           return new Coordinate(i, j);
         }
       }
