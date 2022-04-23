@@ -59,7 +59,7 @@ public class GameViewManager {
     return idToName;
   }
 
-  private Map<Usable, Integer> getFirstPlayerInventory() {
+  private Map<String, Integer> getFirstPlayerInventory() {
     return playerList.get(0).getInventory();
   }
 
@@ -96,7 +96,7 @@ public class GameViewManager {
       addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList,
           pieceList);
     }
-    Map<Usable, Integer> inventory = player.getInventory();
+    Map<String, Integer> inventory = player.getInventory();
     view.update(boardList, idList, pieceList, inventory);
   }
 

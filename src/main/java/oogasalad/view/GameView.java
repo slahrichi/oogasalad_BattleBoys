@@ -151,7 +151,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Map<Integer, String> playerIDToNames;
 
   public GameView(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, Map<Usable, Integer> firstPlayerInventory, ResourceBundle resourceBundle) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, Map<String, Integer> firstPlayerInventory, ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;
@@ -174,7 +174,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void initialize(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Usable, Integer> firstPlayerInventory) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<String, Integer> firstPlayerInventory) {
     initializeBoards(firstPlayerBoards, createInitialIDList(firstPlayerBoards.size()));
     createCenterPane();
     createRightPane();
@@ -190,7 +190,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myCenterPane.getChildren().add(inventory.getPane());
   }
 
-  private void updateInventory(Map<Usable, Integer> playerInventory) {
+  private void updateInventory(Map<String, Integer> playerInventory) {
     inventory.updateElements(playerInventory);
   }
 
@@ -588,7 +588,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void update(List<CellState[][]> boardList, List<Integer> idList,
-      List<Collection<Collection<Coordinate>>> pieceList, Map<Usable, Integer> inventory) {
+      List<Collection<Collection<Coordinate>>> pieceList, Map<String, Integer> inventory) {
     myBoards.clear();
     myPiecesLeft = pieceList;
     currentBoardIndex = 0;
