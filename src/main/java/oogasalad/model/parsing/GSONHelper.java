@@ -11,19 +11,23 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class GSONHelper<T> implements
     JsonSerializer<T>, JsonDeserializer<T> {
   private final String TYPE = "type";
   private final String PROPERTIES = "properties";
   private final String UNKNOWN_TYPE = "Unknown element type: ";
+  private static final Logger LOG = LogManager.getLogger(GSONHelper.class);
 
 
 
   @Override
   public JsonElement serialize(T src, Type type,
       JsonSerializationContext context) {
-
+    LOG.info("serializing custom element");
     JsonObject result = new JsonObject();
     result.add(TYPE, new JsonPrimitive(src.getClass().getName()));
 
@@ -39,6 +43,7 @@ public class GSONHelper<T> implements
   public T deserialize(JsonElement json, Type typeOfT,
       JsonDeserializationContext context) throws JsonParseException {
 
+    LOG.info("deserializing custom element");
     JsonObject jsonObject = json.getAsJsonObject();
     String type = jsonObject.get(TYPE).getAsString();
     JsonElement element = jsonObject.get(PROPERTIES);

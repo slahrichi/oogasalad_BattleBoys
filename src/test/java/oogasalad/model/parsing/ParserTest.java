@@ -76,8 +76,9 @@ public class ParserTest {
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER}};
 
-    exampleParserData = new ParserData(players, pieceList, dummyBoard, decisionEngines);
-
+    //exampleParserData = new ParserData(players, pieceList, dummyBoard, decisionEngines);
+    exampleParserData = null;
+    //TODO: delete this
   }
 
   /*

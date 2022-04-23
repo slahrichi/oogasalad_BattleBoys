@@ -11,7 +11,8 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Properties;
-import oogasalad.model.utilities.winconditions.WinCondition;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class ParsedElement {
 
@@ -19,6 +20,7 @@ public abstract class ParsedElement {
   private final String MISSING_DATA =  "missingData";
   private final String MISSING_FILE = "missingFile";
   private final String EXCEPTIONS_PATH = "src/main/resources/ParserExceptions.properties";
+  private static final Logger LOG = LogManager.getLogger(ParsedElement.class);
 
   public ParsedElement() {
     exceptionMessageProperties = new Properties();
