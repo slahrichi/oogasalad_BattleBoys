@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
-
 import oogasalad.model.utilities.tiles.ShipCell;
 
 public class StaticPiece extends Piece {
