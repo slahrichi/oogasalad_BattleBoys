@@ -12,6 +12,7 @@ public abstract class CellModifier implements Modifiers {
   public Consumer modifierFunction() {
     return myConsumer;
   }
+
   @Override
   public abstract String toString();
 }
