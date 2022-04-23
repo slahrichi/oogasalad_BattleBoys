@@ -63,6 +63,7 @@ public class GameViewManager {
   }
 
   private Map<String, Integer> getFirstPlayerInventory() {
+
     return playerList.get(0).getInventory();
   }
 

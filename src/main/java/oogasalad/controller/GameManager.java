@@ -81,12 +81,19 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return playerQueue.peek().getID();
   }
 
+  public void makeFirstAIPlayersMove() {
+    while(engineMap.containsKey(playerQueue.peek())) {
+      handleAI();
+    }
+  }
 
   private void initialize(GameData data, ResourceBundle resources) {
     currentUsable = new BasicShot();
     myResources = resources;
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
+
+
     numShots = 0;
     whenToMovePieces = 1; //should change this to use gamedata from parser
     allowedShots = 2;
@@ -200,7 +207,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
     gameViewManager.sendUpdatesToView(player);
+    System.out.println(4);
     view.moveToNextPlayer(player.getName());
+    System.out.println(5);
     handleAI();
   }
 
