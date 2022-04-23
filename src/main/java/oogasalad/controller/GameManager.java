@@ -48,7 +48,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private List<Info> AIShots;
   private Usable currentUsable;
   private static final String INVALID_METHOD = "Invalid method name given";
-  private static final Info DUMMY_INFO = new Info(0, 0, 0);
+  private static final String DUMMY_INFO = "";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private ResourceBundle myResources;
 
@@ -121,26 +121,36 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-  private void applyUsable(Info info) {
+  private void equipUsable(String id) {
+    // set currentUsable equal to map.get(info.getID());
+  }
+
+  private void applyUsable(String clickInfo) {
     try {
-      currentUsable.handleUsage().accept(info, this);
+      currentUsable.handleUsage().accept(clickInfo, this);
     }
     catch (Exception e) {
       view.showError(e.getMessage());
     }
   }
 
-  private void selfBoardClicked(Info info) {
-    LOG.info("Self board clicked at " + info.row() + ", " + info.col());
+  private void selfBoardClicked(String clickInfo) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
+    LOG.info("Board " + id + " clicked at " + row + ", " + col);
   }
 
-  public void handleShot(Info info) {
-    Coordinate coordinate = new Coordinate(info.row(), info.col());
-    if (numShots < allowedShots && makeShot(coordinate, info.ID(), currentUsable)) {
+  public void handleShot(String clickInfo) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
+    Coordinate coordinate = new Coordinate(row, col);
+    if (numShots < allowedShots && makeShot(coordinate, id, currentUsable)) {
       Player player = playerList.get(playerIndex);
       view.updateLabels(allowedShots - numShots, player.getNumPieces(), player.getMyCurrency());
       view.displayShotAnimation(coordinate.getRow(), coordinate.getColumn(), e ->
-          updateConditions(info.ID()), info.ID());
+          updateConditions(id), id);
     }
   }
 
@@ -164,13 +174,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-  private void endTurn(Info info) {
+  private void endTurn(String info) {
     playerIndex = (playerIndex + 1) % playerList.size();
     checkIfEndSet();
     Player player = playerList.get(playerIndex);
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
-    gameViewManager.sendUpdatedBoardsToView(player);
+    gameViewManager.sendUpdatesToView(player);
     handleAI();
   }
 
