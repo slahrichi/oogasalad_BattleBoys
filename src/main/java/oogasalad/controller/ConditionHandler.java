@@ -90,7 +90,7 @@ public class ConditionHandler {
   private void checkWinState(Player player, WinState state, int id) {
     if (state.equals(WinState.LOSE)) {
       removePlayer(player, id);
-      manager.sendUpdatedBoardsToView(player);
+      manager.sendUpdatesToView(player);
       Platform.runLater(() -> view.displayLosingDialog(player.getName()));
     } else if (state.equals(WinState.WIN)) {
       moveToWinGame(player);

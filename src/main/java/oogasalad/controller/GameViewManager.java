@@ -12,6 +12,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.view.GameView;
 
 /**
@@ -46,7 +47,7 @@ public class GameViewManager {
   private void setupGameView(GameData data, int allowedShots) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards, coords, generateIDToNames(), myResources);
+    view = new GameView(boards, coords, generateIDToNames(), getFirstPlayerInventory(), myResources);
     view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
@@ -56,6 +57,10 @@ public class GameViewManager {
       idToName.put(p.getID(), p.getName());
     }
     return idToName;
+  }
+
+  private Map<Usable, Integer> getFirstPlayerInventory() {
+    return playerList.get(0).getInventory();
   }
 
   private List<CellState[][]> createFirstPlayerBoards(GameData data) {
@@ -80,7 +85,7 @@ public class GameViewManager {
     return view;
   }
 
-  void sendUpdatedBoardsToView(Player player) {
+  public void sendUpdatesToView(Player player) {
     List<CellState[][]> boardList = new ArrayList<>();
     List<Integer> idList = new ArrayList<>();
     List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
@@ -91,7 +96,8 @@ public class GameViewManager {
       addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList,
           pieceList);
     }
-    view.moveToNextPlayer(boardList, idList, pieceList);
+    Map<Usable, Integer> inventory = player.getInventory();
+    view.moveToNextPlayer(boardList, idList, pieceList, inventory);
   }
 
   private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
