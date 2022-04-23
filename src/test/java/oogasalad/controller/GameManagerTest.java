@@ -21,7 +21,6 @@ import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.view.GameView;
-import oogasalad.view.Info;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -46,7 +45,7 @@ public class GameManagerTest extends DukeApplicationTest {
   private List<WinCondition> wc;
   private GameSetup gs;
   private GameManager gm;
-  private Info info = new Info(0, 1, 1);
+  private String info = "0 0 1";
 
 
   @BeforeEach
@@ -84,10 +83,7 @@ public class GameManagerTest extends DukeApplicationTest {
   void testGameManagerBasic() throws InterruptedException {
     GameData gd = new GameData(playerList, cellBoard, pieceList, wc, engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
-//    sleep(3000);
-//    clickOn(lookup("#pass-computer-message-button").query());
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "placePiece", null, "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -104,18 +100,15 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
-    assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
+    assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_HEALTHY);
     Thread.sleep(2000);
-    assertEquals(gd.players().size(), 1);
+    assertEquals(2, gd.players().size());
   }
 
   @Test
   void testInvalidInputs() {
     GameData gd = new GameData(playerList, cellBoard, pieceList, wc, engineMap);
-    javafxRun(() -> {
-      gm = new GameManager(gd, myResources);
-      gm.createScene();
-    });
+    javafxRun(() -> gm = new GameManager(gd, myResources));
     assertThrows(NullPointerException.class, () -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), new HashMap<>(), myResources),
@@ -126,8 +119,7 @@ public class GameManagerTest extends DukeApplicationTest {
   void testMultiplePieces() throws InterruptedException {
     GameData gd = new GameData(playerList, cellBoard, pieceList2, wc, engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "placePiece", null, "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -144,7 +136,7 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
-    assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
+    assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_HEALTHY);
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
   }
@@ -154,13 +146,8 @@ public class GameManagerTest extends DukeApplicationTest {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
         Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
     GameData gd = new GameData(pfr.playerList(), cellBoard, pieceList2, wc, pfr.engineMap());
-    javafxRun(() -> {
-      gs = new GameSetup(gd, myResources);
-      gs.createScene();
-        }
-    );
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    javafxRun(() -> gs = new GameSetup(gd, myResources));
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "placePiece", null, "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -184,8 +171,7 @@ public class GameManagerTest extends DukeApplicationTest {
     GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(Arrays.asList(
         new HaveXGoldWinCondition(0))), engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "placePiece", null, "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
