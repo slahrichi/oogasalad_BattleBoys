@@ -85,9 +85,11 @@ public class MediumDecisionEngine extends DecisionEngine {
 
   /**
    * method to reset the strategy in the event that the boats move
+   * the AI clears their deque and replenishes all potential coordinates
    */
   public void resetStrategy() {
     getDeque().clear();
+    makeCoordinateMap();
   }
 
   private void prepareBFS() {

@@ -90,5 +90,6 @@ public class EasyDecisionEngine extends DecisionEngine {
 
   public void resetStrategy() {
     getDeque().clear();
+    makeCoordinateMap();
   }
 }
