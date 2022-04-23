@@ -30,7 +30,7 @@ public class PieceDesignStage extends BuilderStage {
   private final int MAX_DIMENSION = 5;
 
   private int[][] stateMap;
-  private List<Piece> pieceList;
+  private List<Object> pieceList;
   private Map<String, int[][]> editableStats;
   private BorderPane myPane;
   private Object pieceType;
@@ -55,7 +55,6 @@ public class PieceDesignStage extends BuilderStage {
 
   public PieceDesignStage() {
     myPane = new BorderPane();
-    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     availablePieceTypes = getMyBuilderResources().getString("possiblePieceType");
     customizableStats = getMyBuilderResources().getString("pieceCellCustomParameters")
         .split(",");
@@ -115,6 +114,7 @@ public class PieceDesignStage extends BuilderStage {
   private void resetCustomization() {
     myPane.setCenter(null);
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
+    stateMap[2][2]=1;
     piecePathList.clear();
     patrolPath.clear();
     myPane.setLeft(null);
@@ -146,7 +146,7 @@ public class PieceDesignStage extends BuilderStage {
   @Override
   protected Object saveAndContinue() {
     myStage.close();
-    WeaponDesignStage wds = new WeaponDesignStage();
+
     return null;
   }
 
@@ -210,7 +210,7 @@ public class PieceDesignStage extends BuilderStage {
     pieceList = new ArrayList<>();
     try {
       pieceList.add(
-          (Piece) createInstance(selectedPieceClass, getParameterType(parameters), parameters));
+          createInstance(selectedPieceClass, getParameterType(parameters), parameters));
 
       addToObjectList(idInputBox.getText());
     } catch (IOException e) {
@@ -246,9 +246,6 @@ public class PieceDesignStage extends BuilderStage {
       piecePathList.add(path);
     }
   }
-
-  // private Piece makePiece(){
-  // }
 
 
 }

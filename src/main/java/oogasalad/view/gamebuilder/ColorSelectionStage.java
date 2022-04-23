@@ -1,9 +1,10 @@
 package oogasalad.view.gamebuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -12,22 +13,26 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import oogasalad.model.utilities.tiles.enums.CellState;
 
-public class ColorSelectionStage extends BuilderStage{
+public class ColorSelectionStage extends BuilderStage {
+
   private BorderPane myPane = new BorderPane();
   private String[] optionList;
-  private List<Color> colorList;
-  private List<ColorPicker> colorPickers=new ArrayList<>();
+  private Map<CellState, Color> colorMap;
+  private List<ColorPicker> colorPickers = new ArrayList<>();
+  private Map<String, ColorPicker> colorPickerMap;
   private Stage myStage;
 
-  public ColorSelectionStage(){
+  public ColorSelectionStage() {
     super();
-    myStage =  new Stage();
-    optionList= getMyBuilderResources().getString("possibleCellState").split(",");
+    myStage = new Stage();
+    colorPickerMap = new HashMap<>();
+    optionList = getMyBuilderResources().getString("possibleCellState").split(",");
     myPane.setCenter(buildOptionDisplay());
     myPane.setRight(makeContinueButton());
 
-    Scene myScene =  new Scene(myPane, 900, 500);
+    Scene myScene = new Scene(myPane, 900, 500);
     myStage.setScene(myScene);
 
   }
@@ -40,30 +45,29 @@ public class ColorSelectionStage extends BuilderStage{
   @Override
   protected Object launch() {
     myStage.showAndWait();
-    return colorList;
+    return colorMap;
   }
 
-  private VBox buildOptionDisplay(){
+  private VBox buildOptionDisplay() {
     VBox result = new VBox();
-    int index=0;
-    for(String option : optionList){
-      ColorPicker test = new ColorPicker();
-      colorPickers.add(test);
-      result.getChildren().add(new HBox(new Text(option),test));
+    int index = 0;
+    for (String option : optionList) {
+      ColorPicker colorPicker = new ColorPicker();
+      colorPickerMap.put(option, colorPicker);
+      result.getChildren().add(new HBox(new Text(option), colorPicker));
 
     }
-
 
     return result;
   }
 
-  protected List<Color> saveAndContinue(){
-    colorList=new ArrayList<>();
-    for(ColorPicker cp : colorPickers){
-      colorList.add(cp.getValue());
+  protected Object saveAndContinue() {
+    colorMap = new HashMap<>();
+    for (String cellStateName : colorPickerMap.keySet()) {
+      colorMap.put(CellState.valueOf(cellStateName), colorPickerMap.get(cellStateName).getValue());
     }
     myStage.close();
-    return colorList;
+    return colorMap;
   }
 
 }

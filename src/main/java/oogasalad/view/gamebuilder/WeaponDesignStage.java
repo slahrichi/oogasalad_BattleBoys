@@ -45,7 +45,7 @@ public class WeaponDesignStage extends BuilderStage {
   private Object[] parameters;
   private Class<?>[] parameterTypes;
   private List<Class<?>> parameterTypesList;
-  private List<Weapon> weaponList = new ArrayList<>();
+  private List<Object> weaponList = new ArrayList<>();
 
   public WeaponDesignStage() {
     colorList.add(DEFAULT_INACTIVE_COLOR);
@@ -84,7 +84,7 @@ public class WeaponDesignStage extends BuilderStage {
   @Override
   protected Object launch() {
     myStage.showAndWait();
-    return null;
+    return weaponList;
   }
 
   private void makePopUpDialog(int i, int j) {
@@ -202,7 +202,7 @@ public class WeaponDesignStage extends BuilderStage {
       parameterTypesList.toArray(parameterTypes);
       String selectedWeaponClass = "oogasalad.model.utilities.usables.weapons."+selectedWeapon;
       try {
-        weaponList.add((Weapon) createInstance(selectedWeaponClass, parameterTypes, parameters));
+        weaponList.add( createInstance(selectedWeaponClass, parameterTypes, parameters));
       } catch (IOException e) {
         e.printStackTrace();
       }
