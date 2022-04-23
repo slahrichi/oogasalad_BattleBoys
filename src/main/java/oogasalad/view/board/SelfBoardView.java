@@ -38,6 +38,6 @@ public class SelfBoardView extends GameBoardView {
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    notifyObserver(evt.getPropertyName()+SELF, new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
+    notifyObserver(evt.getPropertyName()+SELF, ((Coordinate) evt.getNewValue()).getRow() + " " + ((Coordinate) evt.getNewValue()).getColumn() + " " + myID);
   }
 }

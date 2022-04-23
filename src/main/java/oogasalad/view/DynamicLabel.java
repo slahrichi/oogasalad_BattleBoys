@@ -35,4 +35,6 @@ public class DynamicLabel extends Label {
   public void changeDynamicText(String newText) {
     setText(String.format(myText, newText));
   }
+
+
 }

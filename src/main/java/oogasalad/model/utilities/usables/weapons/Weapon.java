@@ -47,10 +47,14 @@ public abstract class Weapon extends Usable {
     protected abstract void makeWeaponFunction();
 
     @Override
-    public BiConsumer<Info, GameManager> handleUsage(){
-        return (info, gm)->{
-            if(gm.getCurrentPlayer() != info.ID())
-                gm.handleShot(info);
+    public BiConsumer<String, GameManager> handleUsage(){
+        return (clickInfo, gm)-> {
+            int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
+            if(gm.getCurrentPlayer() != id) {
+                System.out.println("Hello");
+                System.out.println(id + " " + gm.getCurrentPlayer());
+                gm.handleShot(clickInfo);
+            }
             else
                 throw new IllegalArgumentException("Please Choose an Enemy Board");
         };

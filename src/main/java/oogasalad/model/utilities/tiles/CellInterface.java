@@ -5,7 +5,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
-public interface CellInterface {
+public interface  CellInterface {
 
 
    CellState hit(int dmg);

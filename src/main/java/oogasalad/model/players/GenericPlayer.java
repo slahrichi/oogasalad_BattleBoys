@@ -45,6 +45,10 @@ public abstract class GenericPlayer implements Player{
     }
   }
 
+  public Map<Usable, Integer> getInventory() {
+    return inventory;
+  }
+
   public void removePiece(String id) {
     myBoard.removePiece(id);
   }

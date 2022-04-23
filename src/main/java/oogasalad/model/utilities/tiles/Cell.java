@@ -45,14 +45,12 @@ public abstract class Cell implements CellInterface{
       if(mod.checkConditions(this)) returnMods.add(mod);
     }
     for(Modifiers currMod: returnMods){
-      if(currMod.getClass().getSimpleName().equals("CellModifier")){
-        try {
-          currMod.modifierFunction().accept(this);
-          returnMods.remove(currMod);
-        }catch(Exception e){
+      try {
+        currMod.modifierFunction(this).accept(this);
+        returnMods.remove(currMod);
+      }catch(Exception e){
         }
       }
-    }
     return returnMods;
   }
 
