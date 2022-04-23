@@ -194,7 +194,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void createRightPane() {
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
 
-    piecesRemainingPane = new SetPiecePane(20);
+    piecesRemainingPane = new SetPiecePane(20, myResources);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
 
     setupPieceLegendPane();
