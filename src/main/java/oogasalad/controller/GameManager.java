@@ -60,12 +60,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
    */
     initialize(data, resourceBundle);
     view = gameViewManager.getView();
-    view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
-        playerQueue.peek().getMyCurrency());
     view.addObserver(this);
-
     conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view, gameViewManager,
         whenToMovePieces);
+    if (engineMap.containsKey(playerQueue.peek())) {
+      handleAI();
+    }
+    else {
+      view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
+          playerQueue.peek().getMyCurrency());
+    }
   }
 
   /**
