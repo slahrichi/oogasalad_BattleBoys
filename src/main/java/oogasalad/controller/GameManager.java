@@ -19,6 +19,7 @@ import oogasalad.model.players.EngineRecord;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
@@ -42,14 +43,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private Map<Player, DecisionEngine> engineMap;
   private GameView view;
   private GameViewManager gameViewManager;
-  private int playerIndex;
   private int numShots;
   private int allowedShots;
   private int whenToMovePieces;
   private List<Info> AIShots;
   private Usable currentUsable;
   private static final String INVALID_METHOD = "Invalid method name given";
-  private static final Info DUMMY_INFO = new Info(0, 0, 0);
+  private static final String DUMMY_INFO = "";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private ResourceBundle myResources;
 
@@ -64,7 +64,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         playerQueue.peek().getMyCurrency());
     view.addObserver(this);
 
-    conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view,
+    conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view, gameViewManager,
         whenToMovePieces);
   }
 
@@ -85,7 +85,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     myResources = resources;
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
-    playerIndex = 0;
     numShots = 0;
     whenToMovePieces = 1; //should change this to use gamedata from parser
     allowedShots = 2;
@@ -109,13 +108,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    int id = ((Info) evt.getNewValue()).ID();
-    int row = ((Info) evt.getNewValue()).row();
-    int col = ((Info) evt.getNewValue()).col();
-    Info info = new Info(row, col, id);
     try {
-      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
-      m.invoke(this, info);
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), String.class);
+      m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
       e.printStackTrace();
@@ -123,26 +118,35 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-  private void applyUsable(Info info) {
+  private void equipUsable(String id) {
+    // set currentUsable equal to map.get(info.getID());
+  }
+
+  private void applyUsable(String clickInfo) {
     try {
-      currentUsable.handleUsage().accept(info, this);
+      currentUsable.handleUsage().accept(clickInfo, this);
     }
     catch (Exception e) {
       view.showError(e.getMessage());
     }
   }
 
-  private void selfBoardClicked(Info info) {
-    LOG.info("Self board clicked at " + info.row() + ", " + info.col());
+  private void selfBoardClicked(String clickInfo) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
+    LOG.info("Board " + id + " clicked at " + row + ", " + col);
   }
 
-  public void handleShot(Info info) {
-    Coordinate coordinate = new Coordinate(info.row(), info.col());
-    if (numShots < allowedShots && makeShot(coordinate, info.ID(), currentUsable)) {
+  public void handleShot(String clickInfo) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
+    if (numShots < allowedShots && makeShot(new Coordinate(row, col), id, currentUsable)) {
       Player player = playerQueue.peek();
       view.updateLabels(allowedShots - numShots, player.getNumPieces(), player.getMyCurrency());
-      view.displayShotAnimation(coordinate.getRow(), coordinate.getColumn(), e ->
-          updateConditions(info.ID()), info.ID());
+      view.displayShotAnimation(row, col, e ->
+          updateConditions(id), id);
     }
   }
 
@@ -157,16 +161,19 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void checkIfEndTurn() {
     if (numShots == allowedShots) {
+      // if AI has finished firing their shots
       if (engineMap.containsKey(playerQueue.peek())) {
         view.displayAIMove(playerQueue.peek().getID(), AIShots);
         endTurn(DUMMY_INFO);
-      } else {
+      }
+      // if a human has finished firing their shots
+      else {
         view.allowEndTurn();
       }
     }
   }
 
-  private void endTurn(Info info) {
+  private void endTurn(String info) {
     Player p = playerQueue.poll();
     conditionHandler.updateTurns(p);
     playerQueue.add(p);
@@ -174,7 +181,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     Player player = playerQueue.peek();
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
-    gameViewManager.sendUpdatedBoardsToView(player.getID());
+    gameViewManager.sendUpdatesToView(player);
+    view.moveToNextPlayer(player.getName());
     handleAI();
   }
 
@@ -205,21 +213,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-//  private boolean makeShot(Coordinate c, int id) {
-//    Player currentPlayer = playerList.get(playerIndex);
-//    Player enemy = idMap.get(id);
-//    if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-//      CellState result = enemy.getBoard().hit(c, 1);
-//      adjustStrategy(currentPlayer, result);
-//      currentPlayer.updateEnemyBoard(c, id, result);
-//      view.displayShotAt(c.getRow(), c.getColumn(), result);
-//      conditionHandler.applyModifiers(currentPlayer, enemy);
-//      numShots++;
-//      return true;
-//    }
-//    return false;
-//  }
-
   private boolean makeShot(Coordinate c, int id, Usable weaponUsed) {
     Player currentPlayer = playerQueue.peek();
     Player enemy = idMap.get(id);
@@ -230,7 +223,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         currentPlayer.updateEnemyBoard(hitCoord, id, hitResults.get(hitCoord));
         view.displayShotAt(hitCoord.getRow(), hitCoord.getColumn(), hitResults.get(hitCoord));
       }
-      conditionHandler.applyModifiers(currentPlayer, enemy);
+      List<Modifiers> mods = conditionHandler.applyModifiers(currentPlayer, enemy);
+
+      for(Modifiers mod : mods)
+          mod.modifierFunction(this).accept(this);
+
       numShots++;
       return true;
     } catch (Exception e) {
@@ -243,5 +240,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       DecisionEngine engine = engineMap.get(player);
       engine.adjustStrategy(result);
     }
+  }
+
+  public GameViewManager getGameViewManager() {
+    return gameViewManager;
+  }
+
+  public Map<Integer, Player> getIDMap() {
+    return idMap;
   }
 }

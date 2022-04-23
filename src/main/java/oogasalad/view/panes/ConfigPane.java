@@ -1,5 +1,6 @@
 package oogasalad.view.panes;
 
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -8,19 +9,27 @@ import javafx.scene.layout.GridPane;
 
 import oogasalad.view.maker.ButtonMaker;
 
+/**
+ * This class represents a configuration panel on screen that allows users to configure certain visual aspects of
+ * the program, such as night mode.
+ *
+ * @author Eric Xie
+ */
 public class ConfigPane extends TitledPane {
 
-  private static final String CONFIG_TEXT = "Configuration";
+  private static ResourceBundle myResources;
+
   private static final String CONFIG_ID = "configPane";
   private static final String GRID_ID = "configGrid";
   private static final String NIGHT_MODE_ID = "night-mode";
-  private static final String NIGHT_MODE_TEXT = "Night Mode";
+  private static final String NIGHT_MODE_RESOURCE = "NightMode";
 
   private Button nightBtn;
   private GridPane myGrid;
 
-  public ConfigPane(){
-    setText(CONFIG_TEXT);
+  public ConfigPane(ResourceBundle resourceBundle){
+
+    myResources = resourceBundle;
     setId(CONFIG_ID);
     setExpanded(false);
 
@@ -30,7 +39,7 @@ public class ConfigPane extends TitledPane {
   }
 
   public void setOnAction(EventHandler<ActionEvent> e){
-    nightBtn = ButtonMaker.makeTextButton(NIGHT_MODE_ID, e, NIGHT_MODE_TEXT);
+    nightBtn = ButtonMaker.makeTextButton(NIGHT_MODE_ID, e, myResources.getString(NIGHT_MODE_RESOURCE));
     myGrid.add(nightBtn, 0, 0);
   }
 }

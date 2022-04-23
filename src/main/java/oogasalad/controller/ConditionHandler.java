@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import javafx.application.Platform;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.winconditions.WinCondition;
@@ -26,6 +28,7 @@ public class ConditionHandler {
   private Map<Integer, Player> idMap;
   private List<WinCondition> winConditions;
   private GameView view;
+  private GameViewManager manager;
   private int movePieces;
   private Map<Player, Integer> turnMap;
 
@@ -38,13 +41,15 @@ public class ConditionHandler {
    * @param winConditions list of win conditions
    * @param view          GameView object displaying the game
    */
+
   public ConditionHandler(Queue<Player> playerQueue, Map<Integer, Player> idMap,
-      List<WinCondition> winConditions, GameView view, int movePieces) {
+      List<WinCondition> winConditions, GameView view, GameViewManager manager, int movePieces) {
     this.playerQueue = playerQueue;
     this.idMap = idMap;
     this.winConditions = winConditions;
     this.view = view;
     this.movePieces = movePieces;
+    this.manager = manager;
     createTurnMap();
   }
 
@@ -62,17 +67,16 @@ public class ConditionHandler {
    * @param currPlayer  current Player
    * @param enemyPlayer enemy Player
    */
-  void applyModifiers(Player currPlayer, Player enemyPlayer) {
+  List<Modifiers> applyModifiers(Player currPlayer, Player enemyPlayer) {
     List<Modifiers> mods = enemyPlayer.getBoard().update();
     for (Modifiers mod : mods) {
-      if (mod.getClass().getSimpleName().equals(PLAYER_MODIFIER)) {
         Player[] players = {currPlayer, enemyPlayer};
         try {
-          mod.modifierFunction().accept(players);
+          mod.modifierFunction(players).accept(players);
         } catch (Exception e) {
         }
       }
-    }
+    return mods;
   }
 
   /**
@@ -92,28 +96,35 @@ public class ConditionHandler {
     for (int id : playerIds) {
       Player currPlayer = idMap.get(id);
       WinState currPlayerWinState = condition.updateWinner(currPlayer);
-      LOG.info(String.format("Player %d's WinState %s", id, currPlayerWinState));
+      LOG.info(String.format("Player %d's WinState %s", id+1, currPlayerWinState));
       checkWinState(currPlayer, currPlayerWinState, id);
     }
   }
 
   private void checkWinState(Player player, WinState state, int id) {
-    if (state.equals(WinState.LOSE)) {
-      removePlayer(player, id);
-      view.displayLosingMessage(player.getName());
-    } else if (state.equals(WinState.WIN)) {
-      LOG.info(String.format("Player %d wins!", id));
+    if (state.equals(WinState.WIN)) {
       moveToWinGame(player);
+    } else if (state.equals(WinState.LOSE)) {
+      removePlayer(player, id);
+      view.displayLosingScreen(player.getName());
+      try {
+        TimeUnit.SECONDS.sleep(2);
+      } catch (Exception e) {
+        LOG.info("Sleeping failed");
+      }
+      manager.sendUpdatesToView(playerQueue.peek());
+      view.switchToMainScreen();
     }
   }
 
   private void moveToWinGame(Player player) {
     int id = player.getID();
-    view.displayWinningMessage(idMap.get(id).getName());
+    LOG.info(String.format("Player %d wins!", id+1));
+    view.displayWinningScreen(idMap.get(id).getName());
   }
 
   private void removePlayer(Player player, int id) {
-    LOG.info("Player " + id + " lost");
+    LOG.info("Player " + (id+1) + " lost");
     playerQueue.remove(player);
     idMap.remove(id);
     turnMap.remove(player);
