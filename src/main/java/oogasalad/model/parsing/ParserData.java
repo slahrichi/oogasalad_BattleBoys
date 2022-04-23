@@ -1,4 +1,4 @@
-package oogasalad;
+package oogasalad.model.parsing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,8 +12,6 @@ import oogasalad.model.parsing.parsers.ParsePieces;
 import oogasalad.model.parsing.parsers.ParsePlayers;
 import oogasalad.model.parsing.parsers.ParseWeapons;
 import oogasalad.model.parsing.parsers.ParseWinConditions;
-import oogasalad.model.parsing.ParsedElement;
-import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.Weapon;
@@ -37,12 +35,13 @@ public record ParserData(List<String> players,
                          List<String> decisionEngines,
                          List<WinCondition> winConditions,
                          Map<CellState, Color> cellStateColorMap,
-                         List<Weapon> weapons){
+                         List<Weapon> weapons
+                         ){
   //TODO: implement these four parsers
-  //                         List<SpecialIslands> specialIslands,
-  //                         List<PowerUps> powerUps)  {
-  //Map<String,Integer> playerInventory,
-  //Collection<Usable> allUsables;
+  //  List<SpecialIslands> specialIslands,
+  //  List<PowerUps> powerUps,
+  //  Map<String,Integer> playerInventory,
+  //  Collection<Usable> allUsables) {
 
   @Override
   public boolean equals(Object o) {

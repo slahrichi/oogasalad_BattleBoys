@@ -3,7 +3,7 @@ package oogasalad.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import oogasalad.ParserData;
+import oogasalad.model.parsing.ParserData;
 import oogasalad.model.parsing.Parser;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
