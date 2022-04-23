@@ -73,6 +73,16 @@ public record ParserData(List<String> players,
     if(!(elements.get(3).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 3));
     }
+    if(!(elements.get(4).getClass().equals(ArrayList.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 4));
+    }
+    if(!(elements.get(5).getClass().equals(Map.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 5));
+    }
+    if(!(elements.get(6).getClass().equals(ArrayList.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 6));
+    }
+
     return new ParserData(
         (List<String>) elements.get(0),
         (List<Piece>) elements.get(1),
