@@ -214,6 +214,7 @@ public abstract class BuilderStage {
       comboBox.getItems().add(option);
 
     }
+    comboBox.getSelectionModel().selectFirst();
 
     return comboBox;
   }
