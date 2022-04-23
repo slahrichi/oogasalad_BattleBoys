@@ -1,5 +1,7 @@
 package oogasalad.controller;
 
+import static oogasalad.controller.GameSetup.SCREEN_DURATION;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -7,7 +9,10 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.util.Duration;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.winconditions.WinCondition;
@@ -86,6 +91,7 @@ public class ConditionHandler {
     for (WinCondition condition : winConditions) {
       checkCondition(condition);
     }
+
     if (playerQueue.size() == 1) {
       moveToWinGame(playerQueue.peek());
     }
@@ -107,11 +113,9 @@ public class ConditionHandler {
     } else if (state.equals(WinState.LOSE)) {
       removePlayer(player, id);
       view.displayLosingScreen(player.getName());
-      try {
-        TimeUnit.SECONDS.sleep(2);
-      } catch (Exception e) {
-        LOG.info("Sleeping failed");
-      }
+      Animation pt = new PauseTransition(new Duration(SCREEN_DURATION));
+      pt.setOnFinished(e -> view.closeLoserStage());
+      pt.play();
       manager.sendUpdatesToView(playerQueue.peek());
       view.switchToMainScreen();
     }
