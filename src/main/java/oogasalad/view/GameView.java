@@ -39,6 +39,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
@@ -142,6 +143,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private AbstractScreen passComputerMessageView;
   private ResourceBundle myResources;
   private InventoryView inventory;
+  private Stage loserStage;
   private boolean nightMode;
 
   private Scene myScene;
@@ -495,7 +497,13 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void displayLosingScreen(String name) {
     LoserScreen loser = new LoserScreen(myResources, name);
-    myScene.setRoot(loser);
+    loserStage = new Stage();
+    loserStage.setScene(new Scene(loser, 600, 600));
+    loserStage.show();
+  }
+
+  public void closeLoserStage() {
+    loserStage.close();
   }
 
   public void updateLabels(int shotsRemaining, int numPiecesRemaining, int amountOfGold) {
