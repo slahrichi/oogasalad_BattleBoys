@@ -1,5 +1,6 @@
 package oogasalad.controller;
 
+import com.stripe.param.SourceCreateParams.Mandate.NotificationMethod;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +24,7 @@ import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
+import oogasalad.model.utilities.usables.weapons.EmpoweredShot;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
@@ -48,6 +50,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int whenToMovePieces;
   private List<Info> AIShots;
   private Usable currentUsable;
+  private Map<String, Usable> usablesIDMap;
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String DUMMY_INFO = "";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
@@ -90,6 +93,15 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     allowedShots = 2;
     createIDMap(data.players());
     engineMap = data.engineMap();
+    List<Usable> dummyUsables = new ArrayList<Usable>();
+    dummyUsables.add(new BasicShot());
+    dummyUsables.add(new EmpoweredShot("Double Damage", 1, 2));
+
+    usablesIDMap = new HashMap<String, Usable>();
+    for(Usable currUsable: dummyUsables) {
+      usablesIDMap.put(currUsable.getMyID(), currUsable);
+    }
+
     gameViewManager = new GameViewManager(data, idMap, allowedShots, myResources);
   }
 

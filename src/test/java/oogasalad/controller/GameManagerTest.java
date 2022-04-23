@@ -103,7 +103,7 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 1);
@@ -118,7 +118,7 @@ public class GameManagerTest extends DukeApplicationTest {
     });
     assertThrows(NullPointerException.class, () -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources),
+        new HashMap<>(), new ArrayList<>(), myResources),
         "invalidMethod", null, info)));
   }
 
@@ -143,7 +143,7 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
@@ -171,10 +171,10 @@ public class GameManagerTest extends DukeApplicationTest {
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
     Thread.sleep(3000);
     assertEquals(wasStruckByAI(gd.players().get(0)), true);
   }
@@ -201,7 +201,7 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
   }

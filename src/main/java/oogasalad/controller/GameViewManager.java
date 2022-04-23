@@ -14,6 +14,7 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.view.GameView;
+import oogasalad.view.UsableRecord;
 
 /**
  * A manager that handles the updating of individual Piece objects and how they appear on the board.
@@ -59,8 +60,8 @@ public class GameViewManager {
     return idToName;
   }
 
-  private Map<String, Integer> getFirstPlayerInventory() {
-    return playerList.get(0).getInventory();
+  private List<UsableRecord> getFirstPlayerInventory() {
+    return new ArrayList<>();
   }
 
   private List<CellState[][]> createFirstPlayerBoards(GameData data) {
@@ -97,7 +98,7 @@ public class GameViewManager {
           pieceList);
     }
     Map<String, Integer> inventory = player.getInventory();
-    view.update(boardList, idList, pieceList, inventory);
+    view.update(boardList, idList, pieceList, new ArrayList<>());
   }
 
   private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
@@ -113,6 +114,14 @@ public class GameViewManager {
       coords.add(piece.getRelativeCoords());
     }
     return coords;
+  }
+
+  private List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> map) {
+    List<UsableRecord> usables = new ArrayList<>();
+    String basicID = "Basic Shot";
+//    String basicClassName = map.
+//    usables.add(new UsableRecord())
+    return usables;
   }
 
   /**

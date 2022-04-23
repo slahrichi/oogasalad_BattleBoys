@@ -153,7 +153,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Map<Integer, String> playerIDToNames;
 
   public GameView(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, Map<String, Integer> firstPlayerInventory, ResourceBundle resourceBundle) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, List<UsableRecord> firstPlayerUsables, ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;
@@ -162,7 +162,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     currentBoardIndex = 0;
     playerIDToNames = idToNames;
     myResources = resourceBundle;
-    initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerInventory);
+    initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerUsables);
   }
 
 
@@ -176,7 +176,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void initialize(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<String, Integer> firstPlayerInventory) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, List<UsableRecord> firstPlayerUsables) {
     initializeBoards(firstPlayerBoards, createInitialIDList(firstPlayerBoards.size()));
     createCenterPane();
     createRightPane();
@@ -184,7 +184,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     createPassMessageView();
     initializePiecesLeft(initialPiecesLeft);
     createInventory();
-    updateInventory(firstPlayerInventory);
+    updateInventory(firstPlayerUsables);
   }
 
   private void createInventory() {
@@ -192,8 +192,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myCenterPane.getChildren().add(inventory.getPane());
   }
 
-  private void updateInventory(Map<String, Integer> playerInventory) {
-    inventory.updateElements(playerInventory);
+  private void updateInventory(List<UsableRecord> usableList) {
+    inventory.updateElements(usableList);
   }
 
   private void createPassMessageView() {
@@ -596,14 +596,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void update(List<CellState[][]> boardList, List<Integer> idList,
-      List<Collection<Collection<Coordinate>>> pieceList, Map<String, Integer> inventory) {
+      List<Collection<Collection<Coordinate>>> pieceList, List<UsableRecord> usableList) {
     myBoards.clear();
     myPiecesLeft = pieceList;
     currentBoardIndex = 0;
     int firstID = idList.get(currentBoardIndex);
     initializeBoards(boardList, idList);
     updateTitle(playerIDToNames.get(firstID));
-    updateInventory(inventory);
+    updateInventory(usableList);
     updateDisplayedBoard();
   }
 
