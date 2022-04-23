@@ -202,10 +202,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void checkIfMovePieces() {
     if (conditionHandler.canMovePieces()) {
       conditionHandler.resetTurnMap();
-      for (int i = 0; i < playerQueue.size(); i++) {
-        Player p = playerQueue.poll();
+      for (Player p : playerQueue) {
         p.movePieces();
-        playerQueue.add(p);
+      }
+      for (DecisionEngine engine : engineMap.values()) {
+        engine.resetStrategy();
       }
     }
   }
