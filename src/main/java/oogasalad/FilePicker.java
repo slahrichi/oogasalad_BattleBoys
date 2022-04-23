@@ -17,12 +17,8 @@ public class FilePicker {
   }
 
   public File getFile() {
-<<<<<<< HEAD
-=======
-
     chooser.setInitialDirectory(new File("data"));
     chooser.getExtensionFilters().addAll(new ExtensionFilter("valid save files", "*.properties"));
->>>>>>> master
     chooser.setTitle(FILE_CHOOSER_TITLE);
     Stage dialogStage = new Stage();
     return chooser.showOpenDialog(dialogStage);

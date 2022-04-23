@@ -86,7 +86,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final String OK_BTN_ID = "ok-button";
   private static final String SETUP_ALERT_ID = "setupview-alert";
 
-
   // Resource Strings
   private static final String SETUP_TITLE_RESOURCE = "SetupTitlePrefix";
   private static final String CURRENT_SHIP_RESOURCE = "CurrentShip";

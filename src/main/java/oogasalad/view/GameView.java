@@ -24,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 
 import javafx.scene.control.ScrollPane;
@@ -62,6 +63,7 @@ import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.screens.AbstractScreen;
+import oogasalad.view.screens.LoserScreen;
 import oogasalad.view.screens.PassComputerScreen;
 import oogasalad.view.screens.WinnerScreen;
 import org.apache.logging.log4j.LogManager;
@@ -93,6 +95,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String BOARD_INDEX_LOG = "Current board index: ";
   private static final String BOARD_SHOW_LOG = "Showing board ";
   private static final String CELL_CLICKED_SELF_LOG = "cellClickedSelf";
+  private static final String WON_SUFFIX = "WonSuffix";
+  private static final String LOST_SUFFIX = "LostSuffix";
+  private static final String LOST_ALERT_ID = "player-lost-alert";
 
   // ResourceBundle Strings
 
@@ -190,7 +195,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createPassMessageView() {
-    passComputerMessageView = new PassComputerScreen(e -> myScene.setRoot(myPane), myResources);
+    passComputerMessageView = new PassComputerScreen(e -> switchToMainScreen(), myResources);
+  }
+
+  public void switchToMainScreen() {
+    myScene.setRoot(myPane);
   }
 
   public void initializePiecesLeft(Collection<Collection<Coordinate>> piecesLeft) {
@@ -329,7 +338,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void endTurn() {
     endTurnButton.setDisable(true);
-    notifyObserver("endTurn", new Info(0, 0, 0));
+    notifyObserver("endTurn", "");
   }
 
   // Decrements currentBoardIndex and updates the shown board
@@ -406,7 +415,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
     LOG.info("cellClickedEnemy");
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver(SHOT_METHOD, clickInfo);
+    notifyObserver("applyUsable", clickInfo);
   }
 
   private void cellHoveredSelf(String info) {
@@ -484,10 +493,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myScene.setRoot(winnerScreen);
   }
 
-  public void displayLosingDialog(String name) {
-    //LoserScreen loserScreen = new LoserScreen(name);
-    //myScene.setRoot(loserScreen);
-
+  public void displayLosingScreen(String name) {
+    LoserScreen loser = new LoserScreen(myResources, name);
+    myScene.setRoot(loser);
   }
 
   public void updateLabels(int shotsRemaining, int numPiecesRemaining, int amountOfGold) {
@@ -574,9 +582,13 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     ft.play();
   }
 
-  public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList,
+
+  public void moveToNextPlayer(String name) {
+    switchPlayerMessage(name);
+  }
+
+  public void update(List<CellState[][]> boardList, List<Integer> idList,
       List<Collection<Collection<Coordinate>>> pieceList, Map<Usable, Integer> inventory) {
-    switchPlayerMessage(playerIDToNames.get(idList.get(0)));
     myBoards.clear();
     myPiecesLeft = pieceList;
     currentBoardIndex = 0;

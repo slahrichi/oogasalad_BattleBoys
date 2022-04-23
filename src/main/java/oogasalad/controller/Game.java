@@ -35,19 +35,13 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String DEFAULT_LANGUAGE_PACKAGE = "languages/";
-  private static final String LANGUAGE = "Spanish";
+  private static final String LANGUAGE = "English";
 
   private StartView myStart;
   private GameSetup setup;
-  private GameManager manager;
   private Stage myStage;
   private FilePicker fileChooser;
   private Parser parser;
-<<<<<<< HEAD
-  private List<String> stringPlayers;
-=======
-  private GameData data;
->>>>>>> master
   private ResourceBundle myResources;
   private GameData gameData;
 
@@ -56,31 +50,9 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     myStage = stage;
     fileChooser = new FilePicker();
     myResources = ResourceBundle.getBundle(DEFAULT_LANGUAGE_PACKAGE + LANGUAGE);
-<<<<<<< HEAD
     myStart = new StartView(myResources);
     myStart.addObserver(this);
-=======
     parser = new Parser();
-    ParserData parserData;
-    try {
-      parserData = parser.parse("data/ExampleDataFile.properties");
-    } catch (ParserException e) {
-      LOG.error(e);
-      parserData = null;
-    }
-
-    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(parserData.board(), parserData.players(),
-        parserData.decisionEngines());
-    Map<Player, DecisionEngine> engineMap = pr.engineMap();
-    //testing win condition code
-    List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
-    dummyWinConditions.add(new LoseXShipsLossCondition(2));
-
-    myStart = new StartView(myResources);
-    myStart.addObserver(this);
-    data = new GameData(pr.playerList(), parserData.board(), parserData.pieces(), dummyWinConditions, engineMap);
-    // GameManager should take in list of players and GameData
->>>>>>> master
   }
 
   public File chooseDataFile() {
@@ -110,10 +82,10 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
   private void loadFile() {
     LOG.info("loadFile");
-    PlayerData playerData;
+    ParserData parserData;
     try {
-      playerData = parser.parse(chooseDataFile().getAbsolutePath());
-      createGameData(playerData);
+      parserData = parser.parse(chooseDataFile().getAbsolutePath());
+      createGameData(parserData);
       setup = new GameSetup(gameData, myResources);
       setup.addObserver(this);
       myStage.setScene(setup.createScene());
@@ -126,26 +98,14 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     }
   }
 
-<<<<<<< HEAD
-  private void createGameData(PlayerData data) {
-    stringPlayers = data.players();
-    pieceList = data.pieces();
-    CellState[][] notSoDummyBoard = data.board();
-
-    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(notSoDummyBoard, stringPlayers,
+  private void createGameData(ParserData data) {
+    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(data.board(), data.players(),
         data.decisionEngines());
-    List<Player> players = pr.playerList();
     Map<Player, DecisionEngine> engineMap = pr.engineMap();
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
-    dummyWinConditions.add(new LoseXShipsLossCondition(1));
-    gameData = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions, engineMap);
-=======
-  private void load() {
-    File loadedFile = chooseDataFile();
-
-    LOG.info("Load");
->>>>>>> master
+    dummyWinConditions.add(new LoseXShipsLossCondition(2));
+    gameData = new GameData(pr.playerList(), data.board(), data.pieces(), dummyWinConditions, engineMap);
   }
 
   private void createGame() {

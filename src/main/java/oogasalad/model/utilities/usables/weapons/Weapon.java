@@ -50,8 +50,11 @@ public abstract class Weapon extends Usable {
     public BiConsumer<String, GameManager> handleUsage(){
         return (clickInfo, gm)-> {
             int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-            if(gm.getCurrentPlayer() != id)
+            if(gm.getCurrentPlayer() != id) {
+                System.out.println("Hello");
+                System.out.println(id + " " + gm.getCurrentPlayer());
                 gm.handleShot(clickInfo);
+            }
             else
                 throw new IllegalArgumentException("Please Choose an Enemy Board");
         };

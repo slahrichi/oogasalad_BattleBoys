@@ -97,7 +97,7 @@ public class GameViewManager {
           pieceList);
     }
     Map<Usable, Integer> inventory = player.getInventory();
-    view.moveToNextPlayer(boardList, idList, pieceList, inventory);
+    view.update(boardList, idList, pieceList, inventory);
   }
 
   private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.Map;
+import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.util.Duration;
@@ -18,7 +19,6 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.MovingPiece;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -44,7 +44,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private Stack<Collection<Coordinate>> lastPlacedAbsoluteCoords;
   private ResourceBundle myResources;
 
-  private static final int INTRO_SCREEN_DURATION = 2000;
+  public static final int SCREEN_DURATION = 2000;
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String PROMPT_PREFIX_RESOURCE = "PromptPrefix";
@@ -94,7 +94,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
     setupView.displayIntroScreen();
 
-    PauseTransition pt = new PauseTransition(new Duration(INTRO_SCREEN_DURATION));
+    Animation pt = new PauseTransition(new Duration(SCREEN_DURATION));
     pt.setOnFinished(e -> {
       setupView.addObserver(this);
       moveToNextPlayer("");
@@ -102,8 +102,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     });
 
     pt.play();
-
-
   }
 
   /**

@@ -101,12 +101,13 @@ public class ConditionHandler {
   }
 
   private void checkWinState(Player player, WinState state, int id) {
-    if (state.equals(WinState.LOSE)) {
-      removePlayer(player, id);
-      manager.sendUpdatesToView(player);
-      Platform.runLater(() -> view.displayLosingDialog(player.getName()));
-    } else if (state.equals(WinState.WIN)) {
+    if (state.equals(WinState.WIN)) {
       moveToWinGame(player);
+    } else if (state.equals(WinState.LOSE)) {
+      removePlayer(player, id);
+      view.displayLosingScreen(player.getName());
+      manager.sendUpdatesToView(playerQueue.peek());
+      view.switchToMainScreen();
     }
   }
 
@@ -117,7 +118,7 @@ public class ConditionHandler {
   }
 
   private void removePlayer(Player player, int id) {
-    LOG.info("Player " + id + " lost");
+    LOG.info("Player " + (id+1) + " lost");
     playerQueue.remove(player);
     idMap.remove(id);
     turnMap.remove(player);

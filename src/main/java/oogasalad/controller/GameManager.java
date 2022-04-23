@@ -43,7 +43,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private Map<Player, DecisionEngine> engineMap;
   private GameView view;
   private GameViewManager gameViewManager;
-  private int playerIndex;
   private int numShots;
   private int allowedShots;
   private int whenToMovePieces;
@@ -86,7 +85,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     myResources = resources;
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
-    playerIndex = 0;
     numShots = 0;
     whenToMovePieces = 1; //should change this to use gamedata from parser
     allowedShots = 2;
@@ -110,13 +108,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    int id = ((Info) evt.getNewValue()).ID();
-    int row = ((Info) evt.getNewValue()).row();
-    int col = ((Info) evt.getNewValue()).col();
-    Info info = new Info(row, col, id);
     try {
-      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
-      m.invoke(this, info);
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), String.class);
+      m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
       e.printStackTrace();
@@ -148,12 +142,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
     int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-    Coordinate coordinate = new Coordinate(row, col);
-    Player player = playerQueue.peek();
-    view.updateLabels(allowedShots - numShots, player.getNumPieces(), player.getMyCurrency());
-    view.displayShotAnimation(coordinate.getRow(), coordinate.getColumn(), e ->
+    if (numShots < allowedShots && makeShot(new Coordinate(row, col), id, currentUsable)) {
+      Player player = playerQueue.peek();
+      view.updateLabels(allowedShots - numShots, player.getNumPieces(), player.getMyCurrency());
+      view.displayShotAnimation(row, col, e ->
           updateConditions(id), id);
     }
+  }
 
   private void updateConditions(int id) {
     conditionHandler.applyWinConditions();
@@ -166,10 +161,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void checkIfEndTurn() {
     if (numShots == allowedShots) {
+      // if AI has finished firing their shots
       if (engineMap.containsKey(playerQueue.peek())) {
         view.displayAIMove(playerQueue.peek().getID(), AIShots);
         endTurn(DUMMY_INFO);
-      } else {
+      }
+      // if a human has finished firing their shots
+      else {
         view.allowEndTurn();
       }
     }
@@ -184,6 +182,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
     gameViewManager.sendUpdatesToView(player);
+    view.moveToNextPlayer(player.getName());
     handleAI();
   }
 
@@ -213,21 +212,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       }
     }
   }
-
-//  private boolean makeShot(Coordinate c, int id) {
-//    Player currentPlayer = playerList.get(playerIndex);
-//    Player enemy = idMap.get(id);
-//    if (currentPlayer.getEnemyMap().get(id).canPlaceAt(c)) {
-//      CellState result = enemy.getBoard().hit(c, 1);
-//      adjustStrategy(currentPlayer, result);
-//      currentPlayer.updateEnemyBoard(c, id, result);
-//      view.displayShotAt(c.getRow(), c.getColumn(), result);
-//      conditionHandler.applyModifiers(currentPlayer, enemy);
-//      numShots++;
-//      return true;
-//    }
-//    return false;
-//  }
 
   private boolean makeShot(Coordinate c, int id, Usable weaponUsed) {
     Player currentPlayer = playerQueue.peek();
