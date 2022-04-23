@@ -2,8 +2,10 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -41,7 +43,11 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+<<<<<<< HEAD
 import oogasalad.model.utilities.usables.Usable;
+=======
+import oogasalad.com.stripe.StripeIntegration;
+>>>>>>> master
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -122,6 +128,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button leftButton;
   private Button rightButton;
   private Button endTurnButton;
+  private Button stripeButton;
   private VBox myRightPane;
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
@@ -215,7 +222,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createRightPane() {
+<<<<<<< HEAD
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
+=======
+    shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
+    stripeButton = ButtonMaker.makeTextButton("stripe", e -> {
+      try {
+        new StripeIntegration();
+      } catch (URISyntaxException ex) {
+        ex.printStackTrace();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+    }, "Stripe");
+>>>>>>> master
 
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
@@ -233,7 +253,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     configPane.setOnAction(e -> changeStylesheet());
 
     myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel,
-        numPiecesLabel, goldLabel, shopButton,
+        numPiecesLabel, goldLabel, shopButton, stripeButton,
         piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);

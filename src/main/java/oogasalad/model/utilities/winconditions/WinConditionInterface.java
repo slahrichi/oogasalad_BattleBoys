@@ -1,5 +1,15 @@
 package oogasalad.model.utilities.winconditions;
 
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import oogasalad.model.players.Player;
+import oogasalad.model.players.PlayerRecord;
+import oogasalad.model.utilities.Board;
+import oogasalad.model.utilities.tiles.enums.CellState;
+
 import java.util.function.Function;
 import oogasalad.model.players.Player;
 import oogasalad.model.players.PlayerRecord;
@@ -24,4 +34,8 @@ public interface WinConditionInterface {
    * @return Function lambda that takes in the old PlayerRecord as a parameter and returns an updated PlayerRecord
    */
   public abstract Function<PlayerRecord, WinState> getWinLambda();
+
+  public Set<CellState> getDesirableCellStates();
+
+  public Set<CellState> getNonDesirableCellStates();
 }

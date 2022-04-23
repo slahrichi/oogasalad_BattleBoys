@@ -16,7 +16,7 @@ public class FrontEndUpdater extends Modifiers{
     setMyConsumer(new GameManagerConsumer() {
       @Override
       public void accept(GameManager gameManager) {
-        gameManager.getGameViewManager().sendUpdatesToView(gameManager.getPlayerList().get(gameManager.getCurrentPlayer()));
+        gameManager.getGameViewManager().sendUpdatesToView(gameManager.getIDMap().get(gameManager.getCurrentPlayer()));
       }
     });
   }

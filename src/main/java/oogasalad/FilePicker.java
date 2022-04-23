@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class FilePicker {
@@ -16,6 +17,12 @@ public class FilePicker {
   }
 
   public File getFile() {
+<<<<<<< HEAD
+=======
+
+    chooser.setInitialDirectory(new File("data"));
+    chooser.getExtensionFilters().addAll(new ExtensionFilter("valid save files", "*.properties"));
+>>>>>>> master
     chooser.setTitle(FILE_CHOOSER_TITLE);
     Stage dialogStage = new Stage();
     return chooser.showOpenDialog(dialogStage);

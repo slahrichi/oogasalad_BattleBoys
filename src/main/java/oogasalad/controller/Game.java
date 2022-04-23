@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import oogasalad.FilePicker;
 import oogasalad.GameData;
 import oogasalad.model.parsing.Parser;
-import oogasalad.PlayerData;
+import oogasalad.ParserData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
@@ -43,20 +43,44 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private Stage myStage;
   private FilePicker fileChooser;
   private Parser parser;
+<<<<<<< HEAD
   private List<String> stringPlayers;
+=======
+  private GameData data;
+>>>>>>> master
   private ResourceBundle myResources;
   private GameData gameData;
 
-  //TODO: Remove this variable, it's for testing only
-  private List<Piece> pieceList;
 
   public Game(Stage stage) {
     myStage = stage;
-    parser = new Parser();
     fileChooser = new FilePicker();
     myResources = ResourceBundle.getBundle(DEFAULT_LANGUAGE_PACKAGE + LANGUAGE);
+<<<<<<< HEAD
     myStart = new StartView(myResources);
     myStart.addObserver(this);
+=======
+    parser = new Parser();
+    ParserData parserData;
+    try {
+      parserData = parser.parse("data/ExampleDataFile.properties");
+    } catch (ParserException e) {
+      LOG.error(e);
+      parserData = null;
+    }
+
+    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(parserData.board(), parserData.players(),
+        parserData.decisionEngines());
+    Map<Player, DecisionEngine> engineMap = pr.engineMap();
+    //testing win condition code
+    List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
+    dummyWinConditions.add(new LoseXShipsLossCondition(2));
+
+    myStart = new StartView(myResources);
+    myStart.addObserver(this);
+    data = new GameData(pr.playerList(), parserData.board(), parserData.pieces(), dummyWinConditions, engineMap);
+    // GameManager should take in list of players and GameData
+>>>>>>> master
   }
 
   public File chooseDataFile() {
@@ -102,6 +126,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     }
   }
 
+<<<<<<< HEAD
   private void createGameData(PlayerData data) {
     stringPlayers = data.players();
     pieceList = data.pieces();
@@ -115,6 +140,12 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
     dummyWinConditions.add(new LoseXShipsLossCondition(1));
     gameData = new GameData(players, notSoDummyBoard, pieceList, dummyWinConditions, engineMap);
+=======
+  private void load() {
+    File loadedFile = chooseDataFile();
+
+    LOG.info("Load");
+>>>>>>> master
   }
 
   private void createGame() {
