@@ -1,5 +1,6 @@
 package oogasalad.view.screens;
 
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,11 +26,11 @@ public class WinnerScreen extends AbstractScreen {
    *
    * @param winnerName name of winning player
    */
-  public WinnerScreen(String winnerName) {
+  public WinnerScreen(ResourceBundle resourceBundle, String winnerName) {
     super(20, Pos.CENTER, e -> {
       Platform.exit();
       System.exit(0);
-    });
+    }, resourceBundle);
 
     setId("winner-screen");
 

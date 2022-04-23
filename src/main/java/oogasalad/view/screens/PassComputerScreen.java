@@ -1,5 +1,6 @@
 package oogasalad.view.screens;
 
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -15,18 +16,23 @@ import oogasalad.view.maker.LabelMaker;
  */
 public class PassComputerScreen extends AbstractScreen {
 
-  //TODO: Put these strings into resourcebundles
-  private static final String PASS_MESSAGE = "Please pass the computer to ";
+  private static final double SPACING = 20;
+
+  private static final String PASS_MESSAGE_RESOURCE = "PassMessage";
   private static final String BUTTON_TEXT = "OK";
+
+  private static final String PASS_COMPUTER_SCREEN_ID = "pass-computer-message-view";
+  private static final String PASS_COMPUTER_LABEL_ID = "pass-computer-message-label";
+  private static final String PASS_COMPUTER_BTN_ID = "pass-computer-message-button";
 
   /**
    * Class constructor.
    *
    * @param buttonHandler event handler for main button
    */
-  public PassComputerScreen(EventHandler<ActionEvent> buttonHandler) {
-    super(20, Pos.CENTER, buttonHandler);
-    setId("pass-computer-message-view");
+  public PassComputerScreen(EventHandler<ActionEvent> buttonHandler, ResourceBundle resourceBundle) {
+    super(SPACING, Pos.CENTER, buttonHandler, resourceBundle);
+    setId(PASS_COMPUTER_SCREEN_ID);
   }
 
   /**
@@ -36,7 +42,7 @@ public class PassComputerScreen extends AbstractScreen {
    */
   @Override
   protected Label createMainLabel() {
-    return LabelMaker.makeLabel(PASS_MESSAGE, "pass-computer-message-label");
+    return LabelMaker.makeLabel(myResources.getString(PASS_MESSAGE_RESOURCE), PASS_COMPUTER_LABEL_ID);
   }
 
   /**
@@ -47,7 +53,7 @@ public class PassComputerScreen extends AbstractScreen {
    */
   @Override
   protected Button createMainButton(EventHandler<ActionEvent> handler) {
-    return ButtonMaker.makeTextButton("pass-computer-message-button", handler, BUTTON_TEXT);
+    return ButtonMaker.makeTextButton(PASS_COMPUTER_BTN_ID, handler, BUTTON_TEXT);
   }
 
   /**
@@ -57,7 +63,7 @@ public class PassComputerScreen extends AbstractScreen {
    */
   @Override
   public void setLabelText(String text) {
-    mainLabel.setText(PASS_MESSAGE + text);
+    mainLabel.setText(myResources.getString(PASS_MESSAGE_RESOURCE) + text);
   }
 
 }

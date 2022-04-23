@@ -35,7 +35,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String DEFAULT_LANGUAGE_PACKAGE = "languages/";
-  private static final String LANGUAGE = "English";
+  private static final String LANGUAGE = "Spanish";
 
   private StartView myStart;
   private GameSetup setup;

@@ -15,13 +15,30 @@ import oogasalad.view.maker.ButtonMaker;
 
 public class StartView extends PropertyObservable {
 
-  private static final double SCREEN_WIDTH = 1200;
-  private static final double SCREEN_HEIGHT = 800;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String STYLESHEET = "stylesheets/startStylesheet.css";
   private static final String TITLE_IMAGE = "images/battleshipTitle.png";
+
+  // Values
+  private static final double SCREEN_WIDTH = 1200;
+  private static final double SCREEN_HEIGHT = 800;
   private static final double TITLE_WIDTH = 600;
   private static final double TITLE_HEIGHT = 200;
+
+  // ID strings
+  private static final String PANE_ID = "startPane";
+  private static final String TITLE_BOX_ID = "titleBox";
+  private static final String START_BTN_ID = "start-button";
+  private static final String CREATE_BTN_ID = "create-button";
+  private static final String BUTTON_BOX_ID = "create-button";
+
+  // Operation Strings
+  private static final String LOAD_FILE_OPERATION = "loadFile";
+  private static final String CREATE_FILE_OPERATION = "createGame";
+
+  // Resource Strings
+  private static final String START_BTN_RESOURCE = "StartButton";
+  private static final String CREATE_BTN_RESOURCE = "CreateButton";
 
   private Scene myScene;
   private BorderPane myPane;
@@ -31,8 +48,7 @@ public class StartView extends PropertyObservable {
   public StartView(ResourceBundle resourceBundle) {
 
     myPane = new BorderPane();
-    myPane.setId("startPane");
-
+    myPane.setId(PANE_ID);
     myResources = resourceBundle;
 
     setUpTitle();
@@ -48,7 +64,8 @@ public class StartView extends PropertyObservable {
 
 
   private void setUpTitle() {
-    Image myImage = new Image(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + TITLE_IMAGE).toString(), true);
+    Image myImage = new Image(
+        getClass().getResource(DEFAULT_RESOURCE_PACKAGE + TITLE_IMAGE).toString(), true);
     myTitle = new ImageView(myImage);
     myTitle.setPreserveRatio(true);
     myTitle.setFitHeight(TITLE_HEIGHT);
@@ -56,17 +73,20 @@ public class StartView extends PropertyObservable {
 
     HBox titleBox = new HBox();
     titleBox.getChildren().add(myTitle);
-    titleBox.setId("titleBox");
+    titleBox.setId(TITLE_BOX_ID);
 
     myPane.setTop(titleBox);
   }
 
   private void setUpButtons() {
-    Button startBtn = ButtonMaker.makeTextButton("start-button", e -> handleClicked("loadFile"), myResources.getString("StartButton"));
-    Button createBtn = ButtonMaker.makeTextButton("create-button", e -> handleClicked("createGame"), myResources.getString("CreateButton"));
-    VBox buttonBox = BoxMaker.makeVBox("buttonBox", 50, Pos.CENTER, startBtn, createBtn);
+    Button startBtn = ButtonMaker.makeTextButton(START_BTN_ID,
+        e -> handleClicked(LOAD_FILE_OPERATION), myResources.getString(START_BTN_RESOURCE));
+    Button createBtn = ButtonMaker.makeTextButton(CREATE_BTN_ID,
+        e -> handleClicked(CREATE_FILE_OPERATION), myResources.getString(CREATE_BTN_RESOURCE));
+    VBox buttonBox = BoxMaker.makeVBox(BUTTON_BOX_ID, 50, Pos.CENTER, startBtn, createBtn);
     myPane.setCenter(buttonBox);
   }
+
   private void handleClicked(String operation) {
     notifyObserver(operation, null);
   }

@@ -1,5 +1,6 @@
 package oogasalad.view.screens;
 
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -23,6 +24,8 @@ public abstract class AbstractScreen extends VBox {
   protected static final String DEFAULT_RESOURCE_PACKAGE = "/";
   protected static final String STYLESHEET = "stylesheets/screenStylesheet.css";
 
+  protected static ResourceBundle myResources;
+
   // Default components
   protected Label mainLabel;
   protected Button mainButton;
@@ -34,7 +37,10 @@ public abstract class AbstractScreen extends VBox {
    * @param alignment Alignment of nodes on screen
    * @param handler   On click handler for main button
    */
-  public AbstractScreen(double spacing, Pos alignment, EventHandler<ActionEvent> handler) {
+  public AbstractScreen(double spacing, Pos alignment, EventHandler<ActionEvent> handler, ResourceBundle resourceBundle) {
+
+    myResources = resourceBundle;
+
     setSpacing(spacing);
     setAlignment(alignment);
     getStylesheets().add(DEFAULT_RESOURCE_PACKAGE + STYLESHEET);

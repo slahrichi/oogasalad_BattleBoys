@@ -27,7 +27,6 @@ public class LegendPane extends TitledPane {
   private ResourceBundle myResources;
 
   private static final String LEGEND_PANE_ID = "legendPane";
-  private static final String LEGEND_TEXT = "Legend Key";
 
   private static final int PANE_PADDING = 10;
   private static final int PANE_GAP = PANE_PADDING / 2;
@@ -67,7 +66,6 @@ public class LegendPane extends TitledPane {
   private void setUpPane(){
 
     this.setId(LEGEND_PANE_ID);
-    this.setText(LEGEND_TEXT);
     this.setContent(myScroller);
     this.setExpanded(false);
     this.setMaxHeight(PANE_MAX_HEIGHT);

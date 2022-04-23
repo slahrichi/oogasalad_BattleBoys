@@ -47,6 +47,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private static final int INTRO_SCREEN_DURATION = 2000;
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
   private static final String INVALID_METHOD = "Invalid method name given";
+  private static final String PROMPT_PREFIX_RESOURCE = "PromptPrefix";
   private static final Logger LOG = LogManager.getLogger(GameSetup.class);
 
   /**
@@ -170,7 +171,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private void moveToNextPlayer(String s) {
     playerIndex++;
-    setupView.displayPassComputerMessage("Player " + (playerIndex + 1));
+    setupView.displayPassComputerMessage(myResources.getString(PROMPT_PREFIX_RESOURCE) + (playerIndex + 1));
     if (playerIndex >= playerList.size()) {
       notifyObserver("startGame", null);
       return;
