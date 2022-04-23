@@ -12,7 +12,8 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 /**
  * An AI for users of beginner difficulty to play against. The AI randomly selects both points to
  * attack and enemies to attack. The only intuition that it has is to hit the same point repeatedly
- * if it caused damage on the last shot but has not sunken the cell
+ * if it caused damage on the last shot but has not sunken the cell. It also loses track of enemy
+ * boats after they move.
  *
  * @author Matthew Giglio
  */
