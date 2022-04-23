@@ -16,7 +16,7 @@ public class ParsePlayers extends ParsedElement{
   @Override
   public void save(Properties props, String location, Object o) throws ParserException {
     List<String> players = (List<String>) o;
-    props.put(PROPERTIES_PLAYER_LIST, String.join(" ", players));
+    props.put(PROPERTIES_PLAYER_LIST, String.join(SPACE, players));
   }
 
   @Override

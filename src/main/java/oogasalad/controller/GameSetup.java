@@ -10,13 +10,15 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.Map;
+import javafx.animation.Animation;
+import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
+import javafx.util.Duration;
 import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.MovingPiece;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -42,8 +44,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private Stack<Collection<Coordinate>> lastPlacedAbsoluteCoords;
   private ResourceBundle myResources;
 
+  public static final int SCREEN_DURATION = 2000;
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
   private static final String INVALID_METHOD = "Invalid method name given";
+  private static final String PROMPT_PREFIX_RESOURCE = "PromptPrefix";
   private static final Logger LOG = LogManager.getLogger(GameSetup.class);
 
   /**
@@ -87,9 +91,17 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private void initializeSetupView() {
     setupView = new SetupView(board, myResources);
-    setupView.addObserver(this);
-    moveToNextPlayer("");
-    setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
+
+    setupView.displayIntroScreen();
+
+    Animation pt = new PauseTransition(new Duration(SCREEN_DURATION));
+    pt.setOnFinished(e -> {
+      setupView.addObserver(this);
+      moveToNextPlayer("");
+      setupView.setCurrentPiece(pieceList.get(0).getRelativeCoords());
+    });
+
+    pt.play();
   }
 
   /**
@@ -157,7 +169,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private void moveToNextPlayer(String s) {
     playerIndex++;
-    setupView.displayPassComputerMessage("Player " + (playerIndex + 1));
+    setupView.displayPassComputerMessage(myResources.getString(PROMPT_PREFIX_RESOURCE) + (playerIndex + 1));
     if (playerIndex >= playerList.size()) {
       notifyObserver("startGame", null);
       return;
@@ -176,12 +188,13 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
         placePiece(coord);
       }
       //have setupView show that AI has placed pieces
-
+      setupView.displayAIShipsPlaced();
       setupView.handleConfirm();
     }
   }
 
-  // Assigns a new name to the current player being set up
+  // Assigns a new name to the current player being set up. This method is called through reflection from this class'
+  // property change listener
   private void assignCurrentPlayerName(String name) {
     playerList.get(playerIndex).setName(name);
   }

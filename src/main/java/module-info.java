@@ -13,6 +13,7 @@ open module oogasalad_app {
   requires jdk.jfr;
   requires stripe.java;
   requires spark.core;
+
 // allow other classes to access listed packages in your project
   exports oogasalad.controller;
   exports oogasalad.model.parsing;
