@@ -212,7 +212,15 @@ public class WeaponDesignStage extends BuilderStage {
 
   private void getParameterClasses() {
     for (Object param : parameterList) {
-      parameterTypesList.add(param.getClass());
+      if(param instanceof Integer){
+        parameterTypesList.add(int.class);
+      }
+      else if(param instanceof HashMap){
+        parameterTypesList.add(Map.class);
+      }
+      else {
+        parameterTypesList.add(param.getClass());
+      }
     }
   }
 
