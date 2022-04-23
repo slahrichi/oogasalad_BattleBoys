@@ -133,7 +133,7 @@ public class BoardSetUpStage extends BuilderStage {
   private void convertToCellStates() {
     board = new CellState[width][height];
     for (int i = 0; i < width; i++) {
-      for (int j = 0; j < width; j++) {
+      for (int j = 0; j < height; j++) {
         board[i][j] = CellState.of(stateMap[i][j]);
       }
     }
@@ -143,9 +143,12 @@ public class BoardSetUpStage extends BuilderStage {
   protected CellState[][] saveAndContinue() {
     findReferencePoint(stateMap);
     stateMap = cropToActiveGrid(stateMap);
+    width=stateMap.length;
+    height=stateMap[0].length;
 
     convertToCellStates();
     myStage.close();
+    System.out.println(board.toString());
 
     return board;
   }

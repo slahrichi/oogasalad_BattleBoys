@@ -1,0 +1,77 @@
+.button{
+  -fx-font-size: 12pt;
+  -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+  -fx-pref-width: 100;
+  -fx-pref-height: 50;
+  -fx-font-family: "Segoe UI Semibold";
+}
+
+
+#pass-computer-message-view{
+  -fx-background-image: url("../images/battleshipSwitch.jpg");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: 1200 900;
+  -fx-background-position: center center;
+
+}
+
+#pass-computer-message-label{
+  -fx-background-color: grey;
+  -fx-border-color: black;
+  -fx-pref-height: 50;
+  -fx-padding: 10;
+}
+
+#setup-ships-screen {
+  -fx-background-image: url("../images/battleshipSetup.jpg");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: 1200 900;
+  -fx-background-position: center center;
+}
+
+#setup-ships-screen-label {
+  -fx-background-color: grey;
+  -fx-border-color: black;
+  -fx-pref-height: 50;
+  -fx-padding: 10;
+
+}
+
+#ai-ships-screen {
+  -fx-background-image: url("../images/botSetup.png");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: 1200 900;
+  -fx-background-position: center center;
+}
+
+#ai-ships-screen-label {
+  -fx-background-color: grey;
+  -fx-border-color: black;
+  -fx-pref-height: 50;
+  -fx-padding: 10;
+  -fx-alignment: right;
+}
+
+#ai-shots-screen {
+
+}
+
+#ai-shots-screen-label{
+
+
+}
+
+#winner-screen{
+
+}
+
+#winner-screen-label{
+
+
+
+}
+
+.label{
+  -fx-font-family: "Segoe UI Semibold";
+  -fx-font-size: 20pt;
+}

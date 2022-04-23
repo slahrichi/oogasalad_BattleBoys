@@ -3,6 +3,8 @@ package oogasalad.model.utilities.usables.weapons;
 import java.util.HashMap;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.Modifiers.Burner;
+import oogasalad.model.utilities.tiles.Modifiers.FrontEndUpdater;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
 /**
@@ -27,8 +29,8 @@ public class BurnShot extends Weapon {
       Map<Coordinate, CellState> retMap = new HashMap<>();
       if(board.canBeStruck(coord)){
         if(board.getCell(coord) instanceof ShipCell){
-        //  board.getCell(coord).addModifier(BurnModifier);  Burn Modifier needs to implemented at the moment
-        // board.getCell(coord).addModifier(updateFrontEndModifier);
+          board.getCell(coord).addModifier(new Burner(dmgPerTurn, turnsLasted));
+          board.getCell(coord).addModifier(new FrontEndUpdater(turnsLasted));
         }
         else
           retMap.put(coord, board.hit(coord, dmgPerTurn));

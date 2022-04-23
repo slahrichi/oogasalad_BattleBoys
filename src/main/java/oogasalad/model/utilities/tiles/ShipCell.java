@@ -102,5 +102,8 @@ public class ShipCell extends Cell implements CellInterface {
     return true;
 
   }
+  public int getId(){
+    return id;
+  }
 
 }

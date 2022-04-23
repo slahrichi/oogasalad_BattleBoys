@@ -17,9 +17,10 @@ public abstract class GenericPlayer implements Player{
 
   private int myPiecesLeft;
   private int myCurrency;
-  private Map<Usable, Integer> inventory;
+  private Map<String, Integer> inventory; //change inventory to use id of usables
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Map<CellState, Integer> myHitsMap; //new instance variable
+
   private Board myBoard;
   private int myId;
 
@@ -36,11 +37,16 @@ public abstract class GenericPlayer implements Player{
     myName = PLAYER_PREFIX + (id + 1);
   }
 
+  //changed make purchase to use new ID map
   @Override
-  public void makePurchase(int amount, Usable usable) {
-    if (usable.getPrice() <= myCurrency) {
-      inventory.put(usable, inventory.getOrDefault(usable, 0) + 1);
+  public void makePurchase(int price, String usableID) {
+    if (price <= myCurrency) {
+      inventory.put(usableID, inventory.getOrDefault(usableID, 0) + 1);
     }
+  }
+
+  public Map<String, Integer> getInventory() {
+    return inventory;
   }
 
   public void removePiece(String id) {

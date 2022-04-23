@@ -1,9 +1,7 @@
 package oogasalad;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import oogasalad.model.parsing.ParseBoard;
 import oogasalad.model.parsing.ParseDecisionEngines;
@@ -26,14 +24,14 @@ import oogasalad.model.utilities.tiles.enums.CellState;
  *
  * Author: Matt Knox
  */
-public record PlayerData(List<String> players, List<Piece> pieces, CellState[][] board, List<String> decisionEngines)  {
+public record ParserData(List<String> players, List<Piece> pieces, CellState[][] board, List<String> decisionEngines)  {
 
   @Override
   public boolean equals(Object o) {
     if(this == o) return true;
     if(o == null) return false;
-    if(!(o instanceof PlayerData)) return false;
-    PlayerData other = (PlayerData) o;
+    if(!(o instanceof ParserData)) return false;
+    ParserData other = (ParserData) o;
     if(!this.players.equals(other.players)) return false;
     if(!this.decisionEngines.equals(other.decisionEngines)) return false;
     if(!this.pieces.equals(other.pieces)) return false;
@@ -41,7 +39,7 @@ public record PlayerData(List<String> players, List<Piece> pieces, CellState[][]
     return true;
   }
 
-  public static PlayerData make(List<Object> elements) throws ParserException {
+  public static ParserData make(List<Object> elements) throws ParserException {
     if(!(elements.get(0).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 0));
     }
@@ -54,7 +52,7 @@ public record PlayerData(List<String> players, List<Piece> pieces, CellState[][]
     if(!(elements.get(3).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 3));
     }
-    return new PlayerData(
+    return new ParserData(
         (List<String>) elements.get(0),
         (List<Piece>) elements.get(1),
         (CellState[][]) elements.get(2),
@@ -67,7 +65,7 @@ public record PlayerData(List<String> players, List<Piece> pieces, CellState[][]
     return List.of(new ParsePlayers(), new ParsePieces(), new ParseBoard(), new ParseDecisionEngines());
   }
 
-  public static List<Object> getItems(PlayerData data) {
+  public static List<Object> getItems(ParserData data) {
     return List.of(data.players(), data.pieces(), data.board(), data.decisionEngines());
   }
 

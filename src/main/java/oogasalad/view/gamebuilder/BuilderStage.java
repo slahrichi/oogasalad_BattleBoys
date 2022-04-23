@@ -269,10 +269,16 @@ public abstract class BuilderStage {
 
   protected int[][] cropToActiveGrid(int[][] stateMap){
     int[][] croppedGrid=new int[activeWidth][activeHeight];
+    System.out.println(originX+"width"+(originX+activeWidth));
+    System.out.println(originY+"height"+(originY+activeHeight));
     for(int i=originX;i<originX+activeWidth;i++){
       for(int j=originY;j<originY+activeHeight;j++){
-          croppedGrid[i-activeWidth][j-activeHeight]=stateMap[i][j];
+          croppedGrid[i-originX][j-originY]=stateMap[i][j];
+          System.out.print(croppedGrid[i-originX][j-originY]);
+        //System.out.print("("+(i-originX)+";"+(j-originY)+")");
+
       }
+      System.out.println();
     }
 
     return croppedGrid;

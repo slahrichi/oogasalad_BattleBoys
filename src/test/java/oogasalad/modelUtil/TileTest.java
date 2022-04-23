@@ -60,7 +60,7 @@ public class TileTest {
     HumanPlayer[] players = {p1,p2};
     if(mods!= null && !mods.isEmpty()) {
       for (Modifiers m : mods) {
-        m.modifierFunction().accept(players);
+//        m.modifierFunction().accept(players);
       }
     }
     assertEquals( 0, p1.getMyCurrency());
@@ -69,7 +69,7 @@ public class TileTest {
     cell.hit(1);
     mods = (ArrayList<Modifiers>) cell.update();
     for(Modifiers m: mods){
-      m.modifierFunction().accept(players);
+//      m.modifierFunction().accept(players);
     }
     assertEquals(300, p1.getMyCurrency());
   }
