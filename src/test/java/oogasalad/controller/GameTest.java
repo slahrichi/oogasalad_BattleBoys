@@ -15,17 +15,22 @@ import util.DukeApplicationTest;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+/**
+ * Comprehensive testing for Game
+ *
+ * @author Matthew Giglio
+ */
 public class GameTest extends DukeApplicationTest {
 
 private Game spy;
+private File file;
 
   private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
 
   @BeforeEach
   void setup() {
-
+    file = new File(System.getProperty("user.dir") + "/data/ExampleDataFile.properties");
   }
 
   @Test
@@ -33,7 +38,7 @@ private Game spy;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") + "/data/ExampleDataFile.properties")).when(spy).chooseDataFile();
+      Mockito.doReturn(file).when(spy).chooseDataFile();
       spy.showStart();
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
@@ -47,7 +52,8 @@ private Game spy;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") + "/data/FakeFile.properties")).when(spy).chooseDataFile();
+      Mockito.doReturn(new File(System.getProperty("user.dir") +
+          "/data/FakeFile.properties")).when(spy).chooseDataFile();
       spy.showStart();
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
@@ -61,9 +67,10 @@ private Game spy;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") + "/data/FakeFile.properties")).when(spy).chooseDataFile();
+      Mockito.doReturn(file).when(spy).chooseDataFile();
       spy.showStart();
-      assertThrows(NullPointerException.class, () -> spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
+      assertThrows(NullPointerException.class, () ->
+          spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "fakeMethod", null, null)));
     });
   }
@@ -73,7 +80,7 @@ private Game spy;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") + "/data/ExampleDataFile.properties")).when(spy).chooseDataFile();
+      Mockito.doReturn(file).when(spy).chooseDataFile();
       spy.showStart();
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
