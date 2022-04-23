@@ -89,6 +89,5 @@ private File file;
     });
     Thread.sleep(1000);
     assertNotEquals(null, lookup("#view-shop").query());
-
   }
 }
