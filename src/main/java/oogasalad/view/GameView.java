@@ -379,6 +379,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void switchPlayerMessage(String nextPlayer) {
     passComputerMessageView.setLabelText(nextPlayer);
+    System.out.println(nextPlayer);
     myScene.setRoot(passComputerMessageView);
   }
 

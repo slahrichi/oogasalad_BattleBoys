@@ -63,6 +63,7 @@ public class GameViewManager {
   }
 
   private List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> inventoryMap) {
+    System.out.println(inventoryMap.entrySet());
     List<UsableRecord> inventory = new ArrayList<>();
     String basicShotID = "Basic Shot";
     String basicShotClassName = "BasicShot";

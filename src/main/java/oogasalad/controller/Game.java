@@ -85,13 +85,15 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private void startGame() {
     GameManager manager = new GameManager(gameData, myResources);
     myStage.setScene(manager.createScene());
+    manager.makeFirstAIPlayersMove();
   }
 
   private void loadFile() {
     LOG.info("loadFile");
     ParserData parserData;
     try {
-      parserData = parser.parse(chooseDataFile().getAbsolutePath());
+      String path = chooseDataFile().getAbsolutePath();
+      parserData = parser.parse(path);
       createGameData(parserData);
       setup = new GameSetup(gameData, myResources);
       setup.addObserver(this);

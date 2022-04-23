@@ -42,7 +42,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
   private List<Player> playerList;
   private GameManager gm;
   private List<CellState[][]> list;
-  private Info info = new Info(0, 1, 1);
+  private String info = "0 0 1";
 
   private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
@@ -85,15 +85,13 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
   }
 
   @Test
-  void testPlacePiece() {
+  void testPlacePiece() throws InterruptedException {
     GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
-          gs.createScene();
         }
     );
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "placePiece", null, "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -110,11 +108,9 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
     GameData gd = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
-          gs.createScene();
         }
     );
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
         "placePiece", null, "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -148,7 +144,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
     CellState[][] board = playerList.get(0).getBoard().getCurrentBoardState();
     for (int i = 0; i < board.length; i++) {
       for (int j = 0; j < board[0].length; j++) {
-        if (board[i][j] == CellState.SHIP_DAMAGED) {
+        if (board[i][j] == CellState.SHIP_SUNKEN) {
           return new Coordinate(i, j);
         }
       }
