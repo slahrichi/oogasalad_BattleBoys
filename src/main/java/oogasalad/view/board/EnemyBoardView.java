@@ -31,7 +31,7 @@ public class EnemyBoardView extends GameBoardView {
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    notifyObserver(evt.getPropertyName()+ENEMY, new Info(((Coordinate) evt.getNewValue()).getRow(), ((Coordinate) evt.getNewValue()).getColumn(), myID));
+    notifyObserver(evt.getPropertyName()+ENEMY, ((Coordinate) evt.getNewValue()).getRow() + " " + ((Coordinate) evt.getNewValue()).getColumn() + " " + myID);
   }
 }
 

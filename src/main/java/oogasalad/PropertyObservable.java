@@ -3,6 +3,10 @@ package oogasalad;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ *
+ * @author Minjun Kwak
+ */
 public class PropertyObservable {
   private PropertyChangeSupport pcs;
 

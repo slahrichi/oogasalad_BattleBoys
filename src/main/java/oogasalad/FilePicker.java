@@ -17,7 +17,6 @@ public class FilePicker {
   }
 
   public File getFile() {
-
     chooser.setInitialDirectory(new File("data"));
     chooser.getExtensionFilters().addAll(new ExtensionFilter("valid save files", "*.properties"));
     chooser.setTitle(FILE_CHOOSER_TITLE);

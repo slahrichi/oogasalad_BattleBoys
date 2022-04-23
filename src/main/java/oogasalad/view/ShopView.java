@@ -1,6 +1,9 @@
 package oogasalad.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Side;
@@ -13,8 +16,9 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import oogasalad.PropertyObservable;
 
-public class ShopView {
+public class ShopView extends PropertyObservable implements PropertyChangeListener {
 
   private static final double SCREEN_WIDTH = 1000;
   private static final double SCREEN_HEIGHT = 600;
@@ -35,7 +39,7 @@ public class ShopView {
 
     setUpTitle();
     setUpTabPane(myResources.getString("shopCategories").split(","));
-    addShopItem("Weapon","Test","test",1);
+    addShopItem("Weapon","Test",1,"bruhmoment");
     setUpButtons();
   }
 
@@ -86,9 +90,19 @@ public class ShopView {
   private void setUpButtons() {
   }
 
-  public void addShopItem(String category,String itemName, String itemInfo, int index){
-    Group currentGroup = (Group) nameToPageMap.get(category).getContent();
-    currentGroup.getChildren().add(new ShopItem(itemName,itemInfo,index));
+  public void makeShopView(List<String> usableIDList, List<Integer> priceList, List<String> usableClassNames) {
+    for(int i = 0; i<usableIDList.size(); i++) {
+      addShopItem("Weapon", usableIDList.get(i), priceList.get(i), usableClassNames.get(i));
+    }
   }
 
+  public void addShopItem(String category, String usableID, int price, String usableClassName) {
+    Group currentGroup = (Group) nameToPageMap.get(category).getContent();
+    currentGroup.getChildren().add(new ShopItem(usableID,price,usableClassName).getMyVBox());
+  }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    notifyObserver(evt.getPropertyName(), evt.getNewValue());
+  }
 }
