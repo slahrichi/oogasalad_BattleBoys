@@ -6,7 +6,7 @@
 *.ipr
 *.iws
 *.iml
-#.idea/
+.idea/
 out/
 local.properties
 
