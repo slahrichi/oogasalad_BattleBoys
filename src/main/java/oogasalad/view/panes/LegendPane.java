@@ -13,11 +13,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-
+/**
+ * This class represents a legend that helps the user know what colors on the board represent in terms of CellStates.
+ *
+ * @author Edison Ooi, Eric Xie
+ */
 public class LegendPane extends TitledPane {
 
   private ScrollPane myScroller;
   private GridPane myGrid;
+
   private LinkedHashMap<String, Color> colorMap;
   private ResourceBundle myResources;
 
@@ -31,13 +36,17 @@ public class LegendPane extends TitledPane {
   private static final String LABEL_SPACING = "   ";
   private static final double PANE_MAX_HEIGHT = 250;
 
-
+  /**
+   * Class constructor.
+   * @param colors List of key-value pairs of color and what the color represents
+   */
   public LegendPane(LinkedHashMap<String, Color> colors){
     colorMap = colors;
     setUpGrid();
     setUpPane();
   }
 
+  // Sets up list of LegendElements to appear in this Pane
   private void setUpGrid(){
     myGrid = new GridPane();
     myGrid.setPadding(new Insets(PANE_PADDING));
@@ -54,6 +63,7 @@ public class LegendPane extends TitledPane {
     }
   }
 
+  // Sets up main Pane
   private void setUpPane(){
 
     this.setId(LEGEND_PANE_ID);
