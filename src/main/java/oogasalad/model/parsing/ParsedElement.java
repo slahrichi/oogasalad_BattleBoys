@@ -15,7 +15,7 @@ import oogasalad.model.utilities.winconditions.WinCondition;
 
 public abstract class ParsedElement {
 
-  Properties exceptionMessageProperties;
+  protected Properties exceptionMessageProperties;
   private final String MISSING_DATA =  "missingData";
   private final String MISSING_FILE = "missingFile";
   private final String EXCEPTIONS_PATH = "src/main/resources/ParserExceptions.properties";
@@ -30,7 +30,7 @@ public abstract class ParsedElement {
     }
   }
 
-  Object getElementFromJson(String File, Gson gson, Class myClass) throws ParserException {
+  protected Object getElementFromJson(String File, Gson gson, Class myClass) throws ParserException {
     Object element;
     try{
       element = gson.fromJson(new FileReader(File), myClass);
@@ -41,7 +41,7 @@ public abstract class ParsedElement {
     return element;
   }
 
-  List getParsedObject(String parsedObjectFile, Gson gson,
+  protected List getParsedObject(String parsedObjectFile, Gson gson,
       Type listOfMyClassObject, String missingClass) throws ParserException {
     List<?> ret = null;
     //List<?> ret= null; not sure which one makes more sense
@@ -57,7 +57,7 @@ public abstract class ParsedElement {
     return ret;
   }
 
-  void putJsonInProp(Properties props, String location, Object o, Gson gson, String key) {
+  protected void putJsonInProp(Properties props, String location, Object o, Gson gson, String key) {
     String json = gson.toJson(o);
     File myNewFile = new File(location);
     try {

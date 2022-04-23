@@ -1,4 +1,4 @@
-package oogasalad.model.parsing;
+package oogasalad.model.parsing.parsers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,6 +7,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import oogasalad.model.parsing.GSONHelper;
+import oogasalad.model.parsing.ParsedElement;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.Piece; //
 
 public class ParsePieces extends ParsedElement {

@@ -1,11 +1,13 @@
-package oogasalad.model.parsing;
+package oogasalad.model.parsing.parsers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import oogasalad.model.parsing.ParsedElement;
+import oogasalad.model.parsing.ParserException;
 
-public class ParsePlayers extends ParsedElement{
+public class ParsePlayers extends ParsedElement {
   private final String PROPERTIES_PLAYER_LIST = "Players";
   private final String SPACE = " ";
   private final String PATH = "oogasalad.model.players.";

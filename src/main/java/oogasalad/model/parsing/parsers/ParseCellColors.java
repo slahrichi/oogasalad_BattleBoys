@@ -1,13 +1,15 @@
-package oogasalad.model.parsing;
+package oogasalad.model.parsing.parsers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.Map;
 import java.util.Properties;
 import javafx.scene.paint.Color;
+import oogasalad.model.parsing.ParsedElement;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
-public class ParseCellColors extends ParsedElement{
+public class ParseCellColors extends ParsedElement {
 
   private final String CELL_COLORS_JSON = "CellColors.json";
   private final String PROPERTIES_CELL_COLORS_FILE = "CellColors";

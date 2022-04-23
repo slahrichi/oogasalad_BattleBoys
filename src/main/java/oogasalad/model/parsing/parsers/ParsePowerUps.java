@@ -1,8 +1,10 @@
-package oogasalad.model.parsing;
+package oogasalad.model.parsing.parsers;
 
 import java.util.Properties;
+import oogasalad.model.parsing.ParsedElement;
+import oogasalad.model.parsing.ParserException;
 
-public class ParseShop extends ParsedElement{
+public class ParsePowerUps extends ParsedElement {
 
   @Override
   public void save(Properties props, String location, Object o) throws ParserException {

@@ -1,10 +1,12 @@
-package oogasalad.model.parsing;
+package oogasalad.model.parsing.parsers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import oogasalad.model.parsing.ParsedElement;
+import oogasalad.model.parsing.ParserException;
 
-public class ParseDecisionEngines extends ParsedElement{
+public class ParseDecisionEngines extends ParsedElement {
   private final String PROPERTIES_DECISION_ENGINES_LIST = "DecisionEngines";
   private final String PROPERTIES_PLAYER_LIST = "Players";
   private final String SPACE = " ";

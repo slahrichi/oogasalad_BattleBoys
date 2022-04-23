@@ -1,4 +1,4 @@
-package oogasalad.model.parsing;
+package oogasalad.model.parsing.parsers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,9 +7,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import oogasalad.model.parsing.GSONHelper;
+import oogasalad.model.parsing.ParsedElement;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.winconditions.WinCondition;
 
-public class ParseWinConditions extends ParsedElement{
+public class ParseWinConditions extends ParsedElement {
   private final String PROPERTIES_WINCONDITIONS_FILE = "WinConditionsFile";
   private final String WINCONDITIONS = "WinConditions";
   private final String WINCONDITIONS_JSON = "WinConditions.json";
