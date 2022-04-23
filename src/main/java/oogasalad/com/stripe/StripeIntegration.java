@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import spark.Spark;
 
 import static spark.Spark.post;
 import static spark.Spark.port;
@@ -15,21 +16,26 @@ import static spark.Spark.staticFiles;
 
 public class StripeIntegration {
 
-  public StripeIntegration() throws URISyntaxException, IOException {
-    buildServer();
-    openWebPage();
+  public StripeIntegration() {
+    port(4242);
   }
 
-  private void buildServer() {
-    port(4242);
+  public void purchaseItem() throws URISyntaxException, IOException, InterruptedException {
+    makeRequest();
+    openWebPage();
+
+  }
+
+  private void makeRequest() throws InterruptedException {
 
     // This is your test secret API key.
     Stripe.apiKey = "sk_test_51KpiXJCOTY4jZDr4HsPOnix8e9JuuToD27JhxIPCUSlXfPogIW3n05G0BxcWAKAipD2Dq"
         + "dBdS6qYhV0XkvfOKhcW00m197JWbn";
-
+    Spark.stop();
+    Thread.sleep(500);
+    port(4242);
     staticFiles.externalLocation(
         Paths.get("public").toAbsolutePath().toString());
-
     post("/create-checkout-session", (request, response) -> {
       String YOUR_DOMAIN = "http://localhost:4242";
       SessionCreateParams params =

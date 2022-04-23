@@ -149,6 +149,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Scene myScene;
 
   private int currentBoardIndex;
+  private StripeIntegration stripeIntegration;
 
   private Map<Integer, String> playerIDToNames;
 
@@ -162,6 +163,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     currentBoardIndex = 0;
     playerIDToNames = idToNames;
     myResources = resourceBundle;
+    stripeIntegration = new StripeIntegration();
     initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerInventory);
   }
 
@@ -233,11 +235,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
     stripeButton = ButtonMaker.makeTextButton("stripe", e -> {
       try {
-        new StripeIntegration();
-      } catch (URISyntaxException ex) {
-        ex.printStackTrace();
-      } catch (IOException ex) {
-        ex.printStackTrace();
+        stripeIntegration.purchaseItem();
+      } catch (URISyntaxException | IOException | InterruptedException ex) {
+        showError("Connection to Stripe failed");
       }
     }, "Stripe");
 
