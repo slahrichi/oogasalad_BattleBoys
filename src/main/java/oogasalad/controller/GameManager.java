@@ -17,6 +17,7 @@ import oogasalad.model.players.EngineRecord;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -240,7 +241,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         currentPlayer.updateEnemyBoard(hitCoord, id, hitResults.get(hitCoord));
         view.displayShotAt(hitCoord.getRow(), hitCoord.getColumn(), hitResults.get(hitCoord));
       }
-      conditionHandler.applyModifiers(currentPlayer, enemy);
+      List<Modifiers> mods = conditionHandler.applyModifiers(currentPlayer, enemy);
+
+      for(Modifiers mod : mods)
+          mod.modifierFunction(this).accept(this);
+
       numShots++;
       return true;
     } catch (Exception e) {
@@ -253,5 +258,12 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       DecisionEngine engine = engineMap.get(player);
       engine.adjustStrategy(result);
     }
+  }
+
+  public GameViewManager getGameViewManager() {
+    return gameViewManager;
+  }
+  public List<Player> getPlayerList(){
+    return playerList;
   }
 }

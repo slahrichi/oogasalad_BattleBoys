@@ -2,10 +2,11 @@ package oogasalad.model.utilities.tiles.Modifiers;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.function.Consumer;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
-public class GoldAdder extends PlayerModifier{
+public class GoldAdder extends Modifiers{
 
   private boolean hasBeenAppliedAlready = false;
   private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
@@ -17,6 +18,12 @@ public class GoldAdder extends PlayerModifier{
     };
     this.setMyConsumer(consumer);
   }
+
+  @Override
+  public Consumer modifierFunction(CellInterface cell){
+    return myConsumer;
+  }
+
   @Override
   public Boolean checkConditions(CellInterface cell) {
     if (allowableStates.contains(cell.getCellState()) && !hasBeenAppliedAlready){

@@ -52,17 +52,16 @@ public class ConditionHandler {
    * @param currPlayer  current Player
    * @param enemyPlayer enemy Player
    */
-  void applyModifiers(Player currPlayer, Player enemyPlayer) {
+  List<Modifiers> applyModifiers(Player currPlayer, Player enemyPlayer) {
     List<Modifiers> mods = enemyPlayer.getBoard().update();
     for (Modifiers mod : mods) {
-      if (mod.getClass().getSimpleName().equals(PLAYER_MODIFIER)) {
         Player[] players = {currPlayer, enemyPlayer};
         try {
-          mod.modifierFunction().accept(players);
+          mod.modifierFunction(players).accept(players);
         } catch (Exception e) {
         }
       }
-    }
+    return mods;
   }
 
   /**
