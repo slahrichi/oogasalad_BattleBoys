@@ -3,6 +3,7 @@ package oogasalad.view;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.control.Button;
@@ -62,11 +63,11 @@ public class SetupViewTest extends DukeApplicationTest {
     Piece piece2 = new StaticPiece(ships2, coords2, "1");
     pieces.add(piece1);
     pieces.add(piece2);
-    PlayerFactoryRecord record = PlayerFactory.initializePlayers(board, stringPlayers, null);
+    PlayerFactoryRecord record = PlayerFactory.initializePlayers(board, stringPlayers, new HashMap<>(), null);
     List<Player> players = record.playerList();
     List<WinCondition> winConditions = new ArrayList<>();
     winConditions.add(new LoseXShipsLossCondition(2));
-    GameData data = new GameData(players, board, pieces, winConditions, null);
+    GameData data = new GameData(players, board, pieces, winConditions, null, new HashMap<>(), new HashMap<>());
     GameSetup setup = new GameSetup(data, myResources);
     stage.setScene(setup.createScene());
     stage.show();

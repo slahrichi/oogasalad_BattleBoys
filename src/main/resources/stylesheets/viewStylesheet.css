@@ -66,3 +66,7 @@
   -fx-background-insets: 10px;
   -fx-pref-height: 50px;
 }
+
+#inventory-view {
+  -fx-max-width: 400;
+}

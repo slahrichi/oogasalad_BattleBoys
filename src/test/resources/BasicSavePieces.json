@@ -8,33 +8,66 @@
             "row": 0,
             "column": 1
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 1,
             "column": 0
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 1,
             "column": 1
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         }
       ],
       "allCells": [
@@ -43,35 +76,71 @@
             "row": 0,
             "column": 1
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 1,
             "column": 0
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 1,
             "column": 1
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         }
       ],
+      "myMover": {
+        "route": []
+      },
       "cellListHP": [],
       "myRelativeCoords": [
         {
@@ -100,55 +169,110 @@
             "row": 0,
             "column": 0
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 1,
             "column": 0
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 1,
             "column": 1
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 0,
             "column": 1
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 0,
             "column": 2
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         }
       ],
       "allCells": [
@@ -157,57 +281,115 @@
             "row": 0,
             "column": 0
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 1,
             "column": 0
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 1,
             "column": 1
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 0,
             "column": 1
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
             "row": 0,
             "column": 2
           },
-          "myHealthBar": 1,
-          "currentState": "SHIP_HEALTHY",
           "myGoldValue": 0,
           "id": 0,
-          "myModifiers": []
+          "myModifiers": [
+            {
+              "hasBeenAppliedAlready": false,
+              "allowableStates": [
+                "SHIP_SUNKEN",
+                "ISLAND_SUNK"
+              ],
+              "myConsumer": {
+                "arg$1": 0
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
         }
       ],
+      "myMover": {
+        "route": []
+      },
       "cellListHP": [],
       "myRelativeCoords": [
         {

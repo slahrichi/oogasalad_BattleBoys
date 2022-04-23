@@ -1,5 +1,6 @@
 package oogasalad.view.gamebuilder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,12 +21,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.ShipCell;
 
 public class PieceDesignStage extends BuilderStage {
 
   private final int MAX_DIMENSION = 5;
 
   private int[][] stateMap;
+  private List<Object> pieceList;
   private Map<String, int[][]> editableStats;
   private BorderPane myPane;
   private Object pieceType;
@@ -42,13 +47,14 @@ public class PieceDesignStage extends BuilderStage {
   private final double CELL_SIZE = 20;
   private TextArea idInputBox;
   private final String DEFAULT_PIECE_NAME = "Custom Piece";
+  private List<Coordinate> patrolPath = new ArrayList<>();
+
 
   private String[] customizableStats;
   private Stage myStage;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
-    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     availablePieceTypes = getMyBuilderResources().getString("possiblePieceType");
     customizableStats = getMyBuilderResources().getString("pieceCellCustomParameters")
         .split(",");
@@ -69,14 +75,14 @@ public class PieceDesignStage extends BuilderStage {
 
     Scene myScene = new Scene(myPane, 1000, 500);
     myStage.setScene(myScene);
-    myStage.show();
+
   }
 
   private void initializeCharacteristicMatrix() {
 
     editableStats = new HashMap<>();
-    for (String charactristic : customizableStats) {
-      editableStats.put(charactristic,
+    for (String stat : customizableStats) {
+      editableStats.put(stat,
           initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 1));
     }
   }
@@ -108,7 +114,9 @@ public class PieceDesignStage extends BuilderStage {
   private void resetCustomization() {
     myPane.setCenter(null);
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
+    stateMap[2][2]=1;
     piecePathList.clear();
+    patrolPath.clear();
     myPane.setLeft(null);
   }
 
@@ -121,10 +129,8 @@ public class PieceDesignStage extends BuilderStage {
     newCell.setOnMouseClicked(mouseEvent -> {
       stateMap[i][j] = getSelectedType();
       newCell.setFill(colorList.get(getSelectedType()));
-      if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-        if (mouseEvent.getClickCount() == 2) {
-          makePopUpDialog(i, j);
-        }
+      if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+        makePopUpDialog(i, j);
       }
     });
 
@@ -132,10 +138,15 @@ public class PieceDesignStage extends BuilderStage {
   }
 
   @Override
+  protected Object launch() {
+    myStage.showAndWait();
+    return pieceList;
+  }
+
+  @Override
   protected Object saveAndContinue() {
-    findReferencePoint();
     myStage.close();
-    WeaponDesignStage wds = new WeaponDesignStage();
+
     return null;
   }
 
@@ -154,48 +165,87 @@ public class PieceDesignStage extends BuilderStage {
       }
       myPane.setLeft(pathListView);
       idInputBox = makeTextAreaWithDefaultValue(DEFAULT_PIECE_NAME);
+      String pieceTypeString = pieceType.toString();
+      Boolean needsPath = !reqVars[0].isEmpty();
       myPane.setCenter(
           new VBox(idInputBox,
               new HBox(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, CELL_SIZE, CELL_SIZE, stateMap),
                   displayColorChoice(DEFAULT_STATE_OPTIONS, colorList)),
-              makeButton("Save Piece", e -> savePiece())));
+              makeButton("Save Piece", e -> savePiece(pieceTypeString, needsPath))));
     }
   }
 
-  private void savePiece() {
-    addToObjectList(idInputBox.getText());
+  private List<ShipCell> makeCellList(int[][] pieceMap) {
+    List<ShipCell> cellList = new ArrayList<>();
+
+    for (int i = 0; i < pieceMap.length; i++) {
+      for (int j = 0; j < pieceMap[0].length; j++) {
+        if (pieceMap[i][j] != 0) {
+          cellList.add(
+              new ShipCell(editableStats.get(customizableStats[0])[i][j], new Coordinate(i, j),
+                  editableStats.get(customizableStats[1])[i][j],
+                  idInputBox.getText() + "cell"));
+        }
+      }
+
+    }
+    return cellList;
+  }
+
+
+  private void savePiece(String selectedPieceType, Boolean needsPath) {
+    String selectedPieceClass = "oogasalad.model.utilities." + selectedPieceType + "Piece";
+    findReferencePoint(stateMap);
+    int[][] pieceMap = cropToActiveGrid(stateMap);
+    List<Object> parametersList = new ArrayList<>();
+    parametersList.add(makeCellList(pieceMap));
+    if (needsPath) {
+      parametersList.add(patrolPath);
+    }
+    //parametersList.add(makeRelativeCoordinateMap(pieceMap));
+    parametersList.add(idInputBox.getText());
+
+    Object[] parameters = new Object[parametersList.size()];
+    parametersList.toArray(parameters);
+    pieceList = new ArrayList<>();
+    try {
+      pieceList.add(
+          createInstance(selectedPieceClass, getParameterType(parameters), parameters));
+
+      addToObjectList(idInputBox.getText());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    findReferencePoint(stateMap);
     resetCustomization();
   }
 
-  private void updatePath(String path) {
-    piecePathList.add(path);
-  }
-
-  private void findReferencePoint() {
-    int minX = MAX_DIMENSION;
-    int minY = MAX_DIMENSION;
-    int maxX = 0;
-    int maxY = 0;
-    for (int i = 0; i < stateMap.length; i++) {
-      for (int j = 0; j < stateMap[0].length; j++) {
-        if (stateMap[i][j] != 0) {
-          if (i <= minX && j <= minY) {
-            minX = i;
-            minY = j;
-          }
-          if (i >= minX && j >= minY) {
-            maxX = i;
-            maxY = j;
-          }
-        }
+  private Class<?>[] getParameterType(Object[] parameters) {
+    Class<?>[] parameterTypes = new Class<?>[parameters.length];
+    for (int i = 0; i < parameters.length; i++) {
+      if (parameters[i] instanceof ArrayList) {
+        parameterTypes[i] = List.class;
+      } else {
+        parameterTypes[i] = parameters[i].getClass();
       }
     }
+
+    return parameterTypes;
   }
 
-  // private Piece makePiece(){
-  //   Piece result = new StaticPiece();
-  //       ShipCell a = new
-  // }
+  private void updatePath(String path) {
+    String pathElements[] = path.split(",");
+    String pathDirection = pathElements[0];
+    String pathLength = pathElements[1];
+    if (checkIntConversion(pathLength)) {
+      int length = Integer.parseInt(pathLength);
+      int xDelta = Integer.parseInt(getMyBuilderResources().getString(pathDirection + "X"));
+      int yDelta = Integer.parseInt(getMyBuilderResources().getString(pathDirection + "Y"));
+      patrolPath.add(new Coordinate(xDelta * length, yDelta * length));
+      piecePathList.add(path);
+    }
+  }
 
 
 }

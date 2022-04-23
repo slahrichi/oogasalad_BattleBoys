@@ -1,6 +1,7 @@
 package oogasalad.model.players;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -29,7 +30,7 @@ class AIPlayerTest {
     }
     for(int i = 0; i < 3; i++) {
       Board b = new Board(cellBoard);
-      AIPlayer p = new AIPlayer(b, i, null);
+      AIPlayer p = new AIPlayer(b, i, new HashMap<>(), null);
       allPlayers.add(p);
     }
     // add players to players

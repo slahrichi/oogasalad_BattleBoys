@@ -2,8 +2,10 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -13,26 +15,38 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+import oogasalad.model.utilities.usables.Usable;
+import oogasalad.com.stripe.StripeIntegration;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -50,6 +64,7 @@ import oogasalad.view.panes.LegendPane;
 import oogasalad.view.panes.SetPiecePane;
 import oogasalad.view.panels.TitlePanel;
 import oogasalad.view.screens.AbstractScreen;
+import oogasalad.view.screens.LoserScreen;
 import oogasalad.view.screens.PassComputerScreen;
 import oogasalad.view.screens.WinnerScreen;
 import org.apache.logging.log4j.LogManager;
@@ -75,12 +90,15 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String VIEW_PANE_ID = "view-pane";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String SHOT_METHOD = "handleShot";
-  private static final double BOARD_SIZE = 50;
+  private static final double BOARD_SIZE = 40;
   private static final int EXPLOSION_DURATION = 1000;
 
   private static final String BOARD_INDEX_LOG = "Current board index: ";
   private static final String BOARD_SHOW_LOG = "Showing board ";
   private static final String CELL_CLICKED_SELF_LOG = "cellClickedSelf";
+  private static final String WON_SUFFIX = "WonSuffix";
+  private static final String LOST_SUFFIX = "LostSuffix";
+  private static final String LOST_ALERT_ID = "player-lost-alert";
 
   // ResourceBundle Strings
 
@@ -113,6 +131,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button leftButton;
   private Button rightButton;
   private Button endTurnButton;
+  private Button stripeButton;
   private VBox myRightPane;
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
@@ -123,16 +142,19 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private DynamicLabel goldLabel;
   private AbstractScreen passComputerMessageView;
   private ResourceBundle myResources;
+  private InventoryView inventory;
+  private Stage loserStage;
   private boolean nightMode;
 
   private Scene myScene;
 
   private int currentBoardIndex;
+  private StripeIntegration stripeIntegration;
 
   private Map<Integer, String> playerIDToNames;
 
   public GameView(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, ResourceBundle resourceBundle) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, List<UsableRecord> firstPlayerUsables, ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;
@@ -141,9 +163,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     currentBoardIndex = 0;
     playerIDToNames = idToNames;
     myResources = resourceBundle;
-    initialize(firstPlayerBoards, initialPiecesLeft);
-
+    stripeIntegration = new StripeIntegration();
+    initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerUsables);
   }
+
+
 
   private List<Integer> createInitialIDList(int numPlayers) {
     List<Integer> idList = new ArrayList<>();
@@ -154,16 +178,32 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void initialize(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, List<UsableRecord> firstPlayerUsables) {
     initializeBoards(firstPlayerBoards, createInitialIDList(firstPlayerBoards.size()));
     createCenterPane();
     createRightPane();
     createTitlePanel();
     createPassMessageView();
     initializePiecesLeft(initialPiecesLeft);
+    createInventory();
+    updateInventory(firstPlayerUsables);
   }
+
+  private void createInventory() {
+    inventory = new InventoryView();
+    myCenterPane.getChildren().add(inventory.getPane());
+  }
+
+  private void updateInventory(List<UsableRecord> usableList) {
+    inventory.updateElements(usableList);
+  }
+
   private void createPassMessageView() {
-    passComputerMessageView = new PassComputerScreen(e -> myScene.setRoot(myPane), myResources);
+    passComputerMessageView = new PassComputerScreen(e -> switchToMainScreen(), myResources);
+  }
+
+  public void switchToMainScreen() {
+    myScene.setRoot(myPane);
   }
 
   public void initializePiecesLeft(Collection<Collection<Coordinate>> piecesLeft) {
@@ -193,6 +233,13 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createRightPane() {
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
+    stripeButton = ButtonMaker.makeTextButton("stripe", e -> {
+      try {
+        stripeIntegration.purchaseItem();
+      } catch (URISyntaxException | IOException | InterruptedException ex) {
+        showError("Connection to Stripe failed");
+      }
+    }, "Stripe");
 
     piecesRemainingPane = new SetPiecePane(20, myResources);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
@@ -210,7 +257,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     configPane.setOnAction(e -> changeStylesheet());
 
     myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel,
-        numPiecesLabel, goldLabel, shopButton,
+        numPiecesLabel, goldLabel, shopButton, stripeButton,
         piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
@@ -236,6 +283,26 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myCenterPane.getChildren().add(myBoards.get(currentBoardIndex).getBoardPane());
     setupBoardButtons();
   }
+
+//  private void setupInventory() {
+//    inventory = new ScrollPane();
+//    inventory.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//    HBox box = BoxMaker.makeHBox("inventory-box", 3, Pos.CENTER);
+//    box.setStyle("-fx-background-color: lightblue;");
+//    for (int i = 0; i < 6; i++) {
+//      StackPane pane = new StackPane();
+//      pane.setId("inventory-usable");
+//      pane.setPrefSize(75, 75);
+//      pane.setStyle("-fx-background-color: white;");
+//      Label stock = new Label("x 2");
+//      pane.getChildren().add(stock);
+//      StackPane.setAlignment(stock, Pos.TOP_RIGHT);
+//      box.getChildren().add(pane);
+//    }
+//    inventory.setMaxWidth(400);
+//    inventory.setContent(box);
+//    myCenterPane.getChildren().add(inventory);
+//  }
 
   private void createTitlePanel() {
     myTitle = new TitlePanel("");
@@ -273,7 +340,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void endTurn() {
     endTurnButton.setDisable(true);
-    notifyObserver("endTurn", new Info(0, 0, 0));
+    notifyObserver("endTurn", "");
   }
 
   // Decrements currentBoardIndex and updates the shown board
@@ -303,7 +370,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void refreshCenterPane() {
     myCenterPane.getChildren().clear();
     myCenterPane.getChildren()
-        .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox);
+        .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox, inventory.getPane());
   }
 
   private void updateTitle(String playerName) {
@@ -322,33 +389,38 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     try {
-      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), Info.class);
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), String.class);
       m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
       throw new NullPointerException(INVALID_METHOD);
     }
   }
-
-  private void cellClickedSelf(Info info) {
-    int id = info.ID();
-    int row = info.row();
-    int col = info.col();
-    LOG.info(CELL_CLICKED_SELF_LOG);
-    LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver("applyUsable", info);
+  
+  private void equipUsable(String id) {
+    // this is the ID of the Usable
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), id);
   }
 
-  private void cellClickedEnemy(Info info) {
-    int id = info.ID();
-    int row = info.row();
-    int col = info.col();
+  private void cellClickedSelf(String clickInfo) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
+    LOG.info("cellClickedSelf");
+    LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
+    notifyObserver("applyUsable", clickInfo);
+  }
+
+  private void cellClickedEnemy(String clickInfo) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
     LOG.info("cellClickedEnemy");
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver(SHOT_METHOD, info);
+    notifyObserver("applyUsable", clickInfo);
   }
 
-  private void cellHoveredSelf(Info info) {
+  private void cellHoveredSelf(String info) {
 //    int id = info.ID();
 //    int row = info.row();
 //    int col = info.col();
@@ -356,7 +428,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 //    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
   }
 
-  private void cellHoveredEnemy(Info info) {
+  private void cellHoveredEnemy(String info) {
 //    int id = info.ID();
 //    int row = info.row();
 //    int col = info.col();
@@ -364,7 +436,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 //    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
   }
 
-  private void cellExitedSelf(Info info) {
+  private void cellExitedSelf(String info) {
 //    int id = info.ID();
 //    int row = info.row();
 //    int col = info.col();
@@ -372,7 +444,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 //    LOG.info(String.format(BOARD_HOVERED_LOG, id, row, col));
   }
 
-  private void cellExitedEnemy(Info info) {
+  private void cellExitedEnemy(String info) {
 //    int id = info.ID();
 //    int row = info.row();
 //    int col = info.col();
@@ -423,10 +495,15 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myScene.setRoot(winnerScreen);
   }
 
-  public void displayLosingDialog(String name) {
-    //LoserScreen loserScreen = new LoserScreen(name);
-    //myScene.setRoot(loserScreen);
+  public void displayLosingScreen(String name) {
+    LoserScreen loser = new LoserScreen(myResources, name);
+    loserStage = new Stage();
+    loserStage.setScene(new Scene(loser, 600, 600));
+    loserStage.show();
+  }
 
+  public void closeLoserStage() {
+    loserStage.close();
   }
 
   public void updateLabels(int shotsRemaining, int numPiecesRemaining, int amountOfGold) {
@@ -513,15 +590,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     ft.play();
   }
 
-  public void moveToNextPlayer(List<CellState[][]> boardList, List<Integer> idList,
-      List<Collection<Collection<Coordinate>>> pieceList) {
-    switchPlayerMessage(playerIDToNames.get(idList.get(0)));
+
+  public void moveToNextPlayer(String name) {
+    switchPlayerMessage(name);
+  }
+
+  public void update(List<CellState[][]> boardList, List<Integer> idList,
+      List<Collection<Collection<Coordinate>>> pieceList, List<UsableRecord> usableList) {
     myBoards.clear();
     myPiecesLeft = pieceList;
     currentBoardIndex = 0;
     int firstID = idList.get(currentBoardIndex);
     initializeBoards(boardList, idList);
     updateTitle(playerIDToNames.get(firstID));
+    updateInventory(usableList);
     updateDisplayedBoard();
   }
 

@@ -8,6 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * This class represents a temporary screen that is shown for a certain amount of time right when the game starts,
+ * indicating to the players that it is time to place their Pieces on their boards.
+ *
+ * @author Edison Ooi
+ */
 public class SetUpShipsScreen extends AbstractScreen {
 
   private static final String SETUP_SHIPS_RESOURCE = "SetupShipsMessage";

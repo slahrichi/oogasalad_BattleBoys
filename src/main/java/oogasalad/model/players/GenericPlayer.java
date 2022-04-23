@@ -10,25 +10,25 @@ import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.usables.Usable;
 
 
 public abstract class GenericPlayer implements Player{
 
   private int myPiecesLeft;
   private int myCurrency;
-  private Map<Usable, Integer> inventory;
+  private Map<String, Integer> myInventory; //change inventory to use id of usables
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Map<CellState, Integer> myHitsMap; //new instance variable
+
   private Board myBoard;
   private int myId;
 
   private static final String PLAYER_PREFIX = "Player ";
   private String myName;
 
-  public GenericPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
+  public GenericPlayer(Board board, int id,Map<String, Integer> inventory, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
-    inventory = new HashMap<>();
+    myInventory = inventory;
     myCurrency = 0;
     myEnemyMap = enemyMap;
     myHitsMap = new HashMap<CellState, Integer>();
@@ -36,11 +36,16 @@ public abstract class GenericPlayer implements Player{
     myName = PLAYER_PREFIX + (id + 1);
   }
 
+  //changed make purchase to use new ID map
   @Override
-  public void makePurchase(int amount, Usable usable) {
-    if (usable.getPrice() <= myCurrency) {
-      inventory.put(usable, inventory.getOrDefault(usable, 0) + 1);
+  public void makePurchase(int price, String usableID) {
+    if (price <= myCurrency) {
+      myInventory.put(usableID, myInventory.getOrDefault(usableID, 0) + 1);
     }
+  }
+
+  public Map<String, Integer> getMyInventory() {
+    return myInventory;
   }
 
   public void removePiece(String id) {
@@ -98,7 +103,7 @@ public abstract class GenericPlayer implements Player{
   }
 
   private PlayerRecord makeRecord() {
-    return new PlayerRecord(myPiecesLeft, myCurrency, inventory, myBoard);
+    return new PlayerRecord(myPiecesLeft, myCurrency, myHitsMap, myInventory, myBoard);
   }
 
   public Board getBoard() {

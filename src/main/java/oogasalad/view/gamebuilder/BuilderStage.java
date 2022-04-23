@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.maker.LabelMaker;
 
 public abstract class BuilderStage {
@@ -34,10 +35,14 @@ public abstract class BuilderStage {
   private Stage myStage;
   private final ListView<String> objectsListView = new ListView<>();
   private ObservableList<String> objectList = FXCollections.observableArrayList();
+  private int originX;
+  private int originY;
+  private int activeWidth;
+  private int activeHeight;
 
   private static final int DEFAULT_INPUT_BOX_WIDTH = 120;
   private static final int DEFAULT_INPUT_BOX_HEIGHT = 30;
-  private static final int MAX_OBJECT_LIST_WIDTH = 100;
+  private static final int MAX_OBJECT_LIST_WIDTH = 200;
   private static final int MAX_OBJECT_LIST_HEIGHT = 400;
 
   public BuilderStage() {
@@ -129,7 +134,7 @@ public abstract class BuilderStage {
     HBox result = new HBox(comboBox);
     result.getChildren().add(infoBox);
     result.getChildren()
-        .add(makeButton(buttonText, e -> consumer.accept(comboBox.getValue() + infoBox.getText())));
+        .add(makeButton(buttonText, e -> consumer.accept(comboBox.getValue() +","+infoBox.getText())));
     return result;
   }
 
@@ -218,7 +223,80 @@ public abstract class BuilderStage {
         makeTextAreaWithDefaultValue(defaultId));
   }
 
+  protected void findReferencePoint(int[][] stateMap) {
+    int minX = stateMap.length;
+    int minY = stateMap[0].length;
+    int maxX = 0;
+    int maxY = 0;
+    for (int i = 0; i < stateMap.length; i++) {
+      for (int j = 0; j < stateMap[0].length; j++) {
+        if (stateMap[i][j] != 0) {
+          if (i <= minX) {
+            minX = i;
+          }
+          if (j <= minY) {
+            minY = j;
+          }
+          if (i >= maxX) {
+            maxX = i;
+          }
+          if (j >= maxY) {
+            maxY = j;
+          }
+        }
+      }
+    }
+    activeHeight = maxY - minY + 1;
+    activeWidth = maxX - minX + 1;
+    originX = minX;
+    originY = minY;
+  }
+
+  protected int getOriginX() {
+    return originX;
+  }
+
+  protected int getOriginY() {
+    return originY;
+  }
+
+  protected int getActiveWidth() {
+    return activeWidth;
+  }
+
+  protected int getActiveHeight() {
+    return activeHeight;
+  }
+
+  protected int[][] cropToActiveGrid(int[][] stateMap) {
+    int[][] croppedGrid = new int[activeWidth][activeHeight];
+    for (int i = originX; i < originX + activeWidth; i++) {
+      for (int j = originY; j < originY + activeHeight; j++) {
+        croppedGrid[i - originX][j - originY] = stateMap[i][j];
+
+      }
+    }
+
+    return croppedGrid;
+  }
+
+
+  protected List<Coordinate> makeRelativeCoordinateMap(int[][] grid) {
+    List<Coordinate> activeCoordinateList = new ArrayList<>();
+    for (int i = 0; i < grid.length; i++) {
+      for (int j = 0; j < grid[0].length; j++) {
+        if (grid[i][j] != 0) {
+          activeCoordinateList.add(new Coordinate(i, j));
+        }
+      }
+    }
+
+    return activeCoordinateList;
+  }
+
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);
+
+  protected abstract Object launch();
 
   protected abstract Object saveAndContinue();
 }

@@ -9,6 +9,12 @@ import javafx.scene.layout.GridPane;
 
 import oogasalad.view.maker.ButtonMaker;
 
+/**
+ * This class represents a configuration panel on screen that allows users to configure certain visual aspects of
+ * the program, such as night mode.
+ *
+ * @author Eric Xie
+ */
 public class ConfigPane extends TitledPane {
 
   private static ResourceBundle myResources;

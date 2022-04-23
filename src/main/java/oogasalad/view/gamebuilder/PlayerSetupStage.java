@@ -1,12 +1,14 @@
 package oogasalad.view.gamebuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 
-public class BasicGameSetupStage extends BuilderStage {
+public class PlayerSetupStage extends BuilderStage {
 
   private BorderPane myPane;
   private String availableWinConditionTypes;
@@ -16,9 +18,11 @@ public class BasicGameSetupStage extends BuilderStage {
   private String selectedEngineType;
   private ComboBox engineTypeComboBox;
   private HBox playerSelectionBox;
+  private List<String> playerList=new ArrayList<>();
+  private List<String> engineList=new ArrayList<>();
 
 
-  public BasicGameSetupStage() {
+  public PlayerSetupStage() {
     myPane = new BorderPane();
     availablePlayerTypes = getMyBuilderResources().getString("possiblePlayerType");
     needEngineTypes = getMyBuilderResources().getString("needsEngineSelection");
@@ -26,8 +30,7 @@ public class BasicGameSetupStage extends BuilderStage {
     myPane.setRight(setUpObjectView());
     selectedEngineType = getMyBuilderResources().getString("BlankEngineState");
 
-    makeContinueButton();
-    setUpStage(myPane);
+    myPane.setBottom(makeContinueButton());
   }
 
   private HBox makePlayerSelectionBox() {
@@ -74,7 +77,7 @@ public class BasicGameSetupStage extends BuilderStage {
       }
     }
     addToObjectList(selectedPlayerType + selectedEngineType);
-
+    playerList.add(selectedPlayerType+selectedEngineType);
 
   }
 
@@ -91,6 +94,12 @@ public class BasicGameSetupStage extends BuilderStage {
   @Override
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
     return null;
+  }
+
+  @Override
+  protected Object launch() {
+    setUpStage(myPane);
+    return playerList;
   }
 
   @Override

@@ -28,8 +28,8 @@ public class AIPlayer extends GenericPlayer{
 
   private List<Player> players;
 
-  public AIPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
-    super(board, id, enemyMap);
+  public AIPlayer(Board board, int id, Map<String, Integer> inventory, Map<Integer, MarkerBoard> enemyMap) {
+    super(board, id, inventory, enemyMap);
     players = new ArrayList<>();
   }
 

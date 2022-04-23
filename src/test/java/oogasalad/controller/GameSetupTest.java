@@ -3,8 +3,10 @@ package oogasalad.controller;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.stage.Stage;
 import oogasalad.GameData;
 import oogasalad.model.players.AIPlayer;
 import oogasalad.model.players.HumanPlayer;
@@ -31,6 +33,7 @@ public class GameSetupTest extends DukeApplicationTest {
   private GameData gd1;
   private GameData gd2;
   private GameSetup gs;
+  private Game game;
 
   private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
@@ -43,7 +46,7 @@ public class GameSetupTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), new ArrayList<>(Arrays.asList("None", "Easy")));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(1, 0), new Coordinate(1, 1)));
     List<ShipCell> dummyShipCellList = new ArrayList<>();
@@ -57,35 +60,34 @@ public class GameSetupTest extends DukeApplicationTest {
     pieceList1.add(dummyShip1);
     pieceList2.add(dummyShip1);
     pieceList2.add(dummyShip2);
-    gd1 = new GameData(pfr.playerList(), cellBoard, pieceList1, new ArrayList<>(), pfr.engineMap());
-    gd2 = new GameData(pfr.playerList(), cellBoard, pieceList2, new ArrayList<>(), pfr.engineMap());
+    gd1 = new GameData(pfr.playerList(), cellBoard, pieceList1, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), pfr.engineMap());
+    gd2 = new GameData(pfr.playerList(), cellBoard, pieceList2, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), pfr.engineMap());
   }
 
   // Commented out these tests because GameSetup now takes in GameData with the players already
   // constructed with their boards
 
   @Test
-  void testBasicSetup() {
+  void testBasicSetup() throws InterruptedException{
     javafxRun(() -> gs = new GameSetup(gd1, myResources));
+    Thread.sleep(2000);
     assertEquals(gd1.players().size(), 2);
     assertEquals(gd1.players().get(0).getClass(), HumanPlayer.class);
     assertEquals(gd1.players().get(1).getClass(), AIPlayer.class);
   }
 
   @Test
-  void testInvalidMethodName() {
+  void testInvalidMethodName() throws InterruptedException{
     javafxRun(() -> gs = new GameSetup(gd1, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     assertThrows(NullPointerException.class, () -> gs.propertyChange(new PropertyChangeEvent
         (new SetupView(gd1.board(), myResources), "meow", null, "0 0"))) ;
   }
 
   @Test
-  void testCoordinateChoice() {
+  void testCoordinateChoice() throws InterruptedException{
     javafxRun(() -> gs = new GameSetup(gd1, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
        "0 0")));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -98,10 +100,9 @@ public class GameSetupTest extends DukeApplicationTest {
 
 
   @Test
-  void testInvalidCoordinate() {
+  void testInvalidCoordinate() throws InterruptedException {
     javafxRun(() -> gs = new GameSetup(gd1, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         "-1 0")));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -113,10 +114,9 @@ public class GameSetupTest extends DukeApplicationTest {
   }
 
   @Test
-  void testMultiplePieces() {
+  void testMultiplePieces() throws InterruptedException {
     javafxRun(() -> gs = new GameSetup(gd2, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         "0 0")));
     assertEquals(gd1.players().get(0).getBoard().getCurrentBoardState()[0][1],
@@ -136,13 +136,11 @@ public class GameSetupTest extends DukeApplicationTest {
   }
 
   @Test
-  void testMoveToGame() {
+  void testMoveToGame() throws InterruptedException {
     javafxRun(() -> {
       gs = new GameSetup(gd1, myResources);
-      gs.createScene();
     });
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "moveToNextPlayer", null,
@@ -156,10 +154,9 @@ public class GameSetupTest extends DukeApplicationTest {
   }
 
   @Test
-  void testRemovePiece() {
+  void testRemovePiece() throws InterruptedException {
     javafxRun(() -> gs = new GameSetup(gd1, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "removePiece", null,
@@ -173,10 +170,9 @@ public class GameSetupTest extends DukeApplicationTest {
   }
 
   @Test
-  void testRemoveAllPieces() {
+  void testRemoveAllPieces() throws InterruptedException{
     javafxRun(() -> gs = new GameSetup(gd2, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
@@ -198,10 +194,9 @@ public class GameSetupTest extends DukeApplicationTest {
   }
 
   @Test
-  void testRemoveOnePieceOutOfMultiple() {
+  void testRemoveOnePieceOutOfMultiple() throws InterruptedException {
     javafxRun(() -> gs = new GameSetup(gd2, myResources));
-    writeTo(lookup("#player-name").query(), "Matthew");
-    clickOn(lookup("#ok-button").query());
+    Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,
         "0 0")));
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(), "placePiece", null,

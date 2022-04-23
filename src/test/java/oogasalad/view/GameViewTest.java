@@ -77,7 +77,7 @@ public class GameViewTest extends DukeApplicationTest {
     for (int i = 0; i < numPlayers; i++) {
       idMap.put(i, "Player" + (i+1));
     }
-    view = new GameView(firstPlayerBoards, pieceCoords, idMap, myResources);
+    view = new GameView(firstPlayerBoards, pieceCoords, idMap, new ArrayList<>(), myResources);
     stage.setScene(view.createScene());
     stage.show();
 

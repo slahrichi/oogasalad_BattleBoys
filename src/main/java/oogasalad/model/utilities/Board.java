@@ -153,6 +153,9 @@ public class Board {
     return hitState;
   }
 
+  public Piece getPiece(int id){
+    return myPieces.get(id);
+  }
   public int getNumPiecesSunk() {
     return myNumShipsSunk;
   }
@@ -194,11 +197,9 @@ public class Board {
   public List<Modifiers> update(){
     ArrayList<Modifiers> retModifers = new ArrayList<>();
     for(CellInterface cell: boardMap.values()){
-      ArrayList<Modifiers> cellMods = (ArrayList<Modifiers>) cell.update();
+      List<Modifiers> cellMods = cell.update();
       for(Modifiers mod: cellMods){
-        if(mod.getClass().getSimpleName().equals("BoardModifier")){
-          mod.modifierFunction().accept(this);
-        }
+        mod.modifierFunction(this).accept(this);
       }
     }
   return retModifers;

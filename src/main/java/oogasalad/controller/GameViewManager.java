@@ -12,7 +12,9 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.view.GameView;
+import oogasalad.view.UsableRecord;
 
 /**
  * A manager that handles the updating of individual Piece objects and how they appear on the board.
@@ -29,8 +31,9 @@ public class GameViewManager {
   private Map<Integer, Player> idMap;
   private List<Player> playerList;
   private ResourceBundle myResources;
+  private Map<String, Usable> usablesIDMap;
 
-  public GameViewManager(GameData data, Map<Integer, Player> idMap, int allowedShots, ResourceBundle resourceBundle) {
+  public GameViewManager(GameData data, Map<String, Usable> usablesIDMap, Map<Integer, Player> idMap, int allowedShots, ResourceBundle resourceBundle) {
   /**
    * @param data         GameData object storing information pertinent to game rules
    * @param idMap        Map relating a player id to the Player themselves
@@ -39,6 +42,7 @@ public class GameViewManager {
     this.idMap = idMap;
     this.playerList = data.players();
     this.myResources = resourceBundle;
+    this.usablesIDMap = usablesIDMap;
     setupGameView(data, allowedShots);
 
   }
@@ -46,7 +50,7 @@ public class GameViewManager {
   private void setupGameView(GameData data, int allowedShots) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards, coords, generateIDToNames(), myResources);
+    view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getMyInventory()), myResources);
     view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
@@ -56,6 +60,21 @@ public class GameViewManager {
       idToName.put(p.getID(), p.getName());
     }
     return idToName;
+  }
+
+  private List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> inventoryMap) {
+    List<UsableRecord> inventory = new ArrayList<>();
+    String basicShotID = "Basic Shot";
+    String basicShotClassName = "BasicShot";
+    int basicShotStock = Integer.MAX_VALUE;
+    inventory.add(new UsableRecord(basicShotID, basicShotClassName, basicShotStock));
+    for (String id : inventoryMap.keySet()) {
+      if (!id.equals("Basic Shot")) {
+        System.out.println(usablesIDMap.get(id).getClass().getSimpleName());
+        inventory.add(new UsableRecord(id, usablesIDMap.get(id).getClass().getSimpleName(), inventoryMap.get(id)));
+      }
+    }
+    return inventory;
   }
 
   private List<CellState[][]> createFirstPlayerBoards(GameData data) {
@@ -80,7 +99,7 @@ public class GameViewManager {
     return view;
   }
 
-  void sendUpdatedBoardsToView(Player player) {
+  public void sendUpdatesToView(Player player) {
     List<CellState[][]> boardList = new ArrayList<>();
     List<Integer> idList = new ArrayList<>();
     List<Collection<Collection<Coordinate>>> pieceList = new ArrayList<>();
@@ -91,7 +110,8 @@ public class GameViewManager {
       addToBoardElements(enemyMap.get(id).getBoard(), id, idMap.get(id), boardList, idList,
           pieceList);
     }
-    view.moveToNextPlayer(boardList, idList, pieceList);
+    List<UsableRecord> inventory = convertMapToUsableRecord(player.getMyInventory());
+    view.update(boardList, idList, pieceList, inventory);
   }
 
   private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
