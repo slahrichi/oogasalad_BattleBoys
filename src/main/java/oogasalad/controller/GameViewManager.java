@@ -40,6 +40,9 @@ public class GameViewManager {
     this.idMap = idMap;
     this.playerList = data.players();
     this.myResources = resourceBundle;
+
+    //Dummy Data
+
     setupGameView(data, allowedShots);
 
   }

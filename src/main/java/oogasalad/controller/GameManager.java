@@ -23,6 +23,7 @@ import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
+import oogasalad.model.utilities.usables.weapons.EmpoweredShot;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
@@ -41,6 +42,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private ConditionHandler conditionHandler;
   private Map<Integer, Player> idMap;
   private Map<Player, DecisionEngine> engineMap;
+  private Map<String, Usable> usablesIDMap;
   private GameView view;
   private GameViewManager gameViewManager;
   private int numShots;
@@ -90,6 +92,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     allowedShots = 2;
     createIDMap(data.players());
     engineMap = data.engineMap();
+
+    //this should be replaced by gameData
+    List<Usable> dummyUsables = new ArrayList<Usable>();
+    dummyUsables.add(new BasicShot());
+    dummyUsables.add(new EmpoweredShot("Double Damage", 1, 2));
+
+    usablesIDMap = new HashMap<String, Usable>();
+    for(Usable currUsable: dummyUsables) {
+      usablesIDMap.put(currUsable.getMyID(), currUsable);
+    }
     gameViewManager = new GameViewManager(data, idMap, allowedShots, myResources);
   }
 
@@ -120,6 +132,12 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void equipUsable(String id) {
     // set currentUsable equal to map.get(info.getID());
+    currentUsable = usablesIDMap.get(id);
+    LOG.info(String.format("Current Weapon: %s"), id);
+  }
+
+  private void buyItem(String id) {
+    playerQueue.peek().makePurchase(usablesIDMap.get(id).getPrice(), id);
   }
 
   private void applyUsable(String clickInfo) {
@@ -215,6 +233,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private boolean makeShot(Coordinate c, int id, Usable weaponUsed) {
     Player currentPlayer = playerQueue.peek();
+    Map<String, Integer> currentInventory = currentPlayer.getInventory();
     Player enemy = idMap.get(id);
     try {
       Map<Coordinate, CellState> hitResults = weaponUsed.getFunction().apply(c, enemy.getBoard());
@@ -229,6 +248,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
           mod.modifierFunction(this).accept(this);
 
       numShots++;
+
+      //this removes one weapon when used and removes it from the inventory when all are used.
+      //currentInventory.put(currentUsable.getMyID(),currentInventory.get(currentUsable.getMyID())-1 );
+      //if(currentInventory.get(currentUsable.getMyID())<=0) {
+      //  currentInventory.remove(currentUsable.getMyID());
+      //}
+
       return true;
     } catch (Exception e) {
       return false;
