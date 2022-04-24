@@ -10,14 +10,13 @@ import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.usables.Usable;
 
 
 public abstract class GenericPlayer implements Player{
 
   private int myPiecesLeft;
   private int myCurrency;
-  private Map<String, Integer> inventory; //change inventory to use id of usables
+  private Map<String, Integer> myInventory; //change inventory to use id of usables
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Map<CellState, Integer> myHitsMap; //new instance variable
 
@@ -27,10 +26,10 @@ public abstract class GenericPlayer implements Player{
   private static final String PLAYER_PREFIX = "Player ";
   private String myName;
 
-  public GenericPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
+  public GenericPlayer(Board board, int id, Map<String, Integer> inventory, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
-    inventory = new HashMap<>();
-    inventory.put("BasicShot", Integer.MAX_VALUE);
+    myInventory = new HashMap<>(inventory);
+    myInventory.put("Basic Shot", Integer.MAX_VALUE);
     myCurrency = 0;
     myEnemyMap = enemyMap;
     myHitsMap = new HashMap<CellState, Integer>();
@@ -42,12 +41,12 @@ public abstract class GenericPlayer implements Player{
   @Override
   public void makePurchase(int price, String usableID) {
     if (price <= myCurrency) {
-      inventory.put(usableID, inventory.getOrDefault(usableID, 0) + 1);
+      myInventory.put(usableID, myInventory.getOrDefault(usableID, 0) + 1);
     }
   }
 
-  public Map<String, Integer> getInventory() {
-    return inventory;
+  public Map<String, Integer> getMyInventory() {
+    return myInventory;
   }
 
   public void removePiece(String id) {
@@ -105,7 +104,7 @@ public abstract class GenericPlayer implements Player{
   }
 
   private PlayerRecord makeRecord() {
-    return new PlayerRecord(myPiecesLeft, myCurrency, myHitsMap, inventory, myBoard);
+    return new PlayerRecord(myPiecesLeft, myCurrency, myHitsMap, myInventory, myBoard);
   }
 
   public Board getBoard() {

@@ -17,6 +17,7 @@ public abstract class Weapon extends Usable {
     public Weapon(String id, int gold){
         super(id, gold);
         relativeCoordShots = new HashMap<>();
+        makeWeaponFunction();
     }
     Map<Coordinate,Integer> relativeCoordShots;
 
@@ -51,8 +52,6 @@ public abstract class Weapon extends Usable {
         return (clickInfo, gm)-> {
             int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
             if(gm.getCurrentPlayer() != id) {
-                System.out.println("Hello");
-                System.out.println(id + " " + gm.getCurrentPlayer());
                 gm.handleShot(clickInfo);
             }
             else

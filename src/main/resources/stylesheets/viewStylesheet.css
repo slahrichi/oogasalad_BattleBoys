@@ -68,8 +68,10 @@
 }
 
 #inventory-usable {
-  -fx-background-image: url("../images/battleshipSwitch.jpg");
-  -fx-background-repeat: no-repeat;
   -fx-background-size: 75 75;
   -fx-background-position: center center;
+}
+
+#inventory-view {
+  -fx-max-width: 400;
 }

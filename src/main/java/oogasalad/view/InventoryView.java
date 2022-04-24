@@ -2,21 +2,22 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Map;
+import java.util.List;
+import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import oogasalad.PropertyObservable;
-import oogasalad.model.utilities.usables.Usable;
 import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.LabelMaker;
 
 /**
- * This class represents a scrollable view of all usable items in a player's inventory. Upon clicking on an inventory
- * item, this class will notify an observer with information on the ID of the usable that was clicked so that the
- * player can equip it.
+ * This class represents a scrollable view of all usable items in a player's inventory. Upon
+ * clicking on an inventory item, this class will notify an observer with information on the ID of
+ * the usable that was clicked so that the player can equip it.
  *
  * @author Edison Ooi
  */
@@ -38,22 +39,23 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
   }
 
   /**
-   * Replaces all InventoryElements in this view with new ones generated from the given Map of Usables.
+   * Replaces all InventoryElements in this view with new ones generated from the given Map of
+   * Usables.
+   *
    * @param usables new set of Usables with which to populate this InventoryView
    */
-  public void updateElements(Map<String, Integer> usables) {
+  public void updateElements(List<UsableRecord> usables) {
     clearElements();
-
-    for(String usable : usables.keySet()) {
-      addElementToHBox(usables.get(usable), "", usable); //TODO: Get image path and integer ID from usable
+    for (UsableRecord usable : usables) {
+      addElementToHBox(usable.quantity(), usable.className(), usable.id());
     }
   }
 
   // Adds a new InventoryElement to this view's HBox
-  private void addElementToHBox(int quantity, String imagePath, String id) {
-    InventoryElement element = new InventoryElement(quantity, imagePath, id);
+  private void addElementToHBox(int quantity, String className, String id) {
+    InventoryElement element = new InventoryElement(quantity, className, id);
     element.addObserver(this);
-    elementsBox.getChildren().add(element.getPane());
+    elementsBox.getChildren().add(element.getBox());
   }
 
   // Clears all InventoryElements in this view's HBox
@@ -62,8 +64,9 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
   }
 
   /**
-   * Detects an event, such as a mouse click, on an InventoryElement and propogates information about that element
-   * to listeners.
+   * Detects an event, such as a mouse click, on an InventoryElement and propagates information
+   * about that element to listeners.
+   *
    * @param evt event that was triggered
    */
   @Override
@@ -78,53 +81,64 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
     return myPane;
   }
 
+
   // This class represents an individual usable item's visual representation in an InventoryView
   private class InventoryElement extends PropertyObservable {
 
+    private static final ResourceBundle WEAPON_IMAGE_RESOURCES = ResourceBundle.getBundle(
+        "/WeaponImages");
+    private static final String WEAPON_IMAGES_PATH = "images/weapon_images/";
     // Information about this usable
     private int quantity;
     private String usableID;
 
     // JavaFX components
-    private Label quantityLabel;
-    private StackPane elementPane;
+    private VBox elementBox;
 
     /**
      * Class constructor. Initializes this element's usable's attributes and visual components.
-     * @param quantity Amount of this usable the player owns
-     * @param imagePath Path to the file representing this usable's image representation
-     * @param usableID ID of usable
+     *
+     * @param quantity  Amount of this usable the player owns
+     * @param className Path to the file representing this usable's image representation
+     * @param usableID  ID of usable
      */
-    private InventoryElement(int quantity, String imagePath, String usableID) {
-      elementPane = new StackPane();
-      elementPane.setId("inventory-usable");
-      elementPane.setOnMouseClicked(e -> handleClicked());
+    private InventoryElement(int quantity, String className, String usableID) {
+      elementBox = BoxMaker.makeVBox("inventory-usable", 5, Pos.CENTER);
+      elementBox.setOnMouseClicked(e -> handleClicked());
       this.quantity = quantity;
       this.usableID = usableID;
+      setupName(usableID);
+      setupImage(className);
       setupQuantityLabel();
-      setupBackgroundImage(imagePath);
+    }
+
+    private void setupName(String name) {
+      Label nameLabel = LabelMaker.makeLabel(name, "inventory-element-name-label");
+      elementBox.getChildren().add(nameLabel);
     }
 
     // Sets up quantity label
     private void setupQuantityLabel() {
-      quantityLabel = LabelMaker.makeLabel("x" + quantity, "inventory-element-quantity-label");
-      elementPane.getChildren().add(quantityLabel);
-      StackPane.setAlignment(quantityLabel, Pos.TOP_RIGHT);
+      if (quantity != Integer.MAX_VALUE) {
+        Label quantityLabel = LabelMaker.makeLabel("x" + quantity, "inventory-element-quantity-label");
+        elementBox.getChildren().add(quantityLabel);
+      }
     }
 
     // Sets up background image
-    private void setupBackgroundImage(String imagePath) {
-
+    private void setupImage(String className) {
+      ImageView image = new ImageView(new Image(WEAPON_IMAGES_PATH + WEAPON_IMAGE_RESOURCES.getString(className)));
+      elementBox.getChildren().add(image);
     }
-    
+
     // Notifies observer when this element is clicked
     private void handleClicked() {
       notifyObserver("equipUsable", usableID);
     }
-    
+
     // Returns StackPane representing this InventoryElement
-    private StackPane getPane() {
-      return elementPane;
+    private VBox getBox() {
+      return elementBox;
     }
   }
 

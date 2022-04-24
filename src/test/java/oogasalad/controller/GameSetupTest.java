@@ -3,6 +3,7 @@ package oogasalad.controller;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.stage.Stage;
@@ -45,7 +46,7 @@ public class GameSetupTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), new ArrayList<>(Arrays.asList("None", "Easy")));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(1, 0), new Coordinate(1, 1)));
     List<ShipCell> dummyShipCellList = new ArrayList<>();
@@ -59,8 +60,8 @@ public class GameSetupTest extends DukeApplicationTest {
     pieceList1.add(dummyShip1);
     pieceList2.add(dummyShip1);
     pieceList2.add(dummyShip2);
-    gd1 = new GameData(pfr.playerList(), cellBoard, pieceList1, new ArrayList<>(), pfr.engineMap());
-    gd2 = new GameData(pfr.playerList(), cellBoard, pieceList2, new ArrayList<>(), pfr.engineMap());
+    gd1 = new GameData(pfr.playerList(), cellBoard, pieceList1, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), pfr.engineMap());
+    gd2 = new GameData(pfr.playerList(), cellBoard, pieceList2, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), pfr.engineMap());
   }
 
   // Commented out these tests because GameSetup now takes in GameData with the players already

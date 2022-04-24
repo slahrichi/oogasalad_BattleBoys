@@ -57,8 +57,9 @@ public class GameManagerTest extends DukeApplicationTest {
         cellBoard[i][j] = CellState.WATER;
       }
     }
+    Map<String, Integer> inventory = new HashMap<String, Integer>();
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "HumanPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "HumanPlayer")),inventory, new ArrayList<>(Arrays.asList("None", "Easy")));
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
     WinCondition c = new LoseXShipsLossCondition(1);
@@ -81,7 +82,7 @@ public class GameManagerTest extends DukeApplicationTest {
 
   @Test
   void testGameManagerBasic() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -99,7 +100,8 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
+
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(2, gd.players().size());
@@ -107,17 +109,17 @@ public class GameManagerTest extends DukeApplicationTest {
 
   @Test
   void testInvalidInputs() {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> gm = new GameManager(gd, myResources));
     assertThrows(NullPointerException.class, () -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources),
+        new HashMap<>(), new ArrayList<>(), myResources),
         "invalidMethod", null, info)));
   }
 
   @Test
   void testMultiplePieces() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList2, wc, engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList2, wc, new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -135,7 +137,8 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
+
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1], CellState.SHIP_SUNKEN);
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
@@ -144,8 +147,8 @@ public class GameManagerTest extends DukeApplicationTest {
   @Test
   void testAI() throws InterruptedException {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
-    GameData gd = new GameData(pfr.playerList(), cellBoard, pieceList2, wc, pfr.engineMap());
+        Arrays.asList("HumanPlayer", "AIPlayer")),new HashMap<String, Integer>(), new ArrayList<>(Arrays.asList("None", "Easy")));
+    GameData gd = new GameData(pfr.playerList(), cellBoard, pieceList2, wc, new ArrayList<>(), new HashMap<>(), pfr.engineMap());
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -158,10 +161,10 @@ public class GameManagerTest extends DukeApplicationTest {
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
     Thread.sleep(3000);
     assertEquals(wasStruckByAI(gd.players().get(0)), true);
   }
@@ -169,7 +172,7 @@ public class GameManagerTest extends DukeApplicationTest {
   @Test
   void testWinStateCondition() throws InterruptedException {
     GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(Arrays.asList(
-        new HaveXGoldWinCondition(0))), engineMap);
+        new HaveXGoldWinCondition(0))), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -187,7 +190,7 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
   }

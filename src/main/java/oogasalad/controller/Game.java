@@ -6,6 +6,8 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -19,7 +21,12 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.weapons.BasicShot;
+import oogasalad.model.utilities.usables.weapons.ClusterShot;
+import oogasalad.model.utilities.usables.weapons.EmpoweredShot;
 import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -92,6 +99,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
       setup.addObserver(this);
       myStage.setScene(setup.createScene());
     } catch (NullPointerException e) {
+      e.printStackTrace();
       return;
     }
     catch (ParserException e) {
@@ -101,13 +109,29 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   }
 
   private void createGameData(ParserData data) {
-    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(data.board(), data.players(),
-        data.decisionEngines());
-    Map<Player, DecisionEngine> engineMap = pr.engineMap();
     //testing win condition code
     List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
     dummyWinConditions.add(new LoseXShipsLossCondition(2));
-    gameData = new GameData(pr.playerList(), data.board(), data.pieces(), dummyWinConditions, engineMap);
+
+    List<Usable> dummyUsables = new ArrayList<Usable>();
+    Map<Coordinate, Integer> coordinateMap = new HashMap<>();
+    coordinateMap.put(new Coordinate(0, 0), 1);
+    coordinateMap.put(new Coordinate(-1, 0), 1);
+    coordinateMap.put(new Coordinate(0, 1), 1);
+    coordinateMap.put(new Coordinate(1, 0), 1);
+    coordinateMap.put(new Coordinate(0, -1), 1);
+    dummyUsables.add(new BasicShot());
+    dummyUsables.add(new ClusterShot("Cluster Shot", 1, coordinateMap));
+
+
+    Map<String, Integer> startingInventory = new HashMap<>();
+    startingInventory.put("Basic Shot", Integer.MAX_VALUE);
+    startingInventory.put("Cluster Shot", 2);
+
+    PlayerFactoryRecord pr = PlayerFactory.initializePlayers(data.board(), data.players(),
+        startingInventory, data.decisionEngines());
+    Map<Player, DecisionEngine> engineMap = pr.engineMap();
+    gameData = new GameData(pr.playerList(), data.board(), data.pieces(), dummyWinConditions, dummyUsables, startingInventory, engineMap);
   }
 
   private void createGame() {
