@@ -49,7 +49,7 @@ public class BoardSetUpStage extends BuilderStage {
     widthChange = i -> setWidth(i);
     heightChange = i -> setHeight(i);
 
-    stateMap = initializeMatrixWithValue(height, width, 0);
+    stateMap = initializeMatrixWithValue(height, width, 1);
     drawGrid();
     myPane.setTop(makeInfoInput());
     myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
