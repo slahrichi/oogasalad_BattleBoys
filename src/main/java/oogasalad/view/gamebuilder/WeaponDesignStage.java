@@ -130,7 +130,7 @@ public class WeaponDesignStage extends BuilderStage {
     ComboBox comboBox = makeComboBox(options);
 
     result.getChildren()
-        .addAll(comboBox, makeButton(getDictionaryResources().getString("selectionPrompt"),
+        .addAll(comboBox, makeButton(getDictionaryResources().getString("selectPrompt"),
             e -> handleWeaponChoice(comboBox)));
 
     return result;
