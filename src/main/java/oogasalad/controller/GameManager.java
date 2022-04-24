@@ -232,7 +232,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         EngineRecord move = engine.makeMove();
         LOG.info(move);
         AIShots.add(new Info(move.shot().getRow(), move.shot().getColumn(), move.enemyID()));
-        makeShot(move.shot(), move.enemyID(), currentUsable);
+        makeShot(move.shot(), move.enemyID(), move.weapon());
         updateConditions(player.getID());
       }
     }

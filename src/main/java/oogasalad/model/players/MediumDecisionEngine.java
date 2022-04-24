@@ -8,6 +8,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.weapons.BasicShot;
 
 
 public class MediumDecisionEngine extends DecisionEngine {
@@ -36,7 +37,7 @@ public class MediumDecisionEngine extends DecisionEngine {
       setCurrentPlayer(id);
       List<Coordinate> list = getCoordinateMap().get(id);
       Coordinate location = determineLocation(list);
-      EngineRecord shot = new EngineRecord(location, id);
+      EngineRecord shot = new EngineRecord(location, id, new BasicShot());
       setLastShot(shot);
       return shot;
     }
@@ -99,7 +100,7 @@ public class MediumDecisionEngine extends DecisionEngine {
       Coordinate neighbor = new Coordinate(lastShot.getRow() + c.getRow(),
           lastShot.getColumn() + c.getColumn());
       if (getCoordinateList().contains(neighbor)) {
-        getDeque().addLast(new EngineRecord(neighbor, getCurrentPlayer()));
+        getDeque().addLast(new EngineRecord(neighbor, getCurrentPlayer(), new BasicShot()));
       }
     }
   }

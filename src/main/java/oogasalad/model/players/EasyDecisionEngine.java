@@ -8,6 +8,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.weapons.BasicShot;
 
 /**
  * An AI for users of beginner difficulty to play against. The AI randomly selects both points to
@@ -43,7 +44,7 @@ public class EasyDecisionEngine extends DecisionEngine {
       setCurrentPlayer(id);
       List<Coordinate> list = getCoordinateMap().get(id);
       Coordinate location = determineLocation(list);
-      EngineRecord shot = new EngineRecord(location, id);
+      EngineRecord shot = new EngineRecord(location, id, new BasicShot());
       setLastShot(shot);
       return shot;
     }

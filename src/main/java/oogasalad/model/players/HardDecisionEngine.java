@@ -7,8 +7,8 @@ import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
-public class HardDecisionEngine extends DecisionEngine {
-
+public class HardDecisionEngine {
+/*
   public HardDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
   Player player) {
     super(coordinateList, enemyMap, player);
@@ -69,4 +69,6 @@ public class HardDecisionEngine extends DecisionEngine {
   public void resetStrategy() {
 
   }
+
+ */
 }
