@@ -60,7 +60,7 @@ public class ShopItem extends PropertyObservable {
   }
 
   private void buildButtons() {
-    buyButton = ButtonMaker.makeTextButton("Buy" + myName, e -> buyItem(), "Buy");
+    buyButton = ButtonMaker.makeTextButton("Buy" + myName, e -> buyItem(myName), "Buy");
     confirmStripe = ButtonMaker.makeTextButton("stripeConfirm" + myName, e ->
     {
       try {
@@ -87,12 +87,12 @@ public class ShopItem extends PropertyObservable {
     if (stripeIntegration.hasBeenPaid()) {
       confirmStripe.setVisible(false);
       confirmStripe.setDisable(true);
-      buyItem();
+      buyItem(stripeButton.getId());
     }
   }
 
-  private void buyItem() {
-    notifyObserver("buyItem", myName);
+  private void buyItem(String name) {
+    notifyObserver("buyItem", name);
   }
 
   public VBox getMyVBox() {

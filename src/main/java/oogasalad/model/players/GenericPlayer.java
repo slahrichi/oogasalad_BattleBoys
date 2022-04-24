@@ -28,6 +28,7 @@ public abstract class GenericPlayer implements Player{
   private Board myBoard;
   private int myId;
   private static final String PLAYER_PREFIX = "Player ";
+  private static final String STRIPE = "stripe";
   private String myName;
 
   public GenericPlayer(Board board, int id, Map<String, Integer> inventory, Map<Integer, MarkerBoard> enemyMap) {
@@ -45,9 +46,12 @@ public abstract class GenericPlayer implements Player{
   @Override
   public void makePurchase(int price, String usableID) {
     if (price <= myCurrency) {
-      LOG.info(String.format("Bought %s for %d gold. Remaining Gold: %d", usableID, price, myCurrency));
-      myInventory.put(usableID, myInventory.getOrDefault(usableID, 0) + 1);
-      myCurrency-=price;
+      String genericItem = usableID.replace(STRIPE, "");
+      LOG.info(String.format("Bought %s for %d gold. Remaining Gold: %d", genericItem, price, myCurrency));
+      myInventory.put(genericItem, myInventory.getOrDefault(genericItem, 0) + 1);
+      if (!usableID.startsWith(STRIPE)) {
+        myCurrency -= price;
+      }
     }
   }
 

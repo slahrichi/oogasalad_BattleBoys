@@ -1,6 +1,5 @@
 package oogasalad.controller;
 
-import com.stripe.param.SourceCreateParams.Mandate.NotificationMethod;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
@@ -53,6 +52,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private Usable currentUsable;
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String DUMMY_INFO = "";
+  private static final String STRIPE = "stripe";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private ResourceBundle myResources;
 
@@ -137,8 +137,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void buyItem(String id) {
-    playerQueue.peek().makePurchase(usablesIDMap.get(id).getPrice(), id);
-    view.updateLabels(allowedShots-numShots, playerQueue.peek().getNumPieces(), playerQueue.peek().getMyCurrency());
+    String genericItem = id.replace(STRIPE, "");
+    playerQueue.peek().makePurchase(usablesIDMap.get(genericItem).getPrice(), id);
+    view.updateLabels(allowedShots-numShots, playerQueue.peek().getNumPieces(),
+        playerQueue.peek().getMyCurrency());
     view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
   }
 
