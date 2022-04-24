@@ -65,7 +65,7 @@ public class TileTest {
       }
     }
     System.out.println("Hello");
-    assertEquals( 1000, p1.getMyCurrency());
+    assertEquals( 100, p1.getMyCurrency());
     System.out.println("Hello");
 
     //cell.addModifier(new GoldAdder(200));
