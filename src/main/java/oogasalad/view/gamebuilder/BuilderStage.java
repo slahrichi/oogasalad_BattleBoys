@@ -221,7 +221,7 @@ public abstract class BuilderStage {
     return continueButton;
   }
 
-  protected void showError(String s){
+  protected void showError(String s) {
     builderUtil.throwErrorWindow(s);
   }
 
@@ -321,9 +321,29 @@ public abstract class BuilderStage {
     return activeCoordinateList;
   }
 
+  /**
+   * Because cells needed different on-click behaviour I made the class abstract, it allows all
+   * subclasses to have custom reactions to cell clicks.
+   *
+   * @param xPos  the position on x axis of cell
+   * @param yPos  the position on y axis of cell
+   * @param i     the x coord
+   * @param j     the y coord
+   * @param state state of the cell
+   * @return the rectangle object representing grid cells
+   */
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);
 
+  /**
+   * launches eachd design stage, also used to return input so the ParserData object can be created
+   *
+   * @return the result Object of each design stage
+   */
   protected abstract Object launch();
 
+  /**
+   * continue button function for each stage, abstract because all stages have this option, but
+   * sometimes they need different behviour.
+   */
   protected abstract void saveAndContinue();
 }
