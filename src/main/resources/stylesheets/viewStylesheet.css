@@ -60,10 +60,8 @@
   -fx-padding: 10 0;
 }
 
-#view-shop {
-  -fx-padding: 10px;
-  -fx-border-insets: 10px;
-  -fx-background-insets: 10px;
+#view-shop-button {
+  -fx-padding: 0 25px 0 25px;
   -fx-pref-height: 50px;
 }
 
