@@ -15,7 +15,6 @@ public class ParseCellColors extends ParsedElement {
 
   private final String CELL_COLORS_JSON = "CellColors.json";
   private final String PROPERTIES_CELL_COLORS_FILE = "CellColors";
-  private final String MISSING_FILE = "missingFile";
   private static final Logger LOG = LogManager.getLogger(ParseCellColors.class);
 
   @Override
@@ -28,7 +27,7 @@ public class ParseCellColors extends ParsedElement {
   }
 
   @Override
-  public Object parse(Properties props) throws ParserException {
+  public Map<CellState, Color> parse(Properties props) throws ParserException {
     String cellColorsFile = props.getProperty(PROPERTIES_CELL_COLORS_FILE);
     LOG.info("parsing Cell colors at {}", cellColorsFile);
     Gson gson = new GsonBuilder().create();

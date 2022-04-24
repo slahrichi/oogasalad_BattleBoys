@@ -26,7 +26,7 @@ public class ParsePlayers extends ParsedElement {
   }
 
   @Override
-  public Object parse(Properties props) throws ParserException {
+  public ArrayList parse(Properties props) throws ParserException {
     LOG.info("parsing Players");
     String[] playersData = props.getProperty(PROPERTIES_PLAYER_LIST).split(SPACE);
     for(String player: playersData) {

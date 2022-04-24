@@ -33,7 +33,7 @@ public class ParseWeapons extends ParsedElement {
   }
 
   @Override
-  public Object parse(Properties props) throws ParserException {
+  public List<Weapon> parse(Properties props) throws ParserException {
     String weaponsFile = props.getProperty(PROPERTIES_WEAPONS_FILE);
     LOG.info("parsing Weapons at {}",weaponsFile);
     Gson gson = new GsonBuilder().registerTypeAdapter(Weapon.class, new GSONHelper()).create();

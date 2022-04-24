@@ -5,15 +5,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.paint.Color;
+import oogasalad.model.parsing.parsers.ParseAllUsables;
 import oogasalad.model.parsing.parsers.ParseBoard;
 import oogasalad.model.parsing.parsers.ParseCellColors;
 import oogasalad.model.parsing.parsers.ParseDecisionEngines;
+import oogasalad.model.parsing.parsers.ParseGold;
 import oogasalad.model.parsing.parsers.ParsePieces;
+import oogasalad.model.parsing.parsers.ParsePlayerInventory;
 import oogasalad.model.parsing.parsers.ParsePlayers;
+import oogasalad.model.parsing.parsers.ParsePowerUps;
+import oogasalad.model.parsing.parsers.ParseShipMovementRate;
+import oogasalad.model.parsing.parsers.ParseShotsPerTurn;
+import oogasalad.model.parsing.parsers.ParseSpecialIslands;
 import oogasalad.model.parsing.parsers.ParseWeapons;
 import oogasalad.model.parsing.parsers.ParseWinConditions;
+import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.weapons.Weapon;
 import oogasalad.model.utilities.winconditions.WinCondition;
 
@@ -35,13 +45,14 @@ public record ParserData(List<String> players,
                          List<String> decisionEngines,
                          List<WinCondition> winConditions,
                          Map<CellState, Color> cellStateColorMap,
-                         List<Weapon> weapons
-                         ){
-  //TODO: implement these four parsers
-  //  List<SpecialIslands> specialIslands,
-  //  List<PowerUps> powerUps,
-  //  Map<String,Integer> playerInventory,
-  //  Collection<Usable> allUsables) {
+                         List<Weapon> weapons,
+                         List<IslandCell> specialIslands,
+                         List<Item> powerUps,
+                         Map<String,Integer> playerInventory,
+                         List<Usable> allUsables,
+                         Integer shotsPerTurn,
+                         Integer shipMovementRate,
+                         Integer gold){
 
   @Override
   public boolean equals(Object o) {
@@ -55,8 +66,13 @@ public record ParserData(List<String> players,
     if(!this.decisionEngines.equals(other.decisionEngines)) return false;
     if(!this.cellStateColorMap.equals(other.cellStateColorMap)) return false;
     if(!this.weapons.equals(other.weapons)) return false;
-//    if(!this.specialIslands.equals(other.specialIslands)) return false;
-//    if(!this.powerUps.equals(other.powerUps)) return false;
+    if(!this.specialIslands.equals(other.specialIslands)) return false;
+    if(!this.powerUps.equals(other.powerUps)) return false;
+    if(!this.playerInventory.equals(other.playerInventory)) return false;
+    if(!this.allUsables.equals(other.allUsables)) return false;
+    if(!this.shotsPerTurn.equals(other.shotsPerTurn)) return false;
+    if(!this.shipMovementRate.equals(other.shipMovementRate)) return false;
+    if(!this.gold.equals(other.gold)) return false;
     return true;
   }
 
@@ -82,6 +98,28 @@ public record ParserData(List<String> players,
     if(!(elements.get(6).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 6));
     }
+    if(!(elements.get(7).getClass().equals(ArrayList.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 7));
+    }
+    if(!(elements.get(8).getClass().equals(ArrayList.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 8));
+    }
+    if(!(elements.get(9).getClass().equals(Map.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 9));
+    }
+    if(!(elements.get(10).getClass().equals(List.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 10));
+    }
+
+    if(!(elements.get(11).getClass().equals(Integer.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 11));
+    }
+    if(!(elements.get(12).getClass().equals(Integer.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 12));
+    }
+    if(!(elements.get(13).getClass().equals(Integer.class))) {
+      throw new ParserException(String.format("Element %d of elements is not of valid type", 12));
+    }
 
     return new ParserData(
         (List<String>) elements.get(0),
@@ -90,9 +128,14 @@ public record ParserData(List<String> players,
         (List<String>) elements.get(3),
         (List<WinCondition>) elements.get(4),
         (Map<CellState, Color>) elements.get(5),
-        (List<Weapon>) elements.get(6)
-        //(List<SpecialIsland>) elements.get(7),
-        //(List<PowerUp>) elements.get(8)
+        (List<Weapon>) elements.get(6),
+        (List<IslandCell>) elements.get(7),
+        (List<Item>) elements.get(8),
+        (Map<String, Integer>) elements.get(9),
+        (List<Usable>) elements.get(10),
+        (Integer) elements.get(11),
+        (Integer) elements.get(12),
+        (Integer) elements.get(13)
     );
 
   }
@@ -105,9 +148,14 @@ public record ParserData(List<String> players,
         new ParseDecisionEngines(),
         new ParseWinConditions(),
         new ParseCellColors(),
-        new ParseWeapons());
-//    new ParseSpecialIslands(),
-//        new ParsePowerUps()
+        new ParseWeapons(),
+        new ParseSpecialIslands(),
+        new ParsePowerUps(),
+        new ParsePlayerInventory(),
+        new ParseAllUsables(),
+        new ParseShotsPerTurn(),
+        new ParseShipMovementRate(),
+        new ParseGold());
   }
 
   public static List<Object> getItems(ParserData data) {
@@ -118,12 +166,14 @@ public record ParserData(List<String> players,
         data.decisionEngines(),
         data.winConditions(),
         data.cellStateColorMap(),
-        data.weapons());
-    // data.specialIslands(),
-    // data.powerUps(),
+        data.weapons(),
+        data.specialIslands(),
+        data.powerUps(),
+        data.playerInventory(),
+        data.allUsables(),
+        data.shotsPerTurn(),
+        data.shipMovementRate(),
+        data.gold());
   }
-
-
-
 }
 

@@ -34,7 +34,7 @@ public class ParsePieces extends ParsedElement {
   }
 
   @Override
-  public Object parse(Properties props) throws ParserException {
+  public List<Piece> parse(Properties props) throws ParserException {
     String piecesFile = props.getProperty(PROPERTIES_PIECES_FILE);
     LOG.info("parsing Pieces at {}",piecesFile);
     Gson gson = new GsonBuilder().registerTypeAdapter(Piece.class, new GSONHelper()).create();
