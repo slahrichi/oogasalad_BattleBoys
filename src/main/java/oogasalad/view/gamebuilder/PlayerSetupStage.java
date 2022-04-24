@@ -77,10 +77,11 @@ public class PlayerSetupStage extends BuilderStage {
       }
     }
     addToObjectList(selectedPlayerType + selectedEngineType);
-    playerList.add(selectedPlayerType+selectedEngineType);
+    playerList.add(selectedPlayerType);
+    engineList.add(selectedEngineType);
 
   }
-
+  public List<String> getEngineList(){return engineList;}
   private void addEngineSelectionOption(HBox result, String selection) {
     resetSelection();
     String[] engineOptions = getMyBuilderResources().getString(selection + "EngineOption")
