@@ -30,7 +30,7 @@ class AIPlayerTest {
     }
     for(int i = 0; i < 3; i++) {
       Board b = new Board(cellBoard);
-      AIPlayer p = new AIPlayer(b, i, new HashMap<>(), null);
+      AIPlayer p = new AIPlayer(b, i, new HashMap<>(), 100,null);
       allPlayers.add(p);
     }
     // add players to players

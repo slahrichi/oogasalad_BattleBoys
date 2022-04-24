@@ -106,7 +106,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
   private void createGameData(ParserData data) {
     PlayerFactoryRecord pr = PlayerFactory.initializePlayers(data.board(), data.players(),
-        data.playerInventory(), data.decisionEngines());
+        data.playerInventory(), data.gold(), data.decisionEngines());
     Map<Player, DecisionEngine> engineMap = pr.engineMap();
     gameData = new GameData(pr.playerList(), data.pieces(), data.board(), engineMap,
         data.winConditions(), data.cellStateColorMap(), data.weapons(), data.specialIslands(),

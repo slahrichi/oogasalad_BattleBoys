@@ -56,8 +56,8 @@ public class TileTest {
   @Test
   void testGoldAdder(){
     List<Modifiers> mods = (List<Modifiers>) cell.update();
-    HumanPlayer p1 = new HumanPlayer(null, 0, new HashMap<>(), new HashMap<>());
-    HumanPlayer p2 = new HumanPlayer(null, 0, new HashMap<>(), new HashMap<>());
+    HumanPlayer p1 = new HumanPlayer(null, 0, new HashMap<>(), 100, new HashMap<>());
+    HumanPlayer p2 = new HumanPlayer(null, 0, new HashMap<>(), 100, new HashMap<>());
     HumanPlayer[] players = {p1,p2};
     if(mods!= null && !mods.isEmpty()) {
       for (Modifiers m : mods) {
