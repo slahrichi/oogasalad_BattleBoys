@@ -21,6 +21,11 @@ import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * Creates an environment for designing special islands, depends on javaFX, makes no assumptions.
+ *
+ * @author Luka Mdivani
+ */
 public class SpecialIslandDesigner extends BuilderStage {
 
   private BorderPane myPane;
