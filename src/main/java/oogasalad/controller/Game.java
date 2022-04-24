@@ -134,9 +134,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     dummyUsables.add(new BasicShot());
     dummyUsables.add(new ClusterShot("Cluster Shot :)", 1, coordinateMap));
     dummyUsables.add(new MoltovShot("Molotov FIRE", 10, 1));
-    dummyUsables.add(new BurnShot("BURN", 5, 1, 2));
-
-
+    dummyUsables.add(new BurnShot("BURN", 5, 1, 5));
 
     Map<String, Integer> startingInventory = new HashMap<>();
     startingInventory.put("Basic Shot", Integer.MAX_VALUE);
