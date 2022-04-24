@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Set;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class RandomShot extends Weapon{
   /**
@@ -22,9 +23,13 @@ public class RandomShot extends Weapon{
     this.dmgPerShot = dmgPerShot;
   }
 
+
+  public RandomShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]), Integer.parseInt(parameters[3]),Integer.parseInt(parameters[4]));
+  }
   @Override
-  protected void makeWeaponFunction() {
-    setMyFunction((absolute, board) ->{
+  protected UsableFunction makeWeaponFunction() {
+    UsableFunction ret = (absolute, board) ->{
       Set<Coordinate> relatives = new HashSet<>();
       Map<Coordinate, CellState> retMap =new HashMap<>();
       while(relatives.size()<numShots){
@@ -38,6 +43,7 @@ public class RandomShot extends Weapon{
         }
       }
       return retMap;
-      });
+      };
+    return ret;
   };
 }

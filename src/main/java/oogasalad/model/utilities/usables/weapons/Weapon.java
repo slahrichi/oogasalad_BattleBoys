@@ -6,20 +6,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import oogasalad.controller.GameManager;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.UsableFunction;
 import oogasalad.view.Info;
 
 public abstract class Weapon extends Usable {
 
     public Weapon(String id, int gold){
         super(id, gold);
-        makeWeaponFunction();
     }
 
-    protected abstract void makeWeaponFunction();
+    protected abstract UsableFunction makeWeaponFunction();
+
+    @Override
+    public UsableFunction getFunction() {
+        return makeWeaponFunction();
+    }
 
     @Override
     public String getType() {
