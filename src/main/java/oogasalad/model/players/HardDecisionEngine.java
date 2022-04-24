@@ -6,9 +6,12 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.weapons.BasicShot;
+import oogasalad.model.utilities.usables.weapons.ClusterShot;
 
-public class HardDecisionEngine {
-/*
+public class HardDecisionEngine extends DecisionEngine {
+
   public HardDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
   Player player) {
     super(coordinateList, enemyMap, player);
@@ -24,9 +27,18 @@ public class HardDecisionEngine {
       setCurrentPlayer(id);
       List<Coordinate> list = getCoordinateMap().get(id);
       Coordinate location = determineLocation(list);
-      EngineRecord shot = new EngineRecord(location, id);
+      EngineRecord shot = new EngineRecord(location, id, chooseWeapon());
       setLastShot(shot);
       return shot;
+    }
+  }
+
+  private Usable chooseWeapon() {
+    if (getDeque().isEmpty()) {
+      return new BasicShot();
+    }
+    else {
+      return new BasicShot();
     }
   }
 
@@ -48,10 +60,14 @@ public class HardDecisionEngine {
     }
   }
 
+
   private void prepareBFS() {
+    Coordinate lastShot = getLastShot().shot();
     for (Coordinate c : generateCoordinates()) {
-      if (getCoordinateList().contains(c)) {
-        getDeque().addLast(new EngineRecord(c, getCurrentPlayer()));
+      Coordinate neighbor = new Coordinate(lastShot.getRow() + c.getRow(),
+          lastShot.getColumn() + c.getColumn());
+      if (getCoordinateList().contains(neighbor)) {
+        getDeque().addLast(new EngineRecord(neighbor, getCurrentPlayer(), new BasicShot()));
       }
     }
   }
@@ -70,5 +86,5 @@ public class HardDecisionEngine {
 
   }
 
- */
+
 }
