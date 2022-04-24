@@ -12,15 +12,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * Crates a space for making win conditions, extends BuilderStage, depends on JavaFX, no
+ * assumptions.
+ *
+ * @author Luka Mdivani
+ */
 public class WinConditionSetupStage extends BuilderStage {
 
   private BorderPane myPane = new BorderPane();
-  private Stage myStage = new Stage();
   private String[] possibleWinTypes;
   private String[] needsCellToHitSelection;
   private String[] needsWinConditionSelection;
@@ -29,6 +33,7 @@ public class WinConditionSetupStage extends BuilderStage {
   private ComboBox cellToHitOptionBox;
   private ComboBox winStateOptionBox;
   private List<Object> winConditions;
+  private static final String CLASS_PATH = "oogasalad.model.utilities.winconditions.";
 
   public WinConditionSetupStage() {
     possibleWinTypes = getMyBuilderResources().getString("possibleWinConditionType").split(",");
@@ -47,7 +52,8 @@ public class WinConditionSetupStage extends BuilderStage {
     ComboBox comboBox = makeComboBox(options);
     centerPane = new VBox();
     result.getChildren()
-        .addAll(comboBox, makeButton("Select", e -> handleConditionChoice(comboBox)), centerPane);
+        .addAll(comboBox, makeButton(getDictionaryResources().getString("selectPrompt"),
+            e -> handleConditionChoice(comboBox)), centerPane);
 
     return result;
   }
@@ -69,12 +75,11 @@ public class WinConditionSetupStage extends BuilderStage {
         addWinStateSelectionOption();
       }
       centerPane.getChildren()
-          .add(makeButton("Add Condition",
+          .add(makeButton(getDictionaryResources().getString("addConditionPrompt"),
               e -> saveWinCondition(selection, needsCellToHitBool, needsWinConditionBool)));
 
     } catch (NullPointerException e) {
-      System.out.println("Please Make Selection");
-      e.printStackTrace();
+      showError(getDictionaryResources().getString("selectionError"));
     }
 
   }
@@ -98,12 +103,12 @@ public class WinConditionSetupStage extends BuilderStage {
     Class<?>[] parameterTypes = getParameterTypes(parameters);
 
     try {
-      winConditions.add(createInstance("oogasalad.model.utilities.winconditions." + selection,
+      winConditions.add(createInstance(CLASS_PATH + selection,
           parameterTypes, parameters));
       resetSelection();
       addToObjectList(entryName);
     } catch (IOException e) {
-      e.printStackTrace();
+      showError(getDictionaryResources().getString("reflectionError"));
     }
 
   }
