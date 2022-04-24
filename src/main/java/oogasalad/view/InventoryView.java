@@ -60,6 +60,9 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
     InventoryElement element = new InventoryElement(quantity, className, id);
     element.addObserver(this);
     elementsBox.getChildren().add(element.getBox());
+    if (id.equals("Basic Shot")) {
+      element.getBox().setBackground(new Background(new BackgroundFill( Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
   }
 
   // Clears all InventoryElements in this view's HBox

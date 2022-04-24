@@ -16,17 +16,21 @@ public class ShotAdder extends Modifiers{
 
   public ShotAdder(int count){
     shotsAdded = count;
-    setMyConsumer(new GameManagerConsumer() {
+  }
+
+  @Override
+  protected Consumer createConsumer(){
+    return new GameManagerConsumer() {
       @Override
       public void accept(GameManager gameManager) {
-        gameManager.addRemainingShots(count);
+        gameManager.addRemainingShots(shotsAdded);
       }
-    });
+    };
   }
 
   @Override
   public Consumer modifierFunction(GameManager gm){
-    return myConsumer;
+    return createConsumer();
   }
 
   @Override

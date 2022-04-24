@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javafx.scene.paint.Color;
+import oogasalad.model.parsing.ParserData;
 import oogasalad.model.parsing.Parser;
 import oogasalad.model.parsing.ParserData;
 import oogasalad.model.parsing.ParserException;
@@ -19,7 +20,6 @@ import oogasalad.model.players.HumanPlayer;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
@@ -38,6 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.items.Item;
+import oogasalad.model.utilities.usables.items.ShipHeal;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
 import oogasalad.model.utilities.usables.weapons.BurnShot;
 import oogasalad.model.utilities.usables.weapons.Weapon;
@@ -77,9 +79,9 @@ public class ParserTest {
         makeDecisionEngines(),
         makeWinConditions(),
         makeColorMap(),
-        makeWeapons(),
+        new ArrayList<>(), //makeWeapons(),
         makeIslandCells(),
-        makePowerups(),
+        new ArrayList<>(), //makePowerups(),
         makeInventory(),
         makeUsables(),
         4,
@@ -104,21 +106,23 @@ public class ParserTest {
   private List<Usable> makeUsables() {
     List<Usable> usables = new ArrayList<>();
     usables.add(new BasicShot());
+    usables.add(new BurnShot("burn-shot", 2, 4, 5));
+    usables.add(new ShipHeal("ship-heal", 4, 5));
     return usables;
   }
 
   private Map<String,Integer> makeInventory() {
     Map<String,Integer> map = new HashMap<>();
-    map.put("hey",4);
+    map.put("cluster-shot-5x5",3);
     return map;
   }
 
-  private List<Item> makePowerups() {
+  /*private List<Item> makePowerups() {
     List<Item> powerups = new ArrayList<>();
     powerups.add(new Item(4));
     powerups.add(new Item(3));
     return powerups;
-  }
+  }*/
 
   private List<IslandCell> makeIslandCells() {
     List<IslandCell> arr = new ArrayList<>();
@@ -127,11 +131,11 @@ public class ParserTest {
     return arr;
   }
 
-  private List<Weapon> makeWeapons() {
+  /*private List<Weapon> makeWeapons() {
     List<Weapon> arr = new ArrayList<>();
     arr.add(new BasicShot());
     return arr;
-  }
+  }*/
 
   private Map<CellState, Color> makeColorMap() {
     Map<CellState, Color> map = new HashMap<>();
@@ -208,7 +212,7 @@ public class ParserTest {
     Piece staticPiece = makeDummyPiece();
     CellState[][] testBoard = makeDummyBoard();
     Board b = new Board(testBoard);
-    Player testPlayer = new HumanPlayer(b, 0, new HashMap<String, Integer>(), new HashMap<Integer, MarkerBoard>());
+    Player testPlayer = new HumanPlayer(b, 0, new HashMap<String, Integer>(),2, new HashMap<Integer, MarkerBoard>());
     testPlayer.placePiece(staticPiece, new Coordinate(0,0));
     WinCondition testCondition = new HitXCellsCondition(CellState.WATER_HIT, 2, WinState.WIN);
     return Arrays.asList(testCondition);

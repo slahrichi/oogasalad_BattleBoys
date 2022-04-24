@@ -1,20 +1,26 @@
 [
   {
-    "myCoordinate": {
-      "row": 0,
-      "column": 0
-    },
-    "myModifiers": [],
-    "currentState": "ISLAND_HEALTHY",
-    "myHealthBar": 5
+    "type": "oogasalad.model.utilities.tiles.IslandCell",
+    "properties": {
+      "myCoordinate": {
+        "row": 0,
+        "column": 0
+      },
+      "myModifiers": [],
+      "currentState": "ISLAND_HEALTHY",
+      "myHealthBar": 5
+    }
   },
   {
-    "myCoordinate": {
-      "row": 1,
-      "column": 1
-    },
-    "myModifiers": [],
-    "currentState": "ISLAND_HEALTHY",
-    "myHealthBar": 7
+    "type": "oogasalad.model.utilities.tiles.IslandCell",
+    "properties": {
+      "myCoordinate": {
+        "row": 1,
+        "column": 1
+      },
+      "myModifiers": [],
+      "currentState": "ISLAND_HEALTHY",
+      "myHealthBar": 7
+    }
   }
 ]

@@ -14,7 +14,6 @@ import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
 import javafx.util.Duration;
-import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;

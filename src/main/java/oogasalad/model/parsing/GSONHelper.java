@@ -11,11 +11,15 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
+import java.io.File;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Map;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MovingPiece;
+import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.IslandCell;
@@ -24,7 +28,6 @@ import oogasalad.model.utilities.tiles.Modifiers.FrontEndUpdater;
 import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.Modifiers.ShotAdder;
-import oogasalad.model.utilities.tiles.Modifiers.UsableAdder;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -80,8 +83,7 @@ public class GSONHelper<T> implements
         src.getClass().equals(Burner.class) ||
             src.getClass().equals(FrontEndUpdater.class) ||
             src.getClass().equals(GoldAdder.class) ||
-            src.getClass().equals(ShotAdder.class) ||
-            src.getClass().equals(UsableAdder.class)) {
+            src.getClass().equals(ShotAdder.class)) {
       LOG.info("we have found modifier");
       gson = new GsonBuilder().create();
     }
@@ -115,8 +117,10 @@ public class GSONHelper<T> implements
 
     JsonObject jsonObject = json.getAsJsonObject();
     String type = jsonObject.get(TYPE).getAsString();
+
     LOG.info("deserializing custom element of type {}", type);
     JsonElement element = jsonObject.get(PROPERTIES);
+
 
     try {
       return context.deserialize(element, Class.forName(type));

@@ -16,10 +16,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -44,10 +42,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -72,10 +68,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -102,10 +96,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -130,10 +122,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -158,10 +148,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -213,10 +201,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -241,10 +227,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -269,10 +253,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -297,10 +279,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -325,10 +305,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -355,10 +333,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -383,10 +359,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -411,10 +385,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -439,10 +411,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"
@@ -467,10 +437,8 @@
               {
                 "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
                 "properties": {
+                  "myGold": 0,
                   "hasBeenAppliedAlready": false,
-                  "myConsumer": {
-                    "arg$1": 0
-                  },
                   "allowableStates": [
                     "SHIP_SUNKEN",
                     "ISLAND_SUNK"

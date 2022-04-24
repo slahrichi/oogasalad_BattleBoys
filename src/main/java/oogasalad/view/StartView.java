@@ -24,6 +24,7 @@ public class StartView extends PropertyObservable {
   private static final double SCREEN_HEIGHT = 800;
   private static final double TITLE_WIDTH = 600;
   private static final double TITLE_HEIGHT = 200;
+  private static final double VBOX_SPACING = 50;
 
   // ID strings
   private static final String PANE_ID = "startPane";
@@ -83,7 +84,7 @@ public class StartView extends PropertyObservable {
         e -> handleClicked(LOAD_FILE_OPERATION), myResources.getString(START_BTN_RESOURCE));
     Button createBtn = ButtonMaker.makeTextButton(CREATE_BTN_ID,
         e -> handleClicked(CREATE_FILE_OPERATION), myResources.getString(CREATE_BTN_RESOURCE));
-    VBox buttonBox = BoxMaker.makeVBox(BUTTON_BOX_ID, 50, Pos.CENTER, startBtn, createBtn);
+    VBox buttonBox = BoxMaker.makeVBox(BUTTON_BOX_ID, VBOX_SPACING, Pos.CENTER, startBtn, createBtn);
     myPane.setCenter(buttonBox);
   }
 

@@ -10,8 +10,9 @@ import java.util.Properties;
 import oogasalad.model.parsing.GSONHelper;
 import oogasalad.model.parsing.ParsedElement;
 import oogasalad.model.parsing.ParserException;
-import oogasalad.model.utilities.Item;
+import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.items.Item;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +29,9 @@ public class ParseAllUsables extends ParsedElement {
     location += ALL_USABLES_JSON;
     LOG.info("saving all usables at {}", location);
     List<Usable> allUsables = (List<Usable>) o;
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    Gson gson = new GsonBuilder().
+        registerTypeHierarchyAdapter(Usable.class, new GSONHelper())
+        .setPrettyPrinting().create();
     String json = gson.toJson(allUsables);
     putJsonInProp(props, location, json, PROPERTIES_ALL_USABLES_FILE);
   }
@@ -37,7 +40,7 @@ public class ParseAllUsables extends ParsedElement {
   public List<Usable> parse(Properties props) throws ParserException {
     String allUsablesFile = props.getProperty(PROPERTIES_ALL_USABLES_FILE);
     LOG.info("parsing all usables at {}", allUsablesFile);
-    Gson gson = new GsonBuilder().registerTypeAdapter(Item.class, new GSONHelper()).create();
+    Gson gson = new GsonBuilder().registerTypeAdapter(Usable.class, new GSONHelper()).create();
     Type listOfMyClassObject = new TypeToken<ArrayList<Usable>>() {}.getType();
     return (List<Usable>) getParsedObject(allUsablesFile, gson, listOfMyClassObject, ALL_USABLES);
   }

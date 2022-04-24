@@ -12,6 +12,7 @@ import oogasalad.model.parsing.ParsedElement;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.Piece; //
 import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +40,11 @@ public class ParsePieces extends ParsedElement {
   public List<Piece> parse(Properties props) throws ParserException {
     String piecesFile = props.getProperty(PROPERTIES_PIECES_FILE);
     LOG.info("parsing Pieces at {}",piecesFile);
-    Gson gson = new GsonBuilder().registerTypeAdapter(Piece.class, new GSONHelper()).create();
+    Gson gson = new GsonBuilder().
+        registerTypeHierarchyAdapter(Piece.class, new GSONHelper()).
+        registerTypeHierarchyAdapter(Cell.class, new GSONHelper()).
+        registerTypeHierarchyAdapter(Modifiers.class, new GSONHelper()).
+        create();
     Type listOfMyClassObject = new TypeToken<ArrayList<Piece>>() {}.getType();
     return (List<Piece>) getParsedObject(piecesFile, gson, listOfMyClassObject, PIECES);
   }

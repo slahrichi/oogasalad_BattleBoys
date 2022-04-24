@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 /**
  * Has starting damage and decreases as radius increases.
@@ -15,7 +16,11 @@ public class BlastZoneShot extends Weapon {
     super(ID, gold);
     myStartingDmg = startingDmg;
     generateRelativeCoords();
-    makeWeaponFunction();
+
+  }
+
+  public BlastZoneShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
   }
 
   private void generateRelativeCoords(){
@@ -32,8 +37,8 @@ public class BlastZoneShot extends Weapon {
   }
 
   @Override
-  protected void makeWeaponFunction() {
-    setMyFunction((coordinate, board) -> {
+  protected UsableFunction makeWeaponFunction() {
+    UsableFunction ret = (coordinate, board) -> {
       Map<Coordinate, CellState> retMap = new HashMap<>();
       Map<Coordinate, Integer> relativeCoords = getRelativeCoordShots();
       for(Coordinate coord : relativeCoords.keySet()){
@@ -42,6 +47,7 @@ public class BlastZoneShot extends Weapon {
         }
       }
       return retMap;
-    });
+    };
+    return ret;
   }
 }

@@ -14,17 +14,19 @@ public class GoldAdder extends Modifiers{
   //private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
   //    new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
 
+//=======
+  //private boolean hasBeenAppliedAlready = false;
+  //private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
+  //    new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
+  private int myGold;
+//>>>>>>> master
   public GoldAdder(int gold){
-    PlayerConsumer consumer = a->{
-      a[0].addGold(gold);
-      System.out.format("Player got %d gold total gold now %d", gold, a[0].getMyCurrency());
-    };
-    this.setMyConsumer(consumer);
+    myGold = gold;
   }
 
   @Override
   public Consumer modifierFunction(Player[] players){
-    return myConsumer;
+    return createConsumer();
   }
 
   @Override
@@ -34,6 +36,14 @@ public class GoldAdder extends Modifiers{
       return true;
     }
     return false;
+  }
+
+  @Override
+  protected Consumer createConsumer() {
+    PlayerConsumer consumer = a->{
+      a[0].addGold(myGold);
+    };
+    return consumer;
   }
 
 

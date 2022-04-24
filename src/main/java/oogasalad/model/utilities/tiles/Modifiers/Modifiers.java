@@ -24,8 +24,9 @@ public abstract class Modifiers {
     return false;
   }
 
+  protected abstract Consumer createConsumer();
+
   public abstract String toString();
-  public void setMyConsumer(Consumer mod){ myConsumer = mod;}
 
   public Consumer modifierFunction(CellInterface cell){
     return (a)->{
