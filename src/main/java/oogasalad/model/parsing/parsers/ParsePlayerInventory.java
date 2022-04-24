@@ -24,7 +24,8 @@ public class ParsePlayerInventory extends ParsedElement {
     LOG.info("saving player inventory at {}", location);
     Map playerInventory = (Map<String, Integer>) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    putJsonInProp(props, location, playerInventory, gson, PROPERTIES_PLAYER_INVENTORY_FILE);
+    String json = gson.toJson(playerInventory);
+    putJsonInProp(props, location, json, PROPERTIES_PLAYER_INVENTORY_FILE);
   }
 
 

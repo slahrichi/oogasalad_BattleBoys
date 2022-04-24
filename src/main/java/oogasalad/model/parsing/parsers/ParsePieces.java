@@ -11,6 +11,7 @@ import oogasalad.model.parsing.GSONHelper;
 import oogasalad.model.parsing.ParsedElement;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.Piece; //
+import oogasalad.model.utilities.tiles.Cell;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +31,8 @@ public class ParsePieces extends ParsedElement {
     Gson gson = new GsonBuilder().setPrettyPrinting().
         registerTypeHierarchyAdapter(Piece.class, new GSONHelper()).
         create();
-    putJsonInProp(props, location, pieces, gson, PROPERTIES_PIECES_FILE);
+    String json = gson.toJson(pieces);
+    putJsonInProp(props, location, json, PROPERTIES_PIECES_FILE);
   }
 
   @Override

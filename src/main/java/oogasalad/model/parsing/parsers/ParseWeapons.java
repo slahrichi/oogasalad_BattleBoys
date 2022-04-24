@@ -29,7 +29,8 @@ public class ParseWeapons extends ParsedElement {
     List<Weapon> weapons = (List<Weapon>) o;
     Gson gson =  new GsonBuilder().setPrettyPrinting().registerTypeHierarchyAdapter(
         Weapon.class, new GSONHelper()).create();
-    putJsonInProp(props, location, weapons, gson, PROPERTIES_WEAPONS_FILE);
+    String json = gson.toJson(weapons);
+    putJsonInProp(props, location, json, PROPERTIES_WEAPONS_FILE);
   }
 
   @Override

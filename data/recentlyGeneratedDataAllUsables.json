@@ -1,0 +1,10 @@
+[
+  {
+    "myID": "Basic Shot",
+    "myFunction": {},
+    "goldCost": 0,
+    "relativeCoordShots": {
+      "Coordinate{row\u003d0, column\u003d0}": 1
+    }
+  }
+]

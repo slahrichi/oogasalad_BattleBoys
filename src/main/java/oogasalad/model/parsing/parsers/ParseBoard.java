@@ -24,7 +24,8 @@ public class ParseBoard extends ParsedElement {
     CellState[][] board = (CellState[][]) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().
         create();
-    putJsonInProp(props, location, board, gson, PROPERTIES_BOARD_FILE);
+    String json = gson.toJson(board);
+    putJsonInProp(props, location, json, PROPERTIES_BOARD_FILE);
   }
 
   @Override

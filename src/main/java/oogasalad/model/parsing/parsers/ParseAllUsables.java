@@ -29,7 +29,8 @@ public class ParseAllUsables extends ParsedElement {
     LOG.info("saving all usables at {}", location);
     List<Usable> allUsables = (List<Usable>) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    putJsonInProp(props, location, allUsables, gson, PROPERTIES_ALL_USABLES_FILE);
+    String json = gson.toJson(allUsables);
+    putJsonInProp(props, location, json, PROPERTIES_ALL_USABLES_FILE);
   }
 
   @Override

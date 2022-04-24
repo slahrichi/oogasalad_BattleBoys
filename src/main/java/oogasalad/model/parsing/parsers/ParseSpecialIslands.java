@@ -28,7 +28,8 @@ public class ParseSpecialIslands extends ParsedElement {
     LOG.info("saving Special Islands at {}", location);
     List<IslandCell> specialIslands = (List<IslandCell>) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    putJsonInProp(props, location, specialIslands, gson, PROPERTIES_SPECIAL_ISLANDS_FILE);
+    String json = gson.toJson(specialIslands);
+    putJsonInProp(props, location, json, PROPERTIES_SPECIAL_ISLANDS_FILE);
   }
 
   @Override

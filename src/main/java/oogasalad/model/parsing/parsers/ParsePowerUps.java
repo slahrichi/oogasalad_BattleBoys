@@ -28,7 +28,8 @@ public class ParsePowerUps extends ParsedElement {
     LOG.info("saving powerups at {}", location);
     List<Item> powerUps = (List<Item>) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    putJsonInProp(props, location, powerUps, gson, PROPERTIES_POWERUPS_FILE);
+    String json = gson.toJson(powerUps);
+    putJsonInProp(props, location, json, PROPERTIES_POWERUPS_FILE);
   }
 
 
