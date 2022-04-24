@@ -39,11 +39,11 @@ import org.apache.logging.log4j.Logger;
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
   private Queue<Player> playerQueue;
-  private ConditionHandler conditionHandler;
+  private final ConditionHandler conditionHandler;
   private Map<Integer, Player> idMap;
   private Map<Player, DecisionEngine> engineMap;
   private Map<String, Usable> usablesIDMap;
-  private GameView view;
+  private final GameView view;
   private GameViewManager gameViewManager;
   private int numShots;
   private int allowedShots;
@@ -57,16 +57,17 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private ResourceBundle myResources;
 
   public GameManager(GameData data, ResourceBundle resourceBundle) {
-  /**
-   * @param data GameData object storing all pertinent resources for managing the game such as the
-   *             players and the decision engines for the AI
-   */
+    /**
+     * @param data GameData object storing all pertinent resources for managing the game such as the
+     *             players and the decision engines for the AI
+     */
     initialize(data, resourceBundle);
     view = gameViewManager.getView();
     view.addObserver(this);
     view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
-            playerQueue.peek().getMyCurrency());
-    conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view, gameViewManager,
+        playerQueue.peek().getMyCurrency());
+    conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view,
+        gameViewManager,
         whenToMovePieces);
   }
 
@@ -82,7 +83,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   public void makeFirstAIPlayersMove() {
-    while(engineMap.containsKey(playerQueue.peek())) {
+    while (engineMap.containsKey(playerQueue.peek())) {
       handleAI();
     }
   }
@@ -98,7 +99,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     createIDMap(data.players());
     engineMap = data.engineMap();
     usablesIDMap = new HashMap<>();
-    for(Usable currUsable: data.usables()) {
+    for (Usable currUsable : data.usables()) {
       usablesIDMap.put(currUsable.getMyID(), currUsable);
     }
     gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
@@ -139,30 +140,32 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void buyItem(String id) {
     String genericItem = id.replace(STRIPE, "");
     playerQueue.peek().makePurchase(usablesIDMap.get(genericItem).getPrice(), id);
-    view.updateLabels(allowedShots-numShots, playerQueue.peek().getNumPieces(),
+    view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(),
         playerQueue.peek().getMyCurrency());
-    view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
+    view.updateInventory(
+        gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
   }
 
   private void applyUsable(String clickInfo) {
     try {
       currentUsable.handleUsage().accept(clickInfo, this);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       view.showError(e.getMessage());
     }
   }
 
   private void selfBoardClicked(String clickInfo) {
     int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
-    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int col = Integer.parseInt(
+        clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
     LOG.info("Board " + id + " clicked at " + row + ", " + col);
   }
 
   public void handleShot(String clickInfo) {
     int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
-    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int col = Integer.parseInt(
+        clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
     if (numShots < allowedShots && makeShot(new Coordinate(row, col), id, currentUsable)) {
       Player player = playerQueue.peek();
@@ -174,7 +177,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void updateConditions(int id) {
     conditionHandler.applyWinConditions();
-    view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
+    view.updateInventory(
+        gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
     if (idMap.containsKey(id)) {
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
       gameViewManager.updatePiecesLeft(piecesLeft);
@@ -251,14 +255,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       }
       List<Modifiers> mods = conditionHandler.applyModifiers(currentPlayer, enemy);
 
-      for(Modifiers mod : mods)
-          mod.modifierFunction(this).accept(this);
+      for (Modifiers mod : mods) {
+        mod.modifierFunction(this).accept(this);
+      }
 
       numShots++;
 
       //this removes one weapon when used and removes it from the inventory when all are used.
-      currentInventory.put(currentUsable.getMyID(),currentInventory.get(currentUsable.getMyID())-1 );
-      if(currentInventory.get(currentUsable.getMyID())<=0) {
+      currentInventory.put(currentUsable.getMyID(),
+          currentInventory.get(currentUsable.getMyID()) - 1);
+      if (currentInventory.get(currentUsable.getMyID()) <= 0) {
         currentInventory.remove(currentUsable.getMyID());
       }
 
