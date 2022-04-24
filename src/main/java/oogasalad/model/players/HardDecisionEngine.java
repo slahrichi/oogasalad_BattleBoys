@@ -1,5 +1,6 @@
 package oogasalad.model.players;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
@@ -37,13 +38,10 @@ public class HardDecisionEngine extends DecisionEngine {
       return new BasicShot();
     }
     else {
-      return new BasicShot();
+      return new ClusterShot(null, 0, createSquare());
     }
   }
 
-  private int determineEnemy() {
-    return 0;
-  }
 
   public void adjustStrategy(CellState result) {
     if (wasSuccess(result)) {
@@ -71,14 +69,19 @@ public class HardDecisionEngine extends DecisionEngine {
     return result == CellState.ISLAND_DAMAGED || result == CellState.SHIP_DAMAGED;
   }
 
-
-  public Coordinate placePiece(List<Piece> pieceList) {
-    return null;
-  }
-
   @Override
   public void resetStrategy() {
 
+  }
+
+  private Map<Coordinate, Integer> createSquare() {
+    Map<Coordinate, Integer> map = new HashMap<>();
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
+        map.put(new Coordinate(i, j), 1);
+      }
+    }
+    return map;
   }
 
 

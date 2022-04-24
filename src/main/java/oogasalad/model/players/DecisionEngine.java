@@ -126,6 +126,11 @@ public abstract class DecisionEngine {
     return c;
   }
 
+  protected int determineEnemy() {
+    List<Integer> enemies = new ArrayList<>(getEnemyMap().keySet());
+    return enemies.get(getRandom().nextInt(enemies.size()));
+  }
+
   protected Coordinate determineLocation(List<Coordinate> list) {
     return list.get(getRandom().nextInt(list.size()));
   }

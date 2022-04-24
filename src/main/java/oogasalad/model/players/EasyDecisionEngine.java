@@ -50,11 +50,6 @@ public class EasyDecisionEngine extends DecisionEngine {
     }
   }
 
-  private int determineEnemy() {
-    List<Integer> enemies = new ArrayList<>(getEnemyMap().keySet());
-    return enemies.get(getRandom().nextInt(enemies.size()));
-  }
-
   /**
    * Method to adjust strategy of engine given result of last shot
    * @param result Result of engine's last shot
