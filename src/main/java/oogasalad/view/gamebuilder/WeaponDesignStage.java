@@ -37,7 +37,7 @@ public class WeaponDesignStage extends BuilderStage {
   private List<Color> colorList = new ArrayList<>();
   private String[] needAOEMapList;
   private int[][] damageMatrix;
-  private final String DEFAULT_WEAPON_ID = "CustomWeapon";
+  private final String DEFAULT_WEAPON_ID = "CustomUsable";
   private TextArea idInputBox;
   private List<Integer> weaponStats;
   private List<Object> parameterList;
@@ -109,10 +109,9 @@ public class WeaponDesignStage extends BuilderStage {
   }
 
   @Override
-  protected Object saveAndContinue() {
+  protected void saveAndContinue() {
     myStage.close();
-    PlayerSetupStage bgds = new PlayerSetupStage();
-    return null;
+
   }
 
   private VBox makeWeaponSelectionPrompt(String[] options) {
@@ -143,7 +142,7 @@ public class WeaponDesignStage extends BuilderStage {
       if (needsGridDesignOption(selection)) {
         addGridDesignOption();
       }
-      centerPane.getChildren().add(makeButton("Save Weapon", e -> saveWeapon(selection)));
+      centerPane.getChildren().add(makeButton("Save", e -> saveWeapon(selection)));
       myPane.setCenter(centerPane);
 
     } catch (NullPointerException e) {

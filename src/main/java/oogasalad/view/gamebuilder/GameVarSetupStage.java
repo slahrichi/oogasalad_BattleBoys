@@ -63,9 +63,8 @@ public class GameVarSetupStage extends BuilderStage{
   }
 
   @Override
-  protected Object saveAndContinue() {
+  protected void saveAndContinue() {
     saveVariableData();
     closeWindow();
-    return null;
   }
 }

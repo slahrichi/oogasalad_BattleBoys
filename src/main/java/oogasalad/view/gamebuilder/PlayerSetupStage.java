@@ -103,8 +103,7 @@ public class PlayerSetupStage extends BuilderStage {
   }
 
   @Override
-  protected Object saveAndContinue() {
+  protected void saveAndContinue() {
     closeWindow();
-    return null;
   }
 }

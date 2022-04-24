@@ -314,5 +314,5 @@ public abstract class BuilderStage {
 
   protected abstract Object launch();
 
-  protected abstract Object saveAndContinue();
+  protected abstract void saveAndContinue();
 }

@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.view.maker.LabelMaker;
 
@@ -177,8 +176,7 @@ public class WinConditionSetupStage extends BuilderStage {
   }
 
   @Override
-  protected Object saveAndContinue() {
+  protected void saveAndContinue() {
     closeWindow();
-    return null;
   }
 }
