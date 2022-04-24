@@ -2,46 +2,31 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URISyntaxException;
 import java.util.*;
-
 import java.util.function.Consumer;
 import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
-
 import oogasalad.model.utilities.usables.Usable;
-import oogasalad.com.stripe.StripeIntegration;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -64,6 +49,7 @@ import oogasalad.view.screens.PassComputerScreen;
 import oogasalad.view.screens.WinnerScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import spark.Spark;
 
 public class GameView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer,
     ShopVisualizer, ShotVisualizer, GameDataVisualizer {
@@ -160,8 +146,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
     currentUsableRelativeCoords = new ArrayList<>(Arrays.asList(new Coordinate(0, 0)));
-    loserStage = new Stage();
-    shopStage = new Stage();
+    Platform.runLater(() -> {
+      loserStage = new Stage();
+      shopStage = new Stage();
+    });
     playerIDToNames = idToNames;
     myResources = resourceBundle;
     initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerUsables);
@@ -236,8 +224,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createRightPane() {
-    shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
-
+    shopButton = ButtonMaker.makeTextButton("view-shop-button", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
     piecesRemainingPane = new SetPiecePane(20, myResources);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
 
@@ -285,26 +272,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myCenterPane.getChildren().add(myBoards.get(currentBoardIndex).getBoardPane());
     setupBoardButtons();
   }
-
-//  private void setupInventory() {
-//    inventory = new ScrollPane();
-//    inventory.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-//    HBox box = BoxMaker.makeHBox("inventory-box", 3, Pos.CENTER);
-//    box.setStyle("-fx-background-color: lightblue;");
-//    for (int i = 0; i < 6; i++) {
-//      StackPane pane = new StackPane();
-//      pane.setId("inventory-usable");
-//      pane.setPrefSize(75, 75);
-//      pane.setStyle("-fx-background-color: white;");
-//      Label stock = new Label("x 2");
-//      pane.getChildren().add(stock);
-//      StackPane.setAlignment(stock, Pos.TOP_RIGHT);
-//      box.getChildren().add(pane);
-//    }
-//    inventory.setMaxWidth(400);
-//    inventory.setContent(box);
-//    myCenterPane.getChildren().add(inventory);
-//  }
 
   private void createTitlePanel() {
     myTitle = new TitlePanel("");
@@ -545,15 +512,21 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   @Override
   public void openShop() {
+    shopStage.setOnCloseRequest(e -> {
+      shopButton.setDisable(false);
+      Spark.stop();
+    });
     ShopView shop = new ShopView(shopUsables);
     shop.addObserver(this);
     shopStage.setScene(shop.getMyScene());
     shopStage.show();
+    shopButton.setDisable(true);
   }
 
   @Override
   public void closeShop() {
     shopStage.close();
+    shopButton.setDisable(false);
   }
 
   public void showError(String errorMsg) {
@@ -613,5 +586,4 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     alertNode.setId("alert");
     alert.show();
   }
-
 }

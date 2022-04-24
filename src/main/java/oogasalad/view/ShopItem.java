@@ -27,13 +27,14 @@ public class ShopItem extends PropertyObservable {
 
   private static final double ITEM_SIZE = 30;
   private static final double X_SPACING = 90;
-  private static final double Y_SPACING = 120;
+  private static final double Y_SPACING = 150;
   private static final double GAP = 20;
 
-  private ImageView item; //FIXME replace with ImageView later
+  private ImageView item;
   private int myPrice;
   private VBox myVBox;
   private String myName;
+  private String myUsableClassName;
   private StripeIntegration stripeIntegration;
   private Button buyButton;
   private Button confirmStripe;
@@ -42,14 +43,13 @@ public class ShopItem extends PropertyObservable {
   public ShopItem(String itemName, int price, String usableClassName, int index,
       StripeIntegration stripeIntegration) {
     this.stripeIntegration = stripeIntegration;
-    //item = new Rectangle(WIDTH,HEIGHT);
-    //ResourceBundle weaponImageBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+WEAPON_IMAGES_RESOURCE_BUNDLE);
     String imageName = WEAPON_IMAGE_RESOURCES.getString(usableClassName);
     item = new ImageView(new Image(WEAPON_IMAGES_PATH+imageName));
     item.setFitHeight(ITEM_SIZE);
     item.setFitWidth(ITEM_SIZE);
     myPrice = price;
     myName = itemName;
+    myUsableClassName = usableClassName;
     buildButtons();
     Label nameLabel = LabelMaker.makeLabel(myName, "shop-item-name-label");
     Label priceLabel = LabelMaker.makeLabel(String.format(PRICE_LABEL_FORMAT, myPrice), "shop-item-price-label");
@@ -75,7 +75,7 @@ public class ShopItem extends PropertyObservable {
     stripeButton = ButtonMaker.makeTextButton("stripe" + myName, e ->
     {
       try {
-        stripeIntegration.purchaseItem(myName);
+        stripeIntegration.purchaseItem(myUsableClassName);
         confirmStripe.setDisable(false);
         confirmStripe.setVisible(true);
       } catch (URISyntaxException | IOException | InterruptedException ex) {

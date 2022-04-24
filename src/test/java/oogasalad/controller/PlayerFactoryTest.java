@@ -32,15 +32,15 @@ public class PlayerFactoryTest {
   @BeforeEach
   void setup() {
     Parser parser = new Parser();
-    ParserData parserData = null;
+    ParserData gameData = null;
     try {
-      parserData = parser.parse("src/main/resources/ExampleDataFile.properties");
+      gameData = parser.parse("src/main/resources/ExampleDataFile.properties");
     } catch (ParserException e) {
       e.printStackTrace();
     }
-    playerTypes = parserData.players();
-    board = parserData.board();
-    difficulties = new ArrayList<>(parserData.decisionEngines());
+    playerTypes = gameData.players();
+    board = gameData.board();
+    difficulties = new ArrayList<>(gameData.decisionEngines());
   }
 
   @Test

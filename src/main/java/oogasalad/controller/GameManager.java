@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.scene.Scene;
-import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.EngineRecord;
@@ -23,7 +22,6 @@ import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
-import oogasalad.model.utilities.usables.weapons.EmpoweredShot;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
@@ -93,12 +91,12 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
     numShots = 0;
-    whenToMovePieces = -1; //should change this to use gamedata from parser
-    allowedShots = 1;
+    whenToMovePieces = data.shipMovementRate(); //should change this to use gamedata from parser
+    allowedShots = data.shotsPerTurn();
     createIDMap(data.players());
     engineMap = data.engineMap();
     usablesIDMap = new HashMap<>();
-    for(Usable currUsable: data.usables()) {
+    for(Usable currUsable: data.allUsables()) {
       usablesIDMap.put(currUsable.getMyID(), currUsable);
     }
     gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
@@ -125,7 +123,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
-      e.printStackTrace();
       throw new NullPointerException(INVALID_METHOD);
     }
   }

@@ -19,11 +19,11 @@ import oogasalad.model.parsing.parsers.ParseShotsPerTurn;
 import oogasalad.model.parsing.parsers.ParseSpecialIslands;
 import oogasalad.model.parsing.parsers.ParseWeapons;
 import oogasalad.model.parsing.parsers.ParseWinConditions;
-import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.items.Item;
 import oogasalad.model.utilities.usables.weapons.Weapon;
 import oogasalad.model.utilities.winconditions.WinCondition;
 
