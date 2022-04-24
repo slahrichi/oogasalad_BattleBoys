@@ -19,6 +19,7 @@ public class GameSetupView extends Application{
   public void start(Stage stage) throws Exception {
     List<Object> objectList=new ArrayList<>();
 
+
     GameVarSetupStage gameVarSetupStage = new GameVarSetupStage();
     objectList.add(gameVarSetupStage.launch());
 
@@ -45,6 +46,9 @@ public class GameSetupView extends Application{
 
     ItemDesignStage itemDesignStage = new ItemDesignStage();
     objectList.add(itemDesignStage.launch());
+
+    SpecialIslandDesigner specialIslandDesigner= new SpecialIslandDesigner();
+    objectList.add(specialIslandDesigner.launch());
 
   }
 }
