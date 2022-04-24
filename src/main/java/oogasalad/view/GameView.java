@@ -112,6 +112,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String LEGEND_TEXT_RESOURCE = "LegendText";
   private static final String SHOTS_REMAINING_RESOURCE = "ShotsRemainingText";
   private static final String END_TURN_RESOURCE = "EndTurn";
+  private static final String CURRENT_USABLE_RESOURCE = "CurrentUsable";
   private static final String PIECES_LEFT_RESOURCE = "PiecesLeft";
   private static final String GOLD_LEFT_RESOURCE = "GoldLeft";
 
@@ -137,6 +138,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private SetPiecePane piecesRemainingPane;
   private LegendPane pieceLegendPane;
   private ConfigPane configPane;
+  private DynamicLabel currentUsableLabel;
   private DynamicLabel shotsRemainingLabel;
   private DynamicLabel numPiecesLabel;
   private DynamicLabel goldLabel;
@@ -144,6 +146,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private ResourceBundle myResources;
   private InventoryView inventory;
   private Stage loserStage;
+  private Stage shopStage;
   private List<Usable> shopUsables;
   private boolean nightMode;
 
@@ -258,16 +261,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     configPane = new ConfigPane(myResources);
     configPane.setText(myResources.getString(CONFIG_TEXT_RESOURCE));
-
     configPane.setOnAction(e -> changeStylesheet());
 
-    myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel,
+    currentUsableLabel = LabelMaker.makeDynamicLabel(myResources.getString(CURRENT_USABLE_RESOURCE), "Basic Shot", "current-usable-label");
+
+    myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, currentUsableLabel, shotsRemainingLabel,
         numPiecesLabel, goldLabel, shopButton, stripeButton,
         piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
   }
 
+  public void setCurrentUsable(String id) {
+    currentUsableLabel.changeDynamicText(id);
+  }
 
   private void setupPieceLegendPane() {
 
@@ -567,14 +574,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void openShop() {
     ShopView shop = new ShopView(shopUsables);
     shop.addObserver(this);
-    Stage shopStage = new Stage();
+    shopStage = new Stage();
     shopStage.setScene(shop.getMyScene());
     shopStage.show();
   }
 
   @Override
   public void closeShop() {
-
+    shopStage.close();
   }
 
   public void showError(String errorMsg) {

@@ -201,6 +201,7 @@ public class Board {
       for(Modifiers mod: cellMods){
         mod.modifierFunction(this).accept(this);
       }
+      retModifers.addAll(cellMods);
     }
   return retModifers;
   }

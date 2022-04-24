@@ -8,8 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import oogasalad.PropertyObservable;
 import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.ButtonMaker;
@@ -23,9 +21,9 @@ public class ShopItem extends PropertyObservable {
 
   private static final String PRICE_LABEL_FORMAT = "Price: %d Gold";
 
-
-  private static final double WIDTH = 90;
-  private static final double HEIGHT = 50;
+  private static final double ITEM_SIZE = 30;
+  private static final double X_SPACING = 90;
+  private static final double Y_SPACING = 120;
   private static final double GAP = 20;
 
   private ImageView item; //FIXME replace with ImageView later
@@ -38,14 +36,16 @@ public class ShopItem extends PropertyObservable {
     //ResourceBundle weaponImageBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+WEAPON_IMAGES_RESOURCE_BUNDLE);
     String imageName = WEAPON_IMAGE_RESOURCES.getString(usableClassName);
     item = new ImageView(new Image(WEAPON_IMAGES_PATH+imageName));
+    item.setFitHeight(ITEM_SIZE);
+    item.setFitWidth(ITEM_SIZE);
     myPrice = price;
     myName = itemName;
     Button buyButton = ButtonMaker.makeTextButton("Buy" + itemName, e -> buyItem(), "Buy");
     Label nameLabel = LabelMaker.makeLabel(myName, "shop-item-name-label");
     Label priceLabel = LabelMaker.makeLabel(String.format(PRICE_LABEL_FORMAT, myPrice), "shop-item-price-label");
     myVBox = BoxMaker.makeVBox("VBoxId", 10, Pos.CENTER, nameLabel, item, priceLabel, buyButton);
-    myVBox.setLayoutX((GAP + WIDTH) * (index % 3));
-    myVBox.setLayoutY((GAP + HEIGHT) * (index / 3));
+    myVBox.setLayoutX((GAP + X_SPACING) * (index % 3));
+    myVBox.setLayoutY((GAP + Y_SPACING) * (index / 3));
   }
 
   private void buyItem() {

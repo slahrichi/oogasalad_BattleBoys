@@ -55,6 +55,11 @@ public abstract class Cell implements CellInterface{
   }
 
   @Override
+  public List<Modifiers> getCellModifiers(){
+    return myModifiers;
+  }
+
+  @Override
   public abstract boolean canCarryObject();
 
   //I checked and this method's only used in testing can we remove this method and used protected setter instead?
