@@ -22,6 +22,13 @@ import javafx.scene.shape.Rectangle;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.ShipCell;
 
+/**
+ * Craetes a design window for pieces, provides a place to select piece shape ,as well as path for
+ * moving pieces, subclass of a BuilderStage. Depends on JavaFX as well as reflection to create the
+ * correct piece object.
+ *
+ * @author Luka Mdivani
+ */
 public class PieceDesignStage extends BuilderStage {
 
   private final int MAX_DIMENSION = 5;
@@ -108,7 +115,8 @@ public class PieceDesignStage extends BuilderStage {
   private void resetCustomization() {
     myPane.setCenter(null);
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
-    stateMap[2][2] = 1;
+    int centerCoordinate = 2;
+    stateMap[centerCoordinate][centerCoordinate] = 1;
     piecePathList.clear();
     patrolPath.clear();
     myPane.setLeft(null);
@@ -213,7 +221,7 @@ public class PieceDesignStage extends BuilderStage {
 
       addToObjectList(idInputBox.getText());
     } catch (IOException e) {
-      e.printStackTrace();
+      showError(getDictionaryResources().getString("reflectionError"));
     }
   }
 

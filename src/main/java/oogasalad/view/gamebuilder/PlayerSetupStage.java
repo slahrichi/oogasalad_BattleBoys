@@ -8,17 +8,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 
+
 /**
- * Craetes a design window for pieces, provides a place to select piece shape ,as well as path for
- * moving pieces, subclass of a BuilderStage. Depends on JavaFX as well as reflection to create the
- * correct piece object.
+ * Creates a window to add all the desired player types, extends BuilderStage, depends on JavaFX,
+ * makes no assumptions.
  *
  * @author Luka Mdivani
  */
 public class PlayerSetupStage extends BuilderStage {
 
   private BorderPane myPane;
-  private String availableWinConditionTypes;
   private String availablePlayerTypes;
   private String availableEngineTypes;
   private String needEngineTypes;
@@ -27,7 +26,6 @@ public class PlayerSetupStage extends BuilderStage {
   private HBox playerSelectionBox;
   private List<String> playerList = new ArrayList<>();
   private List<String> engineList = new ArrayList<>();
-
 
   public PlayerSetupStage() {
     myPane = new BorderPane();
@@ -91,6 +89,11 @@ public class PlayerSetupStage extends BuilderStage {
 
   }
 
+  /**
+   * returns a list of corresponding decision engines.
+   *
+   * @return the list of DecisionEngines for each added player
+   */
   public List<String> getEngineList() {
     return engineList;
   }
