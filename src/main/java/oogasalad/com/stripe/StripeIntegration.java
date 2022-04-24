@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.ResourceBundle;
 import spark.Spark;
 
 import static spark.Spark.post;
@@ -16,17 +17,22 @@ import static spark.Spark.staticFiles;
 
 public class StripeIntegration {
 
+  private ResourceBundle resources = ResourceBundle.getBundle("/stripeItemIds");
+
   public StripeIntegration() {
     port(4242);
   }
 
-  public void purchaseItem() throws URISyntaxException, IOException, InterruptedException {
-    makeRequest();
+  public void purchaseItem(String item) throws URISyntaxException, IOException, InterruptedException {
+    makeRequest(item);
     openWebPage();
-
   }
 
-  private void makeRequest() throws InterruptedException {
+  private String getAPIKeyFromItem(String item) {
+    String key = String.join("", item.split(" "));
+    return resources.getString(key);
+  }
+  private void makeRequest(String item) throws InterruptedException {
 
     // This is your test secret API key.
     Stripe.apiKey = "sk_test_51KpiXJCOTY4jZDr4HsPOnix8e9JuuToD27JhxIPCUSlXfPogIW3n05G0BxcWAKAipD2Dq"
@@ -46,7 +52,7 @@ public class StripeIntegration {
               .addLineItem(
                   SessionCreateParams.LineItem.builder()
                       .setQuantity(1L)
-                      .setPrice("price_1KrufxCOTY4jZDr4hjuF9Qpo")
+                      .setPrice(getAPIKeyFromItem(item))
                       .build())
               .build();
       Session session = Session.create(params);

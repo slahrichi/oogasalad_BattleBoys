@@ -48,7 +48,7 @@ public class ShopItem extends PropertyObservable {
     Button stripeButton = ButtonMaker.makeTextButton("stripe" + itemName, e ->
     {
       try {
-        stripeIntegration.purchaseItem();
+        stripeIntegration.purchaseItem(itemName);
       } catch (URISyntaxException ex) {
         ex.printStackTrace();
       } catch (IOException ex) {
