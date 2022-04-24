@@ -19,14 +19,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.usables.weapons.Weapon;
 import oogasalad.view.maker.LabelMaker;
 
 public class WeaponDesignStage extends BuilderStage {
 
   private BorderPane myPane;
   private int[][] stateMap;
-  private String availableWeaponTypes;
+  private String availableUsableTypes;
   private Stage myStage;
   private final int MAX_DIMENSION = 10;
   private VBox centerPane;
@@ -46,16 +45,19 @@ public class WeaponDesignStage extends BuilderStage {
   private Class<?>[] parameterTypes;
   private List<Class<?>> parameterTypesList;
   private List<Object> weaponList = new ArrayList<>();
+  private String classPath;
+  private final String PATH="oogasalad.model.utilities.usables.weapons.";
 
   public WeaponDesignStage() {
     colorList.add(DEFAULT_INACTIVE_COLOR);
     colorList.add(DEFAULT_ACTIVE_COLOR);
+    setUpClassPath();
     myPane = new BorderPane();
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
-    availableWeaponTypes = getMyBuilderResources().getString("possibleWeaponType");
     needAOEMapList = getMyBuilderResources().getString("needsAOEMapWeapon").split(",");
+    setUpUsableData();
     myStage = new Stage();
-    myPane.setTop(makeWeaponSelectionPrompt(availableWeaponTypes.split(",")));
+    myPane.setTop(makeWeaponSelectionPrompt(availableUsableTypes.split(",")));
     myPane.setBottom(makeContinueButton());
     myPane.setRight(setUpObjectView());
     centerPane = new VBox();
@@ -63,7 +65,13 @@ public class WeaponDesignStage extends BuilderStage {
     Scene myScene = new Scene(myPane, 1000, 500);
     myStage.setScene(myScene);
   }
+  protected void setUpUsableData(){
+    availableUsableTypes = getMyBuilderResources().getString("possibleWeaponType");
+  }
+  protected void setClassPath(String path){classPath=path;}
+  protected void setUpClassPath(){classPath=PATH;}
 
+  protected void setUsableDataForKey(String newData){availableUsableTypes=newData;}
   @Override
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
     Rectangle newCell = new Rectangle(xPos, yPos, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE);
@@ -200,7 +208,7 @@ public class WeaponDesignStage extends BuilderStage {
 
       parameterTypes = new Class<?>[parameterTypesList.size()];
       parameterTypesList.toArray(parameterTypes);
-      String selectedWeaponClass = "oogasalad.model.utilities.usables.weapons."+selectedWeapon;
+      String selectedWeaponClass = classPath+selectedWeapon;
       try {
         weaponList.add( createInstance(selectedWeaponClass, parameterTypes, parameters));
       } catch (IOException e) {
