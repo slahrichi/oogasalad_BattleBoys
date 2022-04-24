@@ -38,7 +38,6 @@ public class BoardSetUpStage extends BuilderStage {
 
   private Consumer<Integer> widthChange;
   private Consumer<Integer> heightChange;
-  private Stage myStage;
 
   public BoardSetUpStage() {
     width = DEFAULT_DIMENSION;
@@ -55,8 +54,7 @@ public class BoardSetUpStage extends BuilderStage {
     myPane.setTop(makeInfoInput());
     myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
     myPane.setBottom(makeContinueButton());
-    myStage = new Stage();
-    myStage.setScene(getScene());
+
   }
 
   private void setWidth(int newWidth) {
@@ -126,7 +124,7 @@ public class BoardSetUpStage extends BuilderStage {
 
   @Override
   protected Object launch() {
-    myStage.showAndWait();
+    setUpStage(myPane);
     return board;
   }
 
@@ -140,16 +138,14 @@ public class BoardSetUpStage extends BuilderStage {
   }
 
 
-  protected CellState[][] saveAndContinue() {
+  protected void saveAndContinue() {
     findReferencePoint(stateMap);
     stateMap = cropToActiveGrid(stateMap);
     width=stateMap.length;
     height=stateMap[0].length;
 
     convertToCellStates();
-    myStage.close();
-    System.out.println(board.toString());
+    closeWindow();
 
-    return board;
   }
 }

@@ -22,7 +22,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.ShipCell;
 
 public class PieceDesignStage extends BuilderStage {
@@ -51,7 +50,6 @@ public class PieceDesignStage extends BuilderStage {
 
 
   private String[] customizableStats;
-  private Stage myStage;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
@@ -71,10 +69,6 @@ public class PieceDesignStage extends BuilderStage {
 
     myPane.setTop(makeSelectionComboBox(availablePieceTypes.split(",")));
     myPane.setBottom(makeContinueButton());
-    myStage = new Stage();
-
-    Scene myScene = new Scene(myPane, 1000, 500);
-    myStage.setScene(myScene);
 
   }
 
@@ -139,15 +133,14 @@ public class PieceDesignStage extends BuilderStage {
 
   @Override
   protected Object launch() {
-    myStage.showAndWait();
+    setUpStage(myPane);
     return pieceList;
   }
 
   @Override
-  protected Object saveAndContinue() {
-    myStage.close();
+  protected void saveAndContinue() {
+    closeWindow();
 
-    return null;
   }
 
 
@@ -202,7 +195,7 @@ public class PieceDesignStage extends BuilderStage {
     if (needsPath) {
       parametersList.add(patrolPath);
     }
-    //parametersList.add(makeRelativeCoordinateMap(pieceMap));
+    parametersList.add(makeRelativeCoordinateMap(pieceMap));
     parametersList.add(idInputBox.getText());
 
     Object[] parameters = new Object[parametersList.size()];
