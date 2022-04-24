@@ -46,7 +46,7 @@ public class StripeIntegration {
               .addLineItem(
                   SessionCreateParams.LineItem.builder()
                       .setQuantity(1L)
-                      .setPrice("price_1Kpil7COTY4jZDr4r0YEy78K")
+                      .setPrice("price_1KrufxCOTY4jZDr4hjuF9Qpo")
                       .build())
               .build();
       Session session = Session.create(params);
