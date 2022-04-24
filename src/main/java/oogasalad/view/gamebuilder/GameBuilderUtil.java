@@ -3,6 +3,12 @@ package oogasalad.view.gamebuilder;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 
+/**
+ * An utilities class, has method for reflection used across many different parts of the game
+ * builder.
+ *
+ * @author Luka Mdivani
+ */
 public class GameBuilderUtil {
 
 
