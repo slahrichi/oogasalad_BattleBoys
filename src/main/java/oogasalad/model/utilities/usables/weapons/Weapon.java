@@ -48,6 +48,11 @@ public abstract class Weapon extends Usable {
     protected abstract void makeWeaponFunction();
 
     @Override
+    public String getType() {
+        return "Weapon";
+    }
+
+    @Override
     public BiConsumer<String, GameManager> handleUsage(){
         return (clickInfo, gm)-> {
             int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));

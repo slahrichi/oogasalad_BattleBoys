@@ -31,6 +31,7 @@ import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.GameView;
+import oogasalad.view.LanguageView;
 import oogasalad.view.StartView;
 import oogasalad.view.maker.DialogMaker;
 import org.apache.logging.log4j.LogManager;
@@ -41,10 +42,10 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private static final Logger LOG = LogManager.getLogger(GameView.class);
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String INVALID_METHOD = "Invalid method name given";
-  private static final String DEFAULT_LANGUAGE_PACKAGE = "languages/";
-  private static final String LANGUAGE = "English";
+
 
   private StartView myStart;
+  private LanguageView myLanguage;
   private GameSetup setup;
   private Stage myStage;
   private FilePicker fileChooser;
@@ -56,9 +57,8 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   public Game(Stage stage) {
     myStage = stage;
     fileChooser = new FilePicker();
-    myResources = ResourceBundle.getBundle(DEFAULT_LANGUAGE_PACKAGE + LANGUAGE);
-    myStart = new StartView(myResources);
-    myStart.addObserver(this);
+    myLanguage = new LanguageView();
+    myLanguage.addObserver(this);
     parser = new Parser();
   }
 
@@ -66,29 +66,36 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     return fileChooser.getFile();
   }
 
-  public void showStart() {
-    myStage.setScene(myStart.createScene());
+  public void selectLanguage(){
+    myStage.setScene(myLanguage.getScene());
     myStage.show();
+  }
+
+
+  private void showStart() {
+    myStart = new StartView(myResources);
+    myStart.addObserver(this);
+    myStage.setScene(myStart.createScene());
   }
 
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     try {
-      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName());
-      m.invoke(this);
+      Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), ResourceBundle.class);
+      m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
       throw new NullPointerException(INVALID_METHOD);
     }
   }
 
-  private void startGame() {
+  private void startGame(ResourceBundle resourceBundle) {
     GameManager manager = new GameManager(gameData, myResources);
     myStage.setScene(manager.createScene());
     manager.makeFirstAIPlayersMove();
   }
 
-  private void loadFile() {
+  private void loadFile(ResourceBundle resourceBundle) {
     LOG.info("loadFile");
     ParserData parserData;
     try {
@@ -106,6 +113,12 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
       showError(e.getMessage());
       return;
     }
+  }
+
+  private void languageSelected(ResourceBundle resourceBundle) {
+    myResources = resourceBundle;
+    System.out.println("Reached here.");
+    showStart();
   }
 
   private void createGameData(ParserData data) {

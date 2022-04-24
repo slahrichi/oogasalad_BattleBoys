@@ -28,6 +28,7 @@ public abstract class Usable {
   }
   public int getPrice(){return goldCost;}
 
+  public abstract String getType();
   public abstract BiConsumer<String, GameManager> handleUsage();
 
 }

@@ -49,7 +49,7 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Medium")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), new ArrayList<>(Arrays.asList("None", "Medium")));
     List<Player> engineList = new ArrayList<>(pfr.engineMap().keySet());
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
@@ -77,7 +77,7 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testPlacePiece() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
@@ -95,7 +95,7 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustmentWithMultipleHealth() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>(), engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
@@ -113,18 +113,18 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList(), myResources), "endTurn", null, info)));
     Thread.sleep(2000);
     Coordinate c = findCoordinateStruck().get(0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList(), myResources), "endTurn", null, info)));
     Thread.sleep(2000);
     CellState[][] enemyBoard = playerList.get(0).getBoard().getCurrentBoardState();
     assertEquals(CellState.SHIP_SUNKEN, enemyBoard[c.getRow()][c.getColumn()]);
@@ -132,7 +132,7 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustmentWithBFS() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), engineMap);
+    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
@@ -150,17 +150,17 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
     Thread.sleep(1500);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
     CellState[][] enemyBoard = playerList.get(0).getBoard().getCurrentBoardState();
     Thread.sleep(1500);
     List<Coordinate> list = findCoordinateStruck();
