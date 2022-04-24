@@ -3,6 +3,7 @@ package oogasalad.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
@@ -11,11 +12,21 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class MediumDecisionEngine extends DecisionEngine {
 
+  /**
+   *
+   * @param coordinateList list of coordinates from which the AI can choose for each enemy
+   * @param enemyMap map relating each enemy to a board of moves the AI has made against them
+   * @param player Player to which the DecisionEngine belongs
+   */
   public MediumDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player) {
     super(coordinateList, enemyMap, player);
   }
 
+  /**
+   * Decision logic for engine to make move against another player
+   * @return EngineRecord containing the AI's selected shot location and enemy ID
+   */
   public EngineRecord makeMove() {
     if (!getDeque().isEmpty()) {
       return getDeque().pollFirst();
@@ -41,6 +52,10 @@ public class MediumDecisionEngine extends DecisionEngine {
   }
 
 
+  /**
+   * Method to adjust strategy of engine given result of last shot
+   * @param result Result of engine's last shot
+   */
   public void adjustStrategy(CellState result) {
     if (wasSuccess(result)) {
       getDeque().addFirst(getLastShot());
@@ -48,28 +63,49 @@ public class MediumDecisionEngine extends DecisionEngine {
     }
     if (canBeRemoved(result)) {
       getCoordinateMap().get(getCurrentPlayer()).remove(getLastShot());
+      getDeque().remove(getLastShot());
     }
   }
 
-  @Override
+  /**
+   * Method called during GameSetup that allows the AI to place their pieces
+   *
+   * @param pieceList pieces that the player is allowed to place
+   * @return Coordinate that the AI has chosen to place their piece
+   */
   public Coordinate placePiece(List<Piece> pieceList) {
-    return null;
+    Board board = getPlayer().getBoard();
+    Piece piece = pieceList.get(getPieceIndex());
+    Coordinate c = determineLocation(getCoordinateList());
+    while (!board.hasValidPlacement(c, piece)) {
+      c = determineLocation(getCoordinateList());
+    }
+    updatePieceIndex();
+    return c;
   }
 
-  @Override
+  /**
+   * method to reset the strategy in the event that the boats move
+   * the AI clears their deque and replenishes all potential coordinates
+   */
   public void resetStrategy() {
     getDeque().clear();
+    makeCoordinateMap();
   }
 
   private void prepareBFS() {
+    Coordinate lastShot = getLastShot().shot();
     for (Coordinate c : generateCoordinates()) {
-      if (getCoordinateList().contains(c)) {
-        getDeque().addLast(new EngineRecord(c, getCurrentPlayer()));
+      Coordinate neighbor = new Coordinate(lastShot.getRow() + c.getRow(),
+          lastShot.getColumn() + c.getColumn());
+      if (getCoordinateList().contains(neighbor)) {
+        getDeque().addLast(new EngineRecord(neighbor, getCurrentPlayer()));
       }
     }
   }
 
   private boolean wasSuccess(CellState result) {
-    return result == CellState.ISLAND_DAMAGED || result == CellState.SHIP_DAMAGED;
+    return result == CellState.ISLAND_DAMAGED || result == CellState.SHIP_DAMAGED ||
+        result == CellState.SHIP_SUNKEN || result == CellState.ISLAND_SUNK;
   }
 }
