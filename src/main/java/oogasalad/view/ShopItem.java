@@ -1,6 +1,7 @@
 package oogasalad.view;
 
 
+import com.stripe.exception.StripeException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ResourceBundle;
@@ -35,34 +36,59 @@ public class ShopItem extends PropertyObservable {
   private int myPrice;
   private VBox myVBox;
   private String myName;
+  private StripeIntegration stripeIntegration;
+  private Button buyButton;
+  private Button confirmStripe;
+  private Button stripeButton;
 
   public ShopItem(String itemName, int price, String usableClassName, int index,
       StripeIntegration stripeIntegration) {
+    this.stripeIntegration = stripeIntegration;
     //item = new Rectangle(WIDTH,HEIGHT);
     //ResourceBundle weaponImageBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+WEAPON_IMAGES_RESOURCE_BUNDLE);
     String imageName = WEAPON_IMAGE_RESOURCES.getString(usableClassName);
     item = new ImageView(new Image(WEAPON_IMAGES_PATH+imageName));
     myPrice = price;
     myName = itemName;
-    Button buyButton = ButtonMaker.makeTextButton("Buy" + itemName, e -> buyItem(), "Buy");
-    Button stripeButton = ButtonMaker.makeTextButton("stripe" + itemName, e ->
-    {
-      try {
-        stripeIntegration.purchaseItem(itemName);
-      } catch (URISyntaxException ex) {
-        ex.printStackTrace();
-      } catch (IOException ex) {
-        ex.printStackTrace();
-      } catch (InterruptedException ex) {
-        ex.printStackTrace();
-      }
-    }, "Pay with Stripe");
+    buildButtons();
     Label nameLabel = LabelMaker.makeLabel(myName, "shop-item-name-label");
     Label priceLabel = LabelMaker.makeLabel(String.format(PRICE_LABEL_FORMAT, myPrice), "shop-item-price-label");
     myVBox = BoxMaker.makeVBox("VBoxId", 10, Pos.CENTER, nameLabel, item, priceLabel,
-        buyButton, stripeButton);
+        buyButton, stripeButton, confirmStripe);
     myVBox.setLayoutX((GAP + WIDTH) * (index % 3));
     myVBox.setLayoutY((GAP + HEIGHT) * (index / 3));
+  }
+
+  private void buildButtons() {
+    buyButton = ButtonMaker.makeTextButton("Buy" + myName, e -> buyItem(), "Buy");
+    confirmStripe = ButtonMaker.makeTextButton("stripeConfirm" + myName, e ->
+    {
+      try {
+        confirmStripePayment();
+      } catch (StripeException ex) {
+
+      }
+    }, "Confirm Stripe Payment");
+    confirmStripe.setDisable(true);
+    confirmStripe.setVisible(false);
+    stripeButton = ButtonMaker.makeTextButton("stripe" + myName, e ->
+    {
+      try {
+        stripeIntegration.purchaseItem(myName);
+        confirmStripe.setDisable(false);
+        confirmStripe.setVisible(true);
+      } catch (URISyntaxException | IOException | InterruptedException ex) {
+
+      }
+    }, "Pay with Stripe");
+  }
+
+  private void confirmStripePayment() throws StripeException {
+    if (stripeIntegration.hasBeenPaid()) {
+      confirmStripe.setVisible(false);
+      confirmStripe.setDisable(true);
+      buyItem();
+    }
   }
 
   private void buyItem() {

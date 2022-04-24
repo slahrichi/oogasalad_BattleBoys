@@ -1,6 +1,7 @@
 package oogasalad.com.stripe;
 
 import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import java.awt.Desktop;
@@ -18,6 +19,7 @@ import static spark.Spark.staticFiles;
 public class StripeIntegration {
 
   private ResourceBundle resources = ResourceBundle.getBundle("/stripeItemIds");
+  private Session session;
 
   public StripeIntegration() {
     port(4242);
@@ -55,10 +57,19 @@ public class StripeIntegration {
                       .setPrice(getAPIKeyFromItem(item))
                       .build())
               .build();
-      Session session = Session.create(params);
+      session = Session.create(params);
       response.redirect(session.getUrl(), 303);
       return "";
     });
+  }
+
+  public boolean hasBeenPaid() throws StripeException {
+    if (session == null) {
+      return false;
+    }
+    Session updatedSession = Session.retrieve(session.getId());
+    return updatedSession.getPaymentStatus().equals("paid");
+
   }
 
   private void openWebPage() throws URISyntaxException, IOException {
