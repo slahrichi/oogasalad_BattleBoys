@@ -20,9 +20,13 @@ public class GameVarSetupStage extends BuilderStage{
     gameSettingVariables=getMyBuilderResources().getString("gameVariables").split(",");
     variableInputMap=new HashMap<>();
     myPane.setCenter(centerPane);
+
+  }
+  protected void setUp(){
     setUpVariableInput(gameSettingVariables);
   }
-  private void setUpVariableInput(String[] variables){
+
+  protected void setUpVariableInput(String[] variables){
     makeVarEditor(variables);
     centerPane.getChildren().add(makeContinueButton());
   }
@@ -40,6 +44,7 @@ public class GameVarSetupStage extends BuilderStage{
 
   @Override
   protected Object launch() {
+    setUp();
     setUpStage(myPane);
     return variableInputMap;
   }
