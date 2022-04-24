@@ -4,12 +4,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
 import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.LabelMaker;
@@ -33,7 +37,7 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
   public InventoryView() {
     myPane = new ScrollPane();
     myPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    elementsBox = BoxMaker.makeHBox("inventory-box", 3, Pos.CENTER);
+    elementsBox = BoxMaker.makeHBox("inventory-box", 10, Pos.CENTER);
     myPane.setContent(elementsBox);
     myPane.setId("inventory-view");
   }
@@ -71,6 +75,9 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
+    for (Node child : elementsBox.getChildren()) {
+      ((VBox) child).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
     notifyObserver(evt.getPropertyName(), evt.getNewValue());
   }
 
@@ -88,6 +95,8 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
     private static final ResourceBundle WEAPON_IMAGE_RESOURCES = ResourceBundle.getBundle(
         "/WeaponImages");
     private static final String WEAPON_IMAGES_PATH = "images/weapon_images/";
+    private static final double ITEM_SIZE = 50;
+
     // Information about this usable
     private int quantity;
     private String usableID;
@@ -128,12 +137,15 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
     // Sets up background image
     private void setupImage(String className) {
       ImageView image = new ImageView(new Image(WEAPON_IMAGES_PATH + WEAPON_IMAGE_RESOURCES.getString(className)));
+      image.setFitWidth(ITEM_SIZE);
+      image.setFitHeight(ITEM_SIZE);
       elementBox.getChildren().add(image);
     }
 
     // Notifies observer when this element is clicked
     private void handleClicked() {
       notifyObserver("equipUsable", usableID);
+      elementBox.setBackground(new Background(new BackgroundFill( Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
     // Returns StackPane representing this InventoryElement

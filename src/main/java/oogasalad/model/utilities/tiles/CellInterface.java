@@ -32,6 +32,7 @@ public interface  CellInterface {
    CellState getCellState();
 
    public int getHealth();
+   public List<Modifiers> getCellModifiers();
 
    void moveCell(Coordinate nextMovement);
 }

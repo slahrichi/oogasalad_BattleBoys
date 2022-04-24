@@ -24,9 +24,7 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.usables.Usable;
-import oogasalad.model.utilities.usables.weapons.BasicShot;
-import oogasalad.model.utilities.usables.weapons.ClusterShot;
-import oogasalad.model.utilities.usables.weapons.EmpoweredShot;
+import oogasalad.model.utilities.usables.weapons.*;
 import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -134,12 +132,15 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     coordinateMap.put(new Coordinate(1, 0), 1);
     coordinateMap.put(new Coordinate(0, -1), 1);
     dummyUsables.add(new BasicShot());
-    dummyUsables.add(new ClusterShot("Cluster Shot", 1, coordinateMap));
+    dummyUsables.add(new ClusterShot("Cluster Shot :)", 1, coordinateMap));
+    dummyUsables.add(new MoltovShot("Molotov FIRE", 10, 1));
+    dummyUsables.add(new BurnShot("BURN", 5, 1, 2));
+
 
 
     Map<String, Integer> startingInventory = new HashMap<>();
     startingInventory.put("Basic Shot", Integer.MAX_VALUE);
-    startingInventory.put("Cluster Shot", 2);
+    startingInventory.put("Cluster Shot :)", 2);
 
     PlayerFactoryRecord pr = PlayerFactory.initializePlayers(data.board(), data.players(),
         startingInventory, data.decisionEngines());

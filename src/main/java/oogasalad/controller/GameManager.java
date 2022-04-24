@@ -133,6 +133,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void equipUsable(String id) {
     // set currentUsable equal to map.get(info.getID());
     currentUsable = usablesIDMap.get(id);
+    view.setCurrentUsable(id, usablesIDMap.get(id).getRelativeCoordShots().keySet());
     LOG.info(String.format("Current Weapon: %s", id));
   }
 
@@ -274,6 +275,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       DecisionEngine engine = engineMap.get(player);
       engine.adjustStrategy(result);
     }
+  }
+
+  public void addRemainingShots(int count){
+    numShots +=count;
   }
 
   public GameViewManager getGameViewManager() {

@@ -154,7 +154,9 @@ public class Board {
   }
 
   public Piece getPiece(int id){
-    return myPieces.get(id);
+    Piece myPiece = myPieces.get(id);
+    System.out.println(myPiece.getID());
+    return myPiece;
   }
   public int getNumPiecesSunk() {
     return myNumShipsSunk;
@@ -201,6 +203,7 @@ public class Board {
       for(Modifiers mod: cellMods){
         mod.modifierFunction(this).accept(this);
       }
+      retModifers.addAll(cellMods);
     }
   return retModifers;
   }

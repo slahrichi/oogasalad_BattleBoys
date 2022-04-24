@@ -47,11 +47,15 @@ public abstract class Cell implements CellInterface{
     for(Modifiers currMod: returnMods){
       try {
         currMod.modifierFunction(this).accept(this);
-        returnMods.remove(currMod);
       }catch(Exception e){
         }
       }
     return returnMods;
+  }
+
+  @Override
+  public List<Modifiers> getCellModifiers(){
+    return myModifiers;
   }
 
   @Override

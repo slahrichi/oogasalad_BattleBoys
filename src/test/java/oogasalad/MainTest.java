@@ -18,11 +18,11 @@ class MainTest {
         m = new Main();
     }
 
-
     @Test
     void testVersionIsReady () {
         ResourceBundle resources = ResourceBundle.getBundle("languages/English");
         assertNotEquals(resources, null);
+
 //        // how close do real valued numbers need to be to count as the same
 //        final double TOLERANCE = 0.0005;
 //
