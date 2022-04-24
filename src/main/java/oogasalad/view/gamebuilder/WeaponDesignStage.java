@@ -250,5 +250,7 @@ public class WeaponDesignStage extends BuilderStage {
         arrangeCells(MAX_DIMENSION, MAX_DIMENSION, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE, stateMap),
         displayColorChoice(DEFAULT_STATE_OPTIONS, colorList)));
   }
-
+  public String[] getCreatedWeaponIds(){
+    return getObjectListAsArray();
+  }
 }

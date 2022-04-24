@@ -63,6 +63,20 @@ public abstract class BuilderStage {
     objectList.clear();
   }
 
+  private String[] getStringIdArrayOfCreatedObjets() {
+    String[] result = new String[objectList.size()];
+    int counter = 0;
+    for (String object : objectList) {
+      result[counter] = object;
+      counter++;
+    }
+    return result;
+  }
+
+  protected String[] getObjectListAsArray() {
+    return getStringIdArrayOfCreatedObjets();
+  }
+
   protected ResourceBundle getMyBuilderResources() {
     return myBuilderResources;
   }
@@ -134,7 +148,8 @@ public abstract class BuilderStage {
     HBox result = new HBox(comboBox);
     result.getChildren().add(infoBox);
     result.getChildren()
-        .add(makeButton(buttonText, e -> consumer.accept(comboBox.getValue() +","+infoBox.getText())));
+        .add(makeButton(buttonText,
+            e -> consumer.accept(comboBox.getValue() + "," + infoBox.getText())));
     return result;
   }
 
