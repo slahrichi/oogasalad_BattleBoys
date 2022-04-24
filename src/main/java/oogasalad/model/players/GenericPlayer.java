@@ -151,4 +151,11 @@ public abstract class GenericPlayer implements Player{
     myHitsMap.putIfAbsent(hitResult, 0);
     myHitsMap.put(hitResult, myHitsMap.get(hitResult)+1);
   }
+
+  public void addUsableToInventory(Usable usable){
+    if(inventory.containsKey(usable.getMyID()))
+      inventory.put(usable.getMyID(), inventory.get(usable.getMyID()) + 1);
+    else
+      inventory.put(usable.getMyID(), 1);
+  }
 }
