@@ -242,6 +242,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
+  public void addRemainingShots(int count){
+    numShots +=count;
+  }
+
   public GameViewManager getGameViewManager() {
     return gameViewManager;
   }
