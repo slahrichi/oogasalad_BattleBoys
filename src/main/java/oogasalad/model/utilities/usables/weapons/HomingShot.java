@@ -11,6 +11,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class HomingShot extends Weapon{
   /**
@@ -37,8 +38,8 @@ public class HomingShot extends Weapon{
   }
 
   @Override
-  protected void makeWeaponFunction() {
-    setMyFunction((absolute, board) ->{
+  protected UsableFunction makeWeaponFunction() {
+    UsableFunction ret = (absolute, board) ->{
       List<Coordinate> coordsWithShips = new ArrayList<>();
       List<Coordinate> coordsWithIslands = new ArrayList<>();
       for(int i = 0; i<radius; i++){
@@ -72,6 +73,7 @@ public class HomingShot extends Weapon{
         }
       }
       return retMap;
-    });
+    };
+    return ret;
   };
 }

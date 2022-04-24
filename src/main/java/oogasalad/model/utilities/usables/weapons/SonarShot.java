@@ -7,6 +7,8 @@ import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.WaterCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class SonarShot extends Weapon {
 
@@ -15,7 +17,7 @@ public class SonarShot extends Weapon {
     super(id, gold);
     this.myRadius = radius;
     generateRelativeCoords();
-    makeWeaponFunction();
+
   }
 
   public SonarShot(String[] parameters){
@@ -31,8 +33,8 @@ public class SonarShot extends Weapon {
     }
   }
   @Override
-  protected void makeWeaponFunction() {
-    setMyFunction((abs, board)->{
+  protected UsableFunction makeWeaponFunction() {
+    UsableFunction ret =  (abs, board)->{
       Map<Coordinate, CellState> retValues = new HashMap<>();
       for(Coordinate coord: getRelativeCoordShots().keySet()){
         Coordinate currCoord = new Coordinate(abs.getRow()+coord.getRow(), abs.getColumn() + coord.getColumn());
@@ -42,6 +44,7 @@ public class SonarShot extends Weapon {
           retValues.put(currCoord, board.hit(currCoord, 1));
       }
       return  retValues;
-    });
+    };
+    return ret;
   }
 }

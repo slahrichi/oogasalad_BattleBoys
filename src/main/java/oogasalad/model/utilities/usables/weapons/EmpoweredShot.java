@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class EmpoweredShot extends Weapon{
 
@@ -19,8 +20,8 @@ public class EmpoweredShot extends Weapon{
 
 
   @Override
-  protected void makeWeaponFunction() {
-    setMyFunction((coordinate, board) -> {
+  protected UsableFunction makeWeaponFunction() {
+    UsableFunction ret = (coordinate, board) -> {
       Map<Coordinate, CellState> retMap = new HashMap<>();
       if(board.checkBoundedCoordinate(coordinate)){
         retMap.put(coordinate, board.hit(coordinate, myDMG));
@@ -28,6 +29,7 @@ public class EmpoweredShot extends Weapon{
       }else{
         throw new NullPointerException("Coordinate does not exist in the Board");
       }
-    });
+    };
+    return ret;
   }
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class LineShot extends Weapon{
   /**
@@ -16,7 +17,7 @@ public class LineShot extends Weapon{
   public LineShot(String id, int gold, int dmg){
     super(id, gold);
     myDmg = dmg;
-    makeWeaponFunction();
+
   }
 
   public LineShot(String[] parameters){
@@ -24,8 +25,8 @@ public class LineShot extends Weapon{
   }
 
   @Override
-  protected void makeWeaponFunction() {
-    setMyFunction((abs, board)->
+  protected UsableFunction makeWeaponFunction() {
+    UsableFunction ret = (abs, board)->
     {
       Map<Coordinate, CellState> retMap = new HashMap<>();
       List<Coordinate> relative = new ArrayList<>();
@@ -42,6 +43,7 @@ public class LineShot extends Weapon{
         retMap.put(coord, board.hit(coord, myDmg));
       }
       return retMap;
-    });
+    };
+    return ret;
   }
 }

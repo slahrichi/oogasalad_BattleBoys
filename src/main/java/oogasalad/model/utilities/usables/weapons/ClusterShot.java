@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class ClusterShot extends Weapon{
 
@@ -14,8 +15,8 @@ public class ClusterShot extends Weapon{
   }
 
   @Override
-  protected void makeWeaponFunction() {
-    setMyFunction((absolute, board) -> {
+  protected UsableFunction makeWeaponFunction() {
+    UsableFunction ret = (absolute, board) -> {
       Map<Coordinate, Integer> relativeCoords = getRelativeCoordShots();
       Map<Coordinate, CellState> returnStates = new HashMap<>();
       for(Coordinate relative : relativeCoords.keySet()){
@@ -25,7 +26,8 @@ public class ClusterShot extends Weapon{
         }
       }
       return returnStates;
-    });
+    };
+    return ret;
   }
 
 }

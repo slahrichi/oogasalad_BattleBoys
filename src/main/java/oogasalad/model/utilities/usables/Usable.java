@@ -14,7 +14,6 @@ import oogasalad.view.Info;
 public abstract class Usable {
 
   String myID;
-  UsableFunction myFunction;
   int goldCost;
   Map<Coordinate,Integer> relativeCoordShots;
   public Usable(String ID, int gold){
@@ -45,11 +44,9 @@ public abstract class Usable {
     relativeCoordShots = relCoords;
   }
 
-  public UsableFunction getFunction() {
-      return myFunction;
-  }
-  public String getMyID(){return myID;}
-  protected void setMyFunction(UsableFunction function){myFunction = function;}
+  public abstract UsableFunction getFunction();
+  String getMyID(){return myID;}
+
   protected void setGoldCost(int cost){goldCost = cost;}
   protected void setMyID(String myID) {
     this.myID = myID;
