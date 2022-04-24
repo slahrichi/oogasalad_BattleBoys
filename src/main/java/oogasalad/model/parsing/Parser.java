@@ -10,6 +10,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import oogasalad.model.parsing.parsers.ParseAllUsables;
+import oogasalad.model.parsing.parsers.ParsePowerUps;
+import oogasalad.model.parsing.parsers.ParseSpecialIslands;
+import oogasalad.model.parsing.parsers.ParseSpecialWeapons;
+import oogasalad.model.parsing.parsers.ParseWeapons;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -90,7 +95,15 @@ public class Parser {
     List<Object> parsedElements = new ArrayList<>();
     try {
       for(ParsedElement p: parsers) {
-        parsedElements.add(p.parse(props));
+        if(
+            p.getClass().equals(ParseWeapons.class) ||
+            p.getClass().equals(ParseSpecialIslands.class) ||
+            p.getClass().equals(ParsePowerUps.class) ||
+            p.getClass().equals(ParseAllUsables.class)) {
+          parsedElements.add(null);
+        } else {
+          parsedElements.add(p.parse(props));
+        }
       }
     } catch (JsonSyntaxException e) {
       String message = exceptionMessageProperties.getProperty(JSON_ERROR).formatted(pathToFile);
