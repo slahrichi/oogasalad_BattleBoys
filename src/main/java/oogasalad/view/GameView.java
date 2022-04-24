@@ -1,5 +1,6 @@
 package oogasalad.view;
 
+import com.stripe.exception.StripeException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
@@ -30,6 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
@@ -179,15 +182,24 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createRightPane() {
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), "Open Shop");
+    StripeIntegration stripeIntegration = new StripeIntegration();
+    AtomicBoolean received = new AtomicBoolean(false); // this is true when the button is pressed and the payment has been received
     stripeButton = ButtonMaker.makeTextButton("stripe", e -> {
       try {
-        new StripeIntegration();
+        stripeIntegration.build();
       } catch (URISyntaxException ex) {
         ex.printStackTrace();
       } catch (IOException ex) {
         ex.printStackTrace();
       }
     }, "Stripe");
+    Button stripeReceiveButton = ButtonMaker.makeTextButton("stripe-recceive", e -> {
+      try {
+        received.set(stripeIntegration.receive());
+      } catch (StripeException ex) {
+        ex.printStackTrace();
+      }
+    }, "stripe-receive");
 
     piecesRemainingPane = new SetPiecePane(20);
     piecesRemainingPane.setText("Ships Remaining");
@@ -203,7 +215,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     configPane.setOnAction(e -> changeStylesheet());
 
     myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, shotsRemainingLabel,
-        numPiecesLabel, goldLabel, shopButton, stripeButton,
+        numPiecesLabel, goldLabel, shopButton, stripeButton, stripeReceiveButton,
         piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
