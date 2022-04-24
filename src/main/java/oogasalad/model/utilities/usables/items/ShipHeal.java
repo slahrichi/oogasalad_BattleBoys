@@ -6,6 +6,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class ShipHeal extends Item{
 
@@ -20,8 +21,8 @@ public class ShipHeal extends Item{
   }
 
   @Override
-  protected void makeItemFunction(){
-    setMyFunction((abs, board)->{
+  protected UsableFunction makeItemFunction(){
+    UsableFunction ret = (abs, board)->{
       CellInterface cell = board.getCell(abs);
       Map<Coordinate, CellState> resMap = new HashMap<>();
       resMap.put(abs, board.hit(abs,healPower));
@@ -34,7 +35,8 @@ public class ShipHeal extends Item{
         }
       }
       return resMap;
-    });
+    };
+    return ret;
   }
 
 }
