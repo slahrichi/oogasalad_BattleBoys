@@ -1,16 +1,8 @@
 package oogasalad.model.utilities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import oogasalad.model.utilities.tiles.Cell;
+
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
@@ -20,45 +12,45 @@ import oogasalad.model.utilities.tiles.WaterCell;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Overall Board class that is the model representation of each player's personal board. This includes information such as all valid cells
+ * on the board, all pieces on the board.
+ *
+ * Assumptions:
+ * - Board will be made up of cells
+ * - Board only has finite edge conditions
+ *
+ * Dependencies:
+ * - CellInterface: Cells build up the
+ *
+ * @author Brandon Bae, Prajwal Jagadish, Saad Lahrichi
+ */
 public class Board {
 
   private static final Logger LOG = LogManager.getLogger(Board.class);
   private Map<Coordinate, CellInterface> boardMap;
-  private CellState[][] myBoardSetup;
   private Map<String, Piece> myPieces;
   private List<IslandCell> islandsInPlay;
-  private ResourceBundle exceptions;
   private ResourceBundle logMessages;
-  private static AtomicInteger nextID = new AtomicInteger();
-  //private static final Logger LOG = LogManager.getLogger(Board.class.getName());
+
   private static final String RESOURCES_PACKAGE = "/";
-  private static final String EXCEPTIONS = "BoardExceptions";
   private static final String BACKEND_MESSAGES = "BackendLogMessages";
-  private static final String WRONG_TOP_LEFT = "wrongTopLeft";
-  private static final String WRONG_NEIGHBOR = "wrongNeighbor";
   private int myRows;
   private int myCols;
-  private int myCurrTurnGold;
   private int myNumShipsSunk;
-  private double scoreMultiplier;
-
-
 
   public Board(CellState[][] boardSetup) {
-    myBoardSetup = boardSetup;
     myRows = boardSetup.length;
     myCols = boardSetup[0].length;
     myPieces = new HashMap<>();
-    myCurrTurnGold = 0;
     myNumShipsSunk = 0;
     initialize(boardSetup);
-    exceptions = ResourceBundle.getBundle(RESOURCES_PACKAGE+EXCEPTIONS);
     logMessages = ResourceBundle.getBundle(RESOURCES_PACKAGE+BACKEND_MESSAGES);
   }
 
 
   private void initialize(CellState[][] boardSetup) {
-    boardMap = new HashMap<Coordinate, CellInterface>();
+    boardMap = new HashMap<>();
     for (int i = 0; i < boardSetup.length; i++) {
       for (int j = 0; j < boardSetup[0].length; j++) {
         if(boardSetup[i][j] == CellState.WATER){
@@ -97,7 +89,7 @@ public class Board {
     myPieces.put(piece.getID(), piece); //can make this observer listener in future
     LOG.info(String.format(logMessages.getString("successPiecePlaceInfo"), piece.getID(), topLeft.getRow(), topLeft.getColumn()));
     for(ShipCell c: piece.getCellList()) {
-      place(c.getCoordinates(), c);
+      boardMap.put(c.getCoordinates(),c);
     }
     piece.initializeHPList();
   }
@@ -109,11 +101,6 @@ public class Board {
       }
     }
     return true;
-  }
-
-
-  private void place(Coordinate c, CellInterface cell) {
-    boardMap.put(c, cell);
   }
 
   public List<Piece> listPieces() {
@@ -141,8 +128,8 @@ public class Board {
     int numStartPieces = myPieces.keySet().size();
     CellState hitState = boardMap.get(c).hit(dmg);
 
-    Set<String> ogKeySet = new HashSet<String>(myPieces.keySet());
-    for(String key: ogKeySet) {
+    Set<String> originalKeySet = new HashSet<>(myPieces.keySet());
+    for(String key: originalKeySet) {
       Piece currPiece = myPieces.get(key);
       currPiece.updateShipHP();
       if(currPiece.checkDeath()) {
@@ -157,7 +144,6 @@ public class Board {
 
   public Piece getPiece(int id){
     Piece myPiece = myPieces.get(id);
-    System.out.println(myPiece.getID());
     return myPiece;
   }
   public int getNumPiecesSunk() {
@@ -180,7 +166,7 @@ public class Board {
 
   public void randomizeIslands(List<IslandCell> islands){
     islandsInPlay = islands;
-    List<Coordinate> freeCells = new ArrayList<Coordinate>();
+    List<Coordinate> freeCells = new ArrayList<>();
     for(Coordinate c: boardMap.keySet()){
       if(boardMap.get(c).canCarryObject()){
         freeCells.add(c);
@@ -197,8 +183,9 @@ public class Board {
 
 
   public boolean setIslandsInPlay(List<IslandCell> islands){
-    if(islandsInPlay == null)
+    if(islandsInPlay == null) {
       return false;
+    }
     else{
       this.islandsInPlay = islands;
       for(IslandCell island: islands){
@@ -218,7 +205,7 @@ public class Board {
     return false;
   }
 
-  public List<Modifiers> update(){
+  public List<Modifiers> update() {
     ArrayList<Modifiers> retModifers = new ArrayList<>();
     for(CellInterface cell: boardMap.values()){
       List<Modifiers> cellMods = cell.update();
@@ -227,11 +214,10 @@ public class Board {
       }
       retModifers.addAll(cellMods);
     }
-  return retModifers;
+    return retModifers;
   }
 
   public void removePiece(String ID) {
-    //throw exception if ID is not good ID
     Piece pieceToRemove = myPieces.get(ID);
     myPieces.remove(ID);
     pieceToRemove.removeFromBoard(boardMap);
