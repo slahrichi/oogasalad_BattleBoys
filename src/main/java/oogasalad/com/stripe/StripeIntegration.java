@@ -50,9 +50,7 @@ public class StripeIntegration {
                       .build())
               .build();
       Session session = Session.create(params);
-      System.out.println(session.getUrl());
       response.redirect(session.getUrl(), 303);
-      System.out.println(session.getUrl());
       return "";
     });
   }
