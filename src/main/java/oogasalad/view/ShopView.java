@@ -17,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import oogasalad.PropertyObservable;
+import oogasalad.com.stripe.StripeIntegration;
 import oogasalad.model.utilities.usables.Usable;
 
 public class ShopView extends PropertyObservable implements PropertyChangeListener {
@@ -30,12 +31,13 @@ public class ShopView extends PropertyObservable implements PropertyChangeListen
   private Map<String, ScrollPane> nameToPageMap = new HashMap<>();
   private Map<Tab, ScrollPane> shopPageMap = new HashMap<>();
   private BorderPane myPane;
+  private StripeIntegration stripeIntegration;
 
   public ShopView(List<Usable> shopInventory) {
     myPane = new BorderPane();
     myPane.setId("startPane");
     ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+"ShopBuilder");
-
+    stripeIntegration = new StripeIntegration();
     setUpTitle();
     setUpTabPane(myResources.getString("shopCategories").split(","));
     setUpButtons();
@@ -91,13 +93,15 @@ public class ShopView extends PropertyObservable implements PropertyChangeListen
 
   private void makeShopItems(List<Usable> shopInventory) {
     for(Usable currUsable: shopInventory) {
-      addShopItem(currUsable.getType(), currUsable.getMyID(), currUsable.getPrice(), currUsable.getClass().getSimpleName(),shopInventory.indexOf(currUsable));
+      addShopItem(currUsable.getType(), currUsable.getMyID(), currUsable.getPrice(),
+          currUsable.getClass().getSimpleName(),shopInventory.indexOf(currUsable));
     }
   }
 
   private void addShopItem(String category, String usableID, int price, String usableClassName, int index) {
     Group currentGroup = (Group) nameToPageMap.get(category).getContent();
-    ShopItem newItem = new ShopItem(usableID,price,usableClassName, index);
+    ShopItem newItem = new ShopItem(usableID,price,usableClassName, index,
+        stripeIntegration);
     newItem.addObserver(this);
     currentGroup.getChildren().add(newItem.getMyVBox());
   }

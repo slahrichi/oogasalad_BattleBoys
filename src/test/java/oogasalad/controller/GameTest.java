@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ResourceBundle;
 import javafx.stage.Stage;
+import oogasalad.view.LanguageView;
 import oogasalad.view.StartView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,9 @@ private File file;
     {
       spy = Mockito.spy(new Game(new Stage()));
       Mockito.doReturn(file).when(spy).chooseDataFile();
-      spy.showStart();
+      spy.selectLanguage();
+      spy.propertyChange(new PropertyChangeEvent(new LanguageView(),
+          "languageSelected", null, myResources));
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
     });
@@ -52,9 +55,11 @@ private File file;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") +
-          "/data/FakeFile.properties")).when(spy).chooseDataFile();
-      spy.showStart();
+      Mockito.doReturn(new File(System.getProperty("user.dir")
+          + "/data/FakeFile.properties")).when(spy).chooseDataFile();
+      spy.selectLanguage();
+      spy.propertyChange(new PropertyChangeEvent(new LanguageView(),
+          "languageSelected", null, myResources));
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
     });
@@ -68,7 +73,9 @@ private File file;
     {
       spy = Mockito.spy(new Game(new Stage()));
       Mockito.doReturn(file).when(spy).chooseDataFile();
-      spy.showStart();
+      spy.selectLanguage();
+      spy.propertyChange(new PropertyChangeEvent(new LanguageView(),
+          "languageSelected", null, myResources));
       assertThrows(NullPointerException.class, () ->
           spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "fakeMethod", null, null)));
@@ -81,7 +88,9 @@ private File file;
     {
       spy = Mockito.spy(new Game(new Stage()));
       Mockito.doReturn(file).when(spy).chooseDataFile();
-      spy.showStart();
+      spy.selectLanguage();
+      spy.propertyChange(new PropertyChangeEvent(new LanguageView(),
+          "languageSelected", null, myResources));
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
       javafxRun(() -> spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
@@ -90,4 +99,5 @@ private File file;
     Thread.sleep(1000);
     assertNotEquals(null, lookup("#view-shop").query());
   }
+
 }

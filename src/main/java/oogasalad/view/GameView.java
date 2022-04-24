@@ -127,7 +127,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Button leftButton;
   private Button rightButton;
   private Button endTurnButton;
-  private Button stripeButton;
   private VBox myRightPane;
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
@@ -149,7 +148,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Scene myScene;
 
   private int currentBoardIndex;
-  private StripeIntegration stripeIntegration;
 
   private Map<Integer, String> playerIDToNames;
 
@@ -162,9 +160,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
     currentUsableRelativeCoords = new ArrayList<>(Arrays.asList(new Coordinate(0, 0)));
+    loserStage = new Stage();
+    shopStage = new Stage();
     playerIDToNames = idToNames;
     myResources = resourceBundle;
-    stripeIntegration = new StripeIntegration();
     initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerUsables);
   }
 
@@ -238,13 +237,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createRightPane() {
     shopButton = ButtonMaker.makeTextButton("view-shop", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
-    stripeButton = ButtonMaker.makeTextButton("stripe", e -> {
-      try {
-        stripeIntegration.purchaseItem();
-      } catch (URISyntaxException | IOException | InterruptedException ex) {
-        showError("Connection to Stripe failed");
-      }
-    }, "Stripe");
 
     piecesRemainingPane = new SetPiecePane(20, myResources);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
@@ -263,7 +255,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     currentUsableLabel = LabelMaker.makeDynamicLabel(myResources.getString(CURRENT_USABLE_RESOURCE), "Basic Shot", "current-usable-label");
 
     myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, currentUsableLabel, shotsRemainingLabel,
-        numPiecesLabel, goldLabel, shopButton, stripeButton,
+        numPiecesLabel, goldLabel, shopButton,
         piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(300);
     myPane.setRight(myRightPane);
@@ -496,7 +488,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void displayLosingScreen(String name) {
     LoserScreen loser = new LoserScreen(myResources, name);
-    loserStage = new Stage();
     loserStage.setScene(new Scene(loser, 600, 600));
     loserStage.show();
   }
@@ -556,7 +547,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void openShop() {
     ShopView shop = new ShopView(shopUsables);
     shop.addObserver(this);
-    shopStage = new Stage();
     shopStage.setScene(shop.getMyScene());
     shopStage.show();
   }

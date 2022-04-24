@@ -22,18 +22,14 @@ public class ColorSelectionStage extends BuilderStage {
   private Map<CellState, Color> colorMap;
   private List<ColorPicker> colorPickers = new ArrayList<>();
   private Map<String, ColorPicker> colorPickerMap;
-  private Stage myStage;
 
   public ColorSelectionStage() {
     super();
-    myStage = new Stage();
     colorPickerMap = new HashMap<>();
     optionList = getMyBuilderResources().getString("possibleCellState").split(",");
     myPane.setCenter(buildOptionDisplay());
     myPane.setRight(makeContinueButton());
 
-    Scene myScene = new Scene(myPane, 900, 500);
-    myStage.setScene(myScene);
 
   }
 
@@ -44,7 +40,7 @@ public class ColorSelectionStage extends BuilderStage {
 
   @Override
   protected Object launch() {
-    myStage.showAndWait();
+    setUpStage(myPane);
     return colorMap;
   }
 
@@ -61,13 +57,12 @@ public class ColorSelectionStage extends BuilderStage {
     return result;
   }
 
-  protected Object saveAndContinue() {
+  protected void saveAndContinue() {
     colorMap = new HashMap<>();
     for (String cellStateName : colorPickerMap.keySet()) {
       colorMap.put(CellState.valueOf(cellStateName), colorPickerMap.get(cellStateName).getValue());
     }
-    myStage.close();
-    return colorMap;
+    closeWindow();
   }
 
 }
