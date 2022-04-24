@@ -19,6 +19,8 @@ import oogasalad.model.players.PlayerRecord;
  * won or lost the current game. Determining win states in WinConditions will be defined by a lambda function.
  * This class is intended to be an internal API to the Controller to help determine winners using controller
  * parameters
+ *
+ * @author Brandon Bae
  */
 public interface WinConditionInterface {
 
@@ -35,7 +37,18 @@ public interface WinConditionInterface {
    */
   public abstract Function<PlayerRecord, WinState> getWinLambda();
 
+  /**
+   * This method returns a set of desirable cell states associated with this Win/Loss Condition. This is meant to be
+   * used by the AI players to determine what types of hits are actively helping the AI move closer to winning.
+   * @return Set of cell states that represents cell states that help fulfill the win condition
+   */
   public Set<CellState> getDesirableCellStates();
 
+  /**
+   * This method returns a set of nondesirable cell states associated with this Win/Loss Condition. This is meant to be
+   * used by the AI players to determine what types of hits are detrimental to the AI such as fulfilling a loss condition
+   * or not helping a win condition.
+   * @return Set of cell states that represents cell states that be detrimental for an AI to continue pursuing
+   */
   public Set<CellState> getNonDesirableCellStates();
 }
