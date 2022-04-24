@@ -45,7 +45,7 @@ public abstract class Usable {
   }
 
   public abstract UsableFunction getFunction();
-  String getMyID(){return myID;}
+  public String getMyID(){return myID;}
 
   protected void setGoldCost(int cost){goldCost = cost;}
   protected void setMyID(String myID) {
