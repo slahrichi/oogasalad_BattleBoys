@@ -5,28 +5,17 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import oogasalad.FilePicker;
-import oogasalad.GameData;
 import oogasalad.model.parsing.ParserData;
 import oogasalad.model.parsing.Parser;
 import oogasalad.PropertyObservable;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
-import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.usables.Usable;
-import oogasalad.model.utilities.usables.weapons.*;
-import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
-import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.view.GameView;
 import oogasalad.view.LanguageView;
 import oogasalad.view.StartView;
@@ -48,6 +37,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   private FilePicker fileChooser;
   private Parser parser;
   private ResourceBundle myResources;
+  private ParserData parserData;
   private GameData gameData;
 
 
@@ -63,11 +53,10 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     return fileChooser.getFile();
   }
 
-  public void selectLanguage(){
+  public void selectLanguage() {
     myStage.setScene(myLanguage.getScene());
     myStage.show();
   }
-
 
   private void showStart() {
     myStart = new StartView(myResources);
@@ -94,7 +83,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
   private void loadFile(ResourceBundle resourceBundle) {
     LOG.info("loadFile");
-    ParserData parserData;
     try {
       String path = chooseDataFile().getAbsolutePath();
       parserData = parser.parse(path);
@@ -105,8 +93,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
     } catch (NullPointerException e) {
       e.printStackTrace();
       return;
-    }
-    catch (ParserException e) {
+    } catch (ParserException e) {
       showError(e.getMessage());
       return;
     }
@@ -114,35 +101,17 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
 
   private void languageSelected(ResourceBundle resourceBundle) {
     myResources = resourceBundle;
-    System.out.println("Reached here.");
     showStart();
   }
 
   private void createGameData(ParserData data) {
-    //testing win condition code
-    List<WinCondition> dummyWinConditions = new ArrayList<WinCondition>();
-    dummyWinConditions.add(new LoseXShipsLossCondition(2));
-
-    List<Usable> dummyUsables = new ArrayList<Usable>();
-    Map<Coordinate, Integer> coordinateMap = new HashMap<>();
-    coordinateMap.put(new Coordinate(0, 0), 1);
-    coordinateMap.put(new Coordinate(-1, 0), 1);
-    coordinateMap.put(new Coordinate(0, 1), 1);
-    coordinateMap.put(new Coordinate(1, 0), 1);
-    coordinateMap.put(new Coordinate(0, -1), 1);
-    dummyUsables.add(new BasicShot());
-    dummyUsables.add(new ClusterShot("Cluster Shot :)", 1, coordinateMap));
-    dummyUsables.add(new MoltovShot("Molotov FIRE", 10, 1));
-    dummyUsables.add(new BurnShot("BURN", 5, 1, 5));
-
-    Map<String, Integer> startingInventory = new HashMap<>();
-    startingInventory.put("Basic Shot", Integer.MAX_VALUE);
-    startingInventory.put("Cluster Shot :)", 2);
-
     PlayerFactoryRecord pr = PlayerFactory.initializePlayers(data.board(), data.players(),
-        startingInventory, data.decisionEngines());
+        data.playerInventory(), data.decisionEngines());
     Map<Player, DecisionEngine> engineMap = pr.engineMap();
-    gameData = new GameData(pr.playerList(), data.board(), data.pieces(), dummyWinConditions, dummyUsables, startingInventory, engineMap);
+    gameData = new GameData(pr.playerList(), data.pieces(), data.board(), engineMap,
+        data.winConditions(), data.cellStateColorMap(), data.weapons(), data.specialIslands(),
+        data.powerUps(), data.playerInventory(), data.allUsables(), data.shotsPerTurn(),
+        data.shipMovementRate(), data.gold());
   }
 
   private void createGame() {

@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import oogasalad.GameData;
+import javafx.scene.paint.Color;
+import oogasalad.controller.GameData;
 import oogasalad.controller.GameManager;
 import oogasalad.controller.GameSetup;
 import oogasalad.controller.PlayerFactory;
@@ -16,10 +17,14 @@ import oogasalad.controller.PlayerFactoryRecord;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
+import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.items.Item;
+import oogasalad.model.utilities.usables.weapons.Weapon;
+import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.view.GameView;
-import oogasalad.view.Info;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -86,7 +91,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testPlacePiece() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
@@ -105,7 +110,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustment() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList2, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }

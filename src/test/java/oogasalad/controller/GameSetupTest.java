@@ -5,17 +5,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.stage.Stage;
-import oogasalad.GameData;
+import javafx.scene.paint.Color;
 import oogasalad.model.players.AIPlayer;
+import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.HumanPlayer;
+import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
-import oogasalad.model.utilities.tiles.Cell;
+import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.items.Item;
+import oogasalad.model.utilities.usables.weapons.Weapon;
+import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.view.SetupView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,8 +66,9 @@ public class GameSetupTest extends DukeApplicationTest {
     pieceList1.add(dummyShip1);
     pieceList2.add(dummyShip1);
     pieceList2.add(dummyShip2);
-    gd1 = new GameData(pfr.playerList(), cellBoard, pieceList1, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), pfr.engineMap());
-    gd2 = new GameData(pfr.playerList(), cellBoard, pieceList2, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), pfr.engineMap());
+
+    gd1 = new GameData(pfr.playerList(), pieceList1, cellBoard, pfr.engineMap(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
+    gd2 = new GameData(pfr.playerList(), pieceList2, cellBoard, pfr.engineMap(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
   }
 
   // Commented out these tests because GameSetup now takes in GameData with the players already

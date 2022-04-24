@@ -10,8 +10,8 @@ import java.util.Properties;
 import oogasalad.model.parsing.GSONHelper;
 import oogasalad.model.parsing.ParsedElement;
 import oogasalad.model.parsing.ParserException;
-import oogasalad.model.utilities.Item;
 import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.items.Item;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

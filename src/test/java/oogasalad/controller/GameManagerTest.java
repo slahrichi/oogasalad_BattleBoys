@@ -8,13 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import oogasalad.GameData;
+import javafx.scene.paint.Color;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
+import oogasalad.model.utilities.tiles.IslandCell;
+import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.items.Item;
+import oogasalad.model.utilities.usables.weapons.Weapon;
 import oogasalad.model.utilities.winconditions.HaveXGoldWinCondition;
 import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.winconditions.WinCondition;
@@ -82,7 +86,7 @@ public class GameManagerTest extends DukeApplicationTest {
 
   @Test
   void testGameManagerBasic() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, wc, new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -109,17 +113,17 @@ public class GameManagerTest extends DukeApplicationTest {
 
   @Test
   void testInvalidInputs() {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, wc, new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, wc, new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> gm = new GameManager(gd, myResources));
     assertThrows(NullPointerException.class, () -> gm.propertyChange(new PropertyChangeEvent(new GameView(
-        list, new ArrayList<Collection<Coordinate>>(),
+        list, new ArrayList<>(),
         new HashMap<>(), new ArrayList<>(), myResources),
         "invalidMethod", null, info)));
   }
 
   @Test
   void testMultiplePieces() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList2, wc, new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, wc, new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -147,8 +151,8 @@ public class GameManagerTest extends DukeApplicationTest {
   @Test
   void testAI() throws InterruptedException {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")),new HashMap<String, Integer>(), new ArrayList<>(Arrays.asList("None", "Easy")));
-    GameData gd = new GameData(pfr.playerList(), cellBoard, pieceList2, wc, new ArrayList<>(), new HashMap<>(), pfr.engineMap());
+        Arrays.asList("HumanPlayer", "AIPlayer")),new HashMap<>(), new ArrayList<>(Arrays.asList("None", "Easy")));
+    GameData gd = new GameData(pfr.playerList(), pieceList2, cellBoard, pfr.engineMap(), wc, new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),
@@ -171,8 +175,8 @@ public class GameManagerTest extends DukeApplicationTest {
 
   @Test
   void testWinStateCondition() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(Arrays.asList(
-        new HaveXGoldWinCondition(0))), new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, new ArrayList<>(Arrays.asList(
+        new HaveXGoldWinCondition(0))), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
     javafxRun(() -> gs.propertyChange(new PropertyChangeEvent(gs.getSetupView(),

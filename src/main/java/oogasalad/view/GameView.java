@@ -2,46 +2,31 @@ package oogasalad.view;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URISyntaxException;
 import java.util.*;
-
 import java.util.function.Consumer;
 import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
-
 import oogasalad.model.utilities.usables.Usable;
-import oogasalad.com.stripe.StripeIntegration;
 import oogasalad.view.board.BoardView;
 import oogasalad.view.board.EnemyBoardView;
 import oogasalad.view.board.GameBoardView;
@@ -161,8 +146,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
     currentUsableRelativeCoords = new ArrayList<>(Arrays.asList(new Coordinate(0, 0)));
-    loserStage = new Stage();
-    shopStage = new Stage();
+    Platform.runLater(() -> {
+      loserStage = new Stage();
+      shopStage = new Stage();
+    });
     playerIDToNames = idToNames;
     myResources = resourceBundle;
     initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerUsables);
@@ -599,5 +586,4 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     alertNode.setId("alert");
     alert.show();
   }
-
 }
