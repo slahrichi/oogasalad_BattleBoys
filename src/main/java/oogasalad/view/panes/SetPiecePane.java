@@ -3,6 +3,7 @@ package oogasalad.view.panes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
@@ -27,8 +28,9 @@ public class SetPiecePane extends TitledPane {
   private static final String INDICATOR_ID = "shipBox";
   private static final double INDICATOR_SPACING = 20;
   private static final double PANE_WIDTH = 300;
+  private static final double SHIP_WIDTH = 200;
   private static final String PANE_ID = "shipPane";
-  private static final String LABEL_TEXT = "All ships placed. Press confirm to move on.";
+  private static final String LABEL_TEXT_RESOURCE = "SetPieceText";
   private static final String LABEL_ID = "all-ships-placed-label";
 
   // The visual representations of all ships to be shown in this pane
@@ -39,11 +41,14 @@ public class SetPiecePane extends TitledPane {
   private boolean lastPiecePlaced = false;
   private double myShipSize;
 
+  private static ResourceBundle myResources;
+
   /**
    * Class constructor.
    * @param size
    */
-  public SetPiecePane(double size) {
+  public SetPiecePane(double size, ResourceBundle resourceBundle) {
+    myResources = resourceBundle;
     myShipSize = size;
     shipViews = new ArrayList<>();
     shipIndicatorsBox = BoxMaker.makeVBox(INDICATOR_ID, INDICATOR_SPACING, Pos.CENTER);
@@ -83,8 +88,8 @@ public class SetPiecePane extends TitledPane {
    */
   public void showListCompletion() {
     shipIndicatorsBox.getChildren().clear();
-    Label shipsPlaced = LabelMaker.makeLabel(LABEL_TEXT, LABEL_ID);
-    shipsPlaced.setMaxWidth(200);
+    Label shipsPlaced = LabelMaker.makeLabel(myResources.getString(LABEL_TEXT_RESOURCE), LABEL_ID);
+    shipsPlaced.setMaxWidth(SHIP_WIDTH);
     shipsPlaced.setWrapText(true);
     shipIndicatorsBox.getChildren().add(shipsPlaced);
   }

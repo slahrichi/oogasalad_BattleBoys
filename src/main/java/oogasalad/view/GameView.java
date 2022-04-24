@@ -246,7 +246,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       }
     }, "Stripe");
 
-    piecesRemainingPane = new SetPiecePane(20);
+    piecesRemainingPane = new SetPiecePane(20, myResources);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
 
     setupPieceLegendPane();
