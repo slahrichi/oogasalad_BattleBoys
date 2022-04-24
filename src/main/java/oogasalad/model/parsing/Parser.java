@@ -99,7 +99,8 @@ public class Parser {
             p.getClass().equals(ParseWeapons.class) ||
             p.getClass().equals(ParseSpecialIslands.class) ||
             p.getClass().equals(ParsePowerUps.class) ||
-            p.getClass().equals(ParseAllUsables.class)) {
+            p.getClass().equals(ParseAllUsables.class)
+        ) {
           parsedElements.add(null);
         } else {
           parsedElements.add(p.parse(props));
