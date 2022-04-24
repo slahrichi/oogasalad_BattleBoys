@@ -1,4 +1,4 @@
-package oogasalad.model.parsing;
+package util.parsing;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import oogasalad.ParserData;
+import oogasalad.model.parsing.ParserData;
+import oogasalad.model.parsing.Parser;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
@@ -77,17 +79,18 @@ public class ParserTest {
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER},
         {CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER,CellState.WATER}};
 
-    exampleParserData = new ParserData(players, pieceList, dummyBoard, decisionEngines);
-
+    //exampleParserData = new ParserData(players, pieceList, dummyBoard, decisionEngines);
+    exampleParserData = null;
+    //TODO: delete this
   }
 
   /*
   @Test
   void playerDataReflection() throws ParserException{
-    List<Object> parsedElements = List.of(examplePlayerData.players(),
-        examplePlayerData.pieces(), examplePlayerData.board(), examplePlayerData.decisionEngines());
-    PlayerData returnedPlayerData = parser.getPlayerData(parsedElements);
-    assertEquals(examplePlayerData, returnedPlayerData);
+    List<Object> parsedElements = List.of(exampleParserData.players(),
+        exampleParserData.pieces(), exampleParserData.board(), exampleParserData.decisionEngines());
+    ParserData returnedPlayerData = parser.getPlayerData(parsedElements);
+    assertEquals(exampleParserData, returnedPlayerData);
   }
 
    */

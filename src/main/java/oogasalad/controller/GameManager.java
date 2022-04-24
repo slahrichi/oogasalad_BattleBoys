@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.scene.Scene;
-import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.EngineRecord;
@@ -23,7 +22,7 @@ import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
-import oogasalad.model.utilities.usables.weapons.EmpoweredShot;
+import oogasalad.model.utilities.usables.weapons.BlastZoneShot;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
@@ -52,6 +51,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private Usable currentUsable;
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String DUMMY_INFO = "";
+  private static final String STRIPE = "stripe";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private ResourceBundle myResources;
 
@@ -62,10 +62,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
    */
     initialize(data, resourceBundle);
     view = gameViewManager.getView();
-    view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
-        playerQueue.peek().getMyCurrency());
     view.addObserver(this);
-
+    view.updateLabels(allowedShots, playerQueue.peek().getNumPieces(),
+            playerQueue.peek().getMyCurrency());
     conditionHandler = new ConditionHandler(playerQueue, idMap, data.winConditions(), view, gameViewManager,
         whenToMovePieces);
   }
@@ -88,28 +87,21 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void initialize(GameData data, ResourceBundle resources) {
-    currentUsable = new BasicShot();
+    currentUsable = new BlastZoneShot("zone", 100, 3);
     myResources = resources;
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
-
-
     numShots = 0;
-    whenToMovePieces = 1; //should change this to use gamedata from parser
-    allowedShots = 2;
+    whenToMovePieces = data.shipMovementRate(); //should change this to use gamedata from parser
+    allowedShots = data.shotsPerTurn();
     createIDMap(data.players());
     engineMap = data.engineMap();
-
-    //this should be replaced by gameData
-    List<Usable> dummyUsables = new ArrayList<Usable>();
-    dummyUsables.add(new BasicShot());
-    dummyUsables.add(new EmpoweredShot("Double Damage", 1, 2));
-
-    usablesIDMap = new HashMap<String, Usable>();
-    for(Usable currUsable: dummyUsables) {
+    usablesIDMap = new HashMap<>();
+    for(Usable currUsable: data.allUsables()) {
       usablesIDMap.put(currUsable.getMyID(), currUsable);
     }
-    gameViewManager = new GameViewManager(data, idMap, allowedShots, myResources);
+    gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
+
   }
 
   private void createIDMap(List<Player> playerList) {
@@ -132,7 +124,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
-      e.printStackTrace();
       throw new NullPointerException(INVALID_METHOD);
     }
   }
@@ -140,11 +131,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void equipUsable(String id) {
     // set currentUsable equal to map.get(info.getID());
     currentUsable = usablesIDMap.get(id);
-    LOG.info(String.format("Current Weapon: %s"), id);
+    view.setCurrentUsable(id, usablesIDMap.get(id).getRelativeCoordShots().keySet());
+    LOG.info(String.format("Current Weapon: %s", id));
   }
 
   private void buyItem(String id) {
-    playerQueue.peek().makePurchase(usablesIDMap.get(id).getPrice(), id);
+    String genericItem = id.replace(STRIPE, "");
+    playerQueue.peek().makePurchase(usablesIDMap.get(genericItem).getPrice(), id);
+    view.updateLabels(allowedShots-numShots, playerQueue.peek().getNumPieces(),
+        playerQueue.peek().getMyCurrency());
+    view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
   }
 
   private void applyUsable(String clickInfo) {
@@ -177,6 +173,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void updateConditions(int id) {
     conditionHandler.applyWinConditions();
+    view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
     if (idMap.containsKey(id)) {
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
       gameViewManager.updatePiecesLeft(piecesLeft);
@@ -207,9 +204,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
     gameViewManager.sendUpdatesToView(player);
-    System.out.println(4);
     view.moveToNextPlayer(player.getName());
-    System.out.println(5);
+    currentUsable = new BasicShot();
     handleAI();
   }
 
@@ -243,7 +239,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private boolean makeShot(Coordinate c, int id, Usable weaponUsed) {
     Player currentPlayer = playerQueue.peek();
-    Map<String, Integer> currentInventory = currentPlayer.getInventory();
+    Map<String, Integer> currentInventory = currentPlayer.getMyInventory();
     Player enemy = idMap.get(id);
     try {
       Map<Coordinate, CellState> hitResults = weaponUsed.getFunction().apply(c, enemy.getBoard());
@@ -260,13 +256,14 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       numShots++;
 
       //this removes one weapon when used and removes it from the inventory when all are used.
-      //currentInventory.put(currentUsable.getMyID(),currentInventory.get(currentUsable.getMyID())-1 );
-      //if(currentInventory.get(currentUsable.getMyID())<=0) {
-      //  currentInventory.remove(currentUsable.getMyID());
-      //}
+      currentInventory.put(currentUsable.getMyID(),currentInventory.get(currentUsable.getMyID())-1 );
+      if(currentInventory.get(currentUsable.getMyID())<=0) {
+        currentInventory.remove(currentUsable.getMyID());
+      }
 
       return true;
     } catch (Exception e) {
+      e.printStackTrace();
       return false;
     }
   }
@@ -276,6 +273,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       DecisionEngine engine = engineMap.get(player);
       engine.adjustStrategy(result);
     }
+  }
+
+  public void addRemainingShots(int count){
+    numShots +=count;
   }
 
   public GameViewManager getGameViewManager() {

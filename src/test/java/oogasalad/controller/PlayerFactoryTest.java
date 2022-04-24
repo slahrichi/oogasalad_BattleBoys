@@ -1,9 +1,10 @@
 package oogasalad.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import oogasalad.ParserData;
+import oogasalad.model.parsing.ParserData;
 import oogasalad.model.parsing.Parser;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.players.DecisionEngine;
@@ -31,20 +32,20 @@ public class PlayerFactoryTest {
   @BeforeEach
   void setup() {
     Parser parser = new Parser();
-    ParserData parserData = null;
+    ParserData gameData = null;
     try {
-      parserData = parser.parse("src/main/resources/ExampleDataFile.properties");
+      gameData = parser.parse("src/main/resources/ExampleDataFile.properties");
     } catch (ParserException e) {
       e.printStackTrace();
     }
-    playerTypes = parserData.players();
-    board = parserData.board();
-    difficulties = new ArrayList<>(parserData.decisionEngines());
+    playerTypes = gameData.players();
+    board = gameData.board();
+    difficulties = new ArrayList<>(gameData.decisionEngines());
   }
 
   @Test
   void testBasicPlayerFactory() {
-    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(board, playerTypes, difficulties);
+    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties);
     List<Player> playerList = pfr.playerList();
     assertEquals(playerList.size(), 3);
     Map<Player, DecisionEngine> map = pfr.engineMap();
@@ -57,14 +58,14 @@ public class PlayerFactoryTest {
   @Test
   void testInvalidPlayerType() {
     playerTypes.add("Playyer");
-    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, difficulties).
+    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties).
         playerList());
   }
 
   @Test
   void testInvalidPlayerTyle() {
     difficulties.set(1, "Impahssible");
-    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, difficulties).
+    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties).
         playerList());
   }
 

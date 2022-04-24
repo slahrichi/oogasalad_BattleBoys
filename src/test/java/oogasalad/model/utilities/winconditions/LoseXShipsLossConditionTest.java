@@ -26,7 +26,7 @@ class LoseXShipsLossConditionTest {
   void setup() {
     Piece staticPiece = makeStaticPiece();
     testBoard = makeBoard();
-    testPlayer = new HumanPlayer(testBoard, 0, new HashMap<Integer, MarkerBoard>());
+    testPlayer = new HumanPlayer(testBoard, 0, new HashMap<>(), 100, new HashMap<Integer, MarkerBoard>());
     testPlayer.placePiece(staticPiece, new Coordinate(0,0));
     testCondition = new LoseXShipsLossCondition(1);
   }

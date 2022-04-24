@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ResourceBundle;
 import javafx.stage.Stage;
+import oogasalad.view.LanguageView;
 import oogasalad.view.StartView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,17 +16,22 @@ import util.DukeApplicationTest;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+/**
+ * Comprehensive testing for Game
+ *
+ * @author Matthew Giglio
+ */
 public class GameTest extends DukeApplicationTest {
 
 private Game spy;
+private File file;
 
   private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
 
   @BeforeEach
   void setup() {
-
+    file = new File(System.getProperty("user.dir") + "/data/ExampleDataFile.properties");
   }
 
   @Test
@@ -33,8 +39,10 @@ private Game spy;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") + "/data/ExampleDataFile.properties")).when(spy).chooseDataFile();
-      spy.showStart();
+      Mockito.doReturn(file).when(spy).chooseDataFile();
+      spy.selectLanguage();
+      spy.propertyChange(new PropertyChangeEvent(new LanguageView(),
+          "languageSelected", null, myResources));
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
     });
@@ -47,8 +55,11 @@ private Game spy;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") + "/data/FakeFile.properties")).when(spy).chooseDataFile();
-      spy.showStart();
+      Mockito.doReturn(new File(System.getProperty("user.dir")
+          + "/data/FakeFile.properties")).when(spy).chooseDataFile();
+      spy.selectLanguage();
+      spy.propertyChange(new PropertyChangeEvent(new LanguageView(),
+          "languageSelected", null, myResources));
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
     });
@@ -61,9 +72,12 @@ private Game spy;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") + "/data/FakeFile.properties")).when(spy).chooseDataFile();
-      spy.showStart();
-      assertThrows(NullPointerException.class, () -> spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
+      Mockito.doReturn(file).when(spy).chooseDataFile();
+      spy.selectLanguage();
+      spy.propertyChange(new PropertyChangeEvent(new LanguageView(),
+          "languageSelected", null, myResources));
+      assertThrows(NullPointerException.class, () ->
+          spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "fakeMethod", null, null)));
     });
   }
@@ -73,8 +87,10 @@ private Game spy;
     javafxRun(() ->
     {
       spy = Mockito.spy(new Game(new Stage()));
-      Mockito.doReturn(new File(System.getProperty("user.dir") + "/data/ExampleDataFile.properties")).when(spy).chooseDataFile();
-      spy.showStart();
+      Mockito.doReturn(file).when(spy).chooseDataFile();
+      spy.selectLanguage();
+      spy.propertyChange(new PropertyChangeEvent(new LanguageView(),
+          "languageSelected", null, myResources));
       spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
           "loadFile", null, null));
       javafxRun(() -> spy.propertyChange(new PropertyChangeEvent(new StartView(myResources),
@@ -82,6 +98,6 @@ private Game spy;
     });
     Thread.sleep(1000);
     assertNotEquals(null, lookup("#view-shop").query());
-
   }
+
 }

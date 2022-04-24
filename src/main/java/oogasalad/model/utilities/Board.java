@@ -6,9 +6,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
@@ -154,7 +156,9 @@ public class Board {
   }
 
   public Piece getPiece(int id){
-    return myPieces.get(id);
+    Piece myPiece = myPieces.get(id);
+    System.out.println(myPiece.getID());
+    return myPiece;
   }
   public int getNumPiecesSunk() {
     return myNumShipsSunk;
@@ -171,6 +175,26 @@ public class Board {
   public CellInterface getCell(Coordinate c){
     return boardMap.get(c);
   }
+
+
+
+  public void randomizeIslands(List<IslandCell> islands){
+    islandsInPlay = islands;
+    List<Coordinate> freeCells = new ArrayList<Coordinate>();
+    for(Coordinate c: boardMap.keySet()){
+      if(boardMap.get(c).canCarryObject()){
+        freeCells.add(c);
+      }
+    }
+    Random rand = new Random();
+    for(IslandCell island: islandsInPlay){
+       int index = rand.nextInt(freeCells.size());
+       island.updateCoordinates(freeCells.get(index).getRow(), freeCells.get(index).getColumn());
+       boardMap.replace(freeCells.get(index), island);
+       freeCells.remove(index);
+    }
+  }
+
 
   public boolean setIslandsInPlay(List<IslandCell> islands){
     if(islandsInPlay == null)
@@ -201,6 +225,7 @@ public class Board {
       for(Modifiers mod: cellMods){
         mod.modifierFunction(this).accept(this);
       }
+      retModifers.addAll(cellMods);
     }
   return retModifers;
   }

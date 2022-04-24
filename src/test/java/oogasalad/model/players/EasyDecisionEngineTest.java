@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import oogasalad.GameData;
+import javafx.scene.paint.Color;
+import oogasalad.controller.GameData;
 import oogasalad.controller.GameManager;
 import oogasalad.controller.GameSetup;
 import oogasalad.controller.PlayerFactory;
@@ -16,10 +17,14 @@ import oogasalad.controller.PlayerFactoryRecord;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
+import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.items.Item;
+import oogasalad.model.utilities.usables.weapons.Weapon;
+import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.view.GameView;
-import oogasalad.view.Info;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
@@ -55,7 +60,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100, new ArrayList<>(Arrays.asList("None", "Easy")));
     List<Player> engineList = new ArrayList<>(pfr.engineMap().keySet());
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
@@ -86,7 +91,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testPlacePiece() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
@@ -105,7 +110,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustment() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList2, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
@@ -123,20 +128,20 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
     Thread.sleep(1500);
     Coordinate c = findCoordinateStruck();
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new HashMap<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
     CellState[][] enemyBoard = playerList.get(0).getBoard().getCurrentBoardState();
-    Thread.sleep(1500);
+    Thread.sleep(2000);
     assertEquals(CellState.SHIP_SUNKEN, enemyBoard[c.getRow()][c.getColumn()]);
   }
 
@@ -144,7 +149,7 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
     CellState[][] board = playerList.get(0).getBoard().getCurrentBoardState();
     for (int i = 0; i < board.length; i++) {
       for (int j = 0; j < board[0].length; j++) {
-        if (board[i][j] == CellState.SHIP_SUNKEN) {
+        if (board[i][j] == CellState.SHIP_SUNKEN || board[i][j] == CellState.SHIP_DAMAGED) {
           return new Coordinate(i, j);
         }
       }

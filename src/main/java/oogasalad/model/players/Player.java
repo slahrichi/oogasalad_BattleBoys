@@ -35,7 +35,7 @@ public interface Player {
      */
     public void makePurchase(int amount, String id);
 
-    Map<String, Integer> getInventory();
+    Map<String, Integer> getMyInventory();
 
     /**
      * Players need to place their pieces at the start of the game and might be able to move them
@@ -88,5 +88,7 @@ public interface Player {
     int getMyCurrency();
 
     void updateShot(CellState hitResult); // new method for updating hitsMap
+    void addUsableToInventory(Usable usableToAdd);
+
 }
 

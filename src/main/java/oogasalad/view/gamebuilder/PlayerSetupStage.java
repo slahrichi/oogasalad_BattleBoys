@@ -8,19 +8,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 
+
+/**
+ * Creates a window to add all the desired player types, extends BuilderStage, depends on JavaFX,
+ * makes no assumptions.
+ *
+ * @author Luka Mdivani
+ */
 public class PlayerSetupStage extends BuilderStage {
 
   private BorderPane myPane;
-  private String availableWinConditionTypes;
   private String availablePlayerTypes;
   private String availableEngineTypes;
   private String needEngineTypes;
   private String selectedEngineType;
   private ComboBox engineTypeComboBox;
   private HBox playerSelectionBox;
-  private List<String> playerList=new ArrayList<>();
-  private List<String> engineList=new ArrayList<>();
-
+  private List<String> playerList = new ArrayList<>();
+  private List<String> engineList = new ArrayList<>();
 
   public PlayerSetupStage() {
     myPane = new BorderPane();
@@ -39,7 +44,8 @@ public class PlayerSetupStage extends BuilderStage {
     ComboBox comboBox = makeComboBox(availablePlayerTypes.split(","));
     result.getChildren().add(comboBox);
     result.getChildren()
-        .addAll(makeButton("Select", e -> handlePlayerSelection(comboBox)), playerSelectionBox);
+        .addAll(makeButton(getDictionaryResources().getString("selectPrompt"),
+            e -> handlePlayerSelection(comboBox)), playerSelectionBox);
 
     return result;
   }
@@ -58,11 +64,12 @@ public class PlayerSetupStage extends BuilderStage {
         addEngineSelectionOption(playerSelectionBox, selection);
       }
       playerSelectionBox.getChildren()
-          .add(makeButton("Add Player", e -> addSavePlayerButton(selection, engineTypeComboBox)));
+          .add(makeButton(getDictionaryResources().getString("addPlayerPrompt"),
+              e -> addSavePlayerButton(selection, engineTypeComboBox)));
 
 
     } catch (NullPointerException e) {
-      System.out.println("Please Make Selection");
+      showError(getDictionaryResources().getString("makeSelectionError"));
       e.printStackTrace();
     }
   }
@@ -77,8 +84,18 @@ public class PlayerSetupStage extends BuilderStage {
       }
     }
     addToObjectList(selectedPlayerType + selectedEngineType);
-    playerList.add(selectedPlayerType+selectedEngineType);
+    playerList.add(selectedPlayerType);
+    engineList.add(selectedEngineType);
 
+  }
+
+  /**
+   * returns a list of corresponding decision engines.
+   *
+   * @return the list of DecisionEngines for each added player
+   */
+  public List<String> getEngineList() {
+    return engineList;
   }
 
   private void addEngineSelectionOption(HBox result, String selection) {
@@ -103,8 +120,7 @@ public class PlayerSetupStage extends BuilderStage {
   }
 
   @Override
-  protected Object saveAndContinue() {
+  protected void saveAndContinue() {
     closeWindow();
-    return null;
   }
 }

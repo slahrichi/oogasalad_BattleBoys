@@ -23,6 +23,7 @@ public class PlayerFactory {
   private static CellState[][] myBoard;
   private static int myRange;
   private static Map<Player, DecisionEngine> engineMap;
+  private static Map<String, Integer> inventory;
   private static List<String> myDifficulties;
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String AI_PLAYER = "AIPlayer";
@@ -39,27 +40,28 @@ public class PlayerFactory {
    * @return
    */
   public static PlayerFactoryRecord initializePlayers(CellState[][] board, List<String> playerTypes,
-      List<String> decisionEngines) {
+      Map<String, Integer> startingInventory, int startingGold, List<String> decisionEngines) {
     myBoard = board;
     myRange = playerTypes.size();
     engineMap = new HashMap<>();
+    inventory = startingInventory;
     myDifficulties = decisionEngines;
     List<Player> playerList = new ArrayList<>();
     for (int i = 0; i < playerTypes.size(); i++) {
-      playerList.add(createPlayer(playerTypes.get(i), myBoard, i));
+      playerList.add(createPlayer(playerTypes.get(i), myBoard, inventory, startingGold, i));
     }
     return new PlayerFactoryRecord(playerList, engineMap);
   }
 
-  private static Player createPlayer(String playerType, CellState[][] board, int id) {
+  private static Player createPlayer(String playerType, CellState[][] board, Map<String, Integer> inventory, int startingGold, int id) {
     Board b = new Board(board);
     MarkerBoard mb = new MarkerBoard(board);
     Map<Integer, MarkerBoard> enemyMap = createEnemyMap(mb, id);
     Player p;
     try {
       p = (Player) Class.forName(FILEPATH + playerType).getConstructor(Board.class, int.class,
-              Map.class)
-          .newInstance(b, id, enemyMap);
+              Map.class, int.class, Map.class)
+          .newInstance(b, id, inventory, startingGold, enemyMap);
       if (playerType.equals(AI_PLAYER)) {
         createEngine(p, id, enemyMap);
       }

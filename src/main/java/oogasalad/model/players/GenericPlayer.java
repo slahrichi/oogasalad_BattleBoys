@@ -4,36 +4,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import oogasalad.controller.GameManager;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.model.utilities.usables.Usable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public abstract class GenericPlayer implements Player{
 
+  private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private int myPiecesLeft;
   private int myCurrency;
-  private Map<String, Integer> inventory; //change inventory to use id of usables
+  private Map<String, Integer> myInventory;
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Map<CellState, Integer> myHitsMap; //new instance variable
 
   private Board myBoard;
   private int myId;
-
   private static final String PLAYER_PREFIX = "Player ";
+  private static final String STRIPE = "stripe";
   private String myName;
 
-  public GenericPlayer(Board board, int id, Map<Integer, MarkerBoard> enemyMap) {
+  public GenericPlayer(Board board, int id, Map<String, Integer> inventory, int startingGold, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
-    inventory = new HashMap<>();
-    inventory.put("BasicShot", Integer.MAX_VALUE);
-    myCurrency = 0;
+    myInventory = new HashMap<>(inventory);
+    myInventory.put("Basic Shot", Integer.MAX_VALUE);
+    myCurrency = startingGold;
     myEnemyMap = enemyMap;
-    myHitsMap = new HashMap<CellState, Integer>();
+    myHitsMap = new HashMap<>();
     myId = id;
     myName = PLAYER_PREFIX + (id + 1);
   }
@@ -42,12 +47,17 @@ public abstract class GenericPlayer implements Player{
   @Override
   public void makePurchase(int price, String usableID) {
     if (price <= myCurrency) {
-      inventory.put(usableID, inventory.getOrDefault(usableID, 0) + 1);
+      String genericItem = usableID.replace(STRIPE, "");
+      LOG.info(String.format("Bought %s for %d gold. Remaining Gold: %d", genericItem, price, myCurrency));
+      myInventory.put(genericItem, myInventory.getOrDefault(genericItem, 0) + 1);
+      if (!usableID.startsWith(STRIPE)) {
+        myCurrency -= price;
+      }
     }
   }
 
-  public Map<String, Integer> getInventory() {
-    return inventory;
+  public Map<String, Integer> getMyInventory() {
+    return myInventory;
   }
 
   public void removePiece(String id) {
@@ -105,7 +115,7 @@ public abstract class GenericPlayer implements Player{
   }
 
   private PlayerRecord makeRecord() {
-    return new PlayerRecord(myPiecesLeft, myCurrency, myHitsMap, inventory, myBoard);
+    return new PlayerRecord(myPiecesLeft, myCurrency, myHitsMap, myInventory, myBoard);
   }
 
   public Board getBoard() {
@@ -145,5 +155,12 @@ public abstract class GenericPlayer implements Player{
   public void updateShot(CellState hitResult) {
     myHitsMap.putIfAbsent(hitResult, 0);
     myHitsMap.put(hitResult, myHitsMap.get(hitResult)+1);
+  }
+
+  public void addUsableToInventory(Usable usable){
+    if(myInventory.containsKey(usable.getMyID()))
+      myInventory.put(usable.getMyID(), myInventory.get(usable.getMyID()) + 1);
+    else
+      myInventory.put(usable.getMyID(), 1);
   }
 }

@@ -180,7 +180,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     // FIXME: Move magic numbers to private static / resourcebundle
 
     setupLegendPane();
-    shipPane = new SetPiecePane(SET_PIECE_PANE_SIZE);
+    shipPane = new SetPiecePane(SET_PIECE_PANE_SIZE, myResources);
     shipPane.setText(myResources.getString(CURRENT_SHIP_RESOURCE));
 
 
