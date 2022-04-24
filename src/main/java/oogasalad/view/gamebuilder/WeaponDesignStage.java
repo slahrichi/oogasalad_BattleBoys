@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
@@ -17,16 +16,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * Creates a design environment for weapons, generates all required variable design options for
+ * specific weapons, subclass of BuilderStage, depends on JavaFX. Uses reflection to create correct
+ * objects.
+ *
+ * @author Luka Mdivani
+ */
 public class WeaponDesignStage extends BuilderStage {
 
   private BorderPane myPane;
   private int[][] stateMap;
   private String availableUsableTypes;
-  private Stage myStage;
   private final int MAX_DIMENSION = 10;
   private VBox centerPane;
   private Map<String, TextArea> varInputBoxes;
@@ -46,7 +50,7 @@ public class WeaponDesignStage extends BuilderStage {
   private List<Class<?>> parameterTypesList;
   private List<Object> weaponList = new ArrayList<>();
   private String classPath;
-  private final String PATH="oogasalad.model.utilities.usables.weapons.";
+  private final String PATH = "oogasalad.model.utilities.usables.weapons.";
 
   public WeaponDesignStage() {
     colorList.add(DEFAULT_INACTIVE_COLOR);
@@ -56,22 +60,29 @@ public class WeaponDesignStage extends BuilderStage {
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     needAOEMapList = getMyBuilderResources().getString("needsAOEMapWeapon").split(",");
     setUpUsableData();
-    myStage = new Stage();
     myPane.setTop(makeWeaponSelectionPrompt(availableUsableTypes.split(",")));
     myPane.setBottom(makeContinueButton());
     myPane.setRight(setUpObjectView());
     centerPane = new VBox();
 
-    Scene myScene = new Scene(myPane, 1000, 500);
-    myStage.setScene(myScene);
   }
-  protected void setUpUsableData(){
+
+  protected void setUpUsableData() {
     availableUsableTypes = getMyBuilderResources().getString("possibleWeaponType");
   }
-  protected void setClassPath(String path){classPath=path;}
-  protected void setUpClassPath(){classPath=PATH;}
 
-  protected void setUsableDataForKey(String newData){availableUsableTypes=newData;}
+  protected void setClassPath(String path) {
+    classPath = path;
+  }
+
+  protected void setUpClassPath() {
+    classPath = PATH;
+  }
+
+  protected void setUsableDataForKey(String newData) {
+    availableUsableTypes = newData;
+  }
+
   @Override
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
     Rectangle newCell = new Rectangle(xPos, yPos, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE);
@@ -91,7 +102,7 @@ public class WeaponDesignStage extends BuilderStage {
 
   @Override
   protected Object launch() {
-    myStage.showAndWait();
+    setUpStage(myPane);
     return weaponList;
   }
 
@@ -110,7 +121,7 @@ public class WeaponDesignStage extends BuilderStage {
 
   @Override
   protected void saveAndContinue() {
-    myStage.close();
+    closeWindow();
 
   }
 
@@ -119,7 +130,8 @@ public class WeaponDesignStage extends BuilderStage {
     ComboBox comboBox = makeComboBox(options);
 
     result.getChildren()
-        .addAll(comboBox, makeButton("Select", e -> handleWeaponChoice(comboBox)));
+        .addAll(comboBox, makeButton(getDictionaryResources().getString("selectionPrompt"),
+            e -> handleWeaponChoice(comboBox)));
 
     return result;
   }
@@ -142,12 +154,12 @@ public class WeaponDesignStage extends BuilderStage {
       if (needsGridDesignOption(selection)) {
         addGridDesignOption();
       }
-      centerPane.getChildren().add(makeButton("Save", e -> saveWeapon(selection)));
+      centerPane.getChildren().add(
+          makeButton(getDictionaryResources().getString("savePrompt"), e -> saveWeapon(selection)));
       myPane.setCenter(centerPane);
 
     } catch (NullPointerException e) {
-      System.out.println("Please Make Selection");
-      e.printStackTrace();
+      showError(getDictionaryResources().getString("selectionError"));
     }
   }
 
@@ -207,11 +219,11 @@ public class WeaponDesignStage extends BuilderStage {
 
       parameterTypes = new Class<?>[parameterTypesList.size()];
       parameterTypesList.toArray(parameterTypes);
-      String selectedWeaponClass = classPath+selectedWeapon;
+      String selectedWeaponClass = classPath + selectedWeapon;
       try {
-        weaponList.add( createInstance(selectedWeaponClass, parameterTypes, parameters));
+        weaponList.add(createInstance(selectedWeaponClass, parameterTypes, parameters));
       } catch (IOException e) {
-        e.printStackTrace();
+        showError(getDictionaryResources().getString("reflectionError"));
       }
     }
 
@@ -219,13 +231,11 @@ public class WeaponDesignStage extends BuilderStage {
 
   private void getParameterClasses() {
     for (Object param : parameterList) {
-      if(param instanceof Integer){
+      if (param instanceof Integer) {
         parameterTypesList.add(int.class);
-      }
-      else if(param instanceof HashMap){
+      } else if (param instanceof HashMap) {
         parameterTypesList.add(Map.class);
-      }
-      else {
+      } else {
         parameterTypesList.add(param.getClass());
       }
     }
@@ -244,12 +254,19 @@ public class WeaponDesignStage extends BuilderStage {
   private void addGridDesignOption() {
     damageMatrix = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
-    stateMap[5][5] = 1;
+    int centerCoord = 5;
+    stateMap[centerCoord][centerCoord] = 1;
     centerPane.getChildren().add(new HBox(
         arrangeCells(MAX_DIMENSION, MAX_DIMENSION, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE, stateMap),
         displayColorChoice(DEFAULT_STATE_OPTIONS, colorList)));
   }
-  public String[] getCreatedWeaponIds(){
+
+  /**
+   * returns Ids of all created weapons.
+   *
+   * @return id of all the user created weapons
+   */
+  public String[] getCreatedWeaponIds() {
     return getObjectListAsArray();
   }
 }
