@@ -62,8 +62,7 @@ public class GameViewManager {
     return idToName;
   }
 
-  private List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> inventoryMap) {
-    System.out.println(inventoryMap.entrySet());
+  public List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> inventoryMap) {
     List<UsableRecord> inventory = new ArrayList<>();
     String basicShotID = "Basic Shot";
     String basicShotClassName = "BasicShot";
@@ -71,7 +70,6 @@ public class GameViewManager {
     inventory.add(new UsableRecord(basicShotID, basicShotClassName, basicShotStock));
     for (String id : inventoryMap.keySet()) {
       if (!id.equals("Basic Shot")) {
-        System.out.println(usablesIDMap.get(id).getClass().getSimpleName());
         inventory.add(new UsableRecord(id, usablesIDMap.get(id).getClass().getSimpleName(), inventoryMap.get(id)));
       }
     }

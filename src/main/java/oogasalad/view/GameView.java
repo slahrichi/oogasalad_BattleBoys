@@ -90,7 +90,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String VIEW_PANE_ID = "view-pane";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String SHOT_METHOD = "handleShot";
-  private static final double BOARD_SIZE = 40;
+  private static final double BOARD_SIZE = 20;
   private static final int EXPLOSION_DURATION = 1000;
 
   private static final String BOARD_INDEX_LOG = "Current board index: ";
@@ -191,10 +191,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createInventory() {
     inventory = new InventoryView();
+    inventory.addObserver(this);
     myCenterPane.getChildren().add(inventory.getPane());
   }
 
-  private void updateInventory(List<UsableRecord> usableList) {
+  public void updateInventory(List<UsableRecord> usableList) {
     inventory.updateElements(usableList);
   }
 

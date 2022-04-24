@@ -99,6 +99,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
       setup.addObserver(this);
       myStage.setScene(setup.createScene());
     } catch (NullPointerException e) {
+      e.printStackTrace();
       return;
     }
     catch (ParserException e) {

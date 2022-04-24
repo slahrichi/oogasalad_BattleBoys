@@ -92,8 +92,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     myResources = resources;
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
-
-
     numShots = 0;
     whenToMovePieces = 1; //should change this to use gamedata from parser
     allowedShots = 2;
@@ -103,6 +101,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     for(Usable currUsable: data.usables()) {
       usablesIDMap.put(currUsable.getMyID(), currUsable);
     }
+    System.out.println(usablesIDMap);
     gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
 
   }
@@ -135,7 +134,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void equipUsable(String id) {
     // set currentUsable equal to map.get(info.getID());
     currentUsable = usablesIDMap.get(id);
-    LOG.info(String.format("Current Weapon: %s"), id);
+    LOG.info(String.format("Current Weapon: %s", id));
   }
 
   private void buyItem(String id) {
@@ -172,6 +171,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void updateConditions(int id) {
     conditionHandler.applyWinConditions();
+    view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
     if (idMap.containsKey(id)) {
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
       gameViewManager.updatePiecesLeft(piecesLeft);
@@ -202,9 +202,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
     numShots = 0;
     gameViewManager.sendUpdatesToView(player);
-    System.out.println(4);
     view.moveToNextPlayer(player.getName());
-    System.out.println(5);
+    currentUsable = new BasicShot();
     handleAI();
   }
 
@@ -255,13 +254,14 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       numShots++;
 
       //this removes one weapon when used and removes it from the inventory when all are used.
-      //currentInventory.put(currentUsable.getMyID(),currentInventory.get(currentUsable.getMyID())-1 );
-      //if(currentInventory.get(currentUsable.getMyID())<=0) {
-      //  currentInventory.remove(currentUsable.getMyID());
-      //}
+      currentInventory.put(currentUsable.getMyID(),currentInventory.get(currentUsable.getMyID())-1 );
+      if(currentInventory.get(currentUsable.getMyID())<=0) {
+        currentInventory.remove(currentUsable.getMyID());
+      }
 
       return true;
     } catch (Exception e) {
+      e.printStackTrace();
       return false;
     }
   }
