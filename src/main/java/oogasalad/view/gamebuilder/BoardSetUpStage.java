@@ -81,15 +81,17 @@ public class BoardSetUpStage extends BuilderStage {
     HBox result = new HBox();
     widthInput = makeTextArea();
     heightInput = makeTextArea();
-    Label widthLabel = LabelMaker.makeLabel("Width", "width-label");
-    Label heightLabel = LabelMaker.makeLabel("Height", "height-label");
+    Label widthLabel = LabelMaker.makeLabel(getDictionaryResources().getString("widthPrompt"),
+        "width-label");
+    Label heightLabel = LabelMaker.makeLabel(getDictionaryResources().getString("heightPrompt"),
+        "height-label");
     result.getChildren()
         .addAll(widthLabel, widthInput, heightLabel, heightInput, setDimensionButton());
     return result;
   }
 
   private Button setDimensionButton() {
-    Button result = new Button("Set Dimension");
+    Button result = new Button(getDictionaryResources().getString("dimensionPrompt"));
     result.setOnAction(e -> {
       checkAndSetDimension(widthInput.getText(), widthChange);
       checkAndSetDimension(heightInput.getText(), heightChange);
@@ -101,7 +103,7 @@ public class BoardSetUpStage extends BuilderStage {
     if (!s.isEmpty() && checkIntConversion(s)) {
       changeConsumer.accept(Integer.valueOf(s));
 
-      stateMap = initializeMatrixWithValue(height, width, 0);
+      stateMap = initializeMatrixWithValue(height, width, INITIAL_STATUS);
       drawGrid();
     } else {
       widthInput.clear();
@@ -112,8 +114,7 @@ public class BoardSetUpStage extends BuilderStage {
 
 
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
-    Rectangle newCell = new Rectangle(xPos, yPos,
-        MAX_GRID_WIDTH / width, MAX_GRID_HEIGHT / height);
+    Rectangle newCell = new Rectangle(xPos, yPos, MAX_GRID_WIDTH / width, MAX_GRID_HEIGHT / height);
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {

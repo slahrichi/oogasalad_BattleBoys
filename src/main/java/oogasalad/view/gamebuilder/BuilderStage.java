@@ -34,6 +34,7 @@ import oogasalad.view.maker.LabelMaker;
 public abstract class BuilderStage {
 
   private ResourceBundle myBuilderResources;
+  private ResourceBundle myBuilderDictionaryResources;
   private int selectedType;
   private List<Rectangle> colorOptionList = new ArrayList<>();
   private String itemID;
@@ -55,6 +56,7 @@ public abstract class BuilderStage {
 
   public BuilderStage() {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
+    myBuilderDictionaryResources = ResourceBundle.getBundle("/BuilderDictionary");
     builderUtil = new GameBuilderUtil();
   }
 
@@ -62,6 +64,10 @@ public abstract class BuilderStage {
     objectsListView.setItems(objectList);
     objectsListView.setMaxSize(MAX_OBJECT_LIST_WIDTH, MAX_OBJECT_LIST_HEIGHT);
     return objectsListView;
+  }
+
+  protected ResourceBundle getDictionaryResources() {
+    return myBuilderDictionaryResources;
   }
 
   protected void addToObjectList(String s) {
@@ -209,7 +215,7 @@ public abstract class BuilderStage {
 
   protected Button makeContinueButton() {
 
-    Button continueButton = new Button("Continue");
+    Button continueButton = new Button(getDictionaryResources().getString("continuePrompt"));
     continueButton.setOnAction(e -> saveAndContinue());
     continueButton.setId("ContinueButton");
     return continueButton;
