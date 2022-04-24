@@ -10,7 +10,13 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
 
-
+/**
+ * An AI for users of medium difficulty to play against. The AI randomly selects both points to
+ * attack and enemies to attack. It leverages BFS to scan an area after a successful hit.
+ * It also loses track of enemy boats after they move and exclusively uses BasicShots
+ *
+ * @author Matthew Giglio
+ */
 public class MediumDecisionEngine extends DecisionEngine {
 
   /**
@@ -63,14 +69,6 @@ public class MediumDecisionEngine extends DecisionEngine {
       getDeque().remove(getLastShot());
     }
   }
-
-  /**
-   * Method called during GameSetup that allows the AI to place their pieces
-   *
-   * @param pieceList pieces that the player is allowed to place
-   * @return Coordinate that the AI has chosen to place their piece
-   */
-
 
   /**
    * method to reset the strategy in the event that the boats move
