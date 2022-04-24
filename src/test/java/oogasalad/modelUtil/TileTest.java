@@ -55,22 +55,28 @@ public class TileTest {
 
   @Test
   void testGoldAdder(){
-    ArrayList<Modifiers> mods = (ArrayList<Modifiers>) cell.update();
+    List<Modifiers> mods = (List<Modifiers>) cell.update();
     HumanPlayer p1 = new HumanPlayer(null, 0, new HashMap<>(), new HashMap<>());
     HumanPlayer p2 = new HumanPlayer(null, 0, new HashMap<>(), new HashMap<>());
     HumanPlayer[] players = {p1,p2};
     if(mods!= null && !mods.isEmpty()) {
       for (Modifiers m : mods) {
-//        m.modifierFunction().accept(players);
+        m.modifierFunction(players).accept(players);
       }
     }
-    assertEquals( 0, p1.getMyCurrency());
-    cell.addModifier(new GoldAdder(200));
+    System.out.println("Hello");
+    assertEquals( 1000, p1.getMyCurrency());
+    System.out.println("Hello");
+
+    //cell.addModifier(new GoldAdder(200));
+
+
     cell.hit(1);
     cell.hit(1);
-    mods = (ArrayList<Modifiers>) cell.update();
+    mods = cell.update();
     for(Modifiers m: mods){
-//      m.modifierFunction().accept(players);
+      System.out.println(m.toString());
+      m.modifierFunction(players).accept(players);
     }
     assertEquals(300, p1.getMyCurrency());
   }

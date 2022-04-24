@@ -10,6 +10,7 @@ import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import org.apache.logging.log4j.LogManager;
@@ -153,9 +154,9 @@ public abstract class GenericPlayer implements Player{
   }
 
   public void addUsableToInventory(Usable usable){
-    if(inventory.containsKey(usable.getMyID()))
-      inventory.put(usable.getMyID(), inventory.get(usable.getMyID()) + 1);
+    if(myInventory.containsKey(usable.getMyID()))
+      myInventory.put(usable.getMyID(), myInventory.get(usable.getMyID()) + 1);
     else
-      inventory.put(usable.getMyID(), 1);
+      myInventory.put(usable.getMyID(), 1);
   }
 }

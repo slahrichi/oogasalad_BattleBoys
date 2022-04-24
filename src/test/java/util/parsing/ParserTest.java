@@ -1,4 +1,4 @@
-package oogasalad.model.parsing;
+package util.parsing;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import oogasalad.ParserData;
+import oogasalad.model.parsing.Parser;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
