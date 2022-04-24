@@ -45,7 +45,7 @@ public class PlayerFactoryTest {
 
   @Test
   void testBasicPlayerFactory() {
-    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), difficulties);
+    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties);
     List<Player> playerList = pfr.playerList();
     assertEquals(playerList.size(), 3);
     Map<Player, DecisionEngine> map = pfr.engineMap();
@@ -58,14 +58,14 @@ public class PlayerFactoryTest {
   @Test
   void testInvalidPlayerType() {
     playerTypes.add("Playyer");
-    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), difficulties).
+    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties).
         playerList());
   }
 
   @Test
   void testInvalidPlayerTyle() {
     difficulties.set(1, "Impahssible");
-    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), difficulties).
+    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties).
         playerList());
   }
 

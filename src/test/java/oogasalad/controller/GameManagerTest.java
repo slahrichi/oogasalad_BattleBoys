@@ -63,7 +63,7 @@ public class GameManagerTest extends DukeApplicationTest {
     }
     Map<String, Integer> inventory = new HashMap<String, Integer>();
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "HumanPlayer")),inventory, new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "HumanPlayer")), inventory, 100, new ArrayList<>(Arrays.asList("None", "None")));
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
     WinCondition c = new LoseXShipsLossCondition(1);
@@ -151,7 +151,7 @@ public class GameManagerTest extends DukeApplicationTest {
   @Test
   void testAI() throws InterruptedException {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")),new HashMap<>(), new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100, new ArrayList<>(Arrays.asList("None", "Easy")));
     GameData gd = new GameData(pfr.playerList(), pieceList2, cellBoard, pfr.engineMap(), wc, new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> gs = new GameSetup(gd, myResources));
     Thread.sleep(2000);
@@ -164,10 +164,10 @@ public class GameManagerTest extends DukeApplicationTest {
       gm.createScene();
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
-        list, new ArrayList<Collection<Coordinate>>(),
+        list, new ArrayList<>(),
         new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
-        list, new ArrayList<Collection<Coordinate>>(),
+        list, new ArrayList<>(),
         new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
     Thread.sleep(3000);
     assertEquals(wasStruckByAI(gd.players().get(0)), true);

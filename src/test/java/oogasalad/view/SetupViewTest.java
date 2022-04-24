@@ -69,7 +69,7 @@ public class SetupViewTest extends DukeApplicationTest {
     Piece piece2 = new StaticPiece(ships2, coords2, "1");
     pieces.add(piece1);
     pieces.add(piece2);
-    PlayerFactoryRecord record = PlayerFactory.initializePlayers(board, stringPlayers, new HashMap<>(), null);
+    PlayerFactoryRecord record = PlayerFactory.initializePlayers(board, stringPlayers, new HashMap<>(), 100, null);
     List<Player> players = record.playerList();
     List<WinCondition> winConditions = new ArrayList<>();
     winConditions.add(new LoseXShipsLossCondition(2));
