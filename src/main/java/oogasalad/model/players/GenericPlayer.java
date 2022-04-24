@@ -4,16 +4,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import oogasalad.controller.GameManager;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public abstract class GenericPlayer implements Player{
 
+  private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private int myPiecesLeft;
   private int myCurrency;
   private Map<String, Integer> myInventory; //change inventory to use id of usables
@@ -22,14 +27,14 @@ public abstract class GenericPlayer implements Player{
 
   private Board myBoard;
   private int myId;
-
   private static final String PLAYER_PREFIX = "Player ";
   private String myName;
 
-  public GenericPlayer(Board board, int id,Map<String, Integer> inventory, Map<Integer, MarkerBoard> enemyMap) {
+  public GenericPlayer(Board board, int id, Map<String, Integer> inventory, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
-    myInventory = inventory;
-    myCurrency = 0;
+    myInventory = new HashMap<>(inventory);
+    myInventory.put("Basic Shot", Integer.MAX_VALUE);
+    myCurrency = 1000;
     myEnemyMap = enemyMap;
     myHitsMap = new HashMap<CellState, Integer>();
     myId = id;
@@ -40,7 +45,9 @@ public abstract class GenericPlayer implements Player{
   @Override
   public void makePurchase(int price, String usableID) {
     if (price <= myCurrency) {
+      LOG.info(String.format("Bought %s for %d gold. Remaining Gold: %d", usableID, price, myCurrency));
       myInventory.put(usableID, myInventory.getOrDefault(usableID, 0) + 1);
+      myCurrency-=price;
     }
   }
 

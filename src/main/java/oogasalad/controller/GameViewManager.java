@@ -51,6 +51,7 @@ public class GameViewManager {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
     view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getMyInventory()), myResources);
+    view.setShopUsables(data.usables());
     view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
@@ -62,7 +63,7 @@ public class GameViewManager {
     return idToName;
   }
 
-  private List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> inventoryMap) {
+  public List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> inventoryMap) {
     List<UsableRecord> inventory = new ArrayList<>();
     String basicShotID = "Basic Shot";
     String basicShotClassName = "BasicShot";
@@ -70,7 +71,6 @@ public class GameViewManager {
     inventory.add(new UsableRecord(basicShotID, basicShotClassName, basicShotStock));
     for (String id : inventoryMap.keySet()) {
       if (!id.equals("Basic Shot")) {
-        System.out.println(usablesIDMap.get(id).getClass().getSimpleName());
         inventory.add(new UsableRecord(id, usablesIDMap.get(id).getClass().getSimpleName(), inventoryMap.get(id)));
       }
     }

@@ -90,7 +90,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String VIEW_PANE_ID = "view-pane";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String SHOT_METHOD = "handleShot";
-  private static final double BOARD_SIZE = 40;
+  private static final double BOARD_SIZE = 20;
   private static final int EXPLOSION_DURATION = 1000;
 
   private static final String BOARD_INDEX_LOG = "Current board index: ";
@@ -144,6 +144,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private ResourceBundle myResources;
   private InventoryView inventory;
   private Stage loserStage;
+  private List<Usable> shopUsables;
   private boolean nightMode;
 
   private Scene myScene;
@@ -167,6 +168,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerUsables);
   }
 
+  public void setShopUsables(List<Usable> usables) {
+    shopUsables = usables;
+  }
 
 
   private List<Integer> createInitialIDList(int numPlayers) {
@@ -191,10 +195,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createInventory() {
     inventory = new InventoryView();
+    inventory.addObserver(this);
     myCenterPane.getChildren().add(inventory.getPane());
   }
 
-  private void updateInventory(List<UsableRecord> usableList) {
+  public void updateInventory(List<UsableRecord> usableList) {
     inventory.updateElements(usableList);
   }
 
@@ -379,7 +384,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void switchPlayerMessage(String nextPlayer) {
     passComputerMessageView.setLabelText(nextPlayer);
+    System.out.println(nextPlayer);
     myScene.setRoot(passComputerMessageView);
+  }
+
+  private void buyItem(String itemID) {
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), itemID);
   }
 
   public int getCurrentBoardIndex() {
@@ -555,7 +565,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   @Override
   public void openShop() {
-    System.out.println("Shop Opened");
+    ShopView shop = new ShopView(shopUsables);
+    shop.addObserver(this);
+    Stage shopStage = new Stage();
+    shopStage.setScene(shop.getMyScene());
+    shopStage.show();
   }
 
   @Override

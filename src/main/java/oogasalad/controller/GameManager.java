@@ -43,6 +43,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private ConditionHandler conditionHandler;
   private Map<Integer, Player> idMap;
   private Map<Player, DecisionEngine> engineMap;
+  private Map<String, Usable> usablesIDMap;
   private GameView view;
   private GameViewManager gameViewManager;
   private int numShots;
@@ -50,7 +51,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int whenToMovePieces;
   private List<Info> AIShots;
   private Usable currentUsable;
-  private Map<String, Usable> usablesIDMap;
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String DUMMY_INFO = "";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
@@ -81,6 +81,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return playerQueue.peek().getID();
   }
 
+  public void makeFirstAIPlayersMove() {
+    while(engineMap.containsKey(playerQueue.peek())) {
+      handleAI();
+    }
+  }
 
   private void initialize(GameData data, ResourceBundle resources) {
     currentUsable = new BasicShot();
@@ -88,8 +93,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
     numShots = 0;
-    whenToMovePieces = 1; //should change this to use gamedata from parser
-    allowedShots = 2;
+    whenToMovePieces = -1; //should change this to use gamedata from parser
+    allowedShots = 1;
     createIDMap(data.players());
     engineMap = data.engineMap();
     usablesIDMap = new HashMap<>();
@@ -97,6 +102,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       usablesIDMap.put(currUsable.getMyID(), currUsable);
     }
     gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
+
   }
 
   private void createIDMap(List<Player> playerList) {
@@ -126,6 +132,14 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void equipUsable(String id) {
     // set currentUsable equal to map.get(info.getID());
+    currentUsable = usablesIDMap.get(id);
+    LOG.info(String.format("Current Weapon: %s", id));
+  }
+
+  private void buyItem(String id) {
+    playerQueue.peek().makePurchase(usablesIDMap.get(id).getPrice(), id);
+    view.updateLabels(allowedShots-numShots, playerQueue.peek().getNumPieces(), playerQueue.peek().getMyCurrency());
+    view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
   }
 
   private void applyUsable(String clickInfo) {
@@ -158,6 +172,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void updateConditions(int id) {
     conditionHandler.applyWinConditions();
+    view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
     if (idMap.containsKey(id)) {
       List<Piece> piecesLeft = idMap.get(id).getBoard().listPieces();
       gameViewManager.updatePiecesLeft(piecesLeft);
@@ -189,6 +204,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     numShots = 0;
     gameViewManager.sendUpdatesToView(player);
     view.moveToNextPlayer(player.getName());
+    currentUsable = new BasicShot();
     handleAI();
   }
 
@@ -222,6 +238,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private boolean makeShot(Coordinate c, int id, Usable weaponUsed) {
     Player currentPlayer = playerQueue.peek();
+    Map<String, Integer> currentInventory = currentPlayer.getMyInventory();
     Player enemy = idMap.get(id);
     try {
       Map<Coordinate, CellState> hitResults = weaponUsed.getFunction().apply(c, enemy.getBoard());
@@ -236,8 +253,16 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
           mod.modifierFunction(this).accept(this);
 
       numShots++;
+
+      //this removes one weapon when used and removes it from the inventory when all are used.
+      currentInventory.put(currentUsable.getMyID(),currentInventory.get(currentUsable.getMyID())-1 );
+      if(currentInventory.get(currentUsable.getMyID())<=0) {
+        currentInventory.remove(currentUsable.getMyID());
+      }
+
       return true;
     } catch (Exception e) {
+      e.printStackTrace();
       return false;
     }
   }
