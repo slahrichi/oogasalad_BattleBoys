@@ -46,10 +46,6 @@ public class HardDecisionEngine extends DecisionEngine {
     return 0;
   }
 
-  private Coordinate determineLocation(List<Coordinate> list) {
-    return list.get(getRandom().nextInt(list.size()));
-  }
-
   public void adjustStrategy(CellState result) {
     if (wasSuccess(result)) {
       getDeque().addFirst(getLastShot());

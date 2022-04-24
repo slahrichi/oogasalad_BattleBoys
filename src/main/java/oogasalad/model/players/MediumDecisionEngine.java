@@ -48,10 +48,6 @@ public class MediumDecisionEngine extends DecisionEngine {
     return enemies.get(getRandom().nextInt(enemies.size()));
   }
 
-  private Coordinate determineLocation(List<Coordinate> list) {
-    return list.get(getRandom().nextInt(list.size()));
-  }
-
 
   /**
    * Method to adjust strategy of engine given result of last shot
@@ -74,16 +70,7 @@ public class MediumDecisionEngine extends DecisionEngine {
    * @param pieceList pieces that the player is allowed to place
    * @return Coordinate that the AI has chosen to place their piece
    */
-  public Coordinate placePiece(List<Piece> pieceList) {
-    Board board = getPlayer().getBoard();
-    Piece piece = pieceList.get(getPieceIndex());
-    Coordinate c = determineLocation(getCoordinateList());
-    while (!board.hasValidPlacement(c, piece)) {
-      c = determineLocation(getCoordinateList());
-    }
-    updatePieceIndex();
-    return c;
-  }
+
 
   /**
    * method to reset the strategy in the event that the boats move

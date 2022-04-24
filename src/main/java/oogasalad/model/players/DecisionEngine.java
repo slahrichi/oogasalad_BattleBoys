@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
@@ -95,8 +96,6 @@ public abstract class DecisionEngine {
 
   public abstract void adjustStrategy(CellState result);
 
-  public abstract Coordinate placePiece(List<Piece> pieceList);
-
   protected int getCurrentPlayer() {
     return currentPlayer;
   }
@@ -114,6 +113,21 @@ public abstract class DecisionEngine {
     }
     Collections.shuffle(coordinates);
     return coordinates;
+  }
+
+  protected Coordinate placePiece(List<Piece> pieceList) {
+    Board board = getPlayer().getBoard();
+    Piece piece = pieceList.get(getPieceIndex());
+    Coordinate c = determineLocation(getCoordinateList());
+    while (!board.hasValidPlacement(c, piece)) {
+      c = determineLocation(getCoordinateList());
+    }
+    updatePieceIndex();
+    return c;
+  }
+
+  protected Coordinate determineLocation(List<Coordinate> list) {
+    return list.get(getRandom().nextInt(list.size()));
   }
 
 }

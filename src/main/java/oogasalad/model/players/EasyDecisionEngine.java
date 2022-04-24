@@ -55,10 +55,6 @@ public class EasyDecisionEngine extends DecisionEngine {
     return enemies.get(getRandom().nextInt(enemies.size()));
   }
 
-  private Coordinate determineLocation(List<Coordinate> coordinateList) {
-    return coordinateList.get(getRandom().nextInt(coordinateList.size()));
-  }
-
   /**
    * Method to adjust strategy of engine given result of last shot
    * @param result Result of engine's last shot
