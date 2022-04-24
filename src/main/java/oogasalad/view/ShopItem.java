@@ -17,10 +17,17 @@ import oogasalad.view.maker.BoxMaker;
 import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * Stores the ImagiView as well as the variables for a given ShopItem, has reference with the buy
+ * buttpm using observables and listeners to apply the effects of buying an item from the shop.
+ *
+ * @author Luka Mdivnai, Minjun, Brandon
+ */
 public class ShopItem extends PropertyObservable {
+
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final ResourceBundle WEAPON_IMAGE_RESOURCES = ResourceBundle.getBundle(
-          "/WeaponImages");
+      "/WeaponImages");
   private static final String WEAPON_IMAGES_PATH = "images/weapon_images/";
 
   private static final String PRICE_LABEL_FORMAT = "Price: %d Gold";
@@ -44,7 +51,7 @@ public class ShopItem extends PropertyObservable {
       StripeIntegration stripeIntegration) {
     this.stripeIntegration = stripeIntegration;
     String imageName = WEAPON_IMAGE_RESOURCES.getString(usableClassName);
-    item = new ImageView(new Image(WEAPON_IMAGES_PATH+imageName));
+    item = new ImageView(new Image(WEAPON_IMAGES_PATH + imageName));
     item.setFitHeight(ITEM_SIZE);
     item.setFitWidth(ITEM_SIZE);
     myPrice = price;
@@ -52,7 +59,8 @@ public class ShopItem extends PropertyObservable {
     myUsableClassName = usableClassName;
     buildButtons();
     Label nameLabel = LabelMaker.makeLabel(myName, "shop-item-name-label");
-    Label priceLabel = LabelMaker.makeLabel(String.format(PRICE_LABEL_FORMAT, myPrice), "shop-item-price-label");
+    Label priceLabel = LabelMaker.makeLabel(String.format(PRICE_LABEL_FORMAT, myPrice),
+        "shop-item-price-label");
     myVBox = BoxMaker.makeVBox("VBoxId", 10, Pos.CENTER, nameLabel, item, priceLabel,
         buyButton, stripeButton, confirmStripe);
     myVBox.setLayoutX((GAP + X_SPACING) * (index % 3));
@@ -96,6 +104,11 @@ public class ShopItem extends PropertyObservable {
     notifyObserver("buyItem", name);
   }
 
+  /**
+   * returns the VBox containing the imageview, purchase buttons as well as name/price tags.
+   *
+   * @return the Vbox
+   */
   public VBox getMyVBox() {
     return myVBox;
   }
