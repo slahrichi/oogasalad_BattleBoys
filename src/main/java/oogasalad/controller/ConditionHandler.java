@@ -69,8 +69,9 @@ public class ConditionHandler {
    *
    * @param currPlayer  current Player
    * @param enemyPlayer enemy Player
+   * @param gm GameManager applying the given ConditionHandler class
    */
-  List<Modifiers> applyModifiers(Player currPlayer, Player enemyPlayer) {
+  void applyModifiers(Player currPlayer, Player enemyPlayer, GameManager gm) {
     List<Modifiers> mods = enemyPlayer.getBoard().update();
     for (Modifiers mod : mods) {
         Player[] players = {currPlayer, enemyPlayer};
@@ -79,7 +80,9 @@ public class ConditionHandler {
         } catch (Exception e) {
         }
       }
-    return mods;
+    for (Modifiers mod : mods) {
+      mod.modifierFunction(gm).accept(gm);
+    }
   }
 
   /**

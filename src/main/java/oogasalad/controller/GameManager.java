@@ -19,13 +19,11 @@ import oogasalad.model.players.EngineRecord;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
-import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
-import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
-import oogasalad.model.utilities.usables.weapons.EmpoweredShot;
-import oogasalad.view.Info;
 import oogasalad.view.GameView;
+import oogasalad.view.Info;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +32,7 @@ import org.apache.logging.log4j.Logger;
  * the turn-based logic of the game and relaying the results of a given player's move. The class
  * utilizes auxiliary classes to handle checking win conditions and updating view elements.
  *
- * @author Matthew Giglio
+ * @author Matthew Giglio with assisting contributions from Minjun Kwak and Brandon Bae
  */
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
@@ -53,6 +51,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String DUMMY_INFO = "";
   private static final String STRIPE = "stripe";
+  private static final String SHOT_FAILURE = "Shot attempt failed!";
+  private static final String WEAPON_LOG = "Current weapon: %s";
+  private static final String BOARD_CLICKED = "Board %d clicked at row %d, col %d";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private ResourceBundle myResources;
 
@@ -78,6 +79,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     return view.createScene();
   }
 
+  /**
+   * @return ID of current player
+   */
   public int getCurrentPlayer() {
     return playerQueue.peek().getID();
   }
@@ -91,19 +95,14 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void initialize(GameData data, ResourceBundle resources) {
     currentUsable = new BasicShot();
     myResources = resources;
-    this.playerQueue = new LinkedList<>();
-    playerQueue.addAll(data.players());
+    this.playerQueue = new LinkedList<>(data.players());
     numShots = 0;
-    whenToMovePieces = -1; //should change this to use gamedata from parser
+    whenToMovePieces = 0; //should change this to use gamedata from parser
     allowedShots = 1;
     createIDMap(data.players());
+    createUsablesMap(data.usables());
     engineMap = data.engineMap();
-    usablesIDMap = new HashMap<>();
-    for (Usable currUsable : data.usables()) {
-      usablesIDMap.put(currUsable.getMyID(), currUsable);
-    }
     gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
-
   }
 
   private void createIDMap(List<Player> playerList) {
@@ -111,6 +110,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     for (Player player : playerList) {
       idMap.put(player.getID(), player);
       player.determineHealth();
+    }
+  }
+
+  private void createUsablesMap(List<Usable> usables) {
+    usablesIDMap = new HashMap<>();
+    for (Usable usable : usables) {
+      usablesIDMap.put(usable.getMyID(), usable);
     }
   }
 
@@ -132,9 +138,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void equipUsable(String id) {
-    // set currentUsable equal to map.get(info.getID());
     currentUsable = usablesIDMap.get(id);
-    LOG.info(String.format("Current Weapon: %s", id));
+    LOG.info(String.format(WEAPON_LOG, id));
   }
 
   private void buyItem(String id) {
@@ -159,9 +164,12 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int col = Integer.parseInt(
         clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-    LOG.info("Board " + id + " clicked at " + row + ", " + col);
+    LOG.info(String.format(BOARD_CLICKED, id, row, col));
   }
 
+  /**
+   * @param clickInfo String containing coordinates and enemy ID of player to be attacked
+   */
   public void handleShot(String clickInfo) {
     int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
     int col = Integer.parseInt(
@@ -169,7 +177,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
     if (numShots < allowedShots && makeShot(new Coordinate(row, col), id, currentUsable)) {
       Player player = playerQueue.peek();
-      view.updateLabels(allowedShots - numShots, player.getNumPieces(), player.getMyCurrency());
+      view.updateLabels(allowedShots - numShots, player.getNumPieces(),
+          player.getMyCurrency());
       view.displayShotAnimation(row, col, e ->
           updateConditions(id), id);
     }
@@ -188,13 +197,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void checkIfEndTurn() {
     if (numShots == allowedShots) {
-      // if AI has finished firing their shots
       if (engineMap.containsKey(playerQueue.peek())) {
         view.displayAIMove(playerQueue.peek().getID(), AIShots);
         endTurn(DUMMY_INFO);
-      }
-      // if a human has finished firing their shots
-      else {
+      } else {
         view.allowEndTurn();
       }
     }
@@ -214,16 +220,13 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     handleAI();
   }
 
-  //new private method for moving pieces
   private void checkIfMovePieces() {
     if (conditionHandler.canMovePieces()) {
       conditionHandler.resetTurnMap();
       for (Player p : playerQueue) {
         p.movePieces();
       }
-      for (DecisionEngine engine : engineMap.values()) {
-        engine.resetStrategy();
-      }
+      resetDecisionEngines();
     }
   }
 
@@ -253,25 +256,21 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         currentPlayer.updateEnemyBoard(hitCoord, id, hitResults.get(hitCoord));
         view.displayShotAt(hitCoord.getRow(), hitCoord.getColumn(), hitResults.get(hitCoord));
       }
-      List<Modifiers> mods = conditionHandler.applyModifiers(currentPlayer, enemy);
-
-      for (Modifiers mod : mods) {
-        mod.modifierFunction(this).accept(this);
-      }
-
+      conditionHandler.applyModifiers(currentPlayer, enemy, this);
       numShots++;
-
-      //this removes one weapon when used and removes it from the inventory when all are used.
-      currentInventory.put(currentUsable.getMyID(),
-          currentInventory.get(currentUsable.getMyID()) - 1);
-      if (currentInventory.get(currentUsable.getMyID()) <= 0) {
-        currentInventory.remove(currentUsable.getMyID());
-      }
-
+      handleInventory(currentInventory);
       return true;
     } catch (Exception e) {
-      e.printStackTrace();
+      view.showError(SHOT_FAILURE);
       return false;
+    }
+  }
+
+  private void handleInventory(Map<String, Integer> currentInventory) {
+    currentInventory.put(currentUsable.getMyID(),
+        currentInventory.get(currentUsable.getMyID()) - 1);
+    if (currentInventory.get(currentUsable.getMyID()) <= 0) {
+      currentInventory.remove(currentUsable.getMyID());
     }
   }
 
@@ -282,10 +281,22 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
+  private void resetDecisionEngines() {
+    for (DecisionEngine engine : engineMap.values()) {
+      engine.resetStrategy();
+    }
+  }
+
+  /**
+   * @return GameViewManager associated with class
+   */
   public GameViewManager getGameViewManager() {
     return gameViewManager;
   }
 
+  /**
+   * @return map relating player IDs to player objects
+   */
   public Map<Integer, Player> getIDMap() {
     return idMap;
   }

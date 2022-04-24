@@ -115,7 +115,7 @@ public abstract class DecisionEngine {
     return coordinates;
   }
 
-  protected Coordinate placePiece(List<Piece> pieceList) {
+  public Coordinate placePiece(List<Piece> pieceList) {
     Board board = getPlayer().getBoard();
     Piece piece = pieceList.get(getPieceIndex());
     Coordinate c = determineLocation(getCoordinateList());

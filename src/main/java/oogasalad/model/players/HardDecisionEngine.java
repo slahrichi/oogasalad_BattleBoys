@@ -17,7 +17,6 @@ public class HardDecisionEngine extends DecisionEngine {
     super(coordinateList, enemyMap, player);
   }
 
-  @Override
   public EngineRecord makeMove() {
     if (!getDeque().isEmpty()) {
       return getDeque().pollFirst();
