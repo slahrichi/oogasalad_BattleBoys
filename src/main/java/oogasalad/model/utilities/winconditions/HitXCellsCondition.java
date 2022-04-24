@@ -75,7 +75,7 @@ public class HitXCellsCondition extends WinCondition{
    */
   @Override
   public Set<CellState> getDesirableCellStates() {
-    Set<CellState> updatedDesirableCellStates = new HashSet<CellState>(DEFAULT_DESIRABLE_CELL_STATES);
+    Set<CellState> updatedDesirableCellStates = new HashSet<>(DEFAULT_DESIRABLE_CELL_STATES);
     if(myConditionType == WinState.WIN) {
       updatedDesirableCellStates.add(myCellToHit);
     }
@@ -93,7 +93,7 @@ public class HitXCellsCondition extends WinCondition{
    */
   @Override
   public Set<CellState> getNonDesirableCellStates() {
-    Set<CellState> updatedNonDesirableCellStates = new HashSet<CellState>(DEFAULT_NONDESIRABLE_CELL_STATES);
+    Set<CellState> updatedNonDesirableCellStates = new HashSet<>(DEFAULT_NONDESIRABLE_CELL_STATES);
     if(myConditionType == WinState.WIN) {
       updatedNonDesirableCellStates.remove(myCellToHit);
     }
