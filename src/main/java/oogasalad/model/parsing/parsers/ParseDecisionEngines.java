@@ -1,10 +1,14 @@
-package oogasalad.model.parsing;
+package oogasalad.model.parsing.parsers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import oogasalad.model.parsing.ParsedElement;
+import oogasalad.model.parsing.ParserException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class ParseDecisionEngines extends ParsedElement{
+public class ParseDecisionEngines extends ParsedElement {
   private final String PROPERTIES_DECISION_ENGINES_LIST = "DecisionEngines";
   private final String PROPERTIES_PLAYER_LIST = "Players";
   private final String SPACE = " ";
@@ -16,15 +20,18 @@ public class ParseDecisionEngines extends ParsedElement{
   private final String AI_PLAYER = "AIPlayer";
   private final String HUMAN_DECISION_ENGINE = "None";
   private final String AIPLAYER_BAD_ENGINE = "AIPlayerBadEngine";
+  private static final Logger LOG = LogManager.getLogger(ParseDecisionEngines.class);
 
   @Override
   public void save(Properties props, String location, Object o) throws ParserException {
+    LOG.info("saving Decision Engines at {}",location);
     List<String> decisionEngines = (List<String>) o;
-    props.put(PROPERTIES_DECISION_ENGINES_LIST, String.join(" ", decisionEngines));
+    props.put(PROPERTIES_DECISION_ENGINES_LIST, String.join(SPACE, decisionEngines));
   }
 
   @Override
   public Object parse(Properties props) throws ParserException {
+    LOG.info("parsing Decision Engines");
     List<String> decisionEngines = List.of(
         props.getProperty(PROPERTIES_DECISION_ENGINES_LIST).split(SPACE));
     decisionEngines = new ArrayList<>(decisionEngines);

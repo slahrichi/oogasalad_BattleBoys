@@ -1,16 +1,13 @@
-package oogasalad.model.parsing;
+package oogasalad.model.parsing.parsers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
+import oogasalad.model.parsing.ParsedElement;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ParseBoard extends ParsedElement {
 
@@ -18,10 +15,12 @@ public class ParseBoard extends ParsedElement {
   private final String MISSING_DATA = "missingData";
   private final String BOARD = "Board";
   private final String BOARD_JSON = "Board.json";
+  private static final Logger LOG = LogManager.getLogger(ParseBoard.class);
 
   @Override
   public void save(Properties props, String location, Object o) {
     location += BOARD_JSON;
+    LOG.info("saving Board at {}",location);
     CellState[][] board = (CellState[][]) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().
         create();
@@ -31,14 +30,10 @@ public class ParseBoard extends ParsedElement {
   @Override
   public CellState[][] parse(Properties props) throws ParserException {
     String boardFile = props.getProperty(PROPERTIES_BOARD_FILE);
+    LOG.info("parsing Board at {}",boardFile);
     Gson gson = new GsonBuilder().create();
     CellState[][] boardData;
-    try {
-      boardData = gson.fromJson(new FileReader(boardFile), CellState[][].class);
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-      return null;
-    }
+    boardData = (CellState[][]) getElementFromJson(boardFile, gson, getParsedClass());
     checkAlignedBoard(boardData, boardFile);
     return boardData;
   }
