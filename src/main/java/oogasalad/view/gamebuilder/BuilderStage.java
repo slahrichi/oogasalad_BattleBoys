@@ -1,7 +1,6 @@
 package oogasalad.view.gamebuilder;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,6 +25,12 @@ import javafx.stage.Stage;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * A superclass which has all the methods shared by all the builder stages, this includes building
+ * JavaFX objects for taking in user input. Depends on JavaFX.
+ *
+ * @author Luka Mdivani
+ */
 public abstract class BuilderStage {
 
   private ResourceBundle myBuilderResources;
@@ -45,6 +50,8 @@ public abstract class BuilderStage {
   private static final int DEFAULT_INPUT_BOX_HEIGHT = 30;
   private static final int MAX_OBJECT_LIST_WIDTH = 200;
   private static final int MAX_OBJECT_LIST_HEIGHT = 400;
+  private static final int WINDOW_WIDTH = 900;
+  private static final int WINDOW_HEIGHT = 500;
 
   public BuilderStage() {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
@@ -93,8 +100,8 @@ public abstract class BuilderStage {
     myStage.close();
   }
 
-  public Scene getScene(BorderPane myPane) {
-    return new Scene(myPane, 900, 500);
+  private Scene getScene(BorderPane myPane) {
+    return new Scene(myPane, WINDOW_WIDTH, WINDOW_HEIGHT);
   }
 
   protected int[][] initializeMatrixWithValue(int height, int width, int initialValue) {
@@ -110,7 +117,7 @@ public abstract class BuilderStage {
   protected Object createInstance(String className, Class<?>[] parameterTypes, Object[] parameters)
       throws IOException {
 
-    return builderUtil.createInstance(className,parameterTypes,parameters);
+    return builderUtil.createInstance(className, parameterTypes, parameters);
 
   }
 
@@ -142,9 +149,8 @@ public abstract class BuilderStage {
     infoBox.setMaxSize(50, 20);
     HBox result = new HBox(comboBox);
     result.getChildren().add(infoBox);
-    result.getChildren()
-        .add(makeButton(buttonText,
-            e -> consumer.accept(comboBox.getValue() + "," + infoBox.getText())));
+    result.getChildren().add(makeButton(buttonText,
+        e -> consumer.accept(comboBox.getValue() + "," + infoBox.getText())));
     return result;
   }
 
@@ -169,8 +175,8 @@ public abstract class BuilderStage {
     for (Color c : colorList) {
       Rectangle option = createColorOptionRectangle(c, colorList);
       colorOptionList.add(option);
-      result.getChildren().add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]),
-          option));
+      result.getChildren()
+          .add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]), option));
 
     }
     result.setId("ColorChoiceBox");
