@@ -19,6 +19,7 @@ import oogasalad.model.players.Player;
 import oogasalad.view.GameView;
 import oogasalad.view.LanguageView;
 import oogasalad.view.StartView;
+import oogasalad.view.gamebuilder.GameSetupView;
 import oogasalad.view.maker.DialogMaker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,7 +83,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   }
 
   private void loadFile(ResourceBundle resourceBundle) {
-    LOG.info("loadFile");
     try {
       String path = chooseDataFile().getAbsolutePath();
       parserData = parser.parse(path);
@@ -114,8 +114,9 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
         data.shipMovementRate(), data.gold());
   }
 
-  private void createGame() {
-    LOG.info("Create");
+  private void createGame(ResourceBundle resources) throws Exception {
+    GameSetupView builder = new GameSetupView();
+    builder.start(myStage);
   }
 
   private void showError(String message) {
