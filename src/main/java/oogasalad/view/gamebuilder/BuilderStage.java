@@ -221,6 +221,10 @@ public abstract class BuilderStage {
     return continueButton;
   }
 
+  protected void showError(String s){
+    builderUtil.throwErrorWindow(s);
+  }
+
   protected Boolean checkIntConversion(String string) {
     try {
       int x = Integer.parseInt(string);

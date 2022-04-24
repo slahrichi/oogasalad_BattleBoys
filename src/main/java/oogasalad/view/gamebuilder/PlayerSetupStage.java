@@ -8,6 +8,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Craetes a design window for pieces, provides a place to select piece shape ,as well as path for
+ * moving pieces, subclass of a BuilderStage. Depends on JavaFX as well as reflection to create the
+ * correct piece object.
+ *
+ * @author Luka Mdivani
+ */
 public class PlayerSetupStage extends BuilderStage {
 
   private BorderPane myPane;
@@ -18,8 +25,8 @@ public class PlayerSetupStage extends BuilderStage {
   private String selectedEngineType;
   private ComboBox engineTypeComboBox;
   private HBox playerSelectionBox;
-  private List<String> playerList=new ArrayList<>();
-  private List<String> engineList=new ArrayList<>();
+  private List<String> playerList = new ArrayList<>();
+  private List<String> engineList = new ArrayList<>();
 
 
   public PlayerSetupStage() {
@@ -39,7 +46,8 @@ public class PlayerSetupStage extends BuilderStage {
     ComboBox comboBox = makeComboBox(availablePlayerTypes.split(","));
     result.getChildren().add(comboBox);
     result.getChildren()
-        .addAll(makeButton("Select", e -> handlePlayerSelection(comboBox)), playerSelectionBox);
+        .addAll(makeButton(getDictionaryResources().getString("selectPrompt"),
+            e -> handlePlayerSelection(comboBox)), playerSelectionBox);
 
     return result;
   }
@@ -58,11 +66,12 @@ public class PlayerSetupStage extends BuilderStage {
         addEngineSelectionOption(playerSelectionBox, selection);
       }
       playerSelectionBox.getChildren()
-          .add(makeButton("Add Player", e -> addSavePlayerButton(selection, engineTypeComboBox)));
+          .add(makeButton(getDictionaryResources().getString("addPlayerPrompt"),
+              e -> addSavePlayerButton(selection, engineTypeComboBox)));
 
 
     } catch (NullPointerException e) {
-      System.out.println("Please Make Selection");
+      showError(getDictionaryResources().getString("makeSelectionError"));
       e.printStackTrace();
     }
   }
@@ -81,7 +90,11 @@ public class PlayerSetupStage extends BuilderStage {
     engineList.add(selectedEngineType);
 
   }
-  public List<String> getEngineList(){return engineList;}
+
+  public List<String> getEngineList() {
+    return engineList;
+  }
+
   private void addEngineSelectionOption(HBox result, String selection) {
     resetSelection();
     String[] engineOptions = getMyBuilderResources().getString(selection + "EngineOption")
