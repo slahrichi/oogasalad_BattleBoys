@@ -144,6 +144,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private ResourceBundle myResources;
   private InventoryView inventory;
   private Stage loserStage;
+  private List<Usable> shopUsables;
   private boolean nightMode;
 
   private Scene myScene;
@@ -167,6 +168,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     initialize(firstPlayerBoards, initialPiecesLeft, firstPlayerUsables);
   }
 
+  public void setShopUsables(List<Usable> usables) {
+    shopUsables = usables;
+  }
 
 
   private List<Integer> createInitialIDList(int numPlayers) {
@@ -384,6 +388,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myScene.setRoot(passComputerMessageView);
   }
 
+  private void buyItem(String itemID) {
+    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), itemID);
+  }
+
   public int getCurrentBoardIndex() {
     return currentBoardIndex;
   }
@@ -557,7 +565,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   @Override
   public void openShop() {
-    System.out.println("Shop Opened");
+    ShopView shop = new ShopView(shopUsables);
+    shop.addObserver(this);
+    Stage shopStage = new Stage();
+    shopStage.setScene(shop.getMyScene());
+    shopStage.show();
   }
 
   @Override

@@ -101,7 +101,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     for(Usable currUsable: data.usables()) {
       usablesIDMap.put(currUsable.getMyID(), currUsable);
     }
-    System.out.println(usablesIDMap);
     gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
 
   }
@@ -139,6 +138,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void buyItem(String id) {
     playerQueue.peek().makePurchase(usablesIDMap.get(id).getPrice(), id);
+    view.updateLabels(allowedShots-numShots, playerQueue.peek().getNumPieces(), playerQueue.peek().getMyCurrency());
+    view.updateInventory(gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
   }
 
   private void applyUsable(String clickInfo) {
