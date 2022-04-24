@@ -1,5 +1,7 @@
 package oogasalad.view.gamebuilder;
 
+import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,7 @@ public class GameSetupView extends Application{
   @Override
   public void start(Stage stage) throws Exception {
     List<Object> objectList=new ArrayList<>();
-
+    GameBuilderUtil builderUtil = new GameBuilderUtil();
 
     GameVarSetupStage gameVarSetupStage = new GameVarSetupStage();
     objectList.add(gameVarSetupStage.launch());
@@ -49,6 +51,10 @@ public class GameSetupView extends Application{
 
     SpecialIslandDesigner specialIslandDesigner= new SpecialIslandDesigner();
     objectList.add(specialIslandDesigner.launch());
+
+  }
+
+
 
   }
 }
