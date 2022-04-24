@@ -4,7 +4,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
-
+/**
+ * A class for setting up File name for the desired game setting file. To which the parser later
+ * will write the user selected data. Depends on JavaFX. No assumptions.
+ *
+ * @author Luka Mdivani
+ */
 public class FileNameSelectionStage extends BuilderStage {
 
   private String fileName;
