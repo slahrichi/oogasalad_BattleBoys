@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import oogasalad.GameData;
+import oogasalad.controller.GameData;
 import oogasalad.controller.GameManager;
 import oogasalad.controller.GameSetup;
 import oogasalad.controller.PlayerFactory;
@@ -49,7 +49,7 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), new ArrayList<>(Arrays.asList("None", "Medium")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100, new ArrayList<>(Arrays.asList("None", "Medium")));
     List<Player> engineList = new ArrayList<>(pfr.engineMap().keySet());
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
@@ -77,7 +77,7 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testPlacePiece() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
@@ -95,7 +95,7 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustmentWithMultipleHealth() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList2, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList2, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
@@ -132,7 +132,7 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustmentWithBFS() throws InterruptedException {
-    GameData gd = new GameData(playerList, cellBoard, pieceList, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), engineMap);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }

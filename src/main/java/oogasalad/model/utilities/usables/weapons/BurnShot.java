@@ -7,6 +7,8 @@ import oogasalad.model.utilities.tiles.Modifiers.Burner;
 import oogasalad.model.utilities.tiles.Modifiers.FrontEndUpdater;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.model.utilities.usables.UsableFunction;
+
 /**
  * Hits  a tile and if its a ship, then it will apply a modifier that burns the ship overtime */
 
@@ -19,13 +21,15 @@ public class BurnShot extends Weapon {
     this.dmgPerTurn = dmgPerTurn;
     this.turnsLasted = turnsLasted;
     addRelativePosition(new Coordinate(0,0), 1);
-    makeWeaponFunction();
+
+  }
+  public BurnShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]), Integer.parseInt(parameters[3]));
   }
 
-
   @Override
-  protected void makeWeaponFunction() {
-    setMyFunction((coord, board) ->{
+  protected UsableFunction makeWeaponFunction() {
+    UsableFunction ret = (coord, board) ->{
       Map<Coordinate, CellState> retMap = new HashMap<>();
       if(board.canBeStruck(coord)){
         if(board.getCell(coord) instanceof ShipCell){
@@ -38,7 +42,8 @@ public class BurnShot extends Weapon {
       } else{
         throw new NullPointerException("Coordinate Out of Bounds");
       }
-    });
+    };
+    return ret;
   }
 
 }

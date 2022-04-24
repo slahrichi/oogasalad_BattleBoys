@@ -17,4 +17,5 @@ open module oogasalad_app {
 // allow other classes to access listed packages in your project
   exports oogasalad.controller;
   exports oogasalad.model.parsing;
+  exports oogasalad.model.parsing.parsers;
 }

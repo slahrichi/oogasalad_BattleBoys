@@ -10,7 +10,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import oogasalad.ParserData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class Parser {
@@ -51,9 +52,11 @@ public class Parser {
   private final String PROPERTIES = "properties";
   private final List<String> jsonPaths = List.of("PiecesFile", "BoardFile");
   private Properties exceptionMessageProperties;
+  private static final Logger LOG = LogManager.getLogger(Parser.class);
 
   public void save(ParserData data, String pathToNewFile) throws ParserException  {
 
+    LOG.info(String.format("Saving ParserData to %s", pathToNewFile));
     File file = new File(pathToNewFile);
     Properties props = new Properties();
 
@@ -68,7 +71,9 @@ public class Parser {
       FileOutputStream outputStream = new FileOutputStream(file);
       props.store(outputStream, SAVING_COMMENT);
     } catch (IOException e) {
-      throw new ParserException(exceptionMessageProperties.getProperty(SAVING_ERROR));
+      String message = exceptionMessageProperties.getProperty(SAVING_ERROR);
+      LOG.warn(message);
+      throw new ParserException(message);
     }
   }
 
@@ -80,6 +85,7 @@ public class Parser {
    * @throws FileNotFoundException
    */
   public ParserData parse(String pathToFile) throws ParserException {
+    LOG.info(String.format("Parsing from %s", pathToFile));
     Properties props = getProperties(pathToFile);
     List<Object> parsedElements = new ArrayList<>();
     try {
@@ -87,7 +93,9 @@ public class Parser {
         parsedElements.add(p.parse(props));
       }
     } catch (JsonSyntaxException e) {
-      throw new ParserException(exceptionMessageProperties.getProperty(JSON_ERROR).formatted(pathToFile));
+      String message = exceptionMessageProperties.getProperty(JSON_ERROR).formatted(pathToFile);
+      LOG.warn(message);
+      throw new ParserException(message);
     }
     return ParserData.make(parsedElements);
   }
@@ -101,7 +109,9 @@ public class Parser {
       is.close();
     } catch (IOException e) {
       if (e instanceof FileNotFoundException) {
-        throw new ParserException(exceptionMessageProperties.getProperty(BAD_PATH).formatted(PROPERTIES,file.toString()));
+        String message = exceptionMessageProperties.getProperty(BAD_PATH).formatted(PROPERTIES,file.toString());
+        LOG.warn(message);
+        throw new ParserException(message);
       }
       e.printStackTrace();
     }
@@ -125,14 +135,18 @@ public class Parser {
   public void checkExtension(String pathToFile, String expectedExtension) throws ParserException {
     String passedFileExtension = pathToFile.substring(pathToFile.lastIndexOf(DOT) + 1);
     if (!passedFileExtension.equals(expectedExtension)) {
-      throw new ParserException(exceptionMessageProperties.getProperty(expectedExtension).formatted(passedFileExtension));
+      String message = exceptionMessageProperties.getProperty(expectedExtension).formatted(passedFileExtension);
+      LOG.warn(message);
+      throw new ParserException(message);
     }
   }
 
   private void checkProperties(Properties props) throws ParserException {
     for (String key: REQUIRED_ARGS){
       if(props.getProperty(key) == null) {
-        throw new ParserException(exceptionMessageProperties.getProperty(MISSING_ARG).formatted(key));
+        String message = exceptionMessageProperties.getProperty(MISSING_ARG).formatted(key);
+        LOG.warn(message);
+        throw new ParserException(message);
       }
     }
   }

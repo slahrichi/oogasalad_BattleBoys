@@ -20,6 +20,13 @@ import oogasalad.PropertyObservable;
 import oogasalad.com.stripe.StripeIntegration;
 import oogasalad.model.utilities.usables.Usable;
 
+/**
+ * A Class which creates a view for the shop, it displays items in separate panes, and connects to the
+ * backend through the use of observables and listeners. Depends on javaFX. Makes no assumptions.
+ *
+ *
+ * @author Luka Mdivani
+ */
 public class ShopView extends PropertyObservable implements PropertyChangeListener {
 
   private static final double SCREEN_WIDTH = 1000;
@@ -50,6 +57,11 @@ public class ShopView extends PropertyObservable implements PropertyChangeListen
     myPane.setTop(title);
   }
 
+  /**
+   * returns the scene containing the shop window, so it can be set to a stage.
+   *
+   * @return the Scene containing the shop
+   */
   public Scene getMyScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     return myScene;

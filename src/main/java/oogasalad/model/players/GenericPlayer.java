@@ -10,6 +10,7 @@ import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.winconditions.WinState;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +22,7 @@ public abstract class GenericPlayer implements Player{
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private int myPiecesLeft;
   private int myCurrency;
-  private Map<String, Integer> myInventory; //change inventory to use id of usables
+  private Map<String, Integer> myInventory;
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Map<CellState, Integer> myHitsMap; //new instance variable
 
@@ -31,13 +32,13 @@ public abstract class GenericPlayer implements Player{
   private static final String STRIPE = "stripe";
   private String myName;
 
-  public GenericPlayer(Board board, int id, Map<String, Integer> inventory, Map<Integer, MarkerBoard> enemyMap) {
+  public GenericPlayer(Board board, int id, Map<String, Integer> inventory, int startingGold, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
     myInventory = new HashMap<>(inventory);
     myInventory.put("Basic Shot", Integer.MAX_VALUE);
-    myCurrency = 1000;
+    myCurrency = startingGold;
     myEnemyMap = enemyMap;
-    myHitsMap = new HashMap<CellState, Integer>();
+    myHitsMap = new HashMap<>();
     myId = id;
     myName = PLAYER_PREFIX + (id + 1);
   }
@@ -154,5 +155,12 @@ public abstract class GenericPlayer implements Player{
   public void updateShot(CellState hitResult) {
     myHitsMap.putIfAbsent(hitResult, 0);
     myHitsMap.put(hitResult, myHitsMap.get(hitResult)+1);
+  }
+
+  public void addUsableToInventory(Usable usable){
+    if(myInventory.containsKey(usable.getMyID()))
+      myInventory.put(usable.getMyID(), myInventory.get(usable.getMyID()) + 1);
+    else
+      myInventory.put(usable.getMyID(), 1);
   }
 }

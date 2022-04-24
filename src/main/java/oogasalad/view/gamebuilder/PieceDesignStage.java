@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -20,11 +19,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.ShipCell;
 
+/**
+ * Craetes a design window for pieces, provides a place to select piece shape ,as well as path for
+ * moving pieces, subclass of a BuilderStage. Depends on JavaFX as well as reflection to create the
+ * correct piece object.
+ *
+ * @author Luka Mdivani
+ */
 public class PieceDesignStage extends BuilderStage {
 
   private final int MAX_DIMENSION = 5;
@@ -46,12 +50,12 @@ public class PieceDesignStage extends BuilderStage {
   private final int MAX_LIST_HEIGHT = 400;
   private final double CELL_SIZE = 20;
   private TextArea idInputBox;
-  private final String DEFAULT_PIECE_NAME = "Custom Piece";
+  private static final String DEFAULT_PIECE_NAME = "Custom Piece";
+  private static final String CLASS_PATH = "oogasalad.model.utilities.";
   private List<Coordinate> patrolPath = new ArrayList<>();
 
 
   private String[] customizableStats;
-  private Stage myStage;
 
   public PieceDesignStage() {
     myPane = new BorderPane();
@@ -71,10 +75,6 @@ public class PieceDesignStage extends BuilderStage {
 
     myPane.setTop(makeSelectionComboBox(availablePieceTypes.split(",")));
     myPane.setBottom(makeContinueButton());
-    myStage = new Stage();
-
-    Scene myScene = new Scene(myPane, 1000, 500);
-    myStage.setScene(myScene);
 
   }
 
@@ -91,7 +91,8 @@ public class PieceDesignStage extends BuilderStage {
     VBox result = new VBox();
     ComboBox comboBox = makeComboBox(options);
     result.getChildren().add(comboBox);
-    result.getChildren().add(makeButton("Select", e -> selectPieceType(result, comboBox)));
+    result.getChildren().add(makeButton(getDictionaryResources().getString("selectPrompt"),
+        e -> selectPieceType(result, comboBox)));
     return result;
   }
 
@@ -114,7 +115,8 @@ public class PieceDesignStage extends BuilderStage {
   private void resetCustomization() {
     myPane.setCenter(null);
     stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
-    stateMap[2][2]=1;
+    int centerCoordinate = 2;
+    stateMap[centerCoordinate][centerCoordinate] = 1;
     piecePathList.clear();
     patrolPath.clear();
     myPane.setLeft(null);
@@ -139,15 +141,14 @@ public class PieceDesignStage extends BuilderStage {
 
   @Override
   protected Object launch() {
-    myStage.showAndWait();
+    setUpStage(myPane);
     return pieceList;
   }
 
   @Override
-  protected Object saveAndContinue() {
-    myStage.close();
+  protected void saveAndContinue() {
+    closeWindow();
 
-    return null;
   }
 
 
@@ -171,7 +172,8 @@ public class PieceDesignStage extends BuilderStage {
           new VBox(idInputBox,
               new HBox(arrangeCells(MAX_DIMENSION, MAX_DIMENSION, CELL_SIZE, CELL_SIZE, stateMap),
                   displayColorChoice(DEFAULT_STATE_OPTIONS, colorList)),
-              makeButton("Save Piece", e -> savePiece(pieceTypeString, needsPath))));
+              makeButton(getDictionaryResources().getString("savePiecePrompt"),
+                  e -> savePiece(pieceTypeString, needsPath))));
     }
   }
 
@@ -194,7 +196,7 @@ public class PieceDesignStage extends BuilderStage {
 
 
   private void savePiece(String selectedPieceType, Boolean needsPath) {
-    String selectedPieceClass = "oogasalad.model.utilities." + selectedPieceType + "Piece";
+    String selectedPieceClass = CLASS_PATH + selectedPieceType + "Piece";
     findReferencePoint(stateMap);
     int[][] pieceMap = cropToActiveGrid(stateMap);
     List<Object> parametersList = new ArrayList<>();
@@ -202,23 +204,25 @@ public class PieceDesignStage extends BuilderStage {
     if (needsPath) {
       parametersList.add(patrolPath);
     }
-    //parametersList.add(makeRelativeCoordinateMap(pieceMap));
+    parametersList.add(makeRelativeCoordinateMap(pieceMap));
     parametersList.add(idInputBox.getText());
 
     Object[] parameters = new Object[parametersList.size()];
     parametersList.toArray(parameters);
     pieceList = new ArrayList<>();
+    createPieceObject(selectedPieceClass, parameters);
+    resetCustomization();
+  }
+
+  private void createPieceObject(String selectedPieceClass, Object[] parameters) {
     try {
       pieceList.add(
           createInstance(selectedPieceClass, getParameterType(parameters), parameters));
 
       addToObjectList(idInputBox.getText());
     } catch (IOException e) {
-      e.printStackTrace();
+      showError(getDictionaryResources().getString("reflectionError"));
     }
-
-    findReferencePoint(stateMap);
-    resetCustomization();
   }
 
   private Class<?>[] getParameterType(Object[] parameters) {

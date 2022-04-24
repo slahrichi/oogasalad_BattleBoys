@@ -11,26 +11,41 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Properties;
-import oogasalad.model.utilities.winconditions.WinCondition;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class ParsedElement {
 
-  Properties exceptionMessageProperties;
+  protected Properties exceptionMessageProperties;
   private final String MISSING_DATA =  "missingData";
+  private final String MISSING_FILE = "missingFile";
+  private final String EXCEPTIONS_PATH = "src/main/resources/ParserExceptions.properties";
+  private static final Logger LOG = LogManager.getLogger(ParsedElement.class);
 
   public ParsedElement() {
     exceptionMessageProperties = new Properties();
     try {
-      InputStream is = new FileInputStream("src/main/resources/ParserExceptions.properties");
+      InputStream is = new FileInputStream(EXCEPTIONS_PATH);
       exceptionMessageProperties.load(is);
       is.close();
     } catch (IOException ignored) {
     }
   }
 
-  List getParsedObject(String parsedObjectFile, Gson gson,
+  protected Object getElementFromJson(String File, Gson gson, Class myClass) throws ParserException {
+    Object element;
+    try{
+      element = gson.fromJson(new FileReader(File), myClass);
+    }
+    catch(FileNotFoundException e){
+      throw new ParserException(exceptionMessageProperties.getProperty(MISSING_FILE));
+    }
+    return element;
+  }
+
+  protected List getParsedObject(String parsedObjectFile, Gson gson,
       Type listOfMyClassObject, String missingClass) throws ParserException {
-    List ret = null;
+    List<?> ret = null;
     //List<?> ret= null; not sure which one makes more sense
     try {
       ret = gson.fromJson(new FileReader(parsedObjectFile), listOfMyClassObject);
@@ -44,7 +59,7 @@ public abstract class ParsedElement {
     return ret;
   }
 
-  void putJsonInProp(Properties props, String location, Object o, Gson gson, String key) {
+  protected void putJsonInProp(Properties props, String location, Object o, Gson gson, String key) {
     String json = gson.toJson(o);
     File myNewFile = new File(location);
     try {

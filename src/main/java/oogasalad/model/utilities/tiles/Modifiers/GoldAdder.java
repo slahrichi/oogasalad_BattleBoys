@@ -3,6 +3,8 @@ package oogasalad.model.utilities.tiles.Modifiers;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.function.Consumer;
+
+import oogasalad.model.players.Player;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -11,17 +13,14 @@ public class GoldAdder extends Modifiers{
   private boolean hasBeenAppliedAlready = false;
   private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
       new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
-
+  private int myGold;
   public GoldAdder(int gold){
-    PlayerConsumer consumer = a->{
-      a[0].addGold(gold);
-    };
-    this.setMyConsumer(consumer);
+    myGold = gold;
   }
 
   @Override
-  public Consumer modifierFunction(CellInterface cell){
-    return myConsumer;
+  public Consumer modifierFunction(Player[] players){
+    return createConsumer();
   }
 
   @Override
@@ -31,6 +30,14 @@ public class GoldAdder extends Modifiers{
       return true;
     }
     return false;
+  }
+
+  @Override
+  protected Consumer createConsumer() {
+    PlayerConsumer consumer = a->{
+      a[0].addGold(myGold);
+    };
+    return consumer;
   }
 
 

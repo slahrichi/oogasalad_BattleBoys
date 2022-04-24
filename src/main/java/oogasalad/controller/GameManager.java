@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.scene.Scene;
-import oogasalad.GameData;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.EngineRecord;
@@ -97,10 +96,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     myResources = resources;
     this.playerQueue = new LinkedList<>(data.players());
     numShots = 0;
-    whenToMovePieces = 0; //should change this to use gamedata from parser
-    allowedShots = 1;
+    whenToMovePieces = data.shipMovementRate(); //should change this to use gamedata from parser
+    allowedShots = data.shotsPerTurn();
     createIDMap(data.players());
-    createUsablesMap(data.usables());
+    createUsablesMap(data.allUsables());
     engineMap = data.engineMap();
     gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
   }
@@ -132,7 +131,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
       m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
-      e.printStackTrace();
       throw new NullPointerException(INVALID_METHOD);
     }
   }
@@ -140,6 +138,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private void equipUsable(String id) {
     currentUsable = usablesIDMap.get(id);
     LOG.info(String.format(WEAPON_LOG, id));
+    view.setCurrentUsable(id, usablesIDMap.get(id).getRelativeCoordShots().keySet());
+
   }
 
   private void buyItem(String id) {
@@ -281,10 +281,22 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
+
   private void resetDecisionEngines() {
     for (DecisionEngine engine : engineMap.values()) {
       engine.resetStrategy();
     }
+  }
+
+
+  /**
+   * A method for updating a weapon that I genuinely had no idea about until 2 hours before the
+   * project was due :|
+   *
+   * @param count shots to be added to current shot count
+   */
+  public void addRemainingShots(int count){
+    numShots +=count;
   }
 
   /**
