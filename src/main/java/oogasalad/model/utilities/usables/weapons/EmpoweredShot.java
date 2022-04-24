@@ -13,6 +13,10 @@ public class EmpoweredShot extends Weapon{
     myDMG = dmg;
     addRelativePosition(new Coordinate(0,0), dmg);
   }
+  public EmpoweredShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
+  }
+
 
   @Override
   protected void makeWeaponFunction() {

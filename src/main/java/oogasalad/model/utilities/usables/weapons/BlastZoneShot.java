@@ -18,6 +18,10 @@ public class BlastZoneShot extends Weapon {
     makeWeaponFunction();
   }
 
+  public BlastZoneShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
+  }
+
   private void generateRelativeCoords(){
     int count = 0;
     for(int tempDmg = myStartingDmg; tempDmg>0; tempDmg--){

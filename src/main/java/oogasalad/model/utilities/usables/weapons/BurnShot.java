@@ -21,7 +21,9 @@ public class BurnShot extends Weapon {
     addRelativePosition(new Coordinate(0,0), 1);
     makeWeaponFunction();
   }
-
+  public BurnShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]), Integer.parseInt(parameters[3]));
+  }
 
   @Override
   protected void makeWeaponFunction() {

@@ -17,6 +17,11 @@ public class SonarShot extends Weapon {
     generateRelativeCoords();
     makeWeaponFunction();
   }
+
+  public SonarShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
+  }
+
   private void generateRelativeCoords(){
     int count = 0;
     for(int row = -1*myRadius ; row<myRadius; row++){

@@ -18,6 +18,10 @@ public class MoltovShot extends Weapon{
     addRelativePosition(new Coordinate(0,0), dmg);
   }
 
+  public MoltovShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
+  }
+
   @Override
   protected void makeWeaponFunction(){
     setMyFunction((abs, board)->{

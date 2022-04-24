@@ -22,6 +22,10 @@ public class RandomShot extends Weapon{
     this.dmgPerShot = dmgPerShot;
   }
 
+
+  public RandomShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]), Integer.parseInt(parameters[3]),Integer.parseInt(parameters[4]));
+  }
   @Override
   protected void makeWeaponFunction() {
     setMyFunction((absolute, board) ->{
