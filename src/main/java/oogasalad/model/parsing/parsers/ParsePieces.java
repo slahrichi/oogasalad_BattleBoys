@@ -41,9 +41,9 @@ public class ParsePieces extends ParsedElement {
     String piecesFile = props.getProperty(PROPERTIES_PIECES_FILE);
     LOG.info("parsing Pieces at {}",piecesFile);
     Gson gson = new GsonBuilder().
-        registerTypeHierarchyAdapter(Piece.class, new GSONHelper()).
-        registerTypeHierarchyAdapter(Cell.class, new GSONHelper()).
-        registerTypeHierarchyAdapter(Modifiers.class, new GSONHelper()).
+        registerTypeAdapter(Piece.class, new GSONHelper()).
+        registerTypeAdapter(Cell.class, new GSONHelper()).
+        registerTypeAdapter(Modifiers.class, new GSONHelper()).
         create();
     Type listOfMyClassObject = new TypeToken<ArrayList<Piece>>() {}.getType();
     return (List<Piece>) getParsedObject(piecesFile, gson, listOfMyClassObject, PIECES);

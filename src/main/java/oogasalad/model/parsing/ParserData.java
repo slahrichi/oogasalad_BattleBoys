@@ -1,7 +1,9 @@
 package oogasalad.model.parsing;
 
+import com.google.gson.internal.LinkedTreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.paint.Color;
@@ -92,7 +94,7 @@ public record ParserData(List<String> players,
     if(!(elements.get(4).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 4));
     }
-    if(!(elements.get(5).getClass().equals(Map.class))) {
+    if(!(elements.get(5).getClass().equals(HashMap.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 5));
     }
     if(!(elements.get(6).getClass().equals(ArrayList.class))) {
@@ -104,10 +106,10 @@ public record ParserData(List<String> players,
     if(!(elements.get(8).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 8));
     }
-    if(!(elements.get(9).getClass().equals(Map.class))) {
+    if(!(elements.get(9).getClass().equals(LinkedTreeMap.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 9));
     }
-    if(!(elements.get(10).getClass().equals(List.class))) {
+    if(!(elements.get(10).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 10));
     }
 

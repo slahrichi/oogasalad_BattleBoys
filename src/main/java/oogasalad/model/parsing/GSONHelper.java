@@ -72,12 +72,6 @@ public class GSONHelper<T> implements
             src.getClass().equals(StaticPiece.class) ||
             src.getClass().equals(MovingPiece.class)) {
       LOG.info("we have identified piece");
-      gson = new GsonBuilder().registerTypeHierarchyAdapter(Cell.class, new GSONHelper()).create();
-    } else if( //Cell
-            src.getClass().equals(ShipCell.class) ||
-            src.getClass().equals(IslandCell.class) ||
-            src.getClass().equals(WaterCell.class)) {
-      LOG.info("we have identified cell");
       gson = new GsonBuilder().registerTypeHierarchyAdapter(Modifiers.class, new GSONHelper()).create();
     } else if ( //Modifier
         src.getClass().equals(Burner.class) ||

@@ -256,7 +256,7 @@ public class ParserTest {
   @Test
   void loadBoard()  {
     try {
-      ParserData generatedData = parser.parse("src/test/resources/Test.properties");
+      ParserData generatedData = parser.parse("data/recentlyGeneratedData.properties");
       assertTrue(Arrays.deepEquals(exampleParserData.board(), generatedData.board()));
     } catch(Exception e) {
       fail(String.format("Exception thrown: %s",e.getMessage()));
@@ -266,7 +266,7 @@ public class ParserTest {
   @Test
   void loadPlayers()  {
     try {
-      ParserData generatedData = parser.parse("src/test/resources/Test.properties");
+      ParserData generatedData = parser.parse("data/recentlyGeneratedData.properties");
       assertEquals(exampleParserData.players(), generatedData.players());
     } catch(Exception e) {
       fail(String.format("Exception thrown: %s",e.getMessage()));
@@ -276,7 +276,7 @@ public class ParserTest {
   @Test
   void loadPieces()  {
     try {
-      ParserData generatedData = parser.parse("src/test/resources/Test.properties");
+      ParserData generatedData = parser.parse("data/recentlyGeneratedData.properties");
       assertEquals(exampleParserData.pieces(), generatedData.pieces());
     } catch(Exception e) {
       fail(String.format("Exception thrown: %s",e.getMessage()));
