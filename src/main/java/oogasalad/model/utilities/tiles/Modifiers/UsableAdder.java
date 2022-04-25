@@ -8,6 +8,14 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.weapons.Weapon;
+/**
+ * Purpose - Adds a usable into the players inventory.
+ * Assumptions - Modifier lambda is passed valid player
+ * Parameters - usableId - The Id of the usable wanting to be Added
+ * Dependencies - java.util, Modifiers, player, usable, inventory, shop, parser, GameManager,
+ * @Author - Prajwal Jagadish
+ */
+
 
 public class UsableAdder extends Modifiers {
 
@@ -17,6 +25,10 @@ public class UsableAdder extends Modifiers {
     usableId = id;
   }
 
+  /**
+   * Creates consumer that adds an item to the currents players inventory
+   * @return Consumer
+   */
   @Override
   protected Consumer createConsumer() {
     Consumer ret = new PlayerConsumer() {
@@ -33,6 +45,11 @@ public class UsableAdder extends Modifiers {
     return "Added " + usableId + " to Inventory";
   }
 
+  /**
+   * Consumer is only passed back at the player level.
+   * @param players a generic player
+   * @return the consumer
+   */
   @Override
   public Consumer modifierFunction(Player[] players) {
     return myConsumer;

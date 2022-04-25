@@ -3,7 +3,13 @@ package oogasalad.model.utilities.tiles.Modifiers;
 import java.util.function.Consumer;
 import oogasalad.controller.GameManager;
 import oogasalad.model.utilities.winconditions.WinCondition;
-
+/**
+ * Purpose - Replaces all the winconditions with a new win condition
+ * Assumptions - Modifier lambda is passed valid gamemanager
+ * Parameters - The win condition that was added
+ * Dependencies - java.util, Modifiers, WinCondition, GameManager,
+ * @Author - Prajwal Jagadish
+ */
 public class ReplaceWinCondition extends Modifiers {
   WinCondition condition;
 
@@ -12,6 +18,10 @@ public class ReplaceWinCondition extends Modifiers {
   }
 
 
+  /**
+   * Creates a consumer that replaces the wincondition with another one.
+   * @return
+   */
   @Override
   protected Consumer createConsumer() {
     Consumer ret = new GameManagerConsumer() {
@@ -29,6 +39,9 @@ public class ReplaceWinCondition extends Modifiers {
   }
 
   @Override
+  /**
+   * makes it only pass back the consumer if a gamemanager is passed in
+   */
   public Consumer modifierFunction(GameManager gm) {
     return createConsumer();
   }

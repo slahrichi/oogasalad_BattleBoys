@@ -118,7 +118,9 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     } catch (NoSuchMethodException ex) {
       throw new NullPointerException(NO_SUCH_METHOD);
     } catch (InvocationTargetException ex) {
+      ex.printStackTrace();
       throw new NullPointerException(INVOCATION_TARGET);
+
     } catch (IllegalAccessException ex) {
       throw new NullPointerException(ILLEGAL_ACCESS);
     }
@@ -160,8 +162,9 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void moveToNextPlayer(String s) {
+    if(playerIndex>=0)
+        playerList.get(playerIndex).getBoard().randomizeIslands(islandList);
     playerIndex++;
-
     setupView.displayPassComputerMessage(myResources.getString(PROMPT_PREFIX_RESOURCE)
         + (playerIndex + 1));
     if (playerIndex >= playerList.size()) {

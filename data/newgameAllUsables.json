@@ -1,0 +1,11 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.EmpoweredShot",
+    "properties": {
+      "myDMG": 3,
+      "myID": "shoy",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  }
+]

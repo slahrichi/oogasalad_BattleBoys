@@ -1,0 +1,35 @@
+[
+  {
+    "type": "oogasalad.model.utilities.tiles.IslandCell",
+    "properties": {
+      "myCoordinate": {
+        "row": 0,
+        "column": 0
+      },
+      "myModifiers": [
+        {
+          "myGold": 100,
+          "multiplier": 1,
+          "hasBeenAppliedAlready": false,
+          "allowableStates": [
+            "SHIP_SUNKEN",
+            "ISLAND_SUNK"
+          ]
+        }
+      ],
+      "goldAdders": [
+        {
+          "myGold": 100,
+          "multiplier": 1,
+          "hasBeenAppliedAlready": false,
+          "allowableStates": [
+            "SHIP_SUNKEN",
+            "ISLAND_SUNK"
+          ]
+        }
+      ],
+      "currentState": "ISLAND_HEALTHY",
+      "myHealthBar": 1
+    }
+  }
+]

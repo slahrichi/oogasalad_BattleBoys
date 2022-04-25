@@ -11,13 +11,25 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+/**
+ * Purpose - If hit will result in a random ship cell on the current players board taking damage
+ * Assumptions - Modifier lambda is passed valid Player
+ * Parameters - dmg = Damage caused by the mine
+ * Dependencies - java.util, Modifiers, BoardConsumer, Board, Player, Cell,
+ * @Author - Prajwal Jagadish
+ */
 public class Mine extends Modifiers{
 
   private int dmg;
 
-
+  public Mine(int dmg){
+    this.dmg = dmg;
+  }
 
   @Override
+  /**
+   * Creates Consumer to hit a random shipcell
+   */
   protected Consumer createConsumer() {
     Consumer ret = new PlayerConsumer() {
       @Override
@@ -41,10 +53,15 @@ public class Mine extends Modifiers{
     return ret;
   }
 
+  /**
+   * Passes back the consumer only at the player level
+   * @return consumer
+   */
   @Override
-  public Consumer modifierFunction(GameManager gm){
+  public Consumer modifierFunction(Player[] players){
     return createConsumer();
   }
+
 
   @Override
   public String toString() {
