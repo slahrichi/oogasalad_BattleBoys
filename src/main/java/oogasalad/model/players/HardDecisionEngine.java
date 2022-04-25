@@ -22,6 +22,8 @@ import oogasalad.model.utilities.winconditions.WinCondition;
  */
 public class HardDecisionEngine extends DecisionEngine {
 
+  private static final int CLUSTER_SIZE = 3;
+
   /**
    *
    * @param coordinateList list of coordinates from which the AI can choose for each enemy
@@ -92,8 +94,8 @@ public class HardDecisionEngine extends DecisionEngine {
 
   private Map<Coordinate, Integer> createSquare() {
     Map<Coordinate, Integer> map = new HashMap<>();
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
+    for (int i = 0; i < CLUSTER_SIZE; i++) {
+      for (int j = 0; j < CLUSTER_SIZE; j++) {
         map.put(new Coordinate(i, j), 1);
       }
     }
