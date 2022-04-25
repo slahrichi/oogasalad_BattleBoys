@@ -21,6 +21,7 @@ import oogasalad.model.utilities.usables.items.CircleHeal;
 import oogasalad.model.utilities.usables.items.ShipHeal;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
 import oogasalad.model.utilities.usables.weapons.BlastZoneShot;
+import oogasalad.model.utilities.usables.weapons.BurnShot;
 import oogasalad.model.utilities.usables.weapons.ClusterShot;
 import oogasalad.model.utilities.usables.weapons.EmpoweredShot;
 import oogasalad.model.utilities.usables.weapons.HomingShot;
@@ -217,6 +218,20 @@ public class WeaponTest {
     assertEquals(CellState.SHIP_HEALTHY, ret.get(new Coordinate(1,1)));
     assertEquals(CellState.SHIP_HEALTHY, ret.get(new Coordinate(0,1)));
     assertEquals(CellState.SHIP_HEALTHY, ret.get(new Coordinate(1,0)));
+  }
+
+  @Test
+  void BurnShotTest(){
+    Weapon weapon = new BurnShot("Moltov", 100, 1,4);
+    assertEquals(4,myBoard.getCell(new Coordinate(0,1)).getHealth());
+    Map<Coordinate, CellState> ret = weapon.getFunction().apply(new Coordinate(0,1), myBoard);
+    assertEquals(4,myBoard.getCell(new Coordinate(0,1)).getHealth());
+    myBoard.update();
+    assertEquals(2,myBoard.getCell(new Coordinate(0,1)).getHealth());
+    myBoard.update();
+    assertEquals(1,myBoard.getCell(new Coordinate(0,1)).getHealth());
+    myBoard.update();
+    assertEquals(0,myBoard.getCell(new Coordinate(0,1)).getHealth());
   }
 
 

@@ -164,11 +164,14 @@ public abstract class GenericPlayer implements Player{
     else
       myInventory.put(usable.getMyID(), 1.0);
   }
+
   public void addIDtoInventory(String ID){
-    if(myInventory.containsKey(ID))
-      myInventory.put(ID, myInventory.get(ID) + 1);
-    else
-      myInventory.put(ID, 1);
+   try {
+     if (myInventory.containsKey(ID))
+       myInventory.put(ID, myInventory.get(ID) + 1);
+     else
+       myInventory.put(ID, 1.0);
+   }catch(Exception e){}
   }
   public void setMultiplier(int factor){ multiplier =factor;}
 }
