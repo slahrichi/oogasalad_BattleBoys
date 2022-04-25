@@ -59,7 +59,8 @@ public class GameViewManager {
     view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(
         playerList.get(0).getMyInventory()), myResources);
     view.setShopUsables(data.allUsables());
-    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
+    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(),
+        playerList.get(0).getMyCurrency());
   }
 
   private Map<Integer, String> generateIDToNames() {

@@ -58,7 +58,8 @@ public class PlayerFactory {
     return new PlayerFactoryRecord(playerList, engineMap);
   }
 
-  private static Player createPlayer(String playerType, CellState[][] board, Map<String, Integer> inventory, int startingGold, int id) {
+  private static Player createPlayer(String playerType, CellState[][] board,
+      Map<String, Integer> inventory, int startingGold, int id) {
     Board b = new Board(board);
     MarkerBoard mb = new MarkerBoard(board);
     Map<Integer, MarkerBoard> enemyMap = createEnemyMap(mb, id);

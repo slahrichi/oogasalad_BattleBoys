@@ -96,7 +96,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     myResources = resources;
     this.playerQueue = new LinkedList<>(data.players());
     numShots = 0;
-    whenToMovePieces = data.shipMovementRate(); //should change this to use gamedata from parser
+    whenToMovePieces = data.shipMovementRate();
     allowedShots = data.shotsPerTurn();
     createIDMap(data.players());
     createUsablesMap(data.allUsables());
