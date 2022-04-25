@@ -4,11 +4,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 
 /**
- * This class represents an HBox that serves as the title view of any given screen. It contains
- * a customizable ImageView and a Label.
+ * This class represents an HBox that serves as the title view of any given screen. It contains a
+ * customizable ImageView and a Label.
  *
  * @author Eric Xie
  */
@@ -29,7 +28,7 @@ public class TitlePanel extends HBox {
    *
    * @param inputString initial title text to be displayed
    */
-  public TitlePanel(String inputString){
+  public TitlePanel(String inputString) {
 
     titleImage = new ImageView();
     titleText = new Label(inputString);
