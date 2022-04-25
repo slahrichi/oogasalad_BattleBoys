@@ -52,6 +52,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import spark.Spark;
 
+/**
+ * This class is the main view class for the gameplay stage. It is the top of the view hierarchy
+ * for the main gameplay stage and owns all visual components that appear during that stage. One
+ * GameView should be created and continuously modified throughout the duration of the game.
+ *
+ * @author Minjun Kwak, Eric Xie, Edison Ooi
+ */
 public class GameView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer,
     ShopVisualizer, ShotVisualizer, GameDataVisualizer, ErrorDisplayer {
 
