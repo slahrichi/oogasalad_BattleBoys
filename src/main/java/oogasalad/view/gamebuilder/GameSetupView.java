@@ -13,6 +13,14 @@ import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.items.Item;
 import oogasalad.model.utilities.usables.weapons.Weapon;
 
+/**
+ * The manager class which launches all design stages, takes in the result objects, creates a
+ * parser-data record, which is then passed to a parser, so it can be written to a file.
+ * Assumes that at least one instance of all objects has been created, due to conceptual limitations,
+ * this is might not be 100% open closed.
+ *
+ * @author Luka Mdivani
+ */
 public class GameSetupView extends Application {
 
   public GameSetupView() {
@@ -30,7 +38,7 @@ public class GameSetupView extends Application {
     GameBuilderUtil builderUtil = new GameBuilderUtil();
 
     FileNameSelectionStage fileNameSelectionStage = new FileNameSelectionStage();
-    fileName=(String) fileNameSelectionStage.launch();
+    fileName = (String) fileNameSelectionStage.launch();
 
     PlayerSetupStage playerSetupStage = new PlayerSetupStage();
     objectList.add(playerSetupStage.launch());
@@ -51,14 +59,12 @@ public class GameSetupView extends Application {
 
     WeaponDesignStage weaponDesignStage = new WeaponDesignStage();
     List<Weapon> weapons = (List<Weapon>) weaponDesignStage.launch();
-    objectList.add(weapons);
 
     SpecialIslandDesigner specialIslandDesigner = new SpecialIslandDesigner();
     objectList.add(specialIslandDesigner.launch());
 
     ItemDesignStage itemDesignStage = new ItemDesignStage();
     List<Item> items = (List<Item>) itemDesignStage.launch();
-    objectList.add(items);
 
     InventorySetupStage inventorySetupStage = new InventorySetupStage(
         weaponDesignStage.getCreatedWeaponIds());
@@ -85,7 +91,7 @@ public class GameSetupView extends Application {
         parameters);
 
     Parser parser = new Parser();
-    parser.save(userSelections,fileName );
+    parser.save(userSelections, fileName);
   }
 
   private List<Class<?>> getParamTypes(List<Object> objects) {

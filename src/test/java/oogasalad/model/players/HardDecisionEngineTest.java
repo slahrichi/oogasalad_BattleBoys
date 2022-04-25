@@ -27,8 +27,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
-public class MediumDecisionEngineTest extends DukeApplicationTest {
+public class HardDecisionEngineTest extends DukeApplicationTest {
 
+  private DecisionEngine engine;
   private CellState[][] cellBoard;
   private Map<Player, DecisionEngine> engineMap;
   private GameSetup gs;
@@ -63,12 +64,13 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100,
-        new ArrayList<>(Arrays.asList("None", "Medium")), new ArrayList<>(Arrays.asList
+            Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100,
+        new ArrayList<>(Arrays.asList("None", "Hard")), new ArrayList<>(Arrays.asList
             (new LoseXShipsLossCondition(3))));
     List<Player> engineList = new ArrayList<>(pfr.engineMap().keySet());
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
+    engine = pfr.engineMap().get(engineList.get(0));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(0, 1), new Coordinate(0, 2), new Coordinate(0, 3)));
     List<ShipCell> cellList = new ArrayList<>();

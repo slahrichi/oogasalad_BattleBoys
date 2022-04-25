@@ -4,20 +4,29 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.paint.Color;
+import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.CellView;
+import oogasalad.view.Info;
 
 /**
- * This class represents a BoardView that appears during the setup phase of the game. It allows
- * users to place their Pieces on their board. Because the frontend is not in charge of preserving
- * board state for each player, only one instance of SetupBoardView is created for the entire setup
- * phase, and it is cleared after each player finishes placing their Pieces.
+ * This class creates a dummy board that is meant to be displayed on the right pane of the screen,
+ * which shows the next ship to be placed when used in setup, or shows the ships remaining for each
+ * player. Because it is a dummy board that is not meant to be interacted with, observers are not
+ * added to the cells of this board.
  *
- * @author Eric Xie, Minjun Kwak, Edison Ooi
+ * @author Minjun Kwak
  */
-public class SetupBoardView extends BoardView {
+public class ShipIndicatorBoardView extends BoardView {
 
-  public SetupBoardView(double size, CellState[][] arrayLayout, Map<CellState, Color> colorMap, int id) {
+  /**
+   * Creates the necessary components of a BoardView by calling its superclass constructor
+   *
+   * @param size        the size of each cell
+   * @param arrayLayout the layout of the cell states of the board
+   * @param id          the id of this BoardView
+   */
+  public ShipIndicatorBoardView(double size, CellState[][] arrayLayout, Map<CellState, Color> colorMap, int id) {
     super(size, arrayLayout, colorMap, id);
   }
 
@@ -28,15 +37,13 @@ public class SetupBoardView extends BoardView {
    * @param arrayLayout the layout of the cells of this BoardView
    * @param size        the size of each cell
    */
+  @Override
   public void initializeCellViews(CellState[][] arrayLayout, double size) {
     for (int row = 0; row < arrayLayout.length; row++) {
       for (int col = 0; col < arrayLayout[0].length; col++) {
         List<Double> points = BoardMaker.calculatePoints(row, col, size);
-        CellView cell = new CellView(points, myColorMap.get(arrayLayout[row][col]), row,
-            col);
-        if (arrayLayout[row][col] == CellState.WATER) {
-          cell.addObserver(this);
-        }
+        CellView cell = new CellView(points, myColorMap.get(arrayLayout[row][col]),
+            row, col);
         myLayout[row][col] = cell;
       }
     }
@@ -50,6 +57,7 @@ public class SetupBoardView extends BoardView {
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    notifyObserver(evt.getPropertyName(), evt.getNewValue());
+    notifyObserver(evt.getPropertyName(), new Info(((Coordinate) evt.getNewValue()).getRow(),
+        ((Coordinate) evt.getNewValue()).getColumn(), myID));
   }
 }

@@ -15,12 +15,14 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
+import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.items.Item;
 import oogasalad.model.utilities.usables.weapons.Weapon;
+import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.view.SetupView;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,12 +41,22 @@ public class GameSetupTest extends DukeApplicationTest {
   private GameData gd1;
   private GameData gd2;
   private GameSetup gs;
-  private Game game;
-
+  private Map<CellState, Color> dummyColorMap = new HashMap<>();
   private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
   @BeforeEach
   void setup() {
+    dummyColorMap.put(CellState.NOT_DEFINED, Color.TRANSPARENT);
+    dummyColorMap.put(CellState.WATER, Color.BLUE);
+    dummyColorMap.put(CellState.WATER_HIT, Color.WHITE);
+    dummyColorMap.put(CellState.SHIP_HEALTHY, Color.BLACK);
+    dummyColorMap.put(CellState.SHIP_DAMAGED, Color.ORANGE);
+    dummyColorMap.put(CellState.SHIP_SUNKEN, Color.RED);
+    dummyColorMap.put(CellState.SHIP_HOVER, Color.GRAY);
+    dummyColorMap.put(CellState.SCANNED, Color.PINK);
+    dummyColorMap.put(CellState.ISLAND_HEALTHY, Color.YELLOW);
+    dummyColorMap.put(CellState.ISLAND_DAMAGED, Color.GREEN);
+    dummyColorMap.put(CellState.ISLAND_SUNK, Color.PURPLE);
     CellState[][] cellBoard = new CellState[8][8];
     for (int i = 0; i < cellBoard.length; i++) {
       for (int j = 0; j < cellBoard[0].length; j++) {
@@ -52,7 +64,9 @@ public class GameSetupTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100, new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100,
+        new ArrayList<>(Arrays.asList("None", "Easy")), new ArrayList<>(Arrays.asList
+            (new LoseXShipsLossCondition(3))));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(1, 0), new Coordinate(1, 1)));
     List<ShipCell> dummyShipCellList = new ArrayList<>();
@@ -88,7 +102,7 @@ public class GameSetupTest extends DukeApplicationTest {
     javafxRun(() -> gs = new GameSetup(gd1, myResources));
     Thread.sleep(2000);
     assertThrows(NullPointerException.class, () -> gs.propertyChange(new PropertyChangeEvent
-        (new SetupView(gd1.board(), myResources), "meow", null, "0 0"))) ;
+        (new SetupView(gd1.board(), dummyColorMap, myResources), "meow", null, "0 0"))) ;
   }
 
   @Test

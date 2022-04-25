@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 import oogasalad.controller.Game;
 
 /**
- * Feel free to completely change this code or delete it entirely. 
+ * Class responsible for creating the Game class and starting the program
  */
 public class Main extends Application {
 

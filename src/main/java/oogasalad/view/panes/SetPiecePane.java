@@ -3,23 +3,23 @@ package oogasalad.view.panes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.view.board.ShipIndicatorBoardView;
 import oogasalad.view.maker.BoxMaker;
-import oogasalad.view.ShipIndicatorView;
 import oogasalad.view.maker.LabelMaker;
 
-// need to hold the ship list as well as create the ships to display
-
 /**
- * This class represents a TitledPane that shows visual representations of ships on the side of
- * the main screen. These ships may represent the opponent's remaining ships, the current ship
- * being placed in setup phase, etc.
+ * This class represents a TitledPane that shows visual representations of ships on the side of the
+ * main screen. These ships may represent the opponent's remaining ships, the current ship being
+ * placed in setup phase, etc.
  *
  * @author Edison Ooi, Eric Xie
  */
@@ -33,35 +33,29 @@ public class SetPiecePane extends TitledPane {
   private static final String LABEL_TEXT_RESOURCE = "SetPieceText";
   private static final String LABEL_ID = "all-ships-placed-label";
 
-  // The visual representations of all ships to be shown in this pane
-  private List<ShipIndicatorView> shipViews;
   // Holds all ShipIndicatorViews to be shown
   private VBox shipIndicatorsBox;
-  // Indicates whether this player has placed all of their ships
-  private boolean lastPiecePlaced = false;
+  private Map<CellState, Color> myColorMap;
   private double myShipSize;
 
   private static ResourceBundle myResources;
 
   /**
    * Class constructor.
+   *
    * @param size
    */
-  public SetPiecePane(double size, ResourceBundle resourceBundle) {
+  public SetPiecePane(double size, Map<CellState, Color> colorMap, ResourceBundle resourceBundle) {
     myResources = resourceBundle;
     myShipSize = size;
-    shipViews = new ArrayList<>();
+    myColorMap = colorMap;
     shipIndicatorsBox = BoxMaker.makeVBox(INDICATOR_ID, INDICATOR_SPACING, Pos.CENTER);
-//    shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
     setUpPane();
   }
 
 
   // Initializes key attributes of this TitledPane
   private void setUpPane() {
-//    for(ShipIndicatorView view : shipViews) {
-//      shipIndicatorsBox.getChildren().add(view.getBoardPane());
-//    }
     setContent(shipIndicatorsBox);
     setPrefWidth(PANE_WIDTH);
     setId(PANE_ID);
@@ -78,7 +72,8 @@ public class SetPiecePane extends TitledPane {
     shipIndicatorsBox.getChildren().clear();
     for (Collection<Coordinate> coords : relativeCoords) {
       shipIndicatorsBox.getChildren()
-          .add(new ShipIndicatorView(myShipSize, getArrayRepresentation(coords), 0).getBoardPane());
+          .add(new ShipIndicatorBoardView(myShipSize, getArrayRepresentation(coords), myColorMap,
+              0).getBoardPane());
     }
     setContent(shipIndicatorsBox);
   }
