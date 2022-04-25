@@ -133,8 +133,10 @@ public class PieceDesignStage extends BuilderStage {
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(mouseEvent -> {
-      stateMap[i][j] = getSelectedType();
-      newCell.setFill(colorList.get(getSelectedType()));
+      if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+        stateMap[i][j] = getSelectedType();
+        newCell.setFill(colorList.get(getSelectedType()));
+      }
       if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
         makePopUpDialog(i, j);
       }
