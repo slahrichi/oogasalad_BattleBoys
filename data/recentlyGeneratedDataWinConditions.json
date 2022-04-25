@@ -1,0 +1,10 @@
+[
+  {
+    "type": "oogasalad.model.utilities.winconditions.HitXCellsCondition",
+    "properties": {
+      "myCellToHit": "WATER_HIT",
+      "myNumToHit": 2,
+      "myConditionType": "WIN"
+    }
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "myRadius": 1,
+    "healingPower": 1,
+    "myID": "CustomUsable",
+    "goldCost": 1,
+    "relativeCoordShots": {}
+  }
+]

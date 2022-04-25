@@ -8,6 +8,6 @@ package oogasalad.view;
  *
  * @author Minjun Kwak
  */
-public record UsableRecord(String id, String className, int quantity) {
+public record UsableRecord(String id, String className, double quantity) {
 
 }

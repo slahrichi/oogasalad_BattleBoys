@@ -7,7 +7,7 @@ import oogasalad.model.utilities.MarkerBoard;
 public class HumanPlayer extends GenericPlayer {
 
 
-  public HumanPlayer(Board board, int id, Map<String, Integer> inventory, int startingGold, Map<Integer, MarkerBoard> enemyMap) {
+  public HumanPlayer(Board board, int id, Map<String, Double> inventory, int startingGold, Map<Integer, MarkerBoard> enemyMap) {
     super(board, id, inventory, startingGold, enemyMap);
   }
 

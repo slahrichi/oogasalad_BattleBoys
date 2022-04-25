@@ -16,7 +16,7 @@ public class ParseShipMovementRate extends ParsedElement {
   public void save(Properties props, String location, Object o) throws ParserException {
     LOG.info("saving ship movement rate at {}", location);
     Integer shipMovementRate = (Integer) o;
-    props.put(PROPERTIES_SHIPMOVEMENTRATE, shipMovementRate);
+    props.put(PROPERTIES_SHIPMOVEMENTRATE, shipMovementRate.toString());
   }
 
   @Override

@@ -73,7 +73,7 @@ public class GameManagerTest extends DukeApplicationTest {
         cellBoard[i][j] = CellState.WATER;
       }
     }
-    Map<String, Integer> inventory = new HashMap<String, Integer>();
+    Map<String, Double> inventory = new HashMap<>();
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
         Arrays.asList("HumanPlayer", "HumanPlayer")), inventory, 100,
         new ArrayList<>(Arrays.asList("None", "None")), new ArrayList<>());
@@ -230,7 +230,7 @@ public class GameManagerTest extends DukeApplicationTest {
   @Test
   void testBuyItem() throws InterruptedException {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-            Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<String, Integer>(),
+            Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<String, Double>(),
         100, new ArrayList<>(Arrays.asList("None", "Easy")), new ArrayList<>(Arrays.asList
             (new LoseXShipsLossCondition(3))));
     List<Usable> usables = new ArrayList<>(Arrays.asList(new BasicShot()));

@@ -16,7 +16,7 @@ public class ParseGold extends ParsedElement {
   public void save(Properties props, String location, Object o) throws ParserException {
     LOG.info("saving gold at {}", location);
     Integer gold = (Integer) o;
-    props.put(PROPERTIES_GOLD, gold);
+    props.put(PROPERTIES_GOLD, gold.toString());
   }
 
   @Override
