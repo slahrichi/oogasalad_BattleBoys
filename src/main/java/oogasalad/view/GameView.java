@@ -53,8 +53,8 @@ import org.apache.logging.log4j.Logger;
 import spark.Spark;
 
 /**
- * This class is the main view class for the gameplay stage. It is the top of the view hierarchy
- * for the main gameplay stage and owns all visual components that appear during that stage. One
+ * This class is the main view class for the gameplay stage. It is the top of the view hierarchy for
+ * the main gameplay stage and owns all visual components that appear during that stage. One
  * GameView should be created and continuously modified throughout the duration of the game.
  *
  * @author Minjun Kwak, Eric Xie, Edison Ooi
@@ -98,7 +98,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String APPLY_USABLE_OPERATION = "applyUsable";
   private static final String BASIC_SHOT_DYNAMIC_TEXT = "Basic Shot";
   private static final String INVALID_METHOD = "Invalid method name given";
-  private static final String SHOT_METHOD = "handleShot";
   private static final double BOARD_SIZE = 30;
   private static final double SET_PIECE_PANE_SIZE = 20;
   private static final int EXPLOSION_DURATION = 1000;
@@ -111,10 +110,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   // Text constants
   private static final String BOARD_INDEX_LOG = "Current board index: ";
   private static final String BOARD_SHOW_LOG = "Showing board ";
-  private static final String CELL_CLICKED_SELF_LOG = "cellClickedSelf";
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d, col: %d";
-  private static final String BOARD_HOVERED_LOG = "Board %d was hovered over at row: %d, col: %d";
-  private static final String CELL_CLICKED_ENEMY_LOG = "cellClickedEnemy";
   private static final String AI_SHOT_TEXT = "Player %d took a shot at row %d, column %d on player %d";
 
   // ResourceBundle Strings
@@ -134,24 +130,20 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // JavaFX components
   private TitlePanel myTitle;
-  private BorderPane myPane;
+  private final BorderPane myPane;
   private VBox myCenterPane;
   private Label currentBoardLabel;
   private HBox boardButtonBox;
-  private Button leftButton;
-  private Button rightButton;
   private Button endTurnButton;
-  private VBox myRightPane;
   private Button shopButton;
   private SetPiecePane piecesRemainingPane;
   private LegendPane pieceLegendPane;
-  private ConfigPane configPane;
   private DynamicLabel currentUsableLabel;
   private DynamicLabel shotsRemainingLabel;
   private DynamicLabel numPiecesLabel;
   private DynamicLabel goldLabel;
   private AbstractScreen passComputerMessageView;
-  private ResourceBundle myResources;
+  private final ResourceBundle myResources;
   private InventoryView inventory;
 
   // Custom windows
@@ -159,30 +151,31 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Stage shopStage;
 
   // View metadata
-  private List<BoardView> myBoards;
+  private final List<BoardView> myBoards;
   private int currentBoardIndex;
   private List<Collection<Collection<Coordinate>>> myPiecesLeft;
-  private Map<Integer, String> playerIDToNames;
+  private final Map<Integer, String> playerIDToNames;
   private List<Usable> shopUsables;
   private Collection<Coordinate> currentUsableRelativeCoords;
   private boolean nightMode;
   private Scene myScene;
-  private Map<CellState, Color> myColorMap;
+  private final Map<CellState, Color> myColorMap;
 
   /**
    * Class constructor.
    *
-   * @param firstPlayerBoards List of rectangular representations of the first player's own board
-   *                          and their opponent shots boards
-   * @param initialPiecesLeft Pieces they own that are still alive
-   * @param idToNames Map of player ID's to their name
-   * @param firstPlayerUsables List of UsableRecords representing all the items in the first player's
-   *                           inventory
-   * @param resourceBundle ResourceBundle for this GameView
+   * @param firstPlayerBoards  List of rectangular representations of the first player's own board
+   *                           and their opponent shots boards
+   * @param initialPiecesLeft  Pieces they own that are still alive
+   * @param idToNames          Map of player ID's to their name
+   * @param firstPlayerUsables List of UsableRecords representing all the items in the first
+   *                           player's inventory
+   * @param resourceBundle     ResourceBundle for this GameView
    */
   public GameView(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, List<UsableRecord> firstPlayerUsables, Map<CellState, Color> colorMap, ResourceBundle resourceBundle) {
-    System.out.println("into GameView ");
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames,
+      List<UsableRecord> firstPlayerUsables, Map<CellState, Color> colorMap,
+      ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;
@@ -190,7 +183,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myBoards = new ArrayList<>();
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
-    currentUsableRelativeCoords = new ArrayList<>(Arrays.asList(new Coordinate(0, 0)));
+    currentUsableRelativeCoords = new ArrayList<>(List.of(new Coordinate(0, 0)));
     Platform.runLater(() -> {
       loserStage = new Stage();
       shopStage = new Stage();
@@ -283,7 +276,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myBoards.add(self);
     self.addObserver(this);
     for (int i = 1; i < boards.size(); i++) {
-      GameBoardView enemy = new EnemyBoardView(BOARD_SIZE, boards.get(i), myColorMap, idList.get(i));
+      GameBoardView enemy = new EnemyBoardView(BOARD_SIZE, boards.get(i), myColorMap,
+          idList.get(i));
       myBoards.add(enemy);
       enemy.addObserver(this);
     }
@@ -291,24 +285,30 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // Creates right pane to show game data, config buttons, and buttons to open shop
   private void createRightPane() {
-    shopButton = ButtonMaker.makeTextButton(VIEW_SHOP_BTN_ID, e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
+    shopButton = ButtonMaker.makeTextButton(VIEW_SHOP_BTN_ID, e -> openShop(),
+        myResources.getString(OPEN_SHOP_RESOURCE));
     piecesRemainingPane = new SetPiecePane(SET_PIECE_PANE_SIZE, myColorMap, myResources);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
 
     setupPieceLegendPane();
 
-    shotsRemainingLabel = LabelMaker.makeDynamicLabel(myResources.getString(SHOTS_REMAINING_RESOURCE), "",
+    shotsRemainingLabel = LabelMaker.makeDynamicLabel(
+        myResources.getString(SHOTS_REMAINING_RESOURCE), "",
         SHOTS_REMAINING_LABEL_ID);
-    numPiecesLabel = LabelMaker.makeDynamicLabel(myResources.getString(PIECES_LEFT_RESOURCE), "", NUM_PIECES_LABEL_ID);
-    goldLabel = LabelMaker.makeDynamicLabel(myResources.getString(GOLD_LEFT_RESOURCE), "", GOLD_LABEL_ID);
+    numPiecesLabel = LabelMaker.makeDynamicLabel(myResources.getString(PIECES_LEFT_RESOURCE), "",
+        NUM_PIECES_LABEL_ID);
+    goldLabel = LabelMaker.makeDynamicLabel(myResources.getString(GOLD_LEFT_RESOURCE), "",
+        GOLD_LABEL_ID);
 
-    configPane = new ConfigPane(myResources);
+    ConfigPane configPane = new ConfigPane(myResources);
     configPane.setText(myResources.getString(CONFIG_TEXT_RESOURCE));
     configPane.setOnAction(e -> toggleNightMode());
 
-    currentUsableLabel = LabelMaker.makeDynamicLabel(myResources.getString(CURRENT_USABLE_RESOURCE), BASIC_SHOT_DYNAMIC_TEXT, CURRENT_USABLE_LABEL_ID);
+    currentUsableLabel = LabelMaker.makeDynamicLabel(myResources.getString(CURRENT_USABLE_RESOURCE),
+        BASIC_SHOT_DYNAMIC_TEXT, CURRENT_USABLE_LABEL_ID);
 
-    myRightPane = BoxMaker.makeVBox(CONFIG_BOX_ID, 0, Pos.TOP_CENTER, currentUsableLabel, shotsRemainingLabel,
+    VBox myRightPane = BoxMaker.makeVBox(CONFIG_BOX_ID, 0, Pos.TOP_CENTER, currentUsableLabel,
+        shotsRemainingLabel,
         numPiecesLabel, goldLabel, shopButton,
         piecesRemainingPane, pieceLegendPane, configPane);
     myRightPane.setMinWidth(CONFIG_BOX_SIZE);
@@ -318,7 +318,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   /**
    * Sets the current Usable that the player has equipped.
    *
-   * @param id ID of Usable
+   * @param id           ID of Usable
    * @param usableCoords Usable's coordinates
    */
   public void setCurrentUsable(String id, Collection<Coordinate> usableCoords) {
@@ -351,24 +351,28 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // Creates label that shows which board is currently being displayed
   private void setupBoardLabel() {
-    currentBoardLabel = LabelMaker.makeLabel(myResources.getString(YOUR_BOARD_RESOURCE), BOARD_LABEL_ID);
+    currentBoardLabel = LabelMaker.makeLabel(myResources.getString(YOUR_BOARD_RESOURCE),
+        BOARD_LABEL_ID);
     currentBoardLabel.setId(CURRENT_BOARD_LABEL_ID);
     myCenterPane.getChildren().add(currentBoardLabel);
   }
 
   // Creates buttons to allow user to switch between BoardViews or end their turn
   private void setupBoardButtons() {
-    leftButton = ButtonMaker.makeImageButton(LEFT_BUTTON_ID, e -> decrementBoardIndex(),
+    Button leftButton = ButtonMaker.makeImageButton(LEFT_BUTTON_ID, e -> decrementBoardIndex(),
         IMAGES_PATH + LEFT_BUTTON_IMAGE, ARROW_SIZE, ARROW_SIZE);
     leftButton.getStyleClass().add(ARROW_CLASS);
 
-    rightButton = ButtonMaker.makeImageButton(RIGHT_BUTTON_ID, e -> incrementBoardIndex(),
+    Button rightButton = ButtonMaker.makeImageButton(RIGHT_BUTTON_ID, e -> incrementBoardIndex(),
         IMAGES_PATH + RIGHT_BUTTON_IMAGE, ARROW_SIZE, ARROW_SIZE);
     rightButton.getStyleClass().add(ARROW_CLASS);
 
-    endTurnButton = ButtonMaker.makeTextButton(END_TURN_BTN_ID, e -> endTurn(), myResources.getString(END_TURN_RESOURCE));
+    endTurnButton = ButtonMaker.makeTextButton(END_TURN_BTN_ID, e -> endTurn(),
+        myResources.getString(END_TURN_RESOURCE));
     endTurnButton.setDisable(true);
-    boardButtonBox = BoxMaker.makeHBox(BUTTON_BOARD_BOX_ID, CENTER_PANE_SPACING, Pos.CENTER, leftButton, rightButton, endTurnButton);
+    boardButtonBox = BoxMaker.makeHBox(BUTTON_BOARD_BOX_ID, CENTER_PANE_SPACING, Pos.CENTER,
+        leftButton,
+        rightButton, endTurnButton);
 
     myCenterPane.getChildren().add(boardButtonBox);
   }
@@ -403,7 +407,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     LOG.info(BOARD_INDEX_LOG + currentBoardIndex);
     currentBoardLabel.setText(currentBoardIndex == 0 ? myResources.getString(YOUR_BOARD_RESOURCE)
         : myResources.getString(SHOTS_AGAINST_RESOURCE) + playerIDToNames.getOrDefault(
-            myBoards.get(currentBoardIndex).getID(), myResources.getString(PLAYER_PREFIX_RESOURCE) + (myBoards.get(currentBoardIndex).getID() + 1)));
+            myBoards.get(currentBoardIndex).getID(),
+            myResources.getString(PLAYER_PREFIX_RESOURCE) + (myBoards.get(currentBoardIndex).getID()
+                + 1)));
     refreshCenterPane();
     updatePiecesLeft(myPiecesLeft.get(currentBoardIndex));
     LOG.info(BOARD_INDEX_LOG + currentBoardIndex);
@@ -414,7 +420,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void refreshCenterPane() {
     myCenterPane.getChildren().clear();
     myCenterPane.getChildren()
-        .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox, inventory.getPane());
+        .addAll(currentBoardLabel, myBoards.get(currentBoardIndex).getBoardPane(), boardButtonBox,
+            inventory.getPane());
   }
 
   // Updates title to reflect current player's name
@@ -429,9 +436,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     myScene.setRoot(passComputerMessageView);
   }
 
+  // This method is called by reflection
   // Notifies observer that player has purchased an item
   private void buyItem(String itemID) {
-    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), itemID);
+    notifyObserver(new Object() {
+    }.getClass().getEnclosingMethod().getName(), itemID);
   }
 
   // Returns currentBoardIndex for testing purposes
@@ -440,8 +449,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   /**
-   * Detects a property change from an Object that this class is observing and invokes a corresponding
-   * method with the event's info.
+   * Detects a property change from an Object that this class is observing and invokes a
+   * corresponding method with the event's info.
    *
    * @param evt Event that was fired by listenee
    */
@@ -455,11 +464,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
       throw new NullPointerException(INVALID_METHOD);
     }
   }
-  
+
   // Notifies observer that player wishes to equip a Usable
   private void equipUsable(String id) {
     // this is the ID of the Usable
-    notifyObserver(new Object(){}.getClass().getEnclosingMethod().getName(), id);
+    notifyObserver(new Object() {
+    }.getClass().getEnclosingMethod().getName(), id);
   }
 
   // Notifies observer that user has clicked somewhere on their own board
@@ -473,11 +483,16 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void handleCellClicked(String clickInfo) {
-    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
-    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
-    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-    LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
+    handleClickInfo(clickInfo, LOG, BOARD_CLICKED_LOG);
     notifyObserver(APPLY_USABLE_OPERATION, clickInfo);
+  }
+
+  public static void handleClickInfo(String clickInfo, Logger log, String boardClickedLog) {
+    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
+    int col = Integer.parseInt(
+        clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
+    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
+    log.info(String.format(boardClickedLog, id, row, col));
   }
 
   private void cellHoveredSelf(String hoverInfo) {
@@ -501,9 +516,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     nightMode = !nightMode;
     myScene.getStylesheets().clear();
     if (nightMode) {
-      myScene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET).toExternalForm());
+      myScene.getStylesheets().add(
+          getClass().getResource(DEFAULT_RESOURCE_PACKAGE + NIGHT_STYLESHEET).toExternalForm());
     } else {
-      myScene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
+      myScene.getStylesheets()
+          .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     }
   }
 
@@ -536,6 +553,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   /**
    * Displays winner screen when a player wins the game
+   *
    * @param name Name of player who won
    */
   public void displayWinningScreen(String name) {
@@ -564,9 +582,9 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   /**
    * Wrapper function to update all of current player's data at once.
    *
-   * @param shotsRemaining number of shots the user has left in their turn
+   * @param shotsRemaining     number of shots the user has left in their turn
    * @param numPiecesRemaining number of pieces remaining
-   * @param amountOfGold gold that user has
+   * @param amountOfGold       gold that user has
    */
   public void updateLabels(int shotsRemaining, int numPiecesRemaining, int amountOfGold) {
     setNumShotsRemaining(shotsRemaining);
@@ -654,11 +672,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   /**
    * Displays a certain shot outcome on a certain cell on the user's outgoing shots board. For
-   * example, if the user clicked cell (1,0) and an enemy ship was at that location, cell (1,0) would
-   * turn red.
+   * example, if the user clicked cell (1,0) and an enemy ship was at that location, cell (1,0)
+   * would turn red.
    *
-   * @param x x coordinate of cell
-   * @param y y coordinate of cell
+   * @param x      x coordinate of cell
+   * @param y      y coordinate of cell
    * @param result indicates if the shot was a hit or a miss
    */
   @Override
@@ -672,15 +690,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    * intended to freeze the program and should be used with extra caution and only in places where
    * concurrent processes will not interfere with any UI elements.
    *
-   * @param row row index of shot
-   * @param col column index of shot
+   * @param row      row index of shot
+   * @param col      column index of shot
    * @param consumer code to be executed after shot animation finishes playing
-   * @param id ID of current player, to be consumed by consumer
+   * @param id       ID of current player, to be consumed by consumer
    */
   public void displayShotAnimation(int row, int col, Consumer<Integer> consumer, int id) {
     ImageView explosion = new ImageView();
     explosion.setImage(
-        new Image(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + IMAGES_PATH + EXPLOSION_IMAGE_NAME).toString(),
+        new Image(
+            getClass().getResource(DEFAULT_RESOURCE_PACKAGE + IMAGES_PATH + EXPLOSION_IMAGE_NAME)
+                .toString(),
             true));
     myBoards.get(currentBoardIndex).displayExplosionOnCell(row, col, explosion);
     FadeTransition ft = new FadeTransition(new Duration(EXPLOSION_DURATION), explosion);
@@ -700,16 +720,16 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    */
   public void moveToNextPlayer(String name) {
     displayPassComputerMessage(name);
-    setCurrentUsable(BASIC_SHOT_DYNAMIC_TEXT, new ArrayList<>(Arrays.asList(new Coordinate(0, 0))));
+    setCurrentUsable(BASIC_SHOT_DYNAMIC_TEXT, new ArrayList<>(List.of(new Coordinate(0, 0))));
     closeShop();
   }
 
   /**
    * Updates all visual components of GameView when switching player's turn.
    *
-   * @param boardList List of this player's boards
-   * @param idList List of board ID's
-   * @param pieceList List of this player's pieces remaining
+   * @param boardList  List of this player's boards
+   * @param idList     List of board ID's
+   * @param pieceList  List of this player's pieces remaining
    * @param usableList List of this player's owned Usables
    */
   public void update(List<CellState[][]> boardList, List<Integer> idList,
@@ -725,19 +745,19 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   /**
-   * Displays an alert indicating that an AI player has finished their turn, and provides
-   * informaion on the AI's moves.
+   * Displays an alert indicating that an AI player has finished their turn, and provides informaion
+   * on the AI's moves.
    *
-   * @param id ID of AI player
+   * @param id    ID of AI player
    * @param shots information about the AI player's shots
    */
   public void displayAIMove(int id, List<Info> shots) {
-    String message = "";
-    for (int i = 0; i < shots.size(); i++) {
-      message += String.format(AI_SHOT_TEXT,
-          id+1, shots.get(i).row(), shots.get(i).col(), shots.get(i).ID()+1)+"\n";
+    StringBuilder message = new StringBuilder();
+    for (Info shot : shots) {
+      message.append(String.format(AI_SHOT_TEXT,
+          id + 1, shot.row(), shot.col(), shot.ID() + 1)).append("\n");
     }
-    Alert alert = new Alert(AlertType.INFORMATION, message);
+    Alert alert = new Alert(AlertType.INFORMATION, message.toString());
     Node alertNode = alert.getDialogPane();
     alertNode.setId(AI_ALERT_ID);
     alert.show();

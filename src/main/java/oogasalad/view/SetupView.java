@@ -52,7 +52,7 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * Created in the GameSetup and handles its integration with the backend
  *
- * @author: Eric Xie, Minjun Kwak, Edison Ooi
+ * @author Eric Xie, Minjun Kwak, Edison Ooi
  */
 public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer,
     BoardVisualizer {
@@ -106,28 +106,25 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final String ENTER_NAME_RESOURCE = "EnterName";
   private static final String PROMPT_LABEL_RESOURCE = "PromptLabel";
 
-  private BorderPane myPane;
-  private VBox centerBox;
+  private final BorderPane myPane;
   private HBox bottomPanel;
-  private VBox removePiecePanel;
-  private VBox configBox;
   private Button confirmButton;
 
   private StackPane myCenterPane;
   private Collection<Coordinate> lastPlaced;
   private Collection<Coordinate> nextToPlace;
   private BoardView setupBoard;
-  private Scene myScene;
+  private final Scene myScene;
   private TitlePanel myTitle;
 
   private LegendPane legendPane;
   private SetPiecePane shipPane;
   private AbstractScreen passComputerMessageView;
-  private CellState[][] myCellBoard;
+  private final CellState[][] myCellBoard;
 
   private int currentPlayerNumber;
   private String currentPlayerName;
-  private String title;
+  private final String title;
   private Map<CellState, Color> myColorMap;
 
   /**
@@ -142,7 +139,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
    * @param board,          a 2D array of CellState to be displayed to the user placing their ships
    * @param resourceBundle, the ResourceBundle to be used for program language
    */
-  public SetupView(CellState[][] board, Map<CellState, Color> colorMap, ResourceBundle resourceBundle) {
+  public SetupView(CellState[][] board, Map<CellState, Color> colorMap,
+      ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(SETUP_PANE_ID);
     myCellBoard = board;
@@ -166,8 +164,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
    * Displays the intro screen for the SetupView
    * <p>
    * Assumed to be used by the GameSetup when necessary to display the intro screen.
-   *
-   * @return void
    */
   public void displayIntroScreen() {
     SetUpShipsScreen screen = new SetUpShipsScreen(myResources);
@@ -238,7 +234,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     setupLegendPane();
     shipPane = new SetPiecePane(SET_PIECE_PANE_SIZE, myColorMap, myResources);
     shipPane.setText(myResources.getString(CURRENT_SHIP_RESOURCE));
-    configBox = BoxMaker.makeVBox(CONFIG_BOX_ID, NO_SPACING, Pos.TOP_CENTER, shipPane, legendPane);
+    VBox configBox = BoxMaker.makeVBox(CONFIG_BOX_ID, NO_SPACING, Pos.TOP_CENTER, shipPane,
+        legendPane);
     configBox.setMinWidth(CONFIG_BOX_WIDTH);
     myPane.setRight(configBox);
   }
@@ -258,7 +255,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
         e -> removePiece(lastPlaced), myResources.getString(REMOVE_LAST_RESOURCE));
     Button removeAll = ButtonMaker.makeTextButton(REMOVE_ALL_ID, e -> removeAllPieces(),
         myResources.getString(REMOVE_ALL_RESOURCE));
-    removePiecePanel = BoxMaker.makeVBox(REMOVE_PIECE_ID, SMALL_SPACING, Pos.CENTER,
+    VBox removePiecePanel = BoxMaker.makeVBox(REMOVE_PIECE_ID, SMALL_SPACING, Pos.CENTER,
         removeLastPiece, removeAll);
     bottomPanel = BoxMaker.makeHBox(BOTTOM_PANEL_ID, LARGE_SPACING, Pos.CENTER, removePiecePanel,
         confirmButton);
@@ -284,7 +281,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
     myCenterPane = new StackPane();
     myCenterPane.setId(BOARD_BOX_ID);
-    centerBox = BoxMaker.makeVBox(SETUP_CENTER_ID, LARGE_SPACING, Pos.CENTER, myCenterPane,
+    VBox centerBox = BoxMaker.makeVBox(SETUP_CENTER_ID, LARGE_SPACING, Pos.CENTER, myCenterPane,
         bottomPanel);
     myPane.setCenter(centerBox);
     myCenterPane.getChildren().add(setupBoard.getBoardPane());
@@ -337,7 +334,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   // checks validity of the cell and returns a boolean if true or not
   private boolean checkIfValid(int row, int col) {
     return row >= 0 && row < myCellBoard.length && col >= 0 &&
-        col < myCellBoard[0].length && setupBoard.getColorAt(row, col) != myColorMap.get(CellState.SHIP_HEALTHY);
+        col < myCellBoard[0].length && setupBoard.getColorAt(row, col) != myColorMap.get(
+        CellState.SHIP_HEALTHY);
   }
 
   // checks if cell exited
@@ -350,7 +348,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     }
   }
 
-  // initializes the Coordinates to a Color after being passed a Coordiante and returns a collection of them
+  // initializes the Coordinates to a Color after being passed a Coordinate and returns a collection of them
   private Collection<Coordinate> initializeCoordsToColor(Coordinate coordinate) {
     List<Coordinate> coords = new ArrayList<>();
     for (Coordinate c : nextToPlace) {
@@ -417,7 +415,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   /**
    * Takes a collection of coordinates and sets the lastPlaced variable to it
    *
-   * @param coords
+   * @param coords the coordinates of the last placed piece
    */
   public void setLastPlaced(Collection<Coordinate> coords) {
     lastPlaced = coords;

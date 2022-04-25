@@ -160,11 +160,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void selfBoardClicked(String clickInfo) {
-    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
-    int col = Integer.parseInt(
-        clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
-    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-    LOG.info(String.format(BOARD_CLICKED, id, row, col));
+    GameView.handleClickInfo(clickInfo, LOG, BOARD_CLICKED);
   }
 
   /**

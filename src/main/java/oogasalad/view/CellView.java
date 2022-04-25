@@ -19,10 +19,11 @@ public class CellView extends PropertyObservable {
 
   /**
    * Constructor for a cell. It initializes and sets all the properties for this cell's Polygon
+   *
    * @param points the points that make up this cell's Polygon
-   * @param color the color that this cell's Polygon should be filled with
-   * @param row the row number of this cell
-   * @param col the column number of this cell
+   * @param color  the color that this cell's Polygon should be filled with
+   * @param row    the row number of this cell
+   * @param col    the column number of this cell
    */
   public CellView(List<Double> points, Paint color, int row, int col) {
     myCoords = new Coordinate(row, col);
@@ -54,6 +55,7 @@ public class CellView extends PropertyObservable {
 
   /**
    * Getter for the coordinates of this cell
+   *
    * @return myCoords
    */
   public Coordinate getCoords() {
@@ -62,6 +64,7 @@ public class CellView extends PropertyObservable {
 
   /**
    * Getter for the Polygon of this cell
+   *
    * @return myShape
    */
   public Polygon getCell() {

@@ -27,6 +27,11 @@ import oogasalad.view.maker.LabelMaker;
  */
 public class InventoryView extends PropertyObservable implements PropertyChangeListener {
 
+  private static final String INVENTORY_BOX_ID = "inventory-box";
+  private static final String INVENTORY_VIEW_ID = "inventory-view";
+  private static final String EQUIP_USABLE_METHOD = "equipUsable";
+  private static final String BASIC_SHOT_ID = "Basic Shot";
+  private static final double INVENTORY_SPACING = 10;
   // JavaFX components
   private HBox elementsBox;
   private ScrollPane myPane;
@@ -37,9 +42,9 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
   public InventoryView() {
     myPane = new ScrollPane();
     myPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    elementsBox = BoxMaker.makeHBox("inventory-box", 10, Pos.CENTER);
+    elementsBox = BoxMaker.makeHBox(INVENTORY_BOX_ID, INVENTORY_SPACING, Pos.CENTER);
     myPane.setContent(elementsBox);
-    myPane.setId("inventory-view");
+    myPane.setId(INVENTORY_VIEW_ID);
   }
 
   /**
@@ -60,8 +65,9 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
     InventoryElement element = new InventoryElement(quantity, className, id);
     element.addObserver(this);
     elementsBox.getChildren().add(element.getBox());
-    if (id.equals("Basic Shot")) {
-      element.getBox().setBackground(new Background(new BackgroundFill( Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+    if (id.equals(BASIC_SHOT_ID)) {
+      element.getBox().setBackground(
+          new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
     }
   }
 
@@ -79,7 +85,8 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     for (Node child : elementsBox.getChildren()) {
-      ((VBox) child).setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+      ((VBox) child).setBackground(
+          new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
     }
     notifyObserver(evt.getPropertyName(), evt.getNewValue());
   }
@@ -98,8 +105,13 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
     private static final ResourceBundle WEAPON_IMAGE_RESOURCES = ResourceBundle.getBundle(
         "/WeaponImages");
     private static final String WEAPON_IMAGES_PATH = "images/weapon_images/";
+    private static final String INVENTORY_USABLE_ID = "inventory-usable";
+    private static final String QUANTITY_LABEL = "x";
+    private static final String QUANTITY_LABEL_ID = "inventory-element-quantity-label";
+    private static final String ELEMENT_NAME_LABEL = "inventory-element-name-label";
     private static final double ITEM_SIZE = 50;
     private static final String BASIC_SHOT_ID = "Basic Shot";
+    private static final double ELEMENT_SPACING = 5;
 
     // Information about this usable
     private double quantity;
@@ -116,7 +128,7 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
      * @param usableID  ID of usable
      */
     private InventoryElement(double quantity, String className, String usableID) {
-      elementBox = BoxMaker.makeVBox("inventory-usable", 5, Pos.CENTER);
+      elementBox = BoxMaker.makeVBox(INVENTORY_USABLE_ID, ELEMENT_SPACING, Pos.CENTER);
       elementBox.setOnMouseClicked(e -> handleClicked());
       this.quantity = quantity;
       this.usableID = usableID;
@@ -126,7 +138,7 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
     }
 
     private void setupName(String name) {
-      Label nameLabel = LabelMaker.makeLabel(name, "inventory-element-name-label");
+      Label nameLabel = LabelMaker.makeLabel(name, ELEMENT_NAME_LABEL);
       elementBox.getChildren().add(nameLabel);
     }
 
@@ -140,7 +152,8 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
 
     // Sets up background image
     private void setupImage(String className) {
-      ImageView image = new ImageView(new Image(WEAPON_IMAGES_PATH + WEAPON_IMAGE_RESOURCES.getString(className)));
+      ImageView image = new ImageView(
+          new Image(WEAPON_IMAGES_PATH + WEAPON_IMAGE_RESOURCES.getString(className)));
       image.setFitWidth(ITEM_SIZE);
       image.setFitHeight(ITEM_SIZE);
       elementBox.getChildren().add(image);
@@ -148,8 +161,9 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
 
     // Notifies observer when this element is clicked
     private void handleClicked() {
-      notifyObserver("equipUsable", usableID);
-      elementBox.setBackground(new Background(new BackgroundFill( Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+      notifyObserver(EQUIP_USABLE_METHOD, usableID);
+      elementBox.setBackground(
+          new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
     // Returns StackPane representing this InventoryElement
