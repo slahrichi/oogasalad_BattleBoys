@@ -36,5 +36,6 @@ public interface  CellInterface {
    public List<Modifiers> getCellModifiers();
 
    void moveCell(Coordinate nextMovement);
-   public List<GoldAdder> getGoldModifiers();
+    List<GoldAdder> getGoldModifiers();
+    String getId();
 }

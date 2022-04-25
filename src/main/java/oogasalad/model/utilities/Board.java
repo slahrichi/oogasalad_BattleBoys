@@ -190,7 +190,7 @@ public class Board {
    * @param id ID of piece to get
    * @return Piece with the given ID
    */
-  public Piece getPiece(int id){
+  public Piece getPiece(String id){
     Piece myPiece = myPieces.get(id);
     return myPiece;
   }

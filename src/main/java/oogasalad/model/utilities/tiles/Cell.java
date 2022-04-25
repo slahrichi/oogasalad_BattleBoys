@@ -13,6 +13,7 @@ public abstract class Cell implements CellInterface{
   private List<Modifiers> myModifiers = new ArrayList<>();
   private List<GoldAdder> goldAdders = new ArrayList<>();
   private CellState currentState;
+  private String id;
   private int myHealthBar;
 
   public Cell(Coordinate coordinate, CellState state, int health) {
@@ -20,7 +21,12 @@ public abstract class Cell implements CellInterface{
     currentState = state;
     myHealthBar = health;
   }
-
+  public Cell(Coordinate coordinate, CellState state, int health, String id) {
+    myCoordinate = coordinate;
+    currentState = state;
+    myHealthBar = health;
+    this.id = id;
+  }
   protected void setCellState(CellState newState) {
     currentState = newState;
   }
@@ -99,5 +105,10 @@ public abstract class Cell implements CellInterface{
   @Override
   public List<GoldAdder> getGoldModifiers(){
     return goldAdders;
+  }
+
+  @Override
+  public String getId(){
+    return id;
   }
 }

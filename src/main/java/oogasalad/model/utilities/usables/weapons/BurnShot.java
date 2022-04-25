@@ -44,4 +44,5 @@ public class BurnShot extends Weapon {
     return ret;
   }
 
+
 }

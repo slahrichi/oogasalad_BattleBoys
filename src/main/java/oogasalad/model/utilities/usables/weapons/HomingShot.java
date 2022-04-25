@@ -49,12 +49,11 @@ public class HomingShot extends Weapon{
 
       Set<Coordinate> relatives = new HashSet<>();
       Map<Coordinate, CellState> retMap =new HashMap<>();
-      while(relatives.size()<numShots && !coordsWithIslands.isEmpty() && !coordsWithShips.isEmpty()){
+      while(relatives.size()<numShots && (!coordsWithIslands.isEmpty() || !coordsWithShips.isEmpty())){
         Random rand = new Random();
         if(!coordsWithShips.isEmpty()){
           Coordinate c = coordsWithShips.get(rand.nextInt(coordsWithShips.size()));
           relatives.add(c);
-          coordsWithShips.remove(c);
         }
         else if(!coordsWithIslands.isEmpty()) {
           Coordinate c = coordsWithIslands.get(rand.nextInt(coordsWithShips.size()));
@@ -63,9 +62,8 @@ public class HomingShot extends Weapon{
         }
       }
       for(Coordinate coord:relatives){
-        Coordinate hitCoord = new Coordinate(coord.getRow()+absolute.getRow(), coord.getColumn() + coord.getRow());
-        if(board.checkBoundedCoordinate(hitCoord)){
-          retMap.put(hitCoord, board.hit(hitCoord, dmgPerShot));
+        if(board.checkBoundedCoordinate(coord)){
+          retMap.put(coord, board.hit(coord, dmgPerShot));
         }
       }
       return retMap;
