@@ -2,6 +2,7 @@ package oogasalad.view;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import org.junit.jupiter.api.function.Executable;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +27,8 @@ public class GameViewTest extends DukeApplicationTest {
   private int numPlayers = 3;
   private Button rightButton;
   private Button leftButton;
+  private Button shopButton;
+  private Label shopTitle;
   private Label currentBoardLabel;
   private GameView view;
   private ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
@@ -84,6 +88,7 @@ public class GameViewTest extends DukeApplicationTest {
     rightButton = lookup("#view-pane #view-center-pane #board-button-box #right-button").query();
     leftButton = lookup("#view-pane #view-center-pane #board-button-box #left-button").query();
     currentBoardLabel = lookup("#view-pane #view-center-pane #currentBoardLabel").query();
+    shopButton = lookup("#configBox #view-shop-button").query();
   }
 
   @Test
@@ -101,5 +106,10 @@ public class GameViewTest extends DukeApplicationTest {
     assertEquals(currentBoardLabel.getText(), "Your Board");
     clickOn(rightButton);
     assertEquals(currentBoardLabel.getText(), "Your Shots Against Player 2");
+  }
+
+  @Test
+  public void testShopBtn(){
+    assertDoesNotThrow(() -> rightClickOn(shopButton));
   }
 }

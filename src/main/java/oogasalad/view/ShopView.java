@@ -53,6 +53,7 @@ public class ShopView extends PropertyObservable implements PropertyChangeListen
 
   private void setUpTitle() {
     Text title = new Text("Welcome to the Shop");
+    title.setId("shopTitle");
     title.setFont(Font.font("Verdana", 20));
     myPane.setTop(title);
   }
