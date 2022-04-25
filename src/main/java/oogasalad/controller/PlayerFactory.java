@@ -36,6 +36,7 @@ public class PlayerFactory {
    *
    * @param board CellState[][] used to initialize the board states of each player
    * @param playerTypes list of strings representing player type between human or AI
+   * @param startingInventory map containing starting inventory of player
    * @param decisionEngines list of difficulty levels for each AIPlayer's DecisionEngine
    * @return
    */
