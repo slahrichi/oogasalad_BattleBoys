@@ -163,4 +163,10 @@ public abstract class GenericPlayer implements Player{
     else
       myInventory.put(usable.getMyID(), 1);
   }
+  public void addIDtoInventory(String ID){
+    if(myInventory.containsKey(ID))
+      myInventory.put(ID, myInventory.get(ID) + 1);
+    else
+      myInventory.put(ID, 1);
+  }
 }

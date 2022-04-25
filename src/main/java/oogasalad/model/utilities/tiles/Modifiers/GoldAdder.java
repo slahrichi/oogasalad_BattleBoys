@@ -1,5 +1,6 @@
 package oogasalad.model.utilities.tiles.Modifiers;
 
+import java.nio.channels.MulticastChannel;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.function.Consumer;
@@ -14,10 +15,14 @@ public class GoldAdder extends Modifiers{
   private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
       new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
   private int myGold;
+  private int multiplier =1;
   public GoldAdder(int gold){
     myGold = gold;
   }
 
+  public void setMultiplier(int factor){
+    multiplier = factor;
+  }
   @Override
   public Consumer modifierFunction(Player[] players){
     return createConsumer();
@@ -35,11 +40,10 @@ public class GoldAdder extends Modifiers{
   @Override
   protected Consumer createConsumer() {
     PlayerConsumer consumer = a->{
-      a[0].addGold(myGold);
+      a[0].addGold(myGold*multiplier);
     };
     return consumer;
   }
-
 
   @Override
   public String toString() {

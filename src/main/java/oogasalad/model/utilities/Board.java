@@ -1,5 +1,6 @@
 package oogasalad.model.utilities;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.IslandCell;
+import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
@@ -250,5 +252,12 @@ public class Board {
       myPieces.get(key).movePiece(boardMap);
     }
 
+  }
+
+  public void applyMultiplier(int multiplier) {
+    for(Coordinate coord: boardMap.keySet()){
+      for(GoldAdder adder: boardMap.get(coord).getGoldModifiers())
+        adder.setMultiplier(multiplier);
+    }
   }
 }

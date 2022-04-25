@@ -286,4 +286,6 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   public Map<Integer, Player> getIDMap() {
     return idMap;
   }
+
+  public ConditionHandler getConditionHandler(){return conditionHandler;}
 }

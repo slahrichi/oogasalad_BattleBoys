@@ -34,7 +34,7 @@ public class Burner extends Modifiers{
   }
 
   public String toString(){
-    return "Brun " + dmg + " for " + count + " turns";
+    return "Burn " + dmg + " for " + count + " turns";
   };
 
 }

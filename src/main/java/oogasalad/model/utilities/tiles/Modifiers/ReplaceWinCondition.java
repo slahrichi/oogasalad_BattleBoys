@@ -2,7 +2,6 @@ package oogasalad.model.utilities.tiles.Modifiers;
 
 import java.util.function.Consumer;
 import oogasalad.controller.GameManager;
-import oogasalad.model.players.Player;
 import oogasalad.model.utilities.winconditions.WinCondition;
 
 public class ReplaceWinCondition extends Modifiers {
@@ -18,7 +17,7 @@ public class ReplaceWinCondition extends Modifiers {
     Consumer ret = new GameManagerConsumer() {
       @Override
       public void accept(GameManager gameManager) {
-        gameManager.getConditionHandler().addWinCondition(condition);
+        gameManager.getConditionHandler().replaceWinCondition(condition);
       }
     };
     return ret;
@@ -31,6 +30,6 @@ public class ReplaceWinCondition extends Modifiers {
 
   @Override
   public Consumer modifierFunction(GameManager gm) {
-    return myConsumer;
+    return createConsumer();
   }
 }
