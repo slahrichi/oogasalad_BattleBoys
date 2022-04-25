@@ -40,6 +40,7 @@ public class BoardSetUpStage extends BuilderStage {
   private static final String[] DEFAULT_STATE_OPTIONS = {"Inactive", "Active"};
   private CellState[][] board;
   private static final int INITIAL_STATUS = 1;
+  private static final String TITLE="BOARD DESIGN STAGE";
 
   private Consumer<Integer> widthChange;
   private Consumer<Integer> heightChange;
@@ -127,6 +128,7 @@ public class BoardSetUpStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return board;
   }

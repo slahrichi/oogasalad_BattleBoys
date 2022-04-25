@@ -9,9 +9,11 @@ package oogasalad.view.gamebuilder;
 public class ItemDesignStage extends WeaponDesignStage {
 
   private final String PATH = "oogasalad.model.utilities.usables.items.";
+  private final String TITLE = "CREATE CUSTOM ITEMS";
 
   public ItemDesignStage() {
     super();
+    setTitle(TITLE);
   }
 
   @Override

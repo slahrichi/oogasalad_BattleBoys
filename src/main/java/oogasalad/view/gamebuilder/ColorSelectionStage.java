@@ -26,7 +26,7 @@ public class ColorSelectionStage extends BuilderStage {
   private Map<CellState, Color> colorMap;
   private List<ColorPicker> colorPickers = new ArrayList<>();
   private Map<String, ColorPicker> colorPickerMap;
-
+  private static final String TITLE="Color Selection Stage";
   public ColorSelectionStage() {
     super();
     colorPickerMap = new HashMap<>();
@@ -44,6 +44,7 @@ public class ColorSelectionStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return colorMap;
   }

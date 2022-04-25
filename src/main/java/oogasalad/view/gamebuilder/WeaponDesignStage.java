@@ -51,6 +51,7 @@ public class WeaponDesignStage extends BuilderStage {
   private List<Object> weaponList = new ArrayList<>();
   private String classPath;
   private final String PATH = "oogasalad.model.utilities.usables.weapons.";
+  private final String TITLE="Create Weapons";
 
   public WeaponDesignStage() {
     colorList.add(DEFAULT_INACTIVE_COLOR);
@@ -102,6 +103,7 @@ public class WeaponDesignStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return weaponList;
   }
@@ -153,6 +155,9 @@ public class WeaponDesignStage extends BuilderStage {
       makeStatEditor(variables);
       if (needsGridDesignOption(selection)) {
         addGridDesignOption();
+        centerPane.getChildren()
+            .add(LabelMaker.makeLabel(getDictionaryResources().getString("rightClickInfo"),
+                "infoLabel"));
       }
       centerPane.getChildren().add(
           makeButton(getDictionaryResources().getString("savePrompt"), e -> saveWeapon(selection)));
