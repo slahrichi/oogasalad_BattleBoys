@@ -55,7 +55,6 @@ public class Parser {
   private static final Logger LOG = LogManager.getLogger(Parser.class);
 
   public void save(ParserData data, String pathToNewFile) throws ParserException  {
-
     LOG.info(String.format("Saving ParserData to %s", pathToNewFile));
     File file = new File(pathToNewFile);
     Properties props = new Properties();

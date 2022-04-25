@@ -18,20 +18,27 @@ import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.maker.LabelMaker;
 
 /**
- * Stores the ImagiView as well as the variables for a given ShopItem, has reference with the buy
+ * Stores the ImageView as well as the variables for a given ShopItem, has reference with the buy
  * buttpm using observables and listeners to apply the effects of buying an item from the shop.
  *
- * @author Luka Mdivnai, Minjun, Brandon
+ * @author Luka Mdivnai, Minjun Kwak, Brandon Bae
  */
 public class ShopItem extends PropertyObservable {
 
-  private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final ResourceBundle WEAPON_IMAGE_RESOURCES = ResourceBundle.getBundle(
       "/WeaponImages");
   private static final String WEAPON_IMAGES_PATH = "images/weapon_images/";
-
+  private static final String SHOP_NAME_LABEL_ID = "shop-item-name-label";
   private static final String PRICE_LABEL_FORMAT = "Price: %d Gold";
-
+  private static final String SHOP_PRICE_LABEL_ID = "shop-item-price-label";
+  private static final String SHOP_ITEM_ID = "shop-item";
+  private static final String BUY_ITEM_METHOD = "buyItem";
+  private static final String BUY_ID = "Buy";
+  private static final String STRIPE_CONFIRM_ID = "stripeConfirm";
+  private static final String PAY_WITH_STRIPE_TEXT = "Pay with Stripe";
+  private static final String STRIPE_PREFIX = "stripe";
+  private static final String CONFIRM_STRIPE_TEXT = "stripe";
+  private static final double ITEM_SPACING = 10;
   private static final double ITEM_SIZE = 30;
   private static final double X_SPACING = 90;
   private static final double Y_SPACING = 150;
@@ -58,10 +65,10 @@ public class ShopItem extends PropertyObservable {
     myName = itemName;
     myUsableClassName = usableClassName;
     buildButtons();
-    Label nameLabel = LabelMaker.makeLabel(myName, "shop-item-name-label");
+    Label nameLabel = LabelMaker.makeLabel(myName, SHOP_NAME_LABEL_ID);
     Label priceLabel = LabelMaker.makeLabel(String.format(PRICE_LABEL_FORMAT, myPrice),
-        "shop-item-price-label");
-    myVBox = BoxMaker.makeVBox("VBoxId", 10, Pos.CENTER, nameLabel, item, priceLabel,
+        SHOP_PRICE_LABEL_ID);
+    myVBox = BoxMaker.makeVBox(SHOP_ITEM_ID, ITEM_SPACING, Pos.CENTER, nameLabel, item, priceLabel,
         buyButton, stripeButton, confirmStripe);
     myVBox.setLayoutX((GAP + X_SPACING) * (index % 3));
     myVBox.setLayoutY((GAP + Y_SPACING) * (index / 3));
@@ -69,18 +76,18 @@ public class ShopItem extends PropertyObservable {
   }
 
   private void buildButtons() {
-    buyButton = ButtonMaker.makeTextButton("Buy" + myName, e -> buyItem(myName), "Buy");
-    confirmStripe = ButtonMaker.makeTextButton("stripeConfirm" + myName, e ->
+    buyButton = ButtonMaker.makeTextButton(BUY_ID + myName, e -> buyItem(myName), BUY_ID);
+    confirmStripe = ButtonMaker.makeTextButton(STRIPE_CONFIRM_ID + myName, e ->
     {
       try {
         confirmStripePayment();
       } catch (StripeException ex) {
 
       }
-    }, "Confirm Stripe Payment");
+    }, CONFIRM_STRIPE_TEXT);
     confirmStripe.setDisable(true);
     confirmStripe.setVisible(false);
-    stripeButton = ButtonMaker.makeTextButton("stripe" + myName, e ->
+    stripeButton = ButtonMaker.makeTextButton(STRIPE_PREFIX + myName, e ->
     {
       try {
         stripeIntegration.purchaseItem(myUsableClassName);
@@ -89,7 +96,7 @@ public class ShopItem extends PropertyObservable {
       } catch (URISyntaxException | IOException | InterruptedException ex) {
 
       }
-    }, "Pay with Stripe");
+    }, PAY_WITH_STRIPE_TEXT);
   }
 
   private void confirmStripePayment() throws StripeException {
@@ -101,7 +108,7 @@ public class ShopItem extends PropertyObservable {
   }
 
   private void buyItem(String name) {
-    notifyObserver("buyItem", name);
+    notifyObserver(BUY_ITEM_METHOD, name);
   }
 
   /**
