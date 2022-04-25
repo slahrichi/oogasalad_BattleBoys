@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.scene.paint.Color;
 import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
@@ -251,7 +252,7 @@ public class GameManagerTest extends DukeApplicationTest {
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "buyItem", null, "Basic Shot")));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "buyItem", null, "Basic Shot")));
     assertEquals(2147483647, pfr.playerList().get(0).getMyInventory().get("Basic Shot"));
   }
 

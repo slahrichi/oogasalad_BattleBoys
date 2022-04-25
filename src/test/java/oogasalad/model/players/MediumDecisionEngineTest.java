@@ -29,7 +29,6 @@ import util.DukeApplicationTest;
 
 public class MediumDecisionEngineTest extends DukeApplicationTest {
 
-  private DecisionEngine engine;
   private CellState[][] cellBoard;
   private Map<Player, DecisionEngine> engineMap;
   private GameSetup gs;
@@ -70,7 +69,6 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
     List<Player> engineList = new ArrayList<>(pfr.engineMap().keySet());
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
-    engine = pfr.engineMap().get(engineList.get(0));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(0, 1), new Coordinate(0, 2), new Coordinate(0, 3)));
     List<ShipCell> cellList = new ArrayList<>();
