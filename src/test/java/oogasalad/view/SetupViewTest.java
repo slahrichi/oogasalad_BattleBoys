@@ -96,4 +96,12 @@ public class SetupViewTest extends DukeApplicationTest {
     clickOn(cell2_2);
     assertEquals(Color.BLACK, cell2_2.getFill());
   }
+
+  @Test
+  void removePiece() {
+    clickOn(cell2_2);
+    assertEquals(Color.BLACK, cell2_2.getFill());
+    clickOn(lookup("#boardBox #remove-last-button").query());
+    assertEquals(Color.WHITE, cell2_2.getFill());
+  }
 }
