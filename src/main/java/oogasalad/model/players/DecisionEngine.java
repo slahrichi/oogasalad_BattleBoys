@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
@@ -21,6 +23,8 @@ public abstract class DecisionEngine {
   private List<Coordinate> myCoordinateList;
   private Deque<EngineRecord> myDeque;
   private Map<Integer, MarkerBoard> myEnemyMap;
+  private Set<CellState> wants;
+  private Set<CellState> avoids;
   private Player myPlayer;
   private Random myRandom;
   private EngineRecord myLastShot;
@@ -45,6 +49,30 @@ public abstract class DecisionEngine {
     makeCoordinateMap();
     myPlayer = player;
     myRandom = new Random(System.currentTimeMillis());
+    buildWants(conditionList);
+    buildAvoids(conditionList);
+  }
+
+  private void buildWants(List<WinCondition> conditionList) {
+    wants = new HashSet<>();
+    for (WinCondition condition : conditionList) {
+      wants.addAll(condition.getDesirableCellStates());
+    }
+  }
+
+  private void buildAvoids(List<WinCondition> conditionList) {
+    avoids = new HashSet<>();
+    for (WinCondition condition : conditionList) {
+      avoids.addAll(condition.getNonDesirableCellStates());
+    }
+  }
+
+  protected Set<CellState> getWants() {
+    return wants;
+  }
+
+  protected Set<CellState> getAvoids() {
+    return avoids;
   }
 
   protected void makeCoordinateMap() {
@@ -101,8 +129,7 @@ public abstract class DecisionEngine {
   }
 
   protected boolean canBeRemoved(CellState result) {
-    return result == CellState.SHIP_SUNKEN || result == CellState.WATER ||
-        result == CellState.ISLAND_SUNK || result == CellState.WATER_HIT;
+    return result == CellState.SHIP_SUNKEN || result == CellState.ISLAND_SUNK;
   }
 
   /**

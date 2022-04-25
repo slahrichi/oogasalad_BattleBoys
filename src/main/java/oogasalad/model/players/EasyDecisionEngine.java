@@ -1,6 +1,5 @@
 package oogasalad.model.players;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import oogasalad.model.utilities.Board;
@@ -56,17 +55,17 @@ public class EasyDecisionEngine extends DecisionEngine {
    * @param result Result of engine's last shot
    */
   public void adjustStrategy(CellState result) {
-    if (canBeRemoved(result)) {
-      getCoordinateMap().get(getCurrentPlayer()).remove(getLastShot());
-    }
-    else {
+    if (getWants().contains(result)) {
       getDeque().addFirst(getLastShot());
+    }
+    if (getAvoids().contains(result) || canBeRemoved(result)) {
+      getCoordinateMap().get(getCurrentPlayer()).remove(getLastShot());
+      getDeque().remove(getLastShot());
     }
   }
 
   /**
    * Method called during GameSetup that allows the AI to place their pieces
-   *
    * @param pieceList pieces that the player is allowed to place
    * @return Coordinate that the AI has chosen to place their piece
    */

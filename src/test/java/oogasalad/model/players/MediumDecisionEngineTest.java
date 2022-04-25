@@ -135,7 +135,10 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustmentWithBFS() throws InterruptedException {
-    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap,
+        new ArrayList<>(), new HashMap<>(), new ArrayList<>(),
+        new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(),
+        1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }
