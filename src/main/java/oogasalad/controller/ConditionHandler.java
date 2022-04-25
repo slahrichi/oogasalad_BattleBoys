@@ -35,7 +35,9 @@ public class ConditionHandler {
   private int movePieces;
   private Map<Player, Integer> turnMap;
 
-  private static final String PLAYER_MODIFIER = "PlayerModifier";
+  private static final String PLAYER_WINSTATE = "Player %d's WinState %s";
+  private static final String PLAYER_WON = "Player %d wins!";
+  private static final String PLAYER_LOST = "Player %d lost!";
   private static final Logger LOG = LogManager.getLogger(ConditionHandler.class);
 
   /**
@@ -69,8 +71,9 @@ public class ConditionHandler {
    *
    * @param currPlayer  current Player
    * @param enemyPlayer enemy Player
+   * @param gm GameManager applying the given ConditionHandler class
    */
-  List<Modifiers> applyModifiers(Player currPlayer, Player enemyPlayer) {
+  void applyModifiers(Player currPlayer, Player enemyPlayer, GameManager gm) {
     List<Modifiers> mods = enemyPlayer.getBoard().update();
     for (Modifiers mod : mods) {
         Player[] players = {currPlayer, enemyPlayer};
@@ -79,7 +82,9 @@ public class ConditionHandler {
         } catch (Exception e) {
         }
       }
-    return mods;
+    for (Modifiers mod : mods) {
+      mod.modifierFunction(gm).accept(gm);
+    }
   }
 
   /**
@@ -100,7 +105,7 @@ public class ConditionHandler {
     for (int id : playerIds) {
       Player currPlayer = idMap.get(id);
       WinState currPlayerWinState = condition.updateWinner(currPlayer);
-      LOG.info(String.format("Player %d's WinState %s", id+1, currPlayerWinState));
+      LOG.info(String.format(PLAYER_WINSTATE, id+1, currPlayerWinState));
       checkWinState(currPlayer, currPlayerWinState, id);
     }
   }
@@ -121,12 +126,12 @@ public class ConditionHandler {
 
   private void moveToWinGame(Player player) {
     int id = player.getID();
-    LOG.info(String.format("Player %d wins!", id+1));
+    LOG.info(String.format(PLAYER_WON, id+1));
     view.displayWinningScreen(idMap.get(id).getName());
   }
 
   private void removePlayer(Player player, int id) {
-    LOG.info("Player " + (id+1) + " lost");
+    LOG.info(String.format(PLAYER_LOST, id+1));
     playerQueue.remove(player);
     idMap.remove(id);
     turnMap.remove(player);
