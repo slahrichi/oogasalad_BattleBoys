@@ -103,8 +103,9 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
 
   /**
    * Shows an explosion animation on a cell
-   * @param row the row number of the cell
-   * @param col the column number of the cell
+   *
+   * @param row            the row number of the cell
+   * @param col            the column number of the cell
    * @param explosionImage the image to be shown in the animation
    */
   public void displayExplosionOnCell(int row, int col, ImageView explosionImage) {
@@ -133,21 +134,38 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   }
 
   /**
+   * Removes the explosion image from the board
    *
-   * @param explosionImage
+   * @param explosionImage the image to be removed from the board
    */
   public void removeExplosionImage(ImageView explosionImage) {
     getBoardPane().getChildren().remove(explosionImage);
   }
 
+  /**
+   * Getter for the StackPane that has the board view in it
+   *
+   * @return the StackPane myBoard
+   */
   public Pane getBoardPane() {
     return myBoard;
   }
 
+  /**
+   * Getter for the ID of this BoardView
+   *
+   * @return myID
+   */
   public int getID() {
     return myID;
   }
 
+  /**
+   * The listener method of this BoardView that is called when the class it is observing notifies
+   * this class
+   *
+   * @param evt the evt associated with the notification
+   */
   @Override
   public abstract void propertyChange(PropertyChangeEvent evt);
 }

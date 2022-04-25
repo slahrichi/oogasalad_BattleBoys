@@ -10,8 +10,8 @@ import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.maker.LabelMaker;
 
 /**
- * This class represents a temporary screen that is shown when a player loses the game. Upon clicking the main button,
- * the game exits.
+ * This class represents a temporary screen that is shown when a player loses the game. Upon
+ * clicking the main button, the game exits.
  *
  * @author Edison Ooi and Eric Xie
  */
@@ -28,7 +28,7 @@ public class LoserScreen extends AbstractScreen {
    * The constructor for the LoserScreen object, displayed whenever a user loses
    *
    * @param resourceBundle, the resourceBundle passed to it containing the languages
-   * @param loserName, the name of the user who's a big fat loser
+   * @param loserName,      the name of the user who's a big fat loser
    */
 
   public LoserScreen(ResourceBundle resourceBundle, String loserName) {
@@ -42,6 +42,7 @@ public class LoserScreen extends AbstractScreen {
 
   /**
    * Create main label for the screen
+   *
    * @return Label of the lose message
    */
 
@@ -51,8 +52,8 @@ public class LoserScreen extends AbstractScreen {
   }
 
   /**
-   * Creates a configured Button object to represent the main button on the screen. For this screen it is just a dummy
-   * button.
+   * Creates a configured Button object to represent the main button on the screen. For this screen
+   * it is just a dummy button.
    *
    * @param handler buttonHandler event handler for main button
    * @return new Button object

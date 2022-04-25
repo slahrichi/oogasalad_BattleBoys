@@ -11,8 +11,8 @@ import oogasalad.view.maker.LabelMaker;
 
 /**
  * This class represents a view that tells the user to pass the computer to the next player. Its
- * purpose is to hide any board information from other players when multiple players are playing
- * on the same computer.
+ * purpose is to hide any board information from other players when multiple players are playing on
+ * the same computer.
  */
 public class PassComputerScreen extends AbstractScreen {
 
@@ -30,7 +30,8 @@ public class PassComputerScreen extends AbstractScreen {
    *
    * @param buttonHandler event handler for main button
    */
-  public PassComputerScreen(EventHandler<ActionEvent> buttonHandler, ResourceBundle resourceBundle) {
+  public PassComputerScreen(EventHandler<ActionEvent> buttonHandler,
+      ResourceBundle resourceBundle) {
     super(SPACING, Pos.CENTER, buttonHandler, resourceBundle);
     setId(PASS_COMPUTER_SCREEN_ID);
   }
@@ -42,7 +43,8 @@ public class PassComputerScreen extends AbstractScreen {
    */
   @Override
   protected Label createMainLabel() {
-    return LabelMaker.makeLabel(myResources.getString(PASS_MESSAGE_RESOURCE), PASS_COMPUTER_LABEL_ID);
+    return LabelMaker.makeLabel(myResources.getString(PASS_MESSAGE_RESOURCE),
+        PASS_COMPUTER_LABEL_ID);
   }
 
   /**

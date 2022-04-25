@@ -11,8 +11,8 @@ import oogasalad.view.maker.ButtonMaker;
 import oogasalad.view.maker.LabelMaker;
 
 /**
- * This class represents a temporary screen that is shown when a player wins the game. Upon clicking the main button,
- * the game exits.
+ * This class represents a temporary screen that is shown when a player wins the game. Upon clicking
+ * the main button, the game exits.
  *
  * @author Edison Ooi
  */
