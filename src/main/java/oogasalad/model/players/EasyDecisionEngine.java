@@ -79,9 +79,4 @@ public class EasyDecisionEngine extends DecisionEngine {
     updatePieceIndex();
     return c;
   }
-
-  public void resetStrategy() {
-    getDeque().clear();
-    makeCoordinateMap();
-  }
 }

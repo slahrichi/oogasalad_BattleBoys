@@ -69,11 +69,6 @@ public class HardDecisionEngine extends DecisionEngine {
     return result == CellState.ISLAND_DAMAGED || result == CellState.SHIP_DAMAGED;
   }
 
-  @Override
-  public void resetStrategy() {
-
-  }
-
   private Map<Coordinate, Integer> createSquare() {
     Map<Coordinate, Integer> map = new HashMap<>();
     for (int i = 0; i < 3; i++) {

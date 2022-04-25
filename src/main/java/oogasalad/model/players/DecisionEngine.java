@@ -30,6 +30,12 @@ public abstract class DecisionEngine {
   private static final int[] COL_DELTA = new int[]{-1, 1, 0, 1, 0, 1, -1, -1};
 
 
+  /**
+   *
+   * @param coordinateList list of coordinates AI can attack
+   * @param enemyMap map relating enemy IDs to their MarkerBoards
+   * @param player AI player associated with the DecisionEngine
+   */
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player) {
     myDeque = new ArrayDeque<>();
@@ -47,6 +53,10 @@ public abstract class DecisionEngine {
     }
   }
 
+  /**
+   * process by which each AI makes their move
+   * @return EngineRecord containing chosen move of DecisionEngine
+   */
   public abstract EngineRecord makeMove();
 
   protected List<Coordinate> getCoordinateList() {
@@ -94,6 +104,11 @@ public abstract class DecisionEngine {
         result == CellState.ISLAND_SUNK || result == CellState.WATER_HIT;
   }
 
+  /**
+   * each AI employs a different strategy after the results of a given move
+   *
+   * @param result result of AI's last move
+   */
   public abstract void adjustStrategy(CellState result);
 
   protected int getCurrentPlayer() {
@@ -104,8 +119,6 @@ public abstract class DecisionEngine {
     currentPlayer = id;
   }
 
-  public abstract void resetStrategy();
-
   protected List<Coordinate> generateCoordinates() {
     List<Coordinate> coordinates = new ArrayList<>();
     for (int i = 0; i < ROW_DELTA.length; i++) {
@@ -115,6 +128,11 @@ public abstract class DecisionEngine {
     return coordinates;
   }
 
+  /**
+   *
+   * @param pieceList list of pieces player can place
+   * @return coordinate at which AI has chosen to place piece
+   */
   public Coordinate placePiece(List<Piece> pieceList) {
     Board board = getPlayer().getBoard();
     Piece piece = pieceList.get(getPieceIndex());
@@ -133,6 +151,15 @@ public abstract class DecisionEngine {
 
   protected Coordinate determineLocation(List<Coordinate> list) {
     return list.get(getRandom().nextInt(list.size()));
+  }
+
+  /**
+   * method to reset the strategy in the event that the boats move
+   * the AI clears their deque and replenishes all potential coordinates
+   */
+  public void resetStrategy() {
+    getDeque().clear();
+    makeCoordinateMap();
   }
 
 }
