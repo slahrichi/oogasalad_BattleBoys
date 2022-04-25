@@ -335,7 +335,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private boolean checkIfValid(int row, int col) {
     return row >= 0 && row < myCellBoard.length && col >= 0 &&
         col < myCellBoard[0].length && setupBoard.getColorAt(row, col) != myColorMap.get(
-        CellState.SHIP_HEALTHY);
+        CellState.SHIP_HEALTHY) && setupBoard.getColorAt(row, col) != myColorMap.get(CellState.NOT_DEFINED);
   }
 
   // checks if cell exited
