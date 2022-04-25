@@ -21,6 +21,11 @@ import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * Creates an environment for designing special islands, depends on javaFX, makes no assumptions.
+ *
+ * @author Luka Mdivani
+ */
 public class SpecialIslandDesigner extends BuilderStage {
 
   private BorderPane myPane;
@@ -33,13 +38,18 @@ public class SpecialIslandDesigner extends BuilderStage {
   private ObservableList<String> modifierList = FXCollections.observableArrayList();
   private List<Object> islandList;
   private Cell islandCell;
+  private static final String CLASS_PATH = "oogasalad.model.utilities.tiles.Modifiers.";
+  private static final String DEFAULT_ISLAND_NAME = "default Island";
+  private static final int MODIFIER_LIST_WIDTH = 200;
+  private static final int MODIFIER_LIST_HEIGHT = 300;
+  private static final String DEFAULT_VALUE = "1";
 
   public SpecialIslandDesigner() {
     myPane = new BorderPane();
     myPane.setBottom(makeContinueButton());
     centerPane = new VBox();
     modifierListView.setItems(modifierList);
-    modifierListView.setMaxSize(200, 300);
+    modifierListView.setMaxSize(MODIFIER_LIST_WIDTH, MODIFIER_LIST_HEIGHT);
     modifierTypes = getMyBuilderResources().getString("possibleModifierTypes").split(",");
     stringInputFilter = getMyBuilderResources().getString("needsStringInputFilter").split(",");
     islandList = new ArrayList<>();
@@ -51,10 +61,11 @@ public class SpecialIslandDesigner extends BuilderStage {
     VBox result = new VBox();
     ComboBox comboBox = makeComboBox(modifiers);
 
-    idInputBox = makeTextAreaWithDefaultValue("default Island");
+    idInputBox = makeTextAreaWithDefaultValue(DEFAULT_ISLAND_NAME);
     result.getChildren().add(idInputBox);
     result.getChildren()
-        .addAll(comboBox, makeButton("Select", e -> handleModifierChoice(comboBox)), centerPane);
+        .addAll(comboBox, makeButton(getDictionaryResources().getString("selectPrompt"),
+            e -> handleModifierChoice(comboBox)), centerPane);
 
     return result;
   }
@@ -68,9 +79,11 @@ public class SpecialIslandDesigner extends BuilderStage {
 
     setUpVariableInputs(variables);
     centerPane.getChildren()
-        .addAll(makeButton("Add Modifier", e -> addModifier(selection, islandCell)),
+        .addAll(makeButton(getDictionaryResources().getString("addModifierPrompt"),
+                e -> addModifier(selection, islandCell)),
             modifierListView);
-    centerPane.getChildren().add(makeButton("Save Island", e -> saveIsland(islandCell)));
+    centerPane.getChildren().add(makeButton(getDictionaryResources().getString("saveIslandPrompt"),
+        e -> saveIsland(islandCell)));
   }
 
   private void saveIsland(Cell currentIslandCell) {
@@ -89,11 +102,11 @@ public class SpecialIslandDesigner extends BuilderStage {
     parametersList.toArray(parameters);
     try {
       currentIslandCell.addModifier(
-          (Modifiers) createInstance("oogasalad.model.utilities.tiles.Modifiers." + selection,
+          (Modifiers) createInstance(CLASS_PATH + selection,
               parameterType, parameters));
       modifierList.add(selection + parametersList);
     } catch (IOException e) {
-      e.printStackTrace();
+      showError(getDictionaryResources().getString("reflectionError"));
     }
 
 
@@ -132,7 +145,7 @@ public class SpecialIslandDesigner extends BuilderStage {
 
   private void setUpVariableInputs(String[] variables) {
     for (String var : variables) {
-      TextArea varInput = makeTextAreaWithDefaultValue("1");
+      TextArea varInput = makeTextAreaWithDefaultValue(DEFAULT_VALUE);
       varInputBoxes.put(var, varInput);
       centerPane.getChildren().add(new HBox(LabelMaker.makeLabel(var, var + "_label"), varInput));
     }

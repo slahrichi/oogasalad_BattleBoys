@@ -11,28 +11,6 @@ public class MovingPiece extends Piece {
     myPatrolPath = patrolPath;
   }
 
-/*
-  public MovingPiece(MovingPiece piece) {
-    super(piece);
-  }
-
- */
-
-  public MovingPiece(String id){
-    super(id);
-  }
-
-  @Override
-  public void registerDamage(ShipCell hitLocation) {
-
-    if (getCellList().contains(hitLocation)) {
-      updateStatus("Damaged");
-      getCellList().remove(hitLocation);
-    }
-    if (checkDeath()) {
-      updateStatus("Dead");
-    }
-  }
 
   @Override
   public Piece copyOf() {

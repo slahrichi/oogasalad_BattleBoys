@@ -1,19 +1,12 @@
 package oogasalad.view.board;
 
-import static oogasalad.view.GameView.CELL_STATE_RESOURCES;
-
 import java.beans.PropertyChangeEvent;
-import java.util.List;
-import javafx.scene.paint.Color;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
-import oogasalad.view.CellView;
-import oogasalad.view.Info;
 
 /**
- * This class is a BoardView that represents the current player's own board. It has no onClickHandlers
- * as a user clicking on their own board should not do anything. This BoardView is displayed as one
- * of the BoardViews during the main game.
+ * Creates a BoardView subclass representing an enemy player's board. This BoardView is displayed as
+ * one of the BoardViews during the main game.
  *
  * @author Minjun Kwak, Eric Xie, Edison Ooi
  */
@@ -21,10 +14,23 @@ public class SelfBoardView extends GameBoardView {
 
   private static final String SELF = "Self";
 
+  /**
+   * Creates the necessary components of a BoardView by calling its superclass constructor
+   *
+   * @param size        the size of each cell
+   * @param arrayLayout the layout of the cell states of the board
+   * @param id          the id of this BoardView
+   */
   public SelfBoardView(double size, CellState[][] arrayLayout, int id) {
     super(size, arrayLayout, id);
   }
 
+  /**
+   * The listener method of this BoardView that is called when the class it is observing notifies
+   * this class
+   *
+   * @param evt the evt associated with the notification
+   */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     notifyObserver(evt.getPropertyName()+SELF, ((Coordinate) evt.getNewValue()).getRow() + " " + ((Coordinate) evt.getNewValue()).getColumn() + " " + myID);

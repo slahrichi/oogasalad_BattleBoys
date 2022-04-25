@@ -14,22 +14,32 @@ import java.util.ArrayList;
 public class gson {
 
     public static void main(String[] args) throws IOException {
-        StaticPiece ship1 = new StaticPiece("Long Piece");
         ArrayList<ShipCell> ship1Tiles = new ArrayList<>();
-        ship1Tiles.add(new ShipCell(1, new Coordinate(0,0), 100, ship1));
-        ship1Tiles.add(new ShipCell(1, new Coordinate(0,1), 100, ship1));
-        ship1Tiles.add(new ShipCell(1, new Coordinate(0,2), 100, ship1));
-        ship1Tiles.add(new ShipCell(1, new Coordinate(0,3), 100, ship1));
-        ship1Tiles.add(new ShipCell(1, new Coordinate(0,4), 100, ship1));
-        ship1.initCellList(ship1Tiles);
+        ArrayList<Coordinate> ship1RelCoord = new ArrayList<>();
+        ship1Tiles.add(new ShipCell(1, new Coordinate(0,0), 100, "0"));
+        ship1RelCoord.add(new Coordinate(0,0));
+        ship1Tiles.add(new ShipCell(1, new Coordinate(0,1), 100, "0"));
+        ship1RelCoord.add(new Coordinate(0,1));
+        ship1Tiles.add(new ShipCell(1, new Coordinate(0,2), 100, "0"));
+        ship1RelCoord.add(new Coordinate(0,2));
+        ship1Tiles.add(new ShipCell(1, new Coordinate(0,3), 100, "0"));
+        ship1RelCoord.add(new Coordinate(0,3));
+        ship1Tiles.add(new ShipCell(1, new Coordinate(0,4), 100, "0"));
+        ship1RelCoord.add(new Coordinate(0,4));
+        StaticPiece ship1 = new StaticPiece(ship1Tiles, ship1RelCoord, "0");
 
-        StaticPiece ship2 = new StaticPiece("Tonk");
+
         ArrayList<ShipCell> ship2Tiles = new ArrayList<>();
-        ship2Tiles.add(new ShipCell(4, new Coordinate(0,0), 100, ship1));
-        ship2Tiles.add(new ShipCell(4, new Coordinate(0,1), 200, ship1));
-        ship2Tiles.add(new ShipCell(4, new Coordinate(1,1), 100, ship1));
-        ship2Tiles.add(new ShipCell(4, new Coordinate(1,0), 200, ship1));
-        ship2.initCellList(ship2Tiles);
+        ArrayList<Coordinate> ship2RelCoord = new ArrayList<>();
+        ship2Tiles.add(new ShipCell(4, new Coordinate(0,0), 100, "1"));
+        ship2RelCoord.add(new Coordinate(0,0));
+        ship2Tiles.add(new ShipCell(4, new Coordinate(0,1), 200, "1"));
+        ship2RelCoord.add(new Coordinate(0,1));
+        ship2Tiles.add(new ShipCell(4, new Coordinate(1,1), 100, "1"));
+        ship2RelCoord.add(new Coordinate(1,1));
+        ship2Tiles.add(new ShipCell(4, new Coordinate(1,0), 200, "1"));
+        ship2RelCoord.add(new Coordinate(1,0));
+        StaticPiece ship2 = new StaticPiece(ship2Tiles, ship2RelCoord, "1");
 
         ArrayList<Piece> ships = new ArrayList<>();
         ships.add(ship1);
