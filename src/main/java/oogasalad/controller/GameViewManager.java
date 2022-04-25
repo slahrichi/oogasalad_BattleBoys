@@ -26,13 +26,16 @@ import oogasalad.view.UsableRecord;
 
 public class GameViewManager {
 
+  private static final String BASIC_SHOT_ID = "Basic Shot";
+  private static final String BASIC_SHOT_CLASSNAME = "BasicShot";
+
   private GameView view;
   private Map<Integer, Player> idMap;
   private List<Player> playerList;
   private ResourceBundle myResources;
   private Map<String, Usable> usablesIDMap;
 
-  public GameViewManager(GameData data, Map<String, Usable> usablesIDMap, Map<Integer, Player> idMap, int allowedShots, ResourceBundle resourceBundle) {
+  public GameViewManager(GameData data, Map<String, Usable> usablesIDMap, Map<Integer, Player> idMap, ResourceBundle resourceBundle) {
   /**
    * @param data         GameData object storing information pertinent to game rules
    * @param idMap        Map relating a player id to the Player themselves
@@ -42,18 +45,19 @@ public class GameViewManager {
     this.playerList = data.players();
     this.myResources = resourceBundle;
     this.usablesIDMap = usablesIDMap;
-    setupGameView(data, allowedShots);
-
+    setupGameView(data);
   }
 
-  private void setupGameView(GameData data, int allowedShots) {
+  // Creates a GameView class to show the view of the game and initialize it with the starting elements
+  private void setupGameView(GameData data) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
     view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getMyInventory()), myResources);
     view.setShopUsables(data.allUsables());
-    view.updateLabels(allowedShots, playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
+    view.updateLabels(data.shotsPerTurn(), playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }
 
+  // Create an ID map to get the name of a player given their ID
   private Map<Integer, String> generateIDToNames() {
     Map<Integer, String> idToName = new HashMap<>();
     for (Player p : playerList) {
@@ -62,20 +66,23 @@ public class GameViewManager {
     return idToName;
   }
 
+  // Converts a map of usable ID to the stock of that usable to a UsableRecord object so the view can
+  // display the object properly
   public List<UsableRecord> convertMapToUsableRecord(Map<String, Integer> inventoryMap) {
     List<UsableRecord> inventory = new ArrayList<>();
-    String basicShotID = "Basic Shot";
-    String basicShotClassName = "BasicShot";
+    String basicShotID = BASIC_SHOT_ID;
+    String basicShotClassName = BASIC_SHOT_CLASSNAME;
     int basicShotStock = Integer.MAX_VALUE;
     inventory.add(new UsableRecord(basicShotID, basicShotClassName, basicShotStock));
     for (String id : inventoryMap.keySet()) {
-      if (!id.equals("Basic Shot")) {
+      if (!id.equals(BASIC_SHOT_ID)) {
         inventory.add(new UsableRecord(id, usablesIDMap.get(id).getClass().getSimpleName(), inventoryMap.get(id)));
       }
     }
     return inventory;
   }
 
+  // Creates the list of boards that the first player should be seeing when the game starts
   private List<CellState[][]> createFirstPlayerBoards(GameData data) {
     List<CellState[][]> boards = new ArrayList<>();
     Player firstPlayer = data.players().get(0);
@@ -86,6 +93,8 @@ public class GameViewManager {
     return boards;
   }
 
+  // Creates the list of pieces that the first player should be seeing is remaining on their board
+  // when the game starts
   private Collection<Collection<Coordinate>> createInitialPieces(List<Piece> pieces) {
     Collection<Collection<Coordinate>> pieceCoords = new ArrayList<>();
     for (Piece piece : pieces) {
@@ -94,10 +103,17 @@ public class GameViewManager {
     return pieceCoords;
   }
 
+  /**
+   * Getter method for the GameView created by this class
+   */
   GameView getView() {
     return view;
   }
 
+  /**
+   * Updates the view with the current state of the board, player, and pieces
+   * @param player The current player's turn, for whom the view should be updated for
+   */
   public void sendUpdatesToView(Player player) {
     List<CellState[][]> boardList = new ArrayList<>();
     List<Integer> idList = new ArrayList<>();
@@ -113,6 +129,7 @@ public class GameViewManager {
     view.update(boardList, idList, pieceList, inventory);
   }
 
+  // Helper method for the sendUpdatesToView() method, adds corresponding elements to each list
   private void addToBoardElements(CellState[][] board, int id, Player player, List<CellState[][]>
       boardList, List<Integer> idList, List<Collection<Collection<Coordinate>>> pieceList) {
     boardList.add(board);
@@ -120,6 +137,7 @@ public class GameViewManager {
     pieceList.add(convertPiecesToCoords(player.getBoard().listPieces()));
   }
 
+  // Converts a Piece object to its relative coordinates to be used by the View
   private Collection<Collection<Coordinate>> convertPiecesToCoords(List<Piece> piecesLeft) {
     Collection<Collection<Coordinate>> coords = new ArrayList<>();
     for (Piece piece : piecesLeft) {
@@ -129,6 +147,7 @@ public class GameViewManager {
   }
 
   /**
+   * Updates the pieces left pane in the view
    * @param piecesLeft list of remaining pieces that the player has left
    */
   void updatePiecesLeft(List<Piece> piecesLeft) {

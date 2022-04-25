@@ -10,8 +10,8 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.view.board.ShipIndicatorBoard;
 import oogasalad.view.maker.BoxMaker;
-import oogasalad.view.ShipIndicatorView;
 import oogasalad.view.maker.LabelMaker;
 
 // need to hold the ship list as well as create the ships to display
@@ -34,7 +34,7 @@ public class SetPiecePane extends TitledPane {
   private static final String LABEL_ID = "all-ships-placed-label";
 
   // The visual representations of all ships to be shown in this pane
-  private List<ShipIndicatorView> shipViews;
+  private List<ShipIndicatorBoard> shipViews;
   // Holds all ShipIndicatorViews to be shown
   private VBox shipIndicatorsBox;
   // Indicates whether this player has placed all of their ships
@@ -52,14 +52,14 @@ public class SetPiecePane extends TitledPane {
     myShipSize = size;
     shipViews = new ArrayList<>();
     shipIndicatorsBox = BoxMaker.makeVBox(INDICATOR_ID, INDICATOR_SPACING, Pos.CENTER);
-//    shipViews.add(new ShipIndicatorView(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
+//    shipViews.add(new ShipIndicatorBoard(myShipSize, new CellState[][]{{CellState.WATER}}, 0));
     setUpPane();
   }
 
 
   // Initializes key attributes of this TitledPane
   private void setUpPane() {
-//    for(ShipIndicatorView view : shipViews) {
+//    for(ShipIndicatorBoard view : shipViews) {
 //      shipIndicatorsBox.getChildren().add(view.getBoardPane());
 //    }
     setContent(shipIndicatorsBox);
@@ -78,7 +78,7 @@ public class SetPiecePane extends TitledPane {
     shipIndicatorsBox.getChildren().clear();
     for (Collection<Coordinate> coords : relativeCoords) {
       shipIndicatorsBox.getChildren()
-          .add(new ShipIndicatorView(myShipSize, getArrayRepresentation(coords), 0).getBoardPane());
+          .add(new ShipIndicatorBoard(myShipSize, getArrayRepresentation(coords), 0).getBoardPane());
     }
     setContent(shipIndicatorsBox);
   }

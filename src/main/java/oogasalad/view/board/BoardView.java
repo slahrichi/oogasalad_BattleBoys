@@ -11,7 +11,14 @@ import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.CellView;
 
+/**
+ * Creates the board superclass that defines what a board in the view looks like and how it can
+ * function
+ *
+ * @author Minjun Kwak
+ */
 public abstract class BoardView extends PropertyObservable implements PropertyChangeListener {
+
   private static final String BOARD_ID = "board-view";
   private static final String BASE_ID = "board-view-base";
   private static final String ERROR_MESSAGE = "Row %d and column %d out of bounds";
@@ -21,48 +28,67 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private Pane myBoard;
   private Group myBase;
   protected int myID;
-  protected BoardMaker myBoardMaker;
   protected static String FILL_PREFIX = "FillColor_";
 
-  // controller passes some kind of parameter to the
+  /**
+   * Creates a BoardView with an ID
+   *
+   * @param size        the size of each cell
+   * @param arrayLayout the layout of the state of each cell in the board
+   * @param id          the id of this board
+   */
   public BoardView(double size, CellState[][] arrayLayout, int id) {
-    myBoardMaker = new BoardMaker(size);
     myID = id;
-    setupBoard(arrayLayout);
+    setupBoard(arrayLayout, size);
   }
 
-  private void setupBoard(CellState[][] arrayLayout) {
+  // Sets up the board by creating a StackPane for the board, a CellView array for the board, and a Group
+  // to act as the base for this board view
+  private void setupBoard(CellState[][] arrayLayout, double size) {
     myLayout = new CellView[arrayLayout.length][arrayLayout[0].length];
     myBoard = new StackPane();
     myBoard.setId(BOARD_ID);
     myBase = new Group();
     myBase.setId(BASE_ID);
-    initializeCellViews(arrayLayout);
+    initializeCellViews(arrayLayout, size);
     initializeBoardNodes();
   }
 
-  public abstract void initializeCellViews(CellState[][] arrayLayout);
+  /**
+   * @param arrayLayout
+   * @param size
+   */
+  public abstract void initializeCellViews(CellState[][] arrayLayout, double size);
 
   /**
    * Changes the color of a cell on the BoardView.
-   * @param row x coordinate of cell
-   * @param col y coordinate of cell
+   *
+   * @param row   the row number of this cell
+   * @param col   the column number of this cell
    * @param color Paint to change the cell's fill to
    */
   public void setColorAt(int row, int col, Paint color) {
-    if(!(row < myLayout.length && col < myLayout[0].length)) {
+    if (!(row < myLayout.length && col < myLayout[0].length)) {
       throw new IllegalArgumentException(String.format(ERROR_MESSAGE, row, col));
     }
     myLayout[row][col].getCell().setFill(color);
   }
 
+  /**
+   * Gets the color of a cell on the BoardView.
+   *
+   * @param row the row number of this cell
+   * @param col the column number of this cell
+   * @return the color of this cell
+   */
   public Paint getColorAt(int row, int col) {
-    if(!(row < myLayout.length && col < myLayout[0].length)) {
+    if (!(row < myLayout.length && col < myLayout[0].length)) {
       throw new IllegalArgumentException(String.format(ERROR_MESSAGE, row, col));
     }
     return myLayout[row][col].getCell().getFill();
   }
 
+  // adds polygons representing the cells to the board's base Group, and adds the base to the board's StackPane
   private void initializeBoardNodes() {
     for (int i = 0; i < myLayout.length; i++) {
       for (int j = 0; j < myLayout[0].length; j++) {
@@ -75,6 +101,12 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     myBoard.getChildren().add(myBase);
   }
 
+  /**
+   * Shows an explosion animation on a cell
+   * @param row the row number of the cell
+   * @param col the column number of the cell
+   * @param explosionImage the image to be shown in the animation
+   */
   public void displayExplosionOnCell(int row, int col, ImageView explosionImage) {
     getBoardPane().getChildren().add(explosionImage);
     double cellX = myLayout[row][col].getCell().getBoundsInParent().getMinX();
@@ -88,17 +120,22 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
     explosionImage.setTranslateY(height / 2.0 - (getHeight() / 2 - cellY));
   }
 
-  protected double getWidth() {
+  // gets the width of a cell
+  private double getWidth() {
     return myLayout[0][myLayout[0].length - 1].getCell().getBoundsInParent().getMaxX() -
         myLayout[0][0].getCell().getBoundsInParent().getMinX();
   }
 
-  protected double getHeight() {
+  // gets the height of a cell
+  private double getHeight() {
     return myLayout[myLayout.length - 1][0].getCell().getBoundsInParent().getMaxY() -
         myLayout[0][0].getCell().getBoundsInParent().getMinY();
   }
 
-
+  /**
+   *
+   * @param explosionImage
+   */
   public void removeExplosionImage(ImageView explosionImage) {
     getBoardPane().getChildren().remove(explosionImage);
   }

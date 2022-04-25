@@ -64,7 +64,6 @@ public class LegendPane extends TitledPane {
 
   // Sets up main Pane
   private void setUpPane(){
-
     this.setId(LEGEND_PANE_ID);
     this.setContent(myScroller);
     this.setExpanded(false);

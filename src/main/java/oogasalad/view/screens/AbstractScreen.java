@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
  * The default implementation includes one label on top of one button, however Nodes can be added as
  * needed because AbstractScreens are VBoxes.
  *
- * @author Edison Ooi
+ * @author Edison Ooi and Eric Xie
  */
 public abstract class AbstractScreen extends VBox {
 
