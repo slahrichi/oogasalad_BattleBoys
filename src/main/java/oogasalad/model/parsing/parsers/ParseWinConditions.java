@@ -29,7 +29,8 @@ public class ParseWinConditions extends ParsedElement {
     Gson gson = new GsonBuilder().setPrettyPrinting().
         registerTypeHierarchyAdapter(WinCondition.class, new GSONHelper()).
         create();
-    putJsonInProp(props, location, winConditionsList, gson, PROPERTIES_WINCONDITIONS_FILE);
+    String json = gson.toJson(winConditionsList);
+    putJsonInProp(props, location, json, PROPERTIES_WINCONDITIONS_FILE);
   }
 
   @Override

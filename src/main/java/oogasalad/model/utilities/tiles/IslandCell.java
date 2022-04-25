@@ -9,10 +9,10 @@ public class IslandCell extends Cell implements CellInterface {
 
   public static final CellState ISLAND_CELL_INITIAL_STATE = CellState.ISLAND_HEALTHY;
 
-  private Coordinate myCoordinate;
-  private int myHealthBar;
-  private CellState currentState;
-  private ArrayList<Modifiers> myModifiers = new ArrayList<>();
+  //private Coordinate myCoordinate;
+  //private int myHealthBar;
+  //private CellState currentState;
+  //private ArrayList<Modifiers> myModifiers = new ArrayList<>();
 
   public IslandCell(Coordinate coordinate, int health) {
     super(coordinate, ISLAND_CELL_INITIAL_STATE, health);

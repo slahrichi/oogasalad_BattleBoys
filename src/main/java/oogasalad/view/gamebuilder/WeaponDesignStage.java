@@ -217,7 +217,7 @@ public class WeaponDesignStage extends BuilderStage {
 
       }
       getParameterClasses();
-      addToObjectList(idInputBox.getText() + "_" + selectedWeapon);
+      addToObjectList(idInputBox.getText());
       resetSelection();
       parameters = new Object[parameterList.size()];
       parameterList.toArray(parameters);

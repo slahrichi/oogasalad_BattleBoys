@@ -1,0 +1,17 @@
+[
+  {
+    "myID": "Basic Shot",
+    "goldCost": 0,
+    "relativeCoordShots": {}
+  },
+  {
+    "myID": "burn-shot",
+    "goldCost": 2,
+    "relativeCoordShots": {}
+  },
+  {
+    "myID": "ship-heal",
+    "goldCost": 4,
+    "relativeCoordShots": {}
+  }
+]

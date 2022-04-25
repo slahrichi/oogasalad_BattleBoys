@@ -59,8 +59,7 @@ public abstract class ParsedElement {
     return ret;
   }
 
-  protected void putJsonInProp(Properties props, String location, Object o, Gson gson, String key) {
-    String json = gson.toJson(o);
+  protected void putJsonInProp(Properties props, String location, String json, String key) {
     File myNewFile = new File(location);
     try {
       FileWriter myWriter = new FileWriter(myNewFile);

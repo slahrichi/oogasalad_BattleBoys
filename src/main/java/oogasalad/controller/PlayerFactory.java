@@ -24,7 +24,7 @@ public class PlayerFactory {
   private static CellState[][] myBoard;
   private static int myRange;
   private static Map<Player, DecisionEngine> engineMap;
-  private static Map<String, Integer> inventory;
+  private static Map<String, Double> inventory;
   private static List<String> myDifficulties;
   private static List<WinCondition> myConditions;
   private static final String FILEPATH = "oogasalad.model.players.";
@@ -43,7 +43,7 @@ public class PlayerFactory {
    * @return
    */
   public static PlayerFactoryRecord initializePlayers(CellState[][] board, List<String> playerTypes,
-      Map<String, Integer> startingInventory, int startingGold, List<String> decisionEngines,
+      Map<String, Double> startingInventory, int startingGold, List<String> decisionEngines,
       List<WinCondition> conditionList) {
     myBoard = board;
     myRange = playerTypes.size();
@@ -59,7 +59,7 @@ public class PlayerFactory {
   }
 
   private static Player createPlayer(String playerType, CellState[][] board,
-      Map<String, Integer> inventory, int startingGold, int id) {
+      Map<String, Double> inventory, int startingGold, int id) {
     Board b = new Board(board);
     MarkerBoard mb = new MarkerBoard(board);
     Map<Integer, MarkerBoard> enemyMap = createEnemyMap(mb, id);

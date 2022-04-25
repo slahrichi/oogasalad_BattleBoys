@@ -1,0 +1,67 @@
+[
+  {
+    "type": "oogasalad.model.utilities.StaticPiece",
+    "properties": {
+      "cellList": [
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 0
+          },
+          "myGoldValue": 1,
+          "id": 0,
+          "myModifiers": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "ISLAND_SUNK",
+                  "SHIP_SUNKEN"
+                ]
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
+        }
+      ],
+      "allCells": [
+        {
+          "myRelativeCoordinate": {
+            "row": 0,
+            "column": 0
+          },
+          "myGoldValue": 1,
+          "id": 0,
+          "myModifiers": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "ISLAND_SUNK",
+                  "SHIP_SUNKEN"
+                ]
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "myHealthBar": 1
+        }
+      ],
+      "myMover": {
+        "route": []
+      },
+      "myRelativeCoords": [
+        {
+          "row": 0,
+          "column": 0
+        }
+      ],
+      "pieceId": "Custom Piece"
+    }
+  }
+]
