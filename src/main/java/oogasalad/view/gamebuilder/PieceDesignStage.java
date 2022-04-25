@@ -77,7 +77,7 @@ public class PieceDesignStage extends BuilderStage {
 
     myPane.setTop(makeSelectionComboBox(availablePieceTypes.split(",")));
     myPane.setBottom(makeContinueButton());
-
+    pieceList = new ArrayList<>();
   }
 
   private void initializeCharacteristicMatrix() {
@@ -216,7 +216,7 @@ public class PieceDesignStage extends BuilderStage {
 
     Object[] parameters = new Object[parametersList.size()];
     parametersList.toArray(parameters);
-    pieceList = new ArrayList<>();
+   // pieceList = new ArrayList<>();
     createPieceObject(selectedPieceClass, parameters);
     resetCustomization();
   }

@@ -77,13 +77,19 @@ public class PlayerSetupStage extends BuilderStage {
 
   private void addSavePlayerButton(String selectedPlayerType,
       ComboBox engineTypeComboBox) {
-    if (engineTypeComboBox != null) {
+    System.out.println(engineTypeComboBox);
+    if(engineTypeComboBox!=null) System.out.println(engineTypeComboBox.isShowing());
+    if (engineTypeComboBox!=null) {
       try {
-        selectedEngineType = engineTypeComboBox.getValue().toString();
+          selectedEngineType = engineTypeComboBox.getValue().toString();
       } catch (NullPointerException e) {
-
+        System.out.println("Bruh");
       }
     }
+    if(selectedPlayerType.equals("HumanPlayer")){
+      selectedEngineType = getMyBuilderResources().getString("BlankEngineState");
+    }
+    System.out.println(selectedEngineType);
     addToObjectList(selectedPlayerType + selectedEngineType);
     playerList.add(selectedPlayerType);
     engineList.add(selectedEngineType);
