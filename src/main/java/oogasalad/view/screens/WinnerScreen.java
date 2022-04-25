@@ -19,7 +19,7 @@ import oogasalad.view.maker.LabelMaker;
 public class WinnerScreen extends AbstractScreen {
 
   private static final String WIN_MESSAGE_RESOURCE = "WinText";
-  private static final String BUTTON_MESSAGE = "Exit";
+  private static final String BUTTON_MESSAGE = "Main Menu";
   private static final String WINNER_SCREEN_ID = "winner-screen";
   private static final String WINNER_LABEL_ID = "winner-screen-label";
   private static final String WINNER_BTN_ID = "winner-screen-button";
@@ -31,11 +31,8 @@ public class WinnerScreen extends AbstractScreen {
    *
    * @param winnerName name of winning player
    */
-  public WinnerScreen(ResourceBundle resourceBundle, String winnerName) {
-    super(SPACING, Pos.CENTER, e -> {
-      Platform.exit();
-      System.exit(0);
-    }, resourceBundle);
+  public WinnerScreen(ResourceBundle resourceBundle, String winnerName, EventHandler<ActionEvent> handler) {
+    super(SPACING, Pos.CENTER, handler, resourceBundle);
 
     setId(WINNER_SCREEN_ID);
 

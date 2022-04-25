@@ -54,6 +54,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private static final String SHOT_FAILURE = "Shot attempt failed!";
   private static final String WEAPON_LOG = "Current weapon: %s";
   private static final String BOARD_CLICKED = "Board %d clicked at row %d, col %d";
+  private static final String MAIN_MENU_OPERATION = "mainMenu";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private ResourceBundle myResources;
 
@@ -140,11 +141,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     currentUsable = usablesIDMap.get(id);
     LOG.info(String.format(WEAPON_LOG, id));
     view.setCurrentUsable(id, usablesIDMap.get(id).getRelativeCoordShots().keySet());
-
   }
 
   private void addGold(String param) {
     playerQueue.peek().addGold(CHEAT_GOLD_AMOUNT);
+    view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(), playerQueue.peek().getMyCurrency());
   }
 
   private void addRandomUsable(String param) {
@@ -168,7 +169,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void addNumShotsAllowed(String param) {
-    numShots++;
+    allowedShots++;
     view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(),
             playerQueue.peek().getMyCurrency());
   }
@@ -206,6 +207,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void selfBoardClicked(String clickInfo) {
     GameView.handleClickInfo(clickInfo, LOG, BOARD_CLICKED);
+  }
+
+  private void mainMenu(String clickInfo){
+    notifyObserver(MAIN_MENU_OPERATION, null);
   }
 
   /**
