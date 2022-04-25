@@ -22,6 +22,7 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.items.Item;
 import oogasalad.model.utilities.usables.weapons.Weapon;
+import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
 import oogasalad.model.utilities.winconditions.WinCondition;
 import oogasalad.view.SetupView;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +64,9 @@ public class GameSetupTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100, new ArrayList<>(Arrays.asList("None", "Easy")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100,
+        new ArrayList<>(Arrays.asList("None", "Easy")), new ArrayList<>(Arrays.asList
+            (new LoseXShipsLossCondition(3))));
     List<Coordinate> coordinateList = new ArrayList<>(Arrays.asList(new Coordinate(0, 1),
         new Coordinate(1, 0), new Coordinate(1, 1)));
     List<ShipCell> dummyShipCellList = new ArrayList<>();

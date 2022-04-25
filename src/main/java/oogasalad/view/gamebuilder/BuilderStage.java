@@ -58,6 +58,7 @@ public abstract class BuilderStage {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
     myBuilderDictionaryResources = ResourceBundle.getBundle("/BuilderDictionary");
     builderUtil = new GameBuilderUtil();
+    myStage = new Stage();
   }
 
   protected ListView setUpObjectView() {
@@ -97,7 +98,6 @@ public abstract class BuilderStage {
   }
 
   protected void setUpStage(BorderPane myPane) {
-    myStage = new Stage();
     myStage.setScene(getScene(myPane));
     myStage.showAndWait();
   }
@@ -245,9 +245,8 @@ public abstract class BuilderStage {
     return comboBox;
   }
 
-  protected HBox makeIdInput(String defaultId) {
-    return new HBox(LabelMaker.makeLabel("id:", "id" + "_label"),
-        makeTextAreaWithDefaultValue(defaultId));
+  protected void setTitle(String s){
+    myStage.setTitle(s);
   }
 
   protected void findReferencePoint(int[][] stateMap) {

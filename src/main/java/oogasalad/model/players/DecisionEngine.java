@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.winconditions.WinCondition;
 
 public abstract class DecisionEngine {
 
@@ -19,6 +23,8 @@ public abstract class DecisionEngine {
   private List<Coordinate> myCoordinateList;
   private Deque<EngineRecord> myDeque;
   private Map<Integer, MarkerBoard> myEnemyMap;
+  private Set<CellState> wants;
+  private Set<CellState> avoids;
   private Player myPlayer;
   private Random myRandom;
   private EngineRecord myLastShot;
@@ -29,14 +35,45 @@ public abstract class DecisionEngine {
   private static final int[] COL_DELTA = new int[]{-1, 1, 0, 1, 0, 1, -1, -1};
 
 
+  /**
+   *
+   * @param coordinateList list of coordinates from which the AI can choose for each enemy
+   * @param enemyMap map relating each enemy to a board of moves the AI has made against them
+   * @param player Player to which the DecisionEngine belongs
+   * @param conditionList list of conditions engine needs to consider
+   */
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
-      Player player) {
+      Player player, List<WinCondition> conditionList) {
     myDeque = new ArrayDeque<>();
     myEnemyMap = enemyMap;
     myCoordinateList = coordinateList;
     makeCoordinateMap();
     myPlayer = player;
     myRandom = new Random(System.currentTimeMillis());
+    buildWants(conditionList);
+    buildAvoids(conditionList);
+  }
+
+  private void buildWants(List<WinCondition> conditionList) {
+    wants = new HashSet<>();
+    for (WinCondition condition : conditionList) {
+      wants.addAll(condition.getDesirableCellStates());
+    }
+  }
+
+  private void buildAvoids(List<WinCondition> conditionList) {
+    avoids = new HashSet<>();
+    for (WinCondition condition : conditionList) {
+      avoids.addAll(condition.getNonDesirableCellStates());
+    }
+  }
+
+  protected Set<CellState> getWants() {
+    return wants;
+  }
+
+  protected Set<CellState> getAvoids() {
+    return avoids;
   }
 
   protected void makeCoordinateMap() {
@@ -46,6 +83,10 @@ public abstract class DecisionEngine {
     }
   }
 
+  /**
+   * process by which each AI makes their move
+   * @return EngineRecord containing chosen move of DecisionEngine
+   */
   public abstract EngineRecord makeMove();
 
   protected List<Coordinate> getCoordinateList() {
@@ -89,13 +130,15 @@ public abstract class DecisionEngine {
   }
 
   protected boolean canBeRemoved(CellState result) {
-    return result == CellState.SHIP_SUNKEN || result == CellState.WATER ||
-        result == CellState.ISLAND_SUNK || result == CellState.WATER_HIT;
+    return result == CellState.SHIP_SUNKEN || result == CellState.ISLAND_SUNK;
   }
 
+  /**
+   * each AI employs a different strategy after the results of a given move
+   *
+   * @param result result of AI's last move
+   */
   public abstract void adjustStrategy(CellState result);
-
-  public abstract Coordinate placePiece(List<Piece> pieceList);
 
   protected int getCurrentPlayer() {
     return currentPlayer;
@@ -105,8 +148,6 @@ public abstract class DecisionEngine {
     currentPlayer = id;
   }
 
-  public abstract void resetStrategy();
-
   protected List<Coordinate> generateCoordinates() {
     List<Coordinate> coordinates = new ArrayList<>();
     for (int i = 0; i < ROW_DELTA.length; i++) {
@@ -114,6 +155,40 @@ public abstract class DecisionEngine {
     }
     Collections.shuffle(coordinates);
     return coordinates;
+  }
+
+  /**
+   *
+   * @param pieceList list of pieces player can place
+   * @return coordinate at which AI has chosen to place piece
+   */
+  public Coordinate placePiece(List<Piece> pieceList) {
+    Board board = getPlayer().getBoard();
+    Piece piece = pieceList.get(getPieceIndex());
+    Coordinate c = determineLocation(getCoordinateList());
+    while (!board.hasValidPlacement(c, piece)) {
+      c = determineLocation(getCoordinateList());
+    }
+    updatePieceIndex();
+    return c;
+  }
+
+  protected int determineEnemy() {
+    List<Integer> enemies = new ArrayList<>(getEnemyMap().keySet());
+    return enemies.get(getRandom().nextInt(enemies.size()));
+  }
+
+  protected Coordinate determineLocation(List<Coordinate> list) {
+    return list.get(getRandom().nextInt(list.size()));
+  }
+
+  /**
+   * method to reset the strategy in the event that the boats move
+   * the AI clears their deque and replenishes all potential coordinates
+   */
+  public void resetStrategy() {
+    getDeque().clear();
+    makeCoordinateMap();
   }
 
 }

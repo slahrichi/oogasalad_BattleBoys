@@ -1,6 +1,7 @@
 package oogasalad.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.EasyDecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +47,9 @@ public class PlayerFactoryTest {
 
   @Test
   void testBasicPlayerFactory() {
-    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties);
+    PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(),
+        100, difficulties, new ArrayList<>(Arrays.asList
+            (new LoseXShipsLossCondition(3))));
     List<Player> playerList = pfr.playerList();
     assertEquals(playerList.size(), 3);
     Map<Player, DecisionEngine> map = pfr.engineMap();
@@ -58,14 +62,19 @@ public class PlayerFactoryTest {
   @Test
   void testInvalidPlayerType() {
     playerTypes.add("Playyer");
-    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties).
+    assertThrows(NullPointerException.class, () ->
+        PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(),
+                100, difficulties, new ArrayList<>(Arrays.asList
+                    (new LoseXShipsLossCondition(3)))).
         playerList());
   }
 
   @Test
   void testInvalidPlayerTyle() {
     difficulties.set(1, "Impahssible");
-    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(), 100, difficulties).
+    assertThrows(NullPointerException.class, () -> PlayerFactory.initializePlayers(board, playerTypes,
+            new HashMap<>(), 100, difficulties, new ArrayList<>(Arrays.asList
+                (new LoseXShipsLossCondition(3)))).
         playerList());
   }
 
