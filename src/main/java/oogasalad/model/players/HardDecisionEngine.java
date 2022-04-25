@@ -5,20 +5,39 @@ import java.util.List;
 import java.util.Map;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
-import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
 import oogasalad.model.utilities.usables.weapons.ClusterShot;
 import oogasalad.model.utilities.winconditions.WinCondition;
 
+
+/**
+ * An AI for users of hard difficulty to play against. The AI randomly selects both points to
+ * attack and enemies to attack. It leverages BFS to scan an area after a successful hit.
+ * It also loses track of enemy boats after they move, but exclusively uses Cluster Shots when
+ * it has recently made a hit and will shot the whole area with them.
+ *
+ * @author Matthew Giglio
+ */
 public class HardDecisionEngine extends DecisionEngine {
 
+  /**
+   *
+   * @param coordinateList list of coordinates from which the AI can choose for each enemy
+   * @param enemyMap map relating each enemy to a board of moves the AI has made against them
+   * @param player Player to which the DecisionEngine belongs
+   * @param conditionList list of conditions engine needs to consider
+   */
   public HardDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
   Player player, List<WinCondition> conditionList) {
     super(coordinateList, enemyMap, player, conditionList);
   }
 
+  /**
+   * Decision logic for engine to make move against another player
+   * @return EngineRecord containing the AI's selected shot location and enemy ID
+   */
   public EngineRecord makeMove() {
     if (!getDeque().isEmpty()) {
       return getDeque().pollFirst();
@@ -43,6 +62,11 @@ public class HardDecisionEngine extends DecisionEngine {
     }
   }
 
+  /**
+   * each AI employs a different strategy after the results of a given move
+   *
+   * @param result result of AI's last move
+   */
   public void adjustStrategy(CellState result) {
     if (getWants().contains(result)) {
       getDeque().addFirst(getLastShot());

@@ -22,6 +22,7 @@ public class MediumDecisionEngine extends DecisionEngine {
    * @param coordinateList list of coordinates from which the AI can choose for each enemy
    * @param enemyMap map relating each enemy to a board of moves the AI has made against them
    * @param player Player to which the DecisionEngine belongs
+   * @param conditionList list of conditions engine needs to consider
    */
   public MediumDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player, List<WinCondition> conditionList) {

@@ -37,9 +37,10 @@ public abstract class DecisionEngine {
 
   /**
    *
-   * @param coordinateList list of coordinates AI can attack
-   * @param enemyMap map relating enemy IDs to their MarkerBoards
-   * @param player AI player associated with the DecisionEngine
+   * @param coordinateList list of coordinates from which the AI can choose for each enemy
+   * @param enemyMap map relating each enemy to a board of moves the AI has made against them
+   * @param player Player to which the DecisionEngine belongs
+   * @param conditionList list of conditions engine needs to consider
    */
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
       Player player, List<WinCondition> conditionList) {
