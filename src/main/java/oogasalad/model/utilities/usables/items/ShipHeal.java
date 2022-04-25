@@ -16,9 +16,6 @@ public class ShipHeal extends Item{
     this.healPower = healPower;
   }
 
-  public ShipHeal(String[] parameters){
-    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
-  }
 
   @Override
   protected UsableFunction makeItemFunction(){

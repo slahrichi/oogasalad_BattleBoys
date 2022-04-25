@@ -33,10 +33,6 @@ public class HomingShot extends Weapon{
     }
   }
 
-  public HomingShot(String[] parameters){
-    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]), Integer.parseInt(parameters[3]),Integer.parseInt(parameters[4]));
-  }
-
   @Override
   protected UsableFunction makeWeaponFunction() {
     UsableFunction ret = (absolute, board) ->{

@@ -17,9 +17,7 @@ public class CircleHeal extends Item{
     this.healingPower = healingPower;
   }
 
-  public CircleHeal(String[] parameters){
-    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]),Integer.parseInt(parameters[3]));
-  }
+
   private void generateRelativeCoords(){
     for(int row = -1*myRadius ; row<myRadius; row++){
       for(int col = -1*myRadius; col<myRadius; col++){

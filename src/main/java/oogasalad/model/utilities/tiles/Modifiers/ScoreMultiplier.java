@@ -8,16 +8,12 @@ public class ScoreMultiplier extends Modifiers{
 
   private int multiplier;
 
-
-
-
-
   @Override
   protected Consumer createConsumer() {
-    Consumer ret = new BoardConsumer() {
+    Consumer ret = new PlayerConsumer() {
       @Override
-      public void accept(Board board) {
-        board.applyMultiplier(multiplier);
+      public void accept(Player[] players) {
+        players[0].setMultiplier(multiplier);
       }
     };
     return ret;
@@ -25,7 +21,7 @@ public class ScoreMultiplier extends Modifiers{
 
 
   @Override
-  public Consumer modifierFunction(Board board){
+  public Consumer modifierFunction(Player[] players){
     return myConsumer;
   }
 

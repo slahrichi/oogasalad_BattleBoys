@@ -340,6 +340,10 @@ public class Board {
 
   }
 
+  /**
+   * Goes through any cell that has a gold adder and changes the multiplier for the adder.
+   * @param multiplier the factor that the gold should be multiplied by for
+   */
   public void applyMultiplier(int multiplier) {
     for(Coordinate coord: boardMap.keySet()){
       for(GoldAdder adder: boardMap.get(coord).getGoldModifiers())

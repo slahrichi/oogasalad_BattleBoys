@@ -6,6 +6,8 @@ public class MarkerBoard {
 
   private CellState[][] myMarkerArray;
 
+
+
   public MarkerBoard(CellState[][] cellStates) {
     myMarkerArray = new CellState[cellStates.length][cellStates[0].length];
     for(int i = 0 ; i< myMarkerArray.length; i++) {

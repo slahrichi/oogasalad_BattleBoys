@@ -92,6 +92,8 @@ public interface Player {
     void addUsableToInventory(Usable usableToAdd);
 
     void addIDtoInventory(String ID);
+
+    void setMultiplier(int factor);
 }
 
 
