@@ -1,10 +1,11 @@
 package oogasalad.model.utilities;
 
+
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.IslandCell;
+import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.tiles.ShipCell;
@@ -189,7 +190,7 @@ public class Board {
    * @param id ID of piece to get
    * @return Piece with the given ID
    */
-  public Piece getPiece(int id){
+  public Piece getPiece(String id){
     Piece myPiece = myPieces.get(id);
     return myPiece;
   }
@@ -337,5 +338,16 @@ public class Board {
       myPieces.get(key).movePiece(boardMap);
     }
 
+  }
+
+  /**
+   * Goes through any cell that has a gold adder and changes the multiplier for the adder.
+   * @param multiplier the factor that the gold should be multiplied by for
+   */
+  public void applyMultiplier(int multiplier) {
+    for(Coordinate coord: boardMap.keySet()){
+      for(GoldAdder adder: boardMap.get(coord).getGoldModifiers())
+        adder.setMultiplier(multiplier);
+    }
   }
 }

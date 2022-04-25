@@ -31,7 +31,7 @@ public interface Player {
      * Players are able to make purchases from in-game shop, and items are added to their inventory
      *
      * @param amount cost of item
-     * @param id   id string of usable to be added
+     * @param id     id string of usable to be added
      */
     public void makePurchase(int amount, String id);
 
@@ -88,7 +88,12 @@ public interface Player {
     int getMyCurrency();
 
     void updateShot(CellState hitResult); // new method for updating hitsMap
+
     void addUsableToInventory(Usable usableToAdd);
 
+    void addIDtoInventory(String ID);
+
+    void setMultiplier(int factor);
 }
+
 

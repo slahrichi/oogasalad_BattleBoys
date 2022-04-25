@@ -15,11 +15,10 @@ public class CircleHeal extends Item{
     super(id, gold);
     this.myRadius = radius;
     this.healingPower = healingPower;
+    generateRelativeCoords();
   }
 
-  public CircleHeal(String[] parameters){
-    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]),Integer.parseInt(parameters[3]));
-  }
+
   private void generateRelativeCoords(){
     for(int row = -1*myRadius ; row<myRadius; row++){
       for(int col = -1*myRadius; col<myRadius; col++){
@@ -35,7 +34,7 @@ public class CircleHeal extends Item{
       for(Coordinate relative : getRelativeCoordShots().keySet()){
         Coordinate mappedCoord = new Coordinate(relative.getRow() + abs.getRow(),relative.getColumn() + abs.getColumn());
         if(board.checkBoundedCoordinate( mappedCoord)){
-          returnStates.put(mappedCoord, board.hit(mappedCoord, healingPower));
+          returnStates.put(mappedCoord, board.hit(mappedCoord, -1* healingPower));
         }
       }
       return returnStates;

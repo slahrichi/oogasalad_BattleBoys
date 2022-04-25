@@ -31,6 +31,7 @@ public abstract class GenericPlayer implements Player{
   private static final String PLAYER_PREFIX = "Player ";
   private static final String STRIPE = "stripe";
   private String myName;
+  private int multiplier = 1;
 
   public GenericPlayer(Board board, int id, Map<String, Double> inventory, int startingGold, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
@@ -75,7 +76,7 @@ public abstract class GenericPlayer implements Player{
 
   @Override
   public void addGold(int amount) {
-    myCurrency += amount;
+    myCurrency += multiplier* amount;
   }
 
   @Override
@@ -163,4 +164,14 @@ public abstract class GenericPlayer implements Player{
     else
       myInventory.put(usable.getMyID(), 1.0);
   }
+
+  public void addIDtoInventory(String ID){
+   try {
+     if (myInventory.containsKey(ID))
+       myInventory.put(ID, myInventory.get(ID) + 1);
+     else
+       myInventory.put(ID, 1.0);
+   }catch(Exception e){}
+  }
+  public void setMultiplier(int factor){ multiplier =factor;}
 }

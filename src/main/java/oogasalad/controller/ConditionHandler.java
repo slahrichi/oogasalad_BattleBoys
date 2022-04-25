@@ -2,6 +2,7 @@ package oogasalad.controller;
 
 import static oogasalad.controller.GameSetup.SCREEN_DURATION;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -160,5 +161,13 @@ public class ConditionHandler {
       }
     }
     return turnCount == turnMap.size();
+  }
+  public void addWinCondition(WinCondition condition){
+    winConditions.add(condition);
+  }
+
+  public void replaceWinCondition(WinCondition condition){
+    winConditions = new ArrayList<>();
+    winConditions.add(condition);
   }
 }

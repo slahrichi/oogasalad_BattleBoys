@@ -24,9 +24,6 @@ public class RandomShot extends Weapon{
   }
 
 
-  public RandomShot(String[] parameters){
-    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]), Integer.parseInt(parameters[3]),Integer.parseInt(parameters[4]));
-  }
   @Override
   protected UsableFunction makeWeaponFunction() {
     UsableFunction ret = (absolute, board) ->{

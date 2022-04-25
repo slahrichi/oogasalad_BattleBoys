@@ -24,7 +24,6 @@ public class TileTest {
   @BeforeEach
   void setup() {
     cell  = new ShipCell(2, new Coordinate(0,0), 100, (Piece) null);
-
   }
 
   @Test

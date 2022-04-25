@@ -16,22 +16,16 @@ public class ShipHeal extends Item{
     this.healPower = healPower;
   }
 
-  public ShipHeal(String[] parameters){
-    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
-  }
 
   @Override
   protected UsableFunction makeItemFunction(){
     UsableFunction ret = (abs, board)->{
       CellInterface cell = board.getCell(abs);
       Map<Coordinate, CellState> resMap = new HashMap<>();
-      resMap.put(abs, board.hit(abs,healPower));
       if(board.getCell(abs) instanceof ShipCell){
-        for(ShipCell shipcell : board.getPiece(((ShipCell) cell).getId()).getAllCells()){
-          if(cell != shipcell){
-            shipcell.hit(healPower);
+        for(ShipCell shipcell : board.getPiece(((ShipCell) board.getCell(abs)).getId()).getAllCells()){
+            shipcell.hit(-1*healPower);
             resMap.put(shipcell.getCoordinates(), shipcell.getCellState());
-          }
         }
       }
       return resMap;

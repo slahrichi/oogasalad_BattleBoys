@@ -16,7 +16,7 @@ public class ShipCell extends Cell implements CellInterface {
   private transient Piece myShip;
   //private CellState currentState;
   private int myGoldValue;
-  private int id;
+  private int originalHealth;
   //private ArrayList<Modifiers> myModifiers = new ArrayList<>();
 
 
@@ -24,6 +24,7 @@ public class ShipCell extends Cell implements CellInterface {
 // Use this Constructor to create ships in the real game
   public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, Piece ship) {
     super(null, SHIP_CELL_INTIAL_STATE, health);
+    originalHealth = health;
     //myHealthBar = health;
     myGoldValue = goldValue;
     myRelativeCoordinate = relativeCoordinate;
@@ -33,8 +34,9 @@ public class ShipCell extends Cell implements CellInterface {
   }
 
   public ShipCell(ShipCell parent) {
-    super(null,parent.getCellState(),parent.getHealth());
+    super(null,parent.getCellState(),parent.getHealth(), parent.getId());
     //myHealthBar = parent.myHealthBar;
+    originalHealth = parent.getHealth();
     myGoldValue = parent.myGoldValue;
     addModifier(new GoldAdder(myGoldValue));
     myRelativeCoordinate = parent.myRelativeCoordinate;
@@ -42,10 +44,9 @@ public class ShipCell extends Cell implements CellInterface {
     myShip = parent.myShip;
   }
 
-//Use this only for testing purposes
   public ShipCell(int health, Coordinate relativeCoordinate, int goldValue, String ID) {
-    super(null, SHIP_CELL_INTIAL_STATE, health);
-    //myHealthBar = health;
+    super(null, SHIP_CELL_INTIAL_STATE, health, ID);
+    originalHealth = health;
     myGoldValue = goldValue;
     myRelativeCoordinate = relativeCoordinate;
     //currentState = CellState.SHIP_HEALTHY;
@@ -64,7 +65,9 @@ public class ShipCell extends Cell implements CellInterface {
     if (getHealth() <= 0) {
       setCellState(CellState.SHIP_SUNKEN);
       if(myShip!=null) myShip.registerDamage(this);
-    } else {
+    } else if(originalHealth == getHealth()) {
+      setCellState(CellState.SHIP_HEALTHY);
+    }else{
       setCellState(CellState.SHIP_DAMAGED);
     }
     return getCellState();
@@ -101,9 +104,6 @@ public class ShipCell extends Cell implements CellInterface {
     if(!getMyModifiers().containsAll(other.getMyModifiers())) return false;
     return true;
 
-  }
-  public int getId(){
-    return id;
   }
 
 }

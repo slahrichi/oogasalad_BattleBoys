@@ -15,7 +15,6 @@ public class BasicShot extends Weapon{
 
   }
 
-
   @Override
   protected UsableFunction makeWeaponFunction() {
     UsableFunction ret = (absolute, board) -> {

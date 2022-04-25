@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -14,8 +15,10 @@ import oogasalad.model.utilities.tiles.enums.CellState;
  */
 public abstract class Cell implements CellInterface{
   private Coordinate myCoordinate;
-  private ArrayList<Modifiers> myModifiers = new ArrayList<>();
+  private List<Modifiers> myModifiers = new ArrayList<>();
+  private List<GoldAdder> goldAdders = new ArrayList<>();
   private CellState currentState;
+  private String id;
   private int myHealthBar;
 
   /**
@@ -30,7 +33,13 @@ public abstract class Cell implements CellInterface{
     myHealthBar = health;
   }
 
-  //sets cell state to specified cell state
+  public Cell(Coordinate coordinate, CellState state, int health, String id) {
+    myCoordinate = coordinate;
+    currentState = state;
+    myHealthBar = health;
+    this.id = id;
+  }
+
   protected void setCellState(CellState newState) {
     currentState = newState;
   }
@@ -128,6 +137,8 @@ public abstract class Cell implements CellInterface{
   @Override
   public void addModifier(Modifiers myMod) {
     myModifiers.add(myMod);
+    if(myMod instanceof GoldAdder)
+      goldAdders.add((GoldAdder) myMod);
   }
 
   /**
@@ -146,5 +157,15 @@ public abstract class Cell implements CellInterface{
   @Override
   public int getHealth() {
     return myHealthBar;
+  }
+
+  @Override
+  public List<GoldAdder> getGoldModifiers(){
+    return goldAdders;
+  }
+
+  @Override
+  public String getId(){
+    return id;
   }
 }
