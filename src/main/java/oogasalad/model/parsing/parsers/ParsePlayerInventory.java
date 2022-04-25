@@ -22,7 +22,7 @@ public class ParsePlayerInventory extends ParsedElement {
   public void save(Properties props, String location, Object o) throws ParserException {
     location += PLAYER_INVENTORY_JSON;
     LOG.info("saving player inventory at {}", location);
-    Map playerInventory = (Map<String, Integer>) o;
+    Map playerInventory = (Map<String, Double>) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     String json = gson.toJson(playerInventory);
     putJsonInProp(props, location, json, PROPERTIES_PLAYER_INVENTORY_FILE);
@@ -30,12 +30,12 @@ public class ParsePlayerInventory extends ParsedElement {
 
 
   @Override
-  public Map<String, Integer> parse(Properties props) throws ParserException {
+  public Map<String, Double> parse(Properties props) throws ParserException {
     String playerInventoryFile = props.getProperty(PROPERTIES_PLAYER_INVENTORY_FILE);
     LOG.info("parsing player inventory at {}", playerInventoryFile);
     Gson gson = new GsonBuilder().create();
     Map playerInventory;
-    playerInventory = (Map<String, Integer>) getElementFromJson(playerInventoryFile, gson, getParsedClass());
+    playerInventory = (Map<String, Double>) getElementFromJson(playerInventoryFile, gson, getParsedClass());
     return playerInventory;
   }
 

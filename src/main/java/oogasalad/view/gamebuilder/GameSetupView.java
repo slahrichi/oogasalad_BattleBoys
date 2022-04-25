@@ -59,14 +59,14 @@ public class GameSetupView extends Application {
 
     WeaponDesignStage weaponDesignStage = new WeaponDesignStage();
     List<Weapon> weapons = (List<Weapon>) weaponDesignStage.launch();
-    objectList.add(weapons);
+    objectList.add(new ArrayList<>());
 
     SpecialIslandDesigner specialIslandDesigner = new SpecialIslandDesigner();
     objectList.add(specialIslandDesigner.launch());
 
     ItemDesignStage itemDesignStage = new ItemDesignStage();
     List<Item> items = (List<Item>) itemDesignStage.launch();
-    objectList.add(items);
+    objectList.add(new ArrayList<>());
 
     InventorySetupStage inventorySetupStage = new InventorySetupStage(
         weaponDesignStage.getCreatedWeaponIds());

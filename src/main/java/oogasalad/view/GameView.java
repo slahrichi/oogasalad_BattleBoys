@@ -182,6 +182,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    */
   public GameView(List<CellState[][]> firstPlayerBoards,
       Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, List<UsableRecord> firstPlayerUsables, Map<CellState, Color> colorMap, ResourceBundle resourceBundle) {
+    System.out.println("into GameView ");
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;

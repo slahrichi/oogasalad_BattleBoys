@@ -56,7 +56,7 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
   }
 
   // Adds a new InventoryElement to this view's HBox
-  private void addElementToHBox(int quantity, String className, String id) {
+  private void addElementToHBox(double quantity, String className, String id) {
     InventoryElement element = new InventoryElement(quantity, className, id);
     element.addObserver(this);
     elementsBox.getChildren().add(element.getBox());
@@ -101,7 +101,7 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
     private static final double ITEM_SIZE = 50;
 
     // Information about this usable
-    private int quantity;
+    private double quantity;
     private String usableID;
 
     // JavaFX components
@@ -114,7 +114,7 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
      * @param className Path to the file representing this usable's image representation
      * @param usableID  ID of usable
      */
-    private InventoryElement(int quantity, String className, String usableID) {
+    private InventoryElement(double quantity, String className, String usableID) {
       elementBox = BoxMaker.makeVBox("inventory-usable", 5, Pos.CENTER);
       elementBox.setOnMouseClicked(e -> handleClicked());
       this.quantity = quantity;
@@ -131,8 +131,8 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
 
     // Sets up quantity label
     private void setupQuantityLabel() {
-      if (quantity != Integer.MAX_VALUE) {
-        Label quantityLabel = LabelMaker.makeLabel("x" + quantity, "inventory-element-quantity-label");
+      if (quantity != Double.MAX_VALUE) {
+        Label quantityLabel = LabelMaker.makeLabel("x" + (int) quantity, "inventory-element-quantity-label");
         elementBox.getChildren().add(quantityLabel);
       }
     }

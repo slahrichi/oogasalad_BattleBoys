@@ -146,6 +146,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     myPane = new BorderPane();
     myPane.setId(SETUP_PANE_ID);
     myCellBoard = board;
+    myColorMap = colorMap;
     setupBoard = new SetupBoardView(BOARD_SIZE, myCellBoard, myColorMap, SETUP_BOARD_ID);
     lastPlaced = new ArrayList<>();
     myResources = resourceBundle;
@@ -153,7 +154,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     currentPlayerName = myResources.getString(PROMPT_PREFIX_RESOURCE);
     nextToPlace = new ArrayList<>();
     title = myResources.getString(SETUP_TITLE_RESOURCE);
-    myColorMap = colorMap;
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
     createTitlePanel();
     createBottomPanel();

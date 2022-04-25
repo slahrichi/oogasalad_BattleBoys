@@ -111,9 +111,9 @@ public class ParserTest {
     return usables;
   }
 
-  private Map<String,Integer> makeInventory() {
-    Map<String,Integer> map = new HashMap<>();
-    map.put("cluster-shot-5x5",3);
+  private Map<String,Double> makeInventory() {
+    Map<String,Double> map = new HashMap<>();
+    map.put("cluster-shot-5x5",3.0);
     return map;
   }
 
@@ -212,7 +212,7 @@ public class ParserTest {
     Piece staticPiece = makeDummyPiece();
     CellState[][] testBoard = makeDummyBoard();
     Board b = new Board(testBoard);
-    Player testPlayer = new HumanPlayer(b, 0, new HashMap<String, Integer>(),2, new HashMap<Integer, MarkerBoard>());
+    Player testPlayer = new HumanPlayer(b, 0, new HashMap<String, Double>(),2, new HashMap<Integer, MarkerBoard>());
     testPlayer.placePiece(staticPiece, new Coordinate(0,0));
     WinCondition testCondition = new HitXCellsCondition(CellState.WATER_HIT, 2, WinState.WIN);
     return Arrays.asList(testCondition);

@@ -101,7 +101,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     createIDMap(data.players());
     createUsablesMap(data.allUsables());
     engineMap = data.engineMap();
-    gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
+    gameViewManager = new GameViewManager(data, usablesIDMap, idMap, myResources);
   }
 
   private void createIDMap(List<Player> playerList) {
@@ -247,7 +247,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private boolean makeShot(Coordinate c, int id, Usable weaponUsed) {
     Player currentPlayer = playerQueue.peek();
-    Map<String, Integer> currentInventory = currentPlayer.getMyInventory();
+    Map<String, Double> currentInventory = currentPlayer.getMyInventory();
     Player enemy = idMap.get(id);
     try {
       Map<Coordinate, CellState> hitResults = weaponUsed.getFunction().apply(c, enemy.getBoard());
@@ -266,7 +266,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     }
   }
 
-  private void handleInventory(Map<String, Integer> currentInventory) {
+  private void handleInventory(Map<String, Double> currentInventory) {
     currentInventory.put(currentUsable.getMyID(),
         currentInventory.get(currentUsable.getMyID()) - 1);
     if (currentInventory.get(currentUsable.getMyID()) <= 0) {

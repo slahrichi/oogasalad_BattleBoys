@@ -23,22 +23,30 @@ public class ParsePowerUps extends ParsedElement {
 
   @Override
   public void save(Properties props, String location, Object o) throws ParserException {
+    return;
+    /*
     location += POWERUPS_JSON;
     LOG.info("saving powerups at {}", location);
     List<Item> powerUps = (List<Item>) o;
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     String json = gson.toJson(powerUps);
     putJsonInProp(props, location, json, PROPERTIES_POWERUPS_FILE);
+
+     */
   }
 
 
   @Override
   public List<Item> parse(Properties props) throws ParserException {
+    return new ArrayList<>();
+    /*
     String powerUpsFile = props.getProperty(PROPERTIES_POWERUPS_FILE);
     LOG.info("parsing powerups at {}", powerUpsFile);
     Gson gson = new GsonBuilder().registerTypeAdapter(Item.class, new GSONHelper()).create();
     Type listOfMyClassObject = new TypeToken<ArrayList<Item>>() {}.getType();
     return (List<Item>) getParsedObject(powerUpsFile, gson, listOfMyClassObject, POWERUPS);
+
+     */
   }
 
   @Override

@@ -3,7 +3,7 @@
     "type": "oogasalad.model.utilities.usables.weapons.BlastZoneShot",
     "properties": {
       "myStartingDmg": 1,
-      "myID": "CustomUsable_blastzone",
+      "myID": "CustomUsable_blasts",
       "goldCost": 1,
       "relativeCoordShots": {}
     }
@@ -13,7 +13,7 @@
     "properties": {
       "myRadius": 1,
       "healingPower": 1,
-      "myID": "CustomUsable_circleheal",
+      "myID": "CustomUsable_circle",
       "goldCost": 1,
       "relativeCoordShots": {}
     }
