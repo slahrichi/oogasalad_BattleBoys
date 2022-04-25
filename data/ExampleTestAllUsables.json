@@ -1,0 +1,21 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.BlastZoneShot",
+    "properties": {
+      "myStartingDmg": 1,
+      "myID": "CustomUsable",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.items.CircleHeal",
+    "properties": {
+      "myRadius": 1,
+      "healingPower": 1,
+      "myID": "CustomUsable",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  }
+]

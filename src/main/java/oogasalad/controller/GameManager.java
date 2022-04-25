@@ -47,12 +47,14 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private int whenToMovePieces;
   private List<Info> AIShots;
   private Usable currentUsable;
+  private static final int CHEAT_GOLD_AMOUNT = 1000;
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String DUMMY_INFO = "";
   private static final String STRIPE = "stripe";
   private static final String SHOT_FAILURE = "Shot attempt failed!";
   private static final String WEAPON_LOG = "Current weapon: %s";
   private static final String BOARD_CLICKED = "Board %d clicked at row %d, col %d";
+  private static final String MAIN_MENU_OPERATION = "mainMenu";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private ResourceBundle myResources;
 
@@ -139,7 +141,51 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     currentUsable = usablesIDMap.get(id);
     LOG.info(String.format(WEAPON_LOG, id));
     view.setCurrentUsable(id, usablesIDMap.get(id).getRelativeCoordShots().keySet());
+  }
 
+  private void addGold(String param) {
+    playerQueue.peek().addGold(CHEAT_GOLD_AMOUNT);
+    view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(), playerQueue.peek().getMyCurrency());
+  }
+
+  private void addRandomUsable(String param) {
+    List<String> allUsablesList = new ArrayList<>(usablesIDMap.keySet());
+    int randomUsablesIndex = (int) ((Math.random() * (usablesIDMap.keySet()).size()-1));
+    playerQueue.peek().makePurchase(0, allUsablesList.get(randomUsablesIndex));
+    view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(),
+            playerQueue.peek().getMyCurrency());
+    view.updateInventory(
+            gameViewManager.convertMapToUsableRecord(playerQueue.peek().getMyInventory()));
+  }
+
+  private void makeCurrPlayerWin(String param) {
+    view.displayWinningScreen(playerQueue.peek().getName());
+  }
+
+  private void addAnotherShot(String param) {
+    numShots--;
+    view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(),
+            playerQueue.peek().getMyCurrency());
+  }
+
+  private void addNumShotsAllowed(String param) {
+    allowedShots++;
+    view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(),
+            playerQueue.peek().getMyCurrency());
+  }
+
+  private void decrementNumShotsAllowed(String param) {
+    if(numShots>1) numShots--;
+    view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(),
+            playerQueue.peek().getMyCurrency());
+  }
+
+  private void addWhenToMove(String param) {
+    whenToMovePieces++;
+  }
+
+  private void decrementWhenToMove(String param) {
+    if(whenToMovePieces>1) whenToMovePieces--;
   }
 
   private void buyItem(String id) {
@@ -161,6 +207,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void selfBoardClicked(String clickInfo) {
     GameView.handleClickInfo(clickInfo, LOG, BOARD_CLICKED);
+  }
+
+  private void mainMenu(String clickInfo){
+    notifyObserver(MAIN_MENU_OPERATION, null);
   }
 
   /**

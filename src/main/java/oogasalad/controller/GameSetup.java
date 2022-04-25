@@ -116,12 +116,14 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), String.class);
       m.invoke(this, s);
     } catch (NoSuchMethodException ex) {
+      ex.printStackTrace();
       throw new NullPointerException(NO_SUCH_METHOD);
     } catch (InvocationTargetException ex) {
       ex.printStackTrace();
       throw new NullPointerException(INVOCATION_TARGET);
 
     } catch (IllegalAccessException ex) {
+      ex.printStackTrace();
       throw new NullPointerException(ILLEGAL_ACCESS);
     }
   }

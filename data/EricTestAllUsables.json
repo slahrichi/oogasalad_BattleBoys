@@ -1,0 +1,12 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.BurnShot",
+    "properties": {
+      "dmgPerTurn": 1,
+      "turnsLasted": 1,
+      "myID": "CustomUsable",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  }
+]

@@ -2,12 +2,14 @@ package oogasalad.view;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -18,14 +20,23 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.view.panes.ConfigPane;
+import org.junit.jupiter.api.function.Executable;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Minjun Kwak
+ */
 public class GameViewTest extends DukeApplicationTest {
 
+  private ConfigPane config;
+  private Scene myScene;
   private int numPlayers = 3;
   private Button rightButton;
   private Button leftButton;
+  private Button shopButton;
+  private Button nightButton;
   private Label currentBoardLabel;
   private GameView view;
   private ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
@@ -89,15 +100,19 @@ public class GameViewTest extends DukeApplicationTest {
     }
     Map<Integer, String> idMap = new HashMap<>();
     for (int i = 0; i < numPlayers; i++) {
-      idMap.put(i, "Player" + (i+1));
+      idMap.put(i, "Player " + (i+1));
     }
     view = new GameView(firstPlayerBoards, pieceCoords, idMap, new ArrayList<>(), dummyColorMap, myResources);
-    stage.setScene(view.createScene());
+    myScene = view.createScene();
+    stage.setScene(myScene);
     stage.show();
 
     rightButton = lookup("#view-pane #view-center-pane #board-button-box #right-button").query();
     leftButton = lookup("#view-pane #view-center-pane #board-button-box #left-button").query();
     currentBoardLabel = lookup("#view-pane #view-center-pane #currentBoardLabel").query();
+    shopButton = lookup("#configBox #view-shop-button").query();
+    nightButton = lookup("#configBox #configPane #night-mode").query();
+    config = lookup("#configBox #configPane").query();
   }
 
   @Test
@@ -116,4 +131,27 @@ public class GameViewTest extends DukeApplicationTest {
     clickOn(rightButton);
     assertEquals(currentBoardLabel.getText(), "Your Shots Against Player 2");
   }
+
+  @Test
+  public void testShopBtn(){
+    assertDoesNotThrow(() -> rightClickOn(shopButton));
+  }
+
+  @Test
+  public void testNightMode(){
+    config.setExpanded(true);
+    clickOn(nightButton);
+    String stylesheet = myScene.getStylesheets().toString();
+    assertEquals(stylesheet.substring(stylesheet.length() - 20, stylesheet.length() - 1), "nightStylesheet.css");
+  }
+
+  @Test
+  public void checkShotsRemaining(){
+    clickOn(rightButton);
+    Polygon cell1 = lookup("#view-pane #view-center-pane #board-view #board-view-base #cell-view-0-0-1").query();
+    clickOn(cell1);
+    assertEquals(lookup("#configBox #shots-remaining-label").query().toString(), "DynamicLabel[id=shots-remaining-label, styleClass=label]'Shots Remaining: '");
+  }
+
+
 }

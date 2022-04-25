@@ -17,6 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -96,8 +98,17 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private static final String END_TURN_OPERATION = "endTurn";
   private static final String APPLY_USABLE_OPERATION = "applyUsable";
+  private static final String MAIN_MENU_OPERATION = "mainMenu";
   private static final String BASIC_SHOT_DYNAMIC_TEXT = "Basic Shot";
   private static final String INVALID_METHOD = "Invalid method name given";
+  private static final String ADD_GOLD_CHEAT = "addGold";
+  private static final String ADD_USABLE_CHEAT = "addRandomUsable";
+  private static final String MAKE_CURR_PLAYER_WIN_CHEAT = "makeCurrPlayerWin";
+  private static final String ADD_ANOTHER_SHOT_CHEAT = "addAnotherShot";
+  private static final String ADD_ONE_TOTAL_SHOT_CHEAT = "addNumShotsAllowed";
+  private static final String DECREASE_NUM_SHOTS_CHEAT = "decrementNumShotsAllowed";
+  private static final String ADD_WHEN_TO_MOVE_CHEAT = "addWhenToMove";
+  private static final String DECREASE_WHEN_TO_MOVE_CHEAT = "decrementWhenToMove";
   private static final double BOARD_SIZE = 30;
   private static final double SET_PIECE_PANE_SIZE = 20;
   private static final int EXPLOSION_DURATION = 1000;
@@ -200,11 +211,41 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    */
   public Scene createScene() {
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
+    myScene.setOnKeyPressed(e -> handleKeyPress(e));
     myScene.getStylesheets()
         .add(getClass().getResource(DEFAULT_RESOURCE_PACKAGE + DAY_STYLESHEET).toExternalForm());
     return myScene;
   }
 
+  // Handles cheat keys for the game
+  private void handleKeyPress(KeyEvent e) {
+    switch (e.getCode()) {
+      case A:
+        notifyObserver(ADD_GOLD_CHEAT, "");
+        break;
+      case B:
+        notifyObserver(ADD_USABLE_CHEAT, "");
+        break;
+      case C:
+        notifyObserver(MAKE_CURR_PLAYER_WIN_CHEAT, "");
+        break;
+      case D:
+        notifyObserver(ADD_ANOTHER_SHOT_CHEAT, "");
+        break;
+      case E:
+        notifyObserver(ADD_ONE_TOTAL_SHOT_CHEAT, "");
+        break;
+      case F:
+        notifyObserver(DECREASE_NUM_SHOTS_CHEAT, "");
+        break;
+      case G:
+        notifyObserver(ADD_WHEN_TO_MOVE_CHEAT, "");
+        break;
+      case H:
+        notifyObserver(DECREASE_WHEN_TO_MOVE_CHEAT, "");
+        break;
+    }
+  }
   /**
    * @param usables Usables available for purchase to appear in the shop
    */
@@ -302,7 +343,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     ConfigPane configPane = new ConfigPane(myResources);
     configPane.setText(myResources.getString(CONFIG_TEXT_RESOURCE));
-    configPane.setOnAction(e -> toggleNightMode());
+    configPane.setNightAction(e -> toggleNightMode());
+    configPane.setMenuAction(e -> navigateMenu());
 
     currentUsableLabel = LabelMaker.makeDynamicLabel(myResources.getString(CURRENT_USABLE_RESOURCE),
         BASIC_SHOT_DYNAMIC_TEXT, CURRENT_USABLE_LABEL_ID);
@@ -388,6 +430,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void endTurn() {
     endTurnButton.setDisable(true);
     notifyObserver(END_TURN_OPERATION, "");
+  }
+
+  private void navigateMenu() {
+    notifyObserver(MAIN_MENU_OPERATION, "");
   }
 
   // Decrements currentBoardIndex and updates the shown board
@@ -557,7 +603,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    * @param name Name of player who won
    */
   public void displayWinningScreen(String name) {
-    WinnerScreen winnerScreen = new WinnerScreen(myResources, name);
+    WinnerScreen winnerScreen = new WinnerScreen(myResources, name, e -> notifyObserver(MAIN_MENU_OPERATION, ""));
     myScene.setRoot(winnerScreen);
   }
 

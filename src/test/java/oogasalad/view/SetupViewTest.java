@@ -32,15 +32,28 @@ import oogasalad.view.panels.TitlePanel;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Minjun Kwak
+ */
 public class SetupViewTest extends DukeApplicationTest {
 
-  private Button confirm;
-  private TitlePanel title;
-  private Polygon cell2_2;
   private ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
+  private Map<CellState, Color> dummyColorMap;
 
   @Override
   public void start(Stage stage) {
+    dummyColorMap = new HashMap<>();
+    dummyColorMap.put(CellState.NOT_DEFINED, Color.TRANSPARENT);
+    dummyColorMap.put(CellState.WATER, Color.BLUE);
+    dummyColorMap.put(CellState.WATER_HIT, Color.WHITE);
+    dummyColorMap.put(CellState.SHIP_HEALTHY, Color.BLACK);
+    dummyColorMap.put(CellState.SHIP_DAMAGED, Color.ORANGE);
+    dummyColorMap.put(CellState.SHIP_SUNKEN, Color.RED);
+    dummyColorMap.put(CellState.SHIP_HOVER, Color.GRAY);
+    dummyColorMap.put(CellState.SCANNED, Color.PINK);
+    dummyColorMap.put(CellState.ISLAND_HEALTHY, Color.YELLOW);
+    dummyColorMap.put(CellState.ISLAND_DAMAGED, Color.GREEN);
+    dummyColorMap.put(CellState.ISLAND_SUNK, Color.PURPLE);
     CellState[][] board = new CellState[][]{
         {CellState.WATER, CellState.WATER, CellState.WATER, CellState.WATER},
         {CellState.WATER, CellState.WATER, CellState.WATER, CellState.WATER},
@@ -75,25 +88,40 @@ public class SetupViewTest extends DukeApplicationTest {
     List<WinCondition> winConditions = new ArrayList<>();
     winConditions.add(new LoseXShipsLossCondition(2));
 
-    GameData data = new GameData(players, pieces, board, new HashMap<>(), winConditions, new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
+    GameData data = new GameData(players, pieces, board, new HashMap<>(), winConditions, dummyColorMap, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
     GameSetup setup = new GameSetup(data, myResources);
     stage.setScene(setup.createScene());
     stage.show();
-
-    confirm = lookup("#setup-view-pane #setup-center-box #confirm-button").query();
-    title = lookup("#setup-view-pane #setup-title").query();
-    cell2_2 = lookup("#setup-view-pane #setup-center-box #boardBox #board-view #board-view-base #cell-view-2-2-0").query();
   }
 
   @Test
   void createSetUp() {
-    assertEquals(true, confirm.isDisabled());
+    sleep(2000);
+    clickOn(lookup("#pass-computer-message-button").query());
+    TitlePanel title = lookup("#setup-view-pane #setup-title").query();
+    assertEquals(true, lookup("#setup-view-pane #setup-center-box #confirm-button").query().isDisabled());
     assertEquals("Player 1: Set Up Your Ships", title.getTitle());
   }
 
   @Test
   void spotClicked() {
+    sleep(2000);
+    clickOn(lookup("#pass-computer-message-button").query());
+    clickOn(lookup("#ok-button").query());
+    Polygon cell2_2 = lookup("#setup-view-pane #setup-center-box #boardBox #board-view #board-view-base #cell-view-2-2-0").query();
     clickOn(cell2_2);
     assertEquals(Color.BLACK, cell2_2.getFill());
+  }
+
+  @Test
+  void removePiece() {
+    sleep(2000);
+    clickOn(lookup("#pass-computer-message-button").query());
+    clickOn(lookup("#ok-button").query());
+    Polygon cell2_2 = lookup("#setup-view-pane #setup-center-box #boardBox #board-view #board-view-base #cell-view-2-2-0").query();
+    clickOn(cell2_2);
+    assertEquals(Color.BLACK, cell2_2.getFill());
+    clickOn(lookup("#remove-last-button").query());
+    assertEquals(Color.BLUE, cell2_2.getFill());
   }
 }
