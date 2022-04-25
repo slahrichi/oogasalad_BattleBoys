@@ -253,7 +253,7 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
         new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "buyItem", null, "Basic Shot")));
-    assertEquals(2147483647, pfr.playerList().get(0).getMyInventory().get("Basic Shot"));
+    assertEquals(Double.MAX_VALUE, pfr.playerList().get(0).getMyInventory().get("Basic Shot"));
   }
 
   private boolean wasStruckByAI(Player player) {
