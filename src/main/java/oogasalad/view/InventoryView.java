@@ -99,6 +99,7 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
         "/WeaponImages");
     private static final String WEAPON_IMAGES_PATH = "images/weapon_images/";
     private static final double ITEM_SIZE = 50;
+    private static final String BASIC_SHOT_ID = "Basic Shot";
 
     // Information about this usable
     private double quantity;
@@ -131,7 +132,7 @@ public class InventoryView extends PropertyObservable implements PropertyChangeL
 
     // Sets up quantity label
     private void setupQuantityLabel() {
-      if (quantity != Double.MAX_VALUE) {
+      if (!usableID.equals(BASIC_SHOT_ID)) {
         Label quantityLabel = LabelMaker.makeLabel("x" + (int) quantity, "inventory-element-quantity-label");
         elementBox.getChildren().add(quantityLabel);
       }
