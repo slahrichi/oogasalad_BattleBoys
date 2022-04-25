@@ -13,6 +13,21 @@ import javafx.scene.text.Text;
 import oogasalad.PropertyObservable;
 import oogasalad.view.maker.ButtonMaker;
 
+/**
+ * Creates a window for the user to select their preferred language with the options being English,
+ * Spanish, and French
+ *
+ * Assumed to be run at the start of the program
+ *
+ * Depends on the Game class to be created and shown with the getScene() method, also has dependencies
+ * on multiple JavaFX elements as well as ButtonMaker
+ *
+ * You can use this by creating an object of LanguageView and using the getScene() method to obtain a Scene to display
+ * on a stage just as the Game class does.
+ *
+ * @author Eric Xie and Minjun Kwak
+ */
+
 public class LanguageView extends PropertyObservable {
 
 
@@ -41,6 +56,13 @@ public class LanguageView extends PropertyObservable {
   private Button myContinueButton;
   private ResourceBundle myResources;
 
+  /**
+   * The constructor for the LanguageView object
+   *
+   * Assumed to be used in Game to create and instantiate a LanguageView as well as create a scene out of it
+   * When the LanguageView is created, sets up all the GUI elements and its functionality connected to Game
+   *
+   */
 
   public LanguageView(){
     myResources = ResourceBundle.getBundle(LANGUAGE_RESOURCE_PATH + DEFAULT_LANGUAGE);
@@ -51,6 +73,12 @@ public class LanguageView extends PropertyObservable {
 
   }
 
+  /**
+   * Creates the Scene for the LanguageView GUI to be shown on the stage in the Game class
+   *
+   * @return LanguageView scene
+   */
+
 
   public Scene getScene(){
     myScene = new Scene(sideBox, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -59,6 +87,7 @@ public class LanguageView extends PropertyObservable {
     return myScene;
   }
 
+  // sets up the Box to hold the text, selector, and continue button
 
   private void setUpBox(){
     sideBox = new VBox();
@@ -67,10 +96,14 @@ public class LanguageView extends PropertyObservable {
     sideBox.setAlignment(Pos.CENTER);
   }
 
+  // sets up the text prompting the user what to do
+
   private void setUpText(){
     myText = new Text(myResources.getString(PROMPT_TEXT));
     myText.setFont(new Font(FONT_SIZE));
   }
+
+  // sets up the selector for the user to choose a language
 
   private void setUpSelector() {
     mySelector = new ComboBox();
@@ -80,16 +113,21 @@ public class LanguageView extends PropertyObservable {
     mySelector.setOnAction(e -> switchLanguage());
   }
 
+  // sets up the continue button for the program
+
   private void setUpButton(){
     myContinueButton = ButtonMaker.makeTextButton(CONTINUE_BTN_ID, e -> handleClicked(LANGUAGE_OPERATION), myResources.getString(CONTINUE_TEXT));
   }
 
+  // handles what happens when a language is selected from the Combo box
 
   private void switchLanguage(){
     myResources = ResourceBundle.getBundle(LANGUAGE_RESOURCE_PATH + mySelector.getValue());
     myText.setText(myResources.getString(PROMPT_TEXT));
     myContinueButton.setText(myResources.getString(CONTINUE_TEXT));;
   }
+
+  // used with the button observer for reflection in the Game
 
   private void handleClicked(String operation) {
     notifyObserver(operation, myResources);

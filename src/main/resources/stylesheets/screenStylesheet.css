@@ -52,23 +52,35 @@
   -fx-alignment: right;
 }
 
-#ai-shots-screen {
-
-}
-
-#ai-shots-screen-label{
-
-
-}
 
 #winner-screen{
-
+  -fx-background-image: url("../images/winner.png");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: 1200 900;
+  -fx-background-position: center center;
 }
 
 #winner-screen-label{
+  -fx-background-color: grey;
+  -fx-border-color: black;
+  -fx-pref-height: 50;
+  -fx-padding: 10;
+  -fx-alignment: right;
+}
 
+#loser-screen{
+  -fx-background-image: url("../images/loser.jpeg");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: 1200 900;
+  -fx-background-position: center center;
+}
 
-
+#loser-screen-label{
+  -fx-background-color: grey;
+  -fx-border-color: black;
+  -fx-pref-height: 50;
+  -fx-padding: 10;
+  -fx-alignment: right;
 }
 
 .label{

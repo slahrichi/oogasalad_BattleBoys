@@ -18,8 +18,13 @@ import oogasalad.view.maker.LabelMaker;
  */
 public class WinnerScreen extends AbstractScreen {
 
-  private static final String WIN_MESSAGE = " won the game!";
+  private static final String WIN_MESSAGE_RESOURCE = "WinText";
   private static final String BUTTON_MESSAGE = "Exit";
+  private static final String WINNER_SCREEN_ID = "winner-screen";
+  private static final String WINNER_LABEL_ID = "winner-screen-label";
+  private static final String WINNER_BTN_ID = "winner-screen-button";
+
+  private static final double SPACING = 20;
 
   /**
    * Class constructor.
@@ -27,14 +32,14 @@ public class WinnerScreen extends AbstractScreen {
    * @param winnerName name of winning player
    */
   public WinnerScreen(ResourceBundle resourceBundle, String winnerName) {
-    super(20, Pos.CENTER, e -> {
+    super(SPACING, Pos.CENTER, e -> {
       Platform.exit();
       System.exit(0);
     }, resourceBundle);
 
-    setId("winner-screen");
+    setId(WINNER_SCREEN_ID);
 
-    mainLabel.setText(winnerName + WIN_MESSAGE);
+    mainLabel.setText(winnerName + myResources.getString(WIN_MESSAGE_RESOURCE));
   }
 
   /**
@@ -44,7 +49,7 @@ public class WinnerScreen extends AbstractScreen {
    */
   @Override
   protected Label createMainLabel() {
-    return LabelMaker.makeLabel(WIN_MESSAGE, "winner-screen-label");
+    return LabelMaker.makeLabel(myResources.getString(WIN_MESSAGE_RESOURCE), WINNER_LABEL_ID);
   }
 
   /**
@@ -55,6 +60,6 @@ public class WinnerScreen extends AbstractScreen {
    */
   @Override
   protected Button createMainButton(EventHandler<ActionEvent> handler) {
-    return ButtonMaker.makeTextButton("winner-screen-button", handler, BUTTON_MESSAGE);
+    return ButtonMaker.makeTextButton(WINNER_BTN_ID, handler, BUTTON_MESSAGE);
   }
 }

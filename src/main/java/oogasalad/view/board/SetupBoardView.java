@@ -20,16 +20,14 @@ import oogasalad.view.Info;
  */
 public class SetupBoardView extends BoardView {
 
-  private static final String PLACE_PIECE = "placePiece";
-
   public SetupBoardView(double size, CellState[][] arrayLayout, int id) {
     super(size, arrayLayout, id);
   }
 
-  public void initializeCellViews(CellState[][] arrayLayout) {
+  public void initializeCellViews(CellState[][] arrayLayout, double size) {
     for (int row = 0; row < arrayLayout.length; row++) {
       for (int col = 0; col < arrayLayout[0].length; col++) {
-        List<Double> points = myBoardMaker.calculatePoints(row, col);
+        List<Double> points = BoardMaker.calculatePoints(row, col, size);
         CellView cell = new CellView(points, Color.valueOf(
             CELL_STATE_RESOURCES.getString(FILL_PREFIX + arrayLayout[row][col].name())), row,
             col);

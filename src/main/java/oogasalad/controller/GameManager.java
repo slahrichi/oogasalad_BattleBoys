@@ -32,7 +32,7 @@ import org.apache.logging.log4j.Logger;
  * the turn-based logic of the game and relaying the results of a given player's move. The class
  * utilizes auxiliary classes to handle checking win conditions and updating view elements.
  *
- * @author Matthew Giglio
+ * @author Matthew Giglio, Minjun Kwak
  */
 public class GameManager extends PropertyObservable implements PropertyChangeListener {
 
@@ -99,8 +99,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     for(Usable currUsable: data.allUsables()) {
       usablesIDMap.put(currUsable.getMyID(), currUsable);
     }
-    gameViewManager = new GameViewManager(data, usablesIDMap, idMap, allowedShots, myResources);
-
+    gameViewManager = new GameViewManager(data, usablesIDMap, idMap, myResources);
   }
 
   private void createIDMap(List<Player> playerList) {
