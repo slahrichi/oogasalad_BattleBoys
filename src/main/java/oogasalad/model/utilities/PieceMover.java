@@ -14,11 +14,11 @@ public class PieceMover {
   private Queue<Coordinate> route;
 
   public PieceMover(List<Coordinate> directionList) {
-    route = new LinkedList<Coordinate>(directionList);
+    route = new LinkedList<>(directionList);
   }
 
   public PieceMover(PieceMover parent) {
-    route = new LinkedList<Coordinate>(parent.route);
+    route = new LinkedList<>(parent.route);
   }
 
   public void moveCells(List<ShipCell> pieceCells, Map<Coordinate, CellInterface> boardMap) {
