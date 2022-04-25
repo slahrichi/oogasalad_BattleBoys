@@ -9,8 +9,9 @@ import javafx.scene.control.Label;
 import oogasalad.view.maker.LabelMaker;
 
 /**
- * This class represents a temporary screen that is shown for a certain amount of time right when the game starts,
- * indicating to the players that it is time to place their Pieces on their boards.
+ * This class represents a temporary screen that is shown for a certain amount of time right when
+ * the game starts, indicating to the players that it is time to place their Pieces on their
+ * boards.
  *
  * @author Edison Ooi
  */
@@ -44,8 +45,8 @@ public class SetUpShipsScreen extends AbstractScreen {
   }
 
   /**
-   * Creates a configured Button object to represent the main button on the screen. For this screen it is just a dummy
-   * button.
+   * Creates a configured Button object to represent the main button on the screen. For this screen
+   * it is just a dummy button.
    *
    * @param handler buttonHandler event handler for main button
    * @return new Button object

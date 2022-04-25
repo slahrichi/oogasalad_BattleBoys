@@ -1,7 +1,6 @@
 package oogasalad.view.gamebuilder;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,9 +25,16 @@ import javafx.stage.Stage;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * A superclass which has all the methods shared by all the builder stages, this includes building
+ * JavaFX objects for taking in user input. Depends on JavaFX.
+ *
+ * @author Luka Mdivani
+ */
 public abstract class BuilderStage {
 
   private ResourceBundle myBuilderResources;
+  private ResourceBundle myBuilderDictionaryResources;
   private int selectedType;
   private List<Rectangle> colorOptionList = new ArrayList<>();
   private String itemID;
@@ -45,16 +51,24 @@ public abstract class BuilderStage {
   private static final int DEFAULT_INPUT_BOX_HEIGHT = 30;
   private static final int MAX_OBJECT_LIST_WIDTH = 200;
   private static final int MAX_OBJECT_LIST_HEIGHT = 400;
+  private static final int WINDOW_WIDTH = 900;
+  private static final int WINDOW_HEIGHT = 500;
 
   public BuilderStage() {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
+    myBuilderDictionaryResources = ResourceBundle.getBundle("/BuilderDictionary");
     builderUtil = new GameBuilderUtil();
+    myStage = new Stage();
   }
 
   protected ListView setUpObjectView() {
     objectsListView.setItems(objectList);
     objectsListView.setMaxSize(MAX_OBJECT_LIST_WIDTH, MAX_OBJECT_LIST_HEIGHT);
     return objectsListView;
+  }
+
+  protected ResourceBundle getDictionaryResources() {
+    return myBuilderDictionaryResources;
   }
 
   protected void addToObjectList(String s) {
@@ -84,7 +98,6 @@ public abstract class BuilderStage {
   }
 
   protected void setUpStage(BorderPane myPane) {
-    myStage = new Stage();
     myStage.setScene(getScene(myPane));
     myStage.showAndWait();
   }
@@ -93,8 +106,8 @@ public abstract class BuilderStage {
     myStage.close();
   }
 
-  public Scene getScene(BorderPane myPane) {
-    return new Scene(myPane, 900, 500);
+  private Scene getScene(BorderPane myPane) {
+    return new Scene(myPane, WINDOW_WIDTH, WINDOW_HEIGHT);
   }
 
   protected int[][] initializeMatrixWithValue(int height, int width, int initialValue) {
@@ -110,7 +123,7 @@ public abstract class BuilderStage {
   protected Object createInstance(String className, Class<?>[] parameterTypes, Object[] parameters)
       throws IOException {
 
-    return builderUtil.createInstance(className,parameterTypes,parameters);
+    return builderUtil.createInstance(className, parameterTypes, parameters);
 
   }
 
@@ -142,9 +155,8 @@ public abstract class BuilderStage {
     infoBox.setMaxSize(50, 20);
     HBox result = new HBox(comboBox);
     result.getChildren().add(infoBox);
-    result.getChildren()
-        .add(makeButton(buttonText,
-            e -> consumer.accept(comboBox.getValue() + "," + infoBox.getText())));
+    result.getChildren().add(makeButton(buttonText,
+        e -> consumer.accept(comboBox.getValue() + "," + infoBox.getText())));
     return result;
   }
 
@@ -169,8 +181,8 @@ public abstract class BuilderStage {
     for (Color c : colorList) {
       Rectangle option = createColorOptionRectangle(c, colorList);
       colorOptionList.add(option);
-      result.getChildren().add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]),
-          option));
+      result.getChildren()
+          .add(new HBox(new Text(DEFAULT_STATE_OPTIONS[colorList.indexOf(c)]), option));
 
     }
     result.setId("ColorChoiceBox");
@@ -203,10 +215,14 @@ public abstract class BuilderStage {
 
   protected Button makeContinueButton() {
 
-    Button continueButton = new Button("Continue");
+    Button continueButton = new Button(getDictionaryResources().getString("continuePrompt"));
     continueButton.setOnAction(e -> saveAndContinue());
     continueButton.setId("ContinueButton");
     return continueButton;
+  }
+
+  protected void showError(String s) {
+    builderUtil.throwErrorWindow(s);
   }
 
   protected Boolean checkIntConversion(String string) {
@@ -229,9 +245,8 @@ public abstract class BuilderStage {
     return comboBox;
   }
 
-  protected HBox makeIdInput(String defaultId) {
-    return new HBox(LabelMaker.makeLabel("id:", "id" + "_label"),
-        makeTextAreaWithDefaultValue(defaultId));
+  protected void setTitle(String s){
+    myStage.setTitle(s);
   }
 
   protected void findReferencePoint(int[][] stateMap) {
@@ -305,9 +320,29 @@ public abstract class BuilderStage {
     return activeCoordinateList;
   }
 
+  /**
+   * Because cells needed different on-click behaviour I made the class abstract, it allows all
+   * subclasses to have custom reactions to cell clicks.
+   *
+   * @param xPos  the position on x axis of cell
+   * @param yPos  the position on y axis of cell
+   * @param i     the x coord
+   * @param j     the y coord
+   * @param state state of the cell
+   * @return the rectangle object representing grid cells
+   */
   protected abstract Rectangle createCell(double xPos, double yPos, int i, int j, int state);
 
+  /**
+   * launches eachd design stage, also used to return input so the ParserData object can be created
+   *
+   * @return the result Object of each design stage
+   */
   protected abstract Object launch();
 
+  /**
+   * continue button function for each stage, abstract because all stages have this option, but
+   * sometimes they need different behviour.
+   */
   protected abstract void saveAndContinue();
 }

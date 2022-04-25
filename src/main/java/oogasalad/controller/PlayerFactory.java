@@ -11,6 +11,7 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.winconditions.WinCondition;
 
 
 /**
@@ -25,6 +26,7 @@ public class PlayerFactory {
   private static Map<Player, DecisionEngine> engineMap;
   private static Map<String, Integer> inventory;
   private static List<String> myDifficulties;
+  private static List<WinCondition> myConditions;
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String AI_PLAYER = "AIPlayer";
   private static final String ENGINE = "DecisionEngine";
@@ -36,16 +38,19 @@ public class PlayerFactory {
    *
    * @param board CellState[][] used to initialize the board states of each player
    * @param playerTypes list of strings representing player type between human or AI
+   * @param startingInventory map containing starting inventory of player
    * @param decisionEngines list of difficulty levels for each AIPlayer's DecisionEngine
    * @return
    */
   public static PlayerFactoryRecord initializePlayers(CellState[][] board, List<String> playerTypes,
-      Map<String, Integer> startingInventory, int startingGold, List<String> decisionEngines) {
+      Map<String, Integer> startingInventory, int startingGold, List<String> decisionEngines,
+      List<WinCondition> conditionList) {
     myBoard = board;
     myRange = playerTypes.size();
     engineMap = new HashMap<>();
     inventory = startingInventory;
     myDifficulties = decisionEngines;
+    myConditions = conditionList;
     List<Player> playerList = new ArrayList<>();
     for (int i = 0; i < playerTypes.size(); i++) {
       playerList.add(createPlayer(playerTypes.get(i), myBoard, inventory, startingGold, i));
@@ -53,7 +58,8 @@ public class PlayerFactory {
     return new PlayerFactoryRecord(playerList, engineMap);
   }
 
-  private static Player createPlayer(String playerType, CellState[][] board, Map<String, Integer> inventory, int startingGold, int id) {
+  private static Player createPlayer(String playerType, CellState[][] board,
+      Map<String, Integer> inventory, int startingGold, int id) {
     Board b = new Board(board);
     MarkerBoard mb = new MarkerBoard(board);
     Map<Integer, MarkerBoard> enemyMap = createEnemyMap(mb, id);
@@ -85,8 +91,9 @@ public class PlayerFactory {
       try {
         String difficulty = myDifficulties.get(id);
         DecisionEngine ds = (DecisionEngine) Class.forName(FILEPATH + difficulty + ENGINE)
-            .getConstructor(List.class, Map.class, Player.class).newInstance(
-                player.getBoard().listCoordinates(), enemyMap, player);
+            .getConstructor(List.class, Map.class, Player.class, List.class).newInstance(
+                player.getBoard().listCoordinates(), enemyMap, player,
+                new ArrayList<>(myConditions));
         engineMap.put(player, ds);
       }
       catch (ClassNotFoundException | InvocationTargetException | InstantiationException |

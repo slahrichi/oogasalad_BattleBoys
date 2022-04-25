@@ -54,8 +54,6 @@ import spark.Spark;
 public class GameView extends PropertyObservable implements PropertyChangeListener, BoardVisualizer,
     ShopVisualizer, ShotVisualizer, GameDataVisualizer {
 
-  // FIXME: Need to identify and add strings below to resourcebundle
-
   private static final Logger LOG = LogManager.getLogger(GameView.class);
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
@@ -71,7 +69,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String VIEW_PANE_ID = "view-pane";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String SHOT_METHOD = "handleShot";
-  private static final double BOARD_SIZE = 20;
+  private static final double BOARD_SIZE = 30;
   private static final int EXPLOSION_DURATION = 1000;
 
   private static final String BOARD_INDEX_LOG = "Current board index: ";
@@ -90,14 +88,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String OPEN_SHOP_RESOURCE = "OpenShop";
   private static final String SHIPS_REMAINING_RESOURCE = "ShipsRemaining";
   private static final String CONFIG_TEXT_RESOURCE = "ConfigText";
-  private static final String LEGEND_TEXT_RESOURCE = "LegendText";
   private static final String SHOTS_REMAINING_RESOURCE = "ShotsRemainingText";
   private static final String END_TURN_RESOURCE = "EndTurn";
   private static final String CURRENT_USABLE_RESOURCE = "CurrentUsable";
   private static final String PIECES_LEFT_RESOURCE = "PiecesLeft";
   private static final String GOLD_LEFT_RESOURCE = "GoldLeft";
-
-
 
   public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
       CELL_STATE_RESOURCES_PATH);
@@ -130,11 +125,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private List<Usable> shopUsables;
   private Collection<Coordinate> currentUsableRelativeCoords;
   private boolean nightMode;
-
   private Scene myScene;
-
   private int currentBoardIndex;
-
   private Map<Integer, String> playerIDToNames;
 
   public GameView(List<CellState[][]> firstPlayerBoards,
@@ -158,7 +150,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void setShopUsables(List<Usable> usables) {
     shopUsables = usables;
   }
-
 
   private List<Integer> createInitialIDList(int numPlayers) {
     List<Integer> idList = new ArrayList<>();
@@ -254,14 +245,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void setupPieceLegendPane() {
-
-    LinkedHashMap<String, Color> colorMap = new LinkedHashMap<>();
-    for (CellState state : CellState.values()) {
-      colorMap.put(state.name(),
-          Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
-    }
-    pieceLegendPane = new LegendPane(colorMap);
-    pieceLegendPane.setText(myResources.getString(LEGEND_TEXT_RESOURCE));
+    pieceLegendPane = new LegendPane(myResources);
   }
 
   private void createCenterPane() {
@@ -377,25 +361,24 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void cellClickedSelf(String clickInfo) {
-    int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
-    int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
-    int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-    LOG.info("cellClickedSelf");
-    LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver("applyUsable", clickInfo);
+    handleCellClicked(clickInfo);
+
   }
 
   private void cellClickedEnemy(String clickInfo) {
+    handleCellClicked(clickInfo);
+  }
+
+  private void handleCellClicked(String clickInfo) {
     int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
     int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-    LOG.info("cellClickedEnemy");
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
     notifyObserver("applyUsable", clickInfo);
   }
 
   private void cellHoveredSelf(String hoverInfo) {
-
+    
   }
 
   private void cellHoveredEnemy(String hoverInfo) {

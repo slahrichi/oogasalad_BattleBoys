@@ -64,12 +64,9 @@ public class TileTest {
         m.modifierFunction(players).accept(players);
       }
     }
-    System.out.println("Hello");
     assertEquals( 100, p1.getMyCurrency());
-    System.out.println("Hello");
 
     //cell.addModifier(new GoldAdder(200));
-
 
     cell.hit(1);
     cell.hit(1);

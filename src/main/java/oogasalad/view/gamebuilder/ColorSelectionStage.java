@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -12,9 +11,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+/**
+ * A class for setting up the colors associated with every CellState option, depends on JavaFX and
+ * BuilderStage.java no assumptions made.
+ *
+ * @author Luka Mdivani
+ */
 public class ColorSelectionStage extends BuilderStage {
 
   private BorderPane myPane = new BorderPane();
@@ -22,7 +26,7 @@ public class ColorSelectionStage extends BuilderStage {
   private Map<CellState, Color> colorMap;
   private List<ColorPicker> colorPickers = new ArrayList<>();
   private Map<String, ColorPicker> colorPickerMap;
-
+  private static final String TITLE="Color Selection Stage";
   public ColorSelectionStage() {
     super();
     colorPickerMap = new HashMap<>();
@@ -40,13 +44,13 @@ public class ColorSelectionStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return colorMap;
   }
 
   private VBox buildOptionDisplay() {
     VBox result = new VBox();
-    int index = 0;
     for (String option : optionList) {
       ColorPicker colorPicker = new ColorPicker();
       colorPickerMap.put(option, colorPicker);

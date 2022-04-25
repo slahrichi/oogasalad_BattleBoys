@@ -3,7 +3,6 @@ package oogasalad.view.gamebuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -11,10 +10,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.maker.LabelMaker;
 
+/**
+ * A class for setting up the dimensions and the shape of the board, depends on JavaFX and
+ * BuilderStage.java no assumptions made.
+ *
+ * @author Luka Mdivani
+ */
 public class BoardSetUpStage extends BuilderStage {
 
 
@@ -34,7 +38,9 @@ public class BoardSetUpStage extends BuilderStage {
   private static final Color DEFAULT_INACTIVE_COLOR = Color.GRAY;
   private static final Color DEFAULT_ACTIVE_COLOR = Color.BLUE;
   private static final String[] DEFAULT_STATE_OPTIONS = {"Inactive", "Active"};
-  CellState[][] board;
+  private CellState[][] board;
+  private static final int INITIAL_STATUS = 1;
+  private static final String TITLE="BOARD DESIGN STAGE";
 
   private Consumer<Integer> widthChange;
   private Consumer<Integer> heightChange;
@@ -49,7 +55,7 @@ public class BoardSetUpStage extends BuilderStage {
     widthChange = i -> setWidth(i);
     heightChange = i -> setHeight(i);
 
-    stateMap = initializeMatrixWithValue(height, width, 1);
+    stateMap = initializeMatrixWithValue(height, width, INITIAL_STATUS);
     drawGrid();
     myPane.setTop(makeInfoInput());
     myPane.setRight(displayColorChoice(DEFAULT_STATE_OPTIONS, colorList));
@@ -71,23 +77,22 @@ public class BoardSetUpStage extends BuilderStage {
         arrangeCells(height, width, MAX_GRID_HEIGHT / height, MAX_GRID_WIDTH / width, stateMap));
   }
 
-  public Scene getScene() {
-    return new Scene(myPane, 900, 500);
-  }
 
   private HBox makeInfoInput() {
     HBox result = new HBox();
     widthInput = makeTextArea();
     heightInput = makeTextArea();
-    Label widthLabel = LabelMaker.makeLabel("Width", "width-label");
-    Label heightLabel = LabelMaker.makeLabel("Height", "height-label");
+    Label widthLabel = LabelMaker.makeLabel(getDictionaryResources().getString("widthPrompt"),
+        "width-label");
+    Label heightLabel = LabelMaker.makeLabel(getDictionaryResources().getString("heightPrompt"),
+        "height-label");
     result.getChildren()
         .addAll(widthLabel, widthInput, heightLabel, heightInput, setDimensionButton());
     return result;
   }
 
   private Button setDimensionButton() {
-    Button result = new Button("Set Dimension");
+    Button result = new Button(getDictionaryResources().getString("dimensionPrompt"));
     result.setOnAction(e -> {
       checkAndSetDimension(widthInput.getText(), widthChange);
       checkAndSetDimension(heightInput.getText(), heightChange);
@@ -99,7 +104,7 @@ public class BoardSetUpStage extends BuilderStage {
     if (!s.isEmpty() && checkIntConversion(s)) {
       changeConsumer.accept(Integer.valueOf(s));
 
-      stateMap = initializeMatrixWithValue(height, width, 0);
+      stateMap = initializeMatrixWithValue(height, width, INITIAL_STATUS);
       drawGrid();
     } else {
       widthInput.clear();
@@ -110,8 +115,7 @@ public class BoardSetUpStage extends BuilderStage {
 
 
   protected Rectangle createCell(double xPos, double yPos, int i, int j, int state) {
-    Rectangle newCell = new Rectangle(xPos, yPos,
-        MAX_GRID_WIDTH / width, MAX_GRID_HEIGHT / height);
+    Rectangle newCell = new Rectangle(xPos, yPos, MAX_GRID_WIDTH / width, MAX_GRID_HEIGHT / height);
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(e -> {
@@ -124,6 +128,7 @@ public class BoardSetUpStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return board;
   }
@@ -141,8 +146,8 @@ public class BoardSetUpStage extends BuilderStage {
   protected void saveAndContinue() {
     findReferencePoint(stateMap);
     stateMap = cropToActiveGrid(stateMap);
-    width=stateMap.length;
-    height=stateMap[0].length;
+    width = stateMap.length;
+    height = stateMap[0].length;
 
     convertToCellStates();
     closeWindow();

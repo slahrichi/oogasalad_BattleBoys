@@ -8,12 +8,25 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import oogasalad.view.maker.LabelMaker;
 
-public class AIShipsScreen extends AbstractScreen{
+/**
+ * The AI Ships Screen is a simple screen that shows the human players that the AI is currently
+ * setting up the ships It's solely used to help the user understand what's happening if there are
+ * AI players in the game.
+ * <p>
+ * This class depends on multiple JavaFX elements in order to be created and the SetupView
+ *
+ * @author: Eric Xie and Edison Ooi
+ */
 
-  private static String AI_SHIPS_MESSAGE = "The AI Mastermind is setting up their ships...";
+public class AIShipsScreen extends AbstractScreen {
+
+  private static String AI_SHIPS_RESOURCE = "AIText";
+  private static String AI_SHIPS_SCREEN_ID = "ai-ships-screen";
+  private static String AI_SHIPS_LABEL_ID = "ai-ships-screen-label";
 
   /**
-   * Class constructor. Lays out the screen with one label to show the AI is setting up their ships.
+   * Class constructor. Lays out the screen with one label to show the AI is setting up their
+   * ships.
    *
    * @param spacing   Spacing between nodes on screen
    * @param alignment Alignment of nodes on screen
@@ -23,13 +36,17 @@ public class AIShipsScreen extends AbstractScreen{
       EventHandler<ActionEvent> handler, ResourceBundle resourceBundle) {
     super(spacing, alignment, handler, resourceBundle);
 
-    setId("ai-ships-screen");
+    setId(AI_SHIPS_SCREEN_ID);
   }
+
+  // creates main label for the screen
 
   @Override
   protected Label createMainLabel() {
-    return LabelMaker.makeLabel(AI_SHIPS_MESSAGE, "ai-ships-screen-label");
+    return LabelMaker.makeLabel(myResources.getString(AI_SHIPS_RESOURCE), AI_SHIPS_LABEL_ID);
   }
+
+  // creates main button for the screen
 
   @Override
   protected Button createMainButton(EventHandler<ActionEvent> handler) {

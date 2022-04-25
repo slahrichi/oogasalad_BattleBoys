@@ -20,6 +20,7 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.winconditions.LoseXShipsLossCondition;
 import oogasalad.view.GameView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,9 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
       }
     }
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100, new ArrayList<>(Arrays.asList("None", "Medium")));
+        Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100,
+        new ArrayList<>(Arrays.asList("None", "Medium")), new ArrayList<>(Arrays.asList
+            (new LoseXShipsLossCondition(3))));
     List<Player> engineList = new ArrayList<>(pfr.engineMap().keySet());
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
@@ -132,7 +135,10 @@ public class MediumDecisionEngineTest extends DukeApplicationTest {
 
   @Test
   void testStrategyAdjustmentWithBFS() throws InterruptedException {
-    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(), 1, 0, 100);
+    GameData gd = new GameData(playerList, pieceList, cellBoard, engineMap,
+        new ArrayList<>(), new HashMap<>(), new ArrayList<>(),
+        new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new ArrayList<>(),
+        1, 0, 100);
     javafxRun(() -> {
           gs = new GameSetup(gd, myResources);
         }

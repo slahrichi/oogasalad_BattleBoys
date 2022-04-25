@@ -7,9 +7,8 @@ import oogasalad.model.utilities.tiles.enums.CellState;
  * This interface represents classes that show the user the result of their attempted shot at an
  * opponent, whether the shot was a hit, miss, sink, etc.
  *
- * @author Edison Ooi
+ * @author Edison Ooi, Eric Xie, Minjun Kwak
  */
-
 public interface ShotVisualizer {
 
   /**
