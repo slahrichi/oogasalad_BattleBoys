@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.ShipCell;
+import oogasalad.view.maker.LabelMaker;
 
 /**
  * Craetes a design window for pieces, provides a place to select piece shape ,as well as path for
@@ -53,6 +54,7 @@ public class PieceDesignStage extends BuilderStage {
   private static final String DEFAULT_PIECE_NAME = "Custom Piece";
   private static final String CLASS_PATH = "oogasalad.model.utilities.";
   private List<Coordinate> patrolPath = new ArrayList<>();
+  private static final String TITLE = "CREATE CUSTOM PIECES";
 
 
   private String[] customizableStats;
@@ -93,6 +95,8 @@ public class PieceDesignStage extends BuilderStage {
     result.getChildren().add(comboBox);
     result.getChildren().add(makeButton(getDictionaryResources().getString("selectPrompt"),
         e -> selectPieceType(result, comboBox)));
+    result.getChildren().add(
+        LabelMaker.makeLabel(getDictionaryResources().getString("rightClickInfo"), "infoLabel"));
     return result;
   }
 
@@ -129,8 +133,10 @@ public class PieceDesignStage extends BuilderStage {
     newCell.setStroke(Color.BLACK);
     newCell.setFill(colorList.get(state));
     newCell.setOnMouseClicked(mouseEvent -> {
-      stateMap[i][j] = getSelectedType();
-      newCell.setFill(colorList.get(getSelectedType()));
+      if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+        stateMap[i][j] = getSelectedType();
+        newCell.setFill(colorList.get(getSelectedType()));
+      }
       if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
         makePopUpDialog(i, j);
       }
@@ -141,6 +147,7 @@ public class PieceDesignStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return pieceList;
   }
