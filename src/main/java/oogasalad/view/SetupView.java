@@ -307,6 +307,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
       m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
+      e.printStackTrace();
       throw new NullPointerException(INVALID_METHOD);
     }
   }
