@@ -108,6 +108,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   // move if necessary
   private void startGame(ResourceBundle resourceBundle) {
     GameManager manager = new GameManager(gameData, myResources);
+    manager.addObserver(this);
     myStage.setScene(manager.createScene());
     manager.makeFirstAIPlayersMove();
   }
@@ -134,6 +135,10 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
   // Sets the properties file associated with the selected language, and then shows the Start screen
   private void languageSelected(ResourceBundle resourceBundle) {
     myResources = resourceBundle;
+    showStart();
+  }
+
+  private void mainMenu(ResourceBundle resourceBundle){
     showStart();
   }
 

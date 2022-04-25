@@ -53,6 +53,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   private static final String SHOT_FAILURE = "Shot attempt failed!";
   private static final String WEAPON_LOG = "Current weapon: %s";
   private static final String BOARD_CLICKED = "Board %d clicked at row %d, col %d";
+  private static final String MAIN_MENU_OPERATION = "mainMenu";
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private ResourceBundle myResources;
 
@@ -161,6 +162,10 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
 
   private void selfBoardClicked(String clickInfo) {
     GameView.handleClickInfo(clickInfo, LOG, BOARD_CLICKED);
+  }
+
+  private void mainMenu(){
+     notifyObserver(MAIN_MENU_OPERATION, null);
   }
 
   /**

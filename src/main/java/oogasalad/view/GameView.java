@@ -96,6 +96,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private static final String END_TURN_OPERATION = "endTurn";
   private static final String APPLY_USABLE_OPERATION = "applyUsable";
+  private static final String MAIN_MENU_OPERATION = "mainMenu";
   private static final String BASIC_SHOT_DYNAMIC_TEXT = "Basic Shot";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final double BOARD_SIZE = 30;
@@ -302,7 +303,8 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
     ConfigPane configPane = new ConfigPane(myResources);
     configPane.setText(myResources.getString(CONFIG_TEXT_RESOURCE));
-    configPane.setOnAction(e -> toggleNightMode());
+    configPane.setNightAction(e -> toggleNightMode());
+    configPane.setMenuAction(e -> navigateMenu());
 
     currentUsableLabel = LabelMaker.makeDynamicLabel(myResources.getString(CURRENT_USABLE_RESOURCE),
         BASIC_SHOT_DYNAMIC_TEXT, CURRENT_USABLE_LABEL_ID);
@@ -388,6 +390,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void endTurn() {
     endTurnButton.setDisable(true);
     notifyObserver(END_TURN_OPERATION, "");
+  }
+
+  private void navigateMenu() {
+    notifyObserver(MAIN_MENU_OPERATION, "");
   }
 
   // Decrements currentBoardIndex and updates the shown board

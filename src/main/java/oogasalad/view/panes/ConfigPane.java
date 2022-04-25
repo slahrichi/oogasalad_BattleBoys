@@ -23,8 +23,13 @@ public class ConfigPane extends TitledPane {
   private static final String GRID_ID = "configGrid";
   private static final String NIGHT_MODE_ID = "night-mode";
   private static final String NIGHT_MODE_RESOURCE = "NightMode";
+  private static final String MENU_BTN_ID = "main-menu-btn";
+  private static final String MAIN_MENU_RESOURCE = "MainMenu";
+
+  private static final double PADDING = 10;
 
   private Button nightBtn;
+  private Button menuBtn;
   private GridPane myGrid;
 
   /**
@@ -42,6 +47,7 @@ public class ConfigPane extends TitledPane {
     myGrid = new GridPane();
     setContent(myGrid);
     myGrid.setId(GRID_ID);
+    myGrid.setHgap(PADDING);
   }
 
   /**
@@ -49,9 +55,14 @@ public class ConfigPane extends TitledPane {
    *
    * @param e, the event handler action event that's passed to it
    */
-  public void setOnAction(EventHandler<ActionEvent> e) {
+  public void setNightAction(EventHandler<ActionEvent> e) {
     nightBtn = ButtonMaker.makeTextButton(NIGHT_MODE_ID, e,
         myResources.getString(NIGHT_MODE_RESOURCE));
     myGrid.add(nightBtn, 0, 0);
+  }
+
+  public void setMenuAction(EventHandler<ActionEvent> e){
+    menuBtn = ButtonMaker.makeTextButton(MENU_BTN_ID, e, myResources.getString(MAIN_MENU_RESOURCE));
+    myGrid.add(menuBtn, 1, 0);
   }
 }
