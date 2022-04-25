@@ -1,0 +1,29 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.BasicShot",
+    "properties": {
+      "myID": "Basic Shot",
+      "goldCost": 0,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.BurnShot",
+    "properties": {
+      "dmgPerTurn": 4,
+      "turnsLasted": 5,
+      "myID": "burn-shot",
+      "goldCost": 2,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.items.ShipHeal",
+    "properties": {
+      "healPower": 5,
+      "myID": "ship-heal",
+      "goldCost": 4,
+      "relativeCoordShots": {}
+    }
+  }
+]

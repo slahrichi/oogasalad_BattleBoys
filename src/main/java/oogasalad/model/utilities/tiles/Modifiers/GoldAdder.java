@@ -10,10 +10,16 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class GoldAdder extends Modifiers{
 
-  private boolean hasBeenAppliedAlready = false;
-  private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
-      new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
+  //private boolean hasBeenAppliedAlready = false;
+  //private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
+  //    new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
+
+//=======
+  //private boolean hasBeenAppliedAlready = false;
+  //private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
+  //    new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
   private int myGold;
+//>>>>>>> master
   public GoldAdder(int gold){
     myGold = gold;
   }

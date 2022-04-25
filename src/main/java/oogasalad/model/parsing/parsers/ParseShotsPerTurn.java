@@ -16,7 +16,7 @@ public class ParseShotsPerTurn extends ParsedElement {
   public void save(Properties props, String location, Object o) throws ParserException {
   LOG.info("saving shots per turn at {}", location);
   Integer shotsPerTurn = (Integer) o;
-  props.put(PROPERTIES_SHOTSPERTURN, shotsPerTurn);
+  props.put(PROPERTIES_SHOTSPERTURN, shotsPerTurn.toString());
   }
 
   @Override

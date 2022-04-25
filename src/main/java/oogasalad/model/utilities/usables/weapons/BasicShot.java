@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
-import oogasalad.model.utilities.usables.UsableFunction;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class BasicShot extends Weapon{
 
