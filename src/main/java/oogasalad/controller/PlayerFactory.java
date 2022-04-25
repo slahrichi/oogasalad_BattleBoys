@@ -11,6 +11,7 @@ import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.winconditions.WinCondition;
 
 
 /**
@@ -25,6 +26,7 @@ public class PlayerFactory {
   private static Map<Player, DecisionEngine> engineMap;
   private static Map<String, Integer> inventory;
   private static List<String> myDifficulties;
+  private static List<WinCondition> myConditions;
   private static final String FILEPATH = "oogasalad.model.players.";
   private static final String AI_PLAYER = "AIPlayer";
   private static final String ENGINE = "DecisionEngine";
@@ -41,12 +43,14 @@ public class PlayerFactory {
    * @return
    */
   public static PlayerFactoryRecord initializePlayers(CellState[][] board, List<String> playerTypes,
-      Map<String, Integer> startingInventory, int startingGold, List<String> decisionEngines) {
+      Map<String, Integer> startingInventory, int startingGold, List<String> decisionEngines,
+      List<WinCondition> conditionList) {
     myBoard = board;
     myRange = playerTypes.size();
     engineMap = new HashMap<>();
     inventory = startingInventory;
     myDifficulties = decisionEngines;
+    myConditions = conditionList;
     List<Player> playerList = new ArrayList<>();
     for (int i = 0; i < playerTypes.size(); i++) {
       playerList.add(createPlayer(playerTypes.get(i), myBoard, inventory, startingGold, i));
@@ -86,8 +90,9 @@ public class PlayerFactory {
       try {
         String difficulty = myDifficulties.get(id);
         DecisionEngine ds = (DecisionEngine) Class.forName(FILEPATH + difficulty + ENGINE)
-            .getConstructor(List.class, Map.class, Player.class).newInstance(
-                player.getBoard().listCoordinates(), enemyMap, player);
+            .getConstructor(List.class, Map.class, Player.class, List.class).newInstance(
+                player.getBoard().listCoordinates(), enemyMap, player,
+                new ArrayList<>(myConditions));
         engineMap.put(player, ds);
       }
       catch (ClassNotFoundException | InvocationTargetException | InstantiationException |

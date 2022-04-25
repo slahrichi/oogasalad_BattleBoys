@@ -35,7 +35,6 @@ public class ConditionHandler {
   private int movePieces;
   private Map<Player, Integer> turnMap;
 
-  private static final String PLAYER_MODIFIER = "PlayerModifier";
   private static final Logger LOG = LogManager.getLogger(ConditionHandler.class);
 
   /**

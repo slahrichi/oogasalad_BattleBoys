@@ -9,6 +9,7 @@ import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
+import oogasalad.model.utilities.winconditions.WinCondition;
 
 /**
  * An AI for users of beginner difficulty to play against. The AI randomly selects both points to
@@ -27,8 +28,8 @@ public class EasyDecisionEngine extends DecisionEngine {
    * @param player Player to which the DecisionEngine belongs
    */
   public EasyDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
-      Player player) {
-    super(coordinateList, enemyMap, player);
+      Player player, List<WinCondition> conditionList) {
+    super(coordinateList, enemyMap, player, conditionList);
   }
 
   /**

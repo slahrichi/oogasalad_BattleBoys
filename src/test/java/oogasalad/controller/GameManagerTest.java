@@ -61,7 +61,8 @@ public class GameManagerTest extends DukeApplicationTest {
     }
     Map<String, Integer> inventory = new HashMap<String, Integer>();
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
-        Arrays.asList("HumanPlayer", "HumanPlayer")), inventory, 100, new ArrayList<>(Arrays.asList("None", "None")));
+        Arrays.asList("HumanPlayer", "HumanPlayer")), inventory, 100,
+        new ArrayList<>(Arrays.asList("None", "None")), new ArrayList<>());
     playerList = pfr.playerList();
     engineMap = pfr.engineMap();
     WinCondition c = new LoseXShipsLossCondition(1);
@@ -159,7 +160,8 @@ public class GameManagerTest extends DukeApplicationTest {
   void testAI() throws InterruptedException {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
         Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<>(), 100,
-        new ArrayList<>(Arrays.asList("None", "Easy")));
+        new ArrayList<>(Arrays.asList("None", "Easy")), new ArrayList<>(Arrays.asList
+            (new LoseXShipsLossCondition(3))));
     GameData gd = new GameData(pfr.playerList(), pieceList2, cellBoard, pfr.engineMap(), wc,
         new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
         new HashMap<>(), new ArrayList<>(), 1, 0, 100);
@@ -215,7 +217,8 @@ public class GameManagerTest extends DukeApplicationTest {
   void testBuyItem() throws InterruptedException {
     PlayerFactoryRecord pfr = PlayerFactory.initializePlayers(cellBoard, new ArrayList<>(
             Arrays.asList("HumanPlayer", "AIPlayer")), new HashMap<String, Integer>(),
-        100, new ArrayList<>(Arrays.asList("None", "Easy")));
+        100, new ArrayList<>(Arrays.asList("None", "Easy")), new ArrayList<>(Arrays.asList
+            (new LoseXShipsLossCondition(3))));
     List<Usable> usables = new ArrayList<>(Arrays.asList(new BasicShot()));
     GameData gd = new GameData(playerList, pieceList2, cellBoard, engineMap, new ArrayList<>(Arrays.asList(
         new HaveXGoldWinCondition(0))), new HashMap<>(), new ArrayList<>(),

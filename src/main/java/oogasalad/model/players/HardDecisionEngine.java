@@ -10,12 +10,13 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
 import oogasalad.model.utilities.usables.weapons.ClusterShot;
+import oogasalad.model.utilities.winconditions.WinCondition;
 
 public class HardDecisionEngine extends DecisionEngine {
 
   public HardDecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
-  Player player) {
-    super(coordinateList, enemyMap, player);
+  Player player, List<WinCondition> conditionList) {
+    super(coordinateList, enemyMap, player, conditionList);
   }
 
   public EngineRecord makeMove() {

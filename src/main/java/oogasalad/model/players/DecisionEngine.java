@@ -13,6 +13,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
 import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.winconditions.WinCondition;
 
 public abstract class DecisionEngine {
 
@@ -37,7 +38,7 @@ public abstract class DecisionEngine {
    * @param player AI player associated with the DecisionEngine
    */
   public DecisionEngine(List<Coordinate> coordinateList, Map<Integer, MarkerBoard> enemyMap,
-      Player player) {
+      Player player, List<WinCondition> conditionList) {
     myDeque = new ArrayDeque<>();
     myEnemyMap = enemyMap;
     myCoordinateList = coordinateList;
