@@ -118,6 +118,12 @@ public class ShopView extends PropertyObservable implements PropertyChangeListen
     currentGroup.getChildren().add(newItem.getMyVBox());
   }
 
+  /**
+   * The listener method of this BoardView that is called when the class it is observing notifies
+   * this class
+   *
+   * @param evt the evt associated with the notification
+   */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
     notifyObserver(evt.getPropertyName(), evt.getNewValue());

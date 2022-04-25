@@ -4,6 +4,11 @@ import java.util.Collection;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
+/**
+ * This interface presents an API that is used to interface with the View for placing and removing
+ * ships during the setup of the game.
+ * @author Minjun Kwak, Edison Ooi, Eric Xie
+ */
 public interface BoardVisualizer {
 
   /**

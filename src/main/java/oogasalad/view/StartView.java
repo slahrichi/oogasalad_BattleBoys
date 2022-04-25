@@ -25,7 +25,7 @@ import oogasalad.view.maker.ButtonMaker;
  * An example of this is used in the Game class, where it creates and instantiates the StartView object and creates a Scene
  * off of it to display on a stage.
  *
- * @author Eric Xie
+ * @author Eric Xie, Minjun Kwak
  */
 
 public class StartView extends PropertyObservable {
@@ -100,7 +100,6 @@ public class StartView extends PropertyObservable {
   }
 
   // sets up the title of the Main Menu
-
   private void setUpTitle() {
     Image myImage = new Image(
         getClass().getResource(DEFAULT_RESOURCE_PACKAGE + TITLE_IMAGE).toString(), true);
@@ -117,7 +116,6 @@ public class StartView extends PropertyObservable {
   }
 
   // sets up the buttons of the main menu
-
   private void setUpButtons() {
     Button startBtn = ButtonMaker.makeTextButton(START_BTN_ID,
         e -> handleClicked(LOAD_FILE_OPERATION), myResources.getString(START_BTN_RESOURCE));
@@ -128,7 +126,6 @@ public class StartView extends PropertyObservable {
   }
 
   // observer that handles the functions of buttons clicked using reflection in the Game class
-
   private void handleClicked(String operation) {
     notifyObserver(operation, null);
   }

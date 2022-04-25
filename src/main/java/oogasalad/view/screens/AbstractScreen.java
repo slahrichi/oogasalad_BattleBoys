@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
  * This class represents temporary screens that are display some sort of information to the player
  * until they dismiss it, similar to an alert. Examples include a screen telling the player to pass
  * the computer, a winner/loser screen, and a screen showing what moves an AI player has made.
- *
+ * <p>
  * The default implementation includes one label on top of one button, however Nodes can be added as
  * needed because AbstractScreens are VBoxes.
  *
@@ -37,7 +37,8 @@ public abstract class AbstractScreen extends VBox {
    * @param alignment Alignment of nodes on screen
    * @param handler   On click handler for main button
    */
-  public AbstractScreen(double spacing, Pos alignment, EventHandler<ActionEvent> handler, ResourceBundle resourceBundle) {
+  public AbstractScreen(double spacing, Pos alignment, EventHandler<ActionEvent> handler,
+      ResourceBundle resourceBundle) {
 
     myResources = resourceBundle;
 

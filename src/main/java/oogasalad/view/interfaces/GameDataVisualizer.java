@@ -8,7 +8,7 @@ import oogasalad.model.utilities.Piece;
  * GameDataVisualizer represents classes that display metadata about the current game being played,
  * such as which enemy ships are left, how many shots they have left, or who's turn it is.
  *
- * @author Edison Ooi
+ * @author Edison Ooi, Eric Xie, Minjun Kwak
  */
 public interface GameDataVisualizer {
 
@@ -33,22 +33,10 @@ public interface GameDataVisualizer {
    */
   void setGold(int amountOfGold);
 
-//  /**
-//   * Updates the text that shows the user whose turn it currently is.
-//   *
-//   * @param playerName name or ID of player whose turn it is
-//   */
-//  void setPlayerTurnIndicator(String playerName);
-
   /**
    * Updates the text that shows how many living pieces the current player has left.
    *
    * @param numPiecesRemaining number of pieces remaining
    */
   void setNumPiecesRemaining(int numPiecesRemaining);
-
-
-
-
-
 }

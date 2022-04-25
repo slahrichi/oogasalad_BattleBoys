@@ -23,7 +23,7 @@ import oogasalad.view.maker.LabelMaker;
  * clicking on an inventory item, this class will notify an observer with information on the ID of
  * the usable that was clicked so that the player can equip it.
  *
- * @author Edison Ooi
+ * @author Edison Ooi, Minjun Kwak
  */
 public class InventoryView extends PropertyObservable implements PropertyChangeListener {
 
