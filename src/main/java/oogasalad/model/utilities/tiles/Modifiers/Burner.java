@@ -11,23 +11,28 @@ public class Burner extends Modifiers{
   public Burner(int dmg, int count){
     this.count = count;
     this.dmg   = dmg;
-    setMyConsumer(new CellConsumer() {
-      @Override
-      public void accept(CellInterface cellInterface) {
-        cellInterface.hit(dmg);
-      }
-    });
   }
 
   @Override
   public Consumer modifierFunction(CellInterface cell){
-    return myConsumer;
+    return createConsumer();
   }
 
   public Boolean checkConditions(CellInterface cell){
     count--;
     return count>=0;
   }
+
+  @Override
+  protected Consumer createConsumer() {
+    return new CellConsumer() {
+      @Override
+      public void accept(CellInterface cellInterface) {
+        cellInterface.hit(dmg);
+      }
+    };
+  }
+
   public String toString(){
     return "Brun " + dmg + " for " + count + " turns";
   };

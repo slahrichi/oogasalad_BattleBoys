@@ -13,18 +13,23 @@ public class FrontEndUpdater extends Modifiers{
 
   public FrontEndUpdater(int count){
     this.count = count;
-    setMyConsumer(new GameManagerConsumer() {
-      @Override
-      public void accept(GameManager gameManager) {
-        gameManager.getGameViewManager().sendUpdatesToView(gameManager.getIDMap().get(gameManager.getCurrentPlayer()));
-      }
-    });
   }
+
 
 
   public Boolean checkConditions(CellInterface cell){
     count--;
     return count>=0;
+  }
+
+  @Override
+  protected Consumer createConsumer() {
+    return new GameManagerConsumer() {
+      @Override
+      public void accept(GameManager gameManager) {
+        gameManager.getGameViewManager().sendUpdatesToView(gameManager.getIDMap().get(gameManager.getCurrentPlayer()));
+      }
+    };
   }
 
   public String toString(){
@@ -33,7 +38,7 @@ public class FrontEndUpdater extends Modifiers{
 
   @Override
   public Consumer modifierFunction(Player[] players){
-    return myConsumer;
+    return createConsumer();
   }
 
 }

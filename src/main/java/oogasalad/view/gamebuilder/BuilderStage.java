@@ -39,6 +39,7 @@ public abstract class BuilderStage {
   private int originY;
   private int activeWidth;
   private int activeHeight;
+  private GameBuilderUtil builderUtil;
 
   private static final int DEFAULT_INPUT_BOX_WIDTH = 120;
   private static final int DEFAULT_INPUT_BOX_HEIGHT = 30;
@@ -47,6 +48,7 @@ public abstract class BuilderStage {
 
   public BuilderStage() {
     myBuilderResources = ResourceBundle.getBundle("/BuilderInfo");
+    builderUtil = new GameBuilderUtil();
   }
 
   protected ListView setUpObjectView() {
@@ -108,14 +110,7 @@ public abstract class BuilderStage {
   protected Object createInstance(String className, Class<?>[] parameterTypes, Object[] parameters)
       throws IOException {
 
-    try {
-      Class<?> clazz = Class.forName(className);
-      Constructor<?> constructor = clazz.getConstructor(parameterTypes);
-      return constructor.newInstance(parameters);
-    } catch (Error | Exception e) {
-      e.printStackTrace();
-      throw new IOException(String.format("Class parsing failed: %s className"));
-    }
+    return builderUtil.createInstance(className,parameterTypes,parameters);
 
   }
 

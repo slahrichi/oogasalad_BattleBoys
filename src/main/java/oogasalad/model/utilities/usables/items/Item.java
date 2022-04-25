@@ -3,6 +3,7 @@ package oogasalad.model.utilities.usables.items;
 import java.util.function.BiConsumer;
 import oogasalad.controller.GameManager;
 import oogasalad.model.utilities.usables.Usable;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public abstract class Item extends Usable {
 
@@ -11,7 +12,7 @@ public abstract class Item extends Usable {
     makeItemFunction();
   }
 
-  protected abstract void makeItemFunction();
+  protected abstract UsableFunction  makeItemFunction();
 
 
   @Override
@@ -31,4 +32,6 @@ public abstract class Item extends Usable {
     return "PowerUp";
   }
 
+  @Override
+  public UsableFunction getFunction(){return makeItemFunction();}
 }

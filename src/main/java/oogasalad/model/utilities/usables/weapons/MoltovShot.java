@@ -6,6 +6,7 @@ import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.CellInterface;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
+import oogasalad.model.utilities.usables.UsableFunction;
 
 public class MoltovShot extends Weapon{
   /**
@@ -18,9 +19,13 @@ public class MoltovShot extends Weapon{
     addRelativePosition(new Coordinate(0,0), dmg);
   }
 
+  public MoltovShot(String[] parameters){
+    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
+  }
+
   @Override
-  protected void makeWeaponFunction(){
-    setMyFunction((abs, board)->{
+  protected UsableFunction makeWeaponFunction(){
+    UsableFunction ret = (abs, board)->{
       CellInterface cell = board.getCell(abs);
       Map<Coordinate, CellState> resMap = new HashMap<>();
       resMap.put(abs, board.hit(abs,dmg));
@@ -33,7 +38,8 @@ public class MoltovShot extends Weapon{
         }
       }
       return resMap;
-    });
+    };
+    return ret;
   }
 
 }

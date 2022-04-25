@@ -22,6 +22,7 @@ import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
+import oogasalad.model.utilities.usables.weapons.BlastZoneShot;
 import oogasalad.view.Info;
 import oogasalad.view.GameView;
 import org.apache.logging.log4j.LogManager;
@@ -86,7 +87,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void initialize(GameData data, ResourceBundle resources) {
-    currentUsable = new BasicShot();
+    currentUsable = new BlastZoneShot("zone", 100, 3);
     myResources = resources;
     this.playerQueue = new LinkedList<>();
     playerQueue.addAll(data.players());
