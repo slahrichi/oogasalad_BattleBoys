@@ -56,30 +56,63 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   // FIXME: Need to identify and add strings below to resourcebundle
 
+
   private static final Logger LOG = LogManager.getLogger(GameView.class);
   private static final double SCREEN_WIDTH = 1200;
   private static final double SCREEN_HEIGHT = 800;
+
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String DAY_STYLESHEET = "stylesheets/viewStylesheet.css";
   private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
   private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String IMAGES_PATH = "images/";
   private static final String EXPLOSION_IMAGE_NAME = "explosion-icon.png"; // TODO: Get explosion image from resource bundle
-  private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d, col: %d";
-  private static final String BOARD_HOVERED_LOG = "Board %d was hovered over at row: %d, col: %d";
+
   private static final String CENTER_PANE_ID = "view-center-pane";
   private static final String VIEW_PANE_ID = "view-pane";
+  private static final String VIEW_SHOP_BTN_ID = "view-shop-button";
+  private static final String SHOTS_REMAINING_LABEL_ID = "shots-remaining-label";
+  private static final String NUM_PIECES_LABEL_ID = "num-pieces-label";
+  private static final String GOLD_LABEL_ID = "gold-label";
+  private static final String CURRENT_USABLE_LABEL_ID = "current-usable-label";
+  private static final String CONFIG_BOX_ID = "configBox";
+  private static final String GAME_TITLE_ID = "game-title";
+  private static final String BOARD_LABEL_ID = "board-label";
+  private static final String CURRENT_BOARD_LABEL_ID = "currentBoardLabel";
+  private static final String LEFT_BUTTON_ID = "left-button";
+  private static final String LEFT_BUTTON_IMAGE = "arrow-left.png";
+  private static final String ARROW_CLASS = "arrow-button";
+  private static final String RIGHT_BUTTON_ID = "right-button";
+  private static final String RIGHT_BUTTON_IMAGE = "arrow-right.png";
+  private static final String END_TURN_BTN_ID = "end-turn-button";
+  private static final String BUTTON_BOARD_BOX_ID = "board-button-box";
+  private static final String GAMEVIEW_ALERT_ID = "gameview-alert";
+  private static final String AI_ALERT_ID = "alert";
+
+  private static final String END_TURN_OPERATION = "endTurn";
+  private static final String APPLY_USABLE_OPERATION = "applyUsable";
+  private static final String BASIC_SHOT_DYNAMIC_TEXT = "Basic Shot";
   private static final String INVALID_METHOD = "Invalid method name given";
   private static final String SHOT_METHOD = "handleShot";
+  private static final double SET_PIECE_PANE_SIZE = 20;
   private static final double BOARD_SIZE = 20;
   private static final int EXPLOSION_DURATION = 1000;
+  private static final double CONFIG_BOX_SIZE = 300;
+  private static final double CENTER_PANE_SPACING = 20;
+  private static final double ARROW_SIZE = 50;
+  private static final double LOSER_SIZE = 600;
+
 
   private static final String BOARD_INDEX_LOG = "Current board index: ";
   private static final String BOARD_SHOW_LOG = "Showing board ";
   private static final String CELL_CLICKED_SELF_LOG = "cellClickedSelf";
-  private static final String WON_SUFFIX = "WonSuffix";
-  private static final String LOST_SUFFIX = "LostSuffix";
-  private static final String LOST_ALERT_ID = "player-lost-alert";
+  private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d, col: %d";
+  private static final String BOARD_HOVERED_LOG = "Board %d was hovered over at row: %d, col: %d";
+  private static final String CELL_CLICKED_ENEMY_LOG = "cellClickedEnemy";
+  private static final String AI_SHOT_TEXT = "Player %d took a shot at row %d, column %d on player %d";
+
+
+
 
   // ResourceBundle Strings
 
@@ -224,27 +257,27 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createRightPane() {
-    shopButton = ButtonMaker.makeTextButton("view-shop-button", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
-    piecesRemainingPane = new SetPiecePane(20, myResources);
+    shopButton = ButtonMaker.makeTextButton(VIEW_SHOP_BTN_ID, e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
+    piecesRemainingPane = new SetPiecePane(SET_PIECE_PANE_SIZE, myResources);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
 
     setupPieceLegendPane();
 
     shotsRemainingLabel = LabelMaker.makeDynamicLabel(myResources.getString(SHOTS_REMAINING_RESOURCE), "",
-        "shots-remaining-label");
-    numPiecesLabel = LabelMaker.makeDynamicLabel(myResources.getString(PIECES_LEFT_RESOURCE), "", "num-pieces-label");
-    goldLabel = LabelMaker.makeDynamicLabel(myResources.getString(GOLD_LEFT_RESOURCE), "", "gold-label");
+        SHOTS_REMAINING_LABEL_ID);
+    numPiecesLabel = LabelMaker.makeDynamicLabel(myResources.getString(PIECES_LEFT_RESOURCE), "", NUM_PIECES_LABEL_ID);
+    goldLabel = LabelMaker.makeDynamicLabel(myResources.getString(GOLD_LEFT_RESOURCE), "", GOLD_LABEL_ID);
 
     configPane = new ConfigPane(myResources);
     configPane.setText(myResources.getString(CONFIG_TEXT_RESOURCE));
     configPane.setOnAction(e -> changeStylesheet());
 
-    currentUsableLabel = LabelMaker.makeDynamicLabel(myResources.getString(CURRENT_USABLE_RESOURCE), "Basic Shot", "current-usable-label");
+    currentUsableLabel = LabelMaker.makeDynamicLabel(myResources.getString(CURRENT_USABLE_RESOURCE), BASIC_SHOT_DYNAMIC_TEXT, CURRENT_USABLE_LABEL_ID);
 
-    myRightPane = BoxMaker.makeVBox("configBox", 0, Pos.TOP_CENTER, currentUsableLabel, shotsRemainingLabel,
+    myRightPane = BoxMaker.makeVBox(CONFIG_BOX_ID, 0, Pos.TOP_CENTER, currentUsableLabel, shotsRemainingLabel,
         numPiecesLabel, goldLabel, shopButton,
         piecesRemainingPane, pieceLegendPane, configPane);
-    myRightPane.setMinWidth(300);
+    myRightPane.setMinWidth(CONFIG_BOX_SIZE);
     myPane.setRight(myRightPane);
   }
 
@@ -265,7 +298,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void createCenterPane() {
-    myCenterPane = BoxMaker.makeVBox(CENTER_PANE_ID, 20, Pos.CENTER);
+    myCenterPane = BoxMaker.makeVBox(CENTER_PANE_ID, CENTER_PANE_SPACING, Pos.CENTER);
     myPane.setCenter(myCenterPane);
 
     setupBoardLabel();
@@ -276,29 +309,29 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private void createTitlePanel() {
     myTitle = new TitlePanel("");
     updateTitle(playerIDToNames.get(myBoards.get(currentBoardIndex).getID()));
-    myTitle.setId("game-title");
+    myTitle.setId(GAME_TITLE_ID);
     myPane.setTop(myTitle);
   }
 
 
   private void setupBoardLabel() {
-    currentBoardLabel = LabelMaker.makeLabel(myResources.getString(YOUR_BOARD_RESOURCE), "board-label");
-    currentBoardLabel.setId("currentBoardLabel");
+    currentBoardLabel = LabelMaker.makeLabel(myResources.getString(YOUR_BOARD_RESOURCE), BOARD_LABEL_ID);
+    currentBoardLabel.setId(CURRENT_BOARD_LABEL_ID);
     myCenterPane.getChildren().add(currentBoardLabel);
   }
 
   private void setupBoardButtons() {
-    leftButton = ButtonMaker.makeImageButton("left-button", e -> decrementBoardIndex(),
-        IMAGES_PATH + "arrow-left.png", 50, 50);
-    leftButton.getStyleClass().add("arrow-button");
+    leftButton = ButtonMaker.makeImageButton(LEFT_BUTTON_ID, e -> decrementBoardIndex(),
+        IMAGES_PATH + LEFT_BUTTON_IMAGE, ARROW_SIZE, ARROW_SIZE);
+    leftButton.getStyleClass().add(ARROW_CLASS);
 
-    rightButton = ButtonMaker.makeImageButton("right-button", e -> incrementBoardIndex(),
-        IMAGES_PATH + "arrow-right.png", 50, 50);
-    rightButton.getStyleClass().add("arrow-button");
+    rightButton = ButtonMaker.makeImageButton(RIGHT_BUTTON_ID, e -> incrementBoardIndex(),
+        IMAGES_PATH + RIGHT_BUTTON_IMAGE, ARROW_SIZE, ARROW_SIZE);
+    rightButton.getStyleClass().add(ARROW_CLASS);
 
-    endTurnButton = ButtonMaker.makeTextButton("end-turn-button", e -> endTurn(), myResources.getString(END_TURN_RESOURCE));
+    endTurnButton = ButtonMaker.makeTextButton(END_TURN_BTN_ID, e -> endTurn(), myResources.getString(END_TURN_RESOURCE));
     endTurnButton.setDisable(true);
-    boardButtonBox = BoxMaker.makeHBox("board-button-box", 20, Pos.CENTER, leftButton, rightButton, endTurnButton);
+    boardButtonBox = BoxMaker.makeHBox(BUTTON_BOARD_BOX_ID, CENTER_PANE_SPACING, Pos.CENTER, leftButton, rightButton, endTurnButton);
 
     myCenterPane.getChildren().add(boardButtonBox);
   }
@@ -309,7 +342,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void endTurn() {
     endTurnButton.setDisable(true);
-    notifyObserver("endTurn", "");
+    notifyObserver(END_TURN_OPERATION, "");
   }
 
   // Decrements currentBoardIndex and updates the shown board
@@ -380,18 +413,18 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
     int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
     int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-    LOG.info("cellClickedSelf");
+    LOG.info(CELL_CLICKED_SELF_LOG);
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver("applyUsable", clickInfo);
+    notifyObserver(APPLY_USABLE_OPERATION, clickInfo);
   }
 
   private void cellClickedEnemy(String clickInfo) {
     int row = Integer.parseInt(clickInfo.substring(0, clickInfo.indexOf(" ")));
     int col = Integer.parseInt(clickInfo.substring(clickInfo.indexOf(" ") + 1, clickInfo.lastIndexOf(" ")));
     int id = Integer.parseInt(clickInfo.substring(clickInfo.lastIndexOf(" ") + 1));
-    LOG.info("cellClickedEnemy");
+    LOG.info(CELL_CLICKED_ENEMY_LOG);
     LOG.info(String.format(BOARD_CLICKED_LOG, id, row, col));
-    notifyObserver("applyUsable", clickInfo);
+    notifyObserver(APPLY_USABLE_OPERATION, clickInfo);
   }
 
   private void cellHoveredSelf(String hoverInfo) {
@@ -455,7 +488,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void displayLosingScreen(String name) {
     LoserScreen loser = new LoserScreen(myResources, name);
-    loserStage.setScene(new Scene(loser, 600, 600));
+    loserStage.setScene(new Scene(loser, LOSER_SIZE, LOSER_SIZE));
     loserStage.show();
   }
 
@@ -530,7 +563,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   public void showError(String errorMsg) {
-    Alert alert = DialogMaker.makeAlert(errorMsg, "gameview-alert");
+    Alert alert = DialogMaker.makeAlert(errorMsg, GAMEVIEW_ALERT_ID);
     alert.showAndWait();
   }
 
@@ -559,7 +592,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   public void moveToNextPlayer(String name) {
     switchPlayerMessage(name);
-    setCurrentUsable("Basic Shot", new ArrayList<>(Arrays.asList(new Coordinate(0, 0))));
+    setCurrentUsable(BASIC_SHOT_DYNAMIC_TEXT, new ArrayList<>(Arrays.asList(new Coordinate(0, 0))));
     closeShop();
   }
 
@@ -578,12 +611,12 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void displayAIMove(int id, List<Info> shots) {
     String message = "";
     for (int i = 0; i < shots.size(); i++) {
-      message += String.format("Player %d took a shot at row %d, column %d on player %d",
+      message += String.format(AI_SHOT_TEXT,
           id+1, shots.get(i).row(), shots.get(i).col(), shots.get(i).ID()+1)+"\n";
     }
     Alert alert = new Alert(AlertType.INFORMATION, message);
     Node alertNode = alert.getDialogPane();
-    alertNode.setId("alert");
+    alertNode.setId(AI_ALERT_ID);
     alert.show();
   }
 }
