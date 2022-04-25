@@ -48,10 +48,23 @@ public class GameManagerTest extends DukeApplicationTest {
   private GameSetup gs;
   private GameManager gm;
   private String info = "0 1 1";
+  private Map<CellState, Color> dummyColorMap;
 
 
   @BeforeEach
   void setup() {
+    dummyColorMap = new HashMap<>();
+    dummyColorMap.put(CellState.NOT_DEFINED, Color.TRANSPARENT);
+    dummyColorMap.put(CellState.WATER, Color.BLUE);
+    dummyColorMap.put(CellState.WATER_HIT, Color.WHITE);
+    dummyColorMap.put(CellState.SHIP_HEALTHY, Color.BLACK);
+    dummyColorMap.put(CellState.SHIP_DAMAGED, Color.ORANGE);
+    dummyColorMap.put(CellState.SHIP_SUNKEN, Color.RED);
+    dummyColorMap.put(CellState.SHIP_HOVER, Color.GRAY);
+    dummyColorMap.put(CellState.SCANNED, Color.PINK);
+    dummyColorMap.put(CellState.ISLAND_HEALTHY, Color.YELLOW);
+    dummyColorMap.put(CellState.ISLAND_DAMAGED, Color.GREEN);
+    dummyColorMap.put(CellState.ISLAND_SUNK, Color.PURPLE);
     int[][] board = new int[][]{{1, 1, 1}, {0, 1, 1}};
     cellBoard = new CellState[board.length][board[0].length];
     for (int i = 0; i < cellBoard.length; i++) {
@@ -105,7 +118,7 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "handleShot", null, info)));
 
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1],
         CellState.SHIP_SUNKEN);
@@ -121,7 +134,7 @@ public class GameManagerTest extends DukeApplicationTest {
     javafxRun(() -> gm = new GameManager(gd, myResources));
     assertThrows(NullPointerException.class, () -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<>(),
-        new HashMap<>(), new ArrayList<>(), myResources),
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources),
         "invalidMethod", null, info)));
   }
 
@@ -148,7 +161,7 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "handleShot", null, info)));
 
     assertEquals(gd.players().get(1).getBoard().getCurrentBoardState()[0][1],
         CellState.SHIP_SUNKEN);
@@ -177,10 +190,10 @@ public class GameManagerTest extends DukeApplicationTest {
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "endTurn", null, info)));
     Thread.sleep(3000);
     assertEquals(wasStruckByAI(gd.players().get(0)), true);
   }
@@ -208,7 +221,7 @@ public class GameManagerTest extends DukeApplicationTest {
     assertEquals(gd.engineMap().size(), 0);
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "handleShot", null, info)));
     Thread.sleep(2000);
     assertEquals(gd.players().size(), 2);
   }

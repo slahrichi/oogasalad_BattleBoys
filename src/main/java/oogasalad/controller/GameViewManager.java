@@ -52,16 +52,14 @@ public class GameViewManager {
       setupGameView(data);
     }
 
-    // Creates a GameView class to show the view of the game and initialize it with the starting elements
-    private void setupGameView (GameData data){
-      List<CellState[][]> boards = createFirstPlayerBoards(data);
-      Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-      view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(
-          playerList.get(0).getMyInventory()), myResources);
-      view.setShopUsables(data.allUsables());
-      view.updateLabels(data.shotsPerTurn(), playerList.get(0).getNumPieces(),
-          playerList.get(0).getMyCurrency());
-    }
+  // Creates a GameView class to show the view of the game and initialize it with the starting elements
+  private void setupGameView(GameData data) {
+    List<CellState[][]> boards = createFirstPlayerBoards(data);
+    Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
+    view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getMyInventory()), data.cellStateColorMap(), myResources);
+    view.setShopUsables(data.allUsables());
+    view.updateLabels(data.shotsPerTurn(), playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
+  }
 
     // Create an ID map to get the name of a player given their ID
     private Map<Integer, String> generateIDToNames () {

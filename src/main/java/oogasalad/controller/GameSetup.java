@@ -13,6 +13,7 @@ import java.util.Map;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
@@ -39,6 +40,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private List<Piece> pieceList;
   private Map<Player, DecisionEngine> engineMap;
   private int pieceIndex;
+  private Map<CellState, Color> colorMap;
   private Stack<Collection<Coordinate>> lastPlacedAbsoluteCoords;
   private ResourceBundle myResources;
 
@@ -60,6 +62,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     this.playerList = data.players();
     this.board = data.board();
     this.pieceList = data.pieces();
+    this.colorMap = data.cellStateColorMap();
     this.pieceIndex = 0;
     this.playerIndex = -1;
     this.lastPlacedAbsoluteCoords = new Stack<>();
@@ -77,7 +80,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void initializeSetupView() {
-    setupView = new SetupView(board, myResources);
+    setupView = new SetupView(board, colorMap, myResources);
 
     setupView.displayIntroScreen();
 

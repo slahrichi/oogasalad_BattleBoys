@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import oogasalad.model.utilities.Coordinate;
@@ -28,9 +29,22 @@ public class GameViewTest extends DukeApplicationTest {
   private Label currentBoardLabel;
   private GameView view;
   private ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
+  private Map<CellState, Color> dummyColorMap;
 
   @Override
   public void start(Stage stage) {
+    dummyColorMap = new HashMap<>();
+    dummyColorMap.put(CellState.NOT_DEFINED, Color.TRANSPARENT);
+    dummyColorMap.put(CellState.WATER, Color.BLUE);
+    dummyColorMap.put(CellState.WATER_HIT, Color.WHITE);
+    dummyColorMap.put(CellState.SHIP_HEALTHY, Color.BLACK);
+    dummyColorMap.put(CellState.SHIP_DAMAGED, Color.ORANGE);
+    dummyColorMap.put(CellState.SHIP_SUNKEN, Color.RED);
+    dummyColorMap.put(CellState.SHIP_HOVER, Color.GRAY);
+    dummyColorMap.put(CellState.SCANNED, Color.PINK);
+    dummyColorMap.put(CellState.ISLAND_HEALTHY, Color.YELLOW);
+    dummyColorMap.put(CellState.ISLAND_DAMAGED, Color.GREEN);
+    dummyColorMap.put(CellState.ISLAND_SUNK, Color.PURPLE);
     List<CellState[][]> firstPlayerBoards = new ArrayList<>();
     CellState[][] selfBoard = new CellState[][]{
         {CellState.WATER, CellState.WATER, CellState.SHIP_HEALTHY, CellState.SHIP_HEALTHY},
@@ -77,7 +91,7 @@ public class GameViewTest extends DukeApplicationTest {
     for (int i = 0; i < numPlayers; i++) {
       idMap.put(i, "Player" + (i+1));
     }
-    view = new GameView(firstPlayerBoards, pieceCoords, idMap, new ArrayList<>(), myResources);
+    view = new GameView(firstPlayerBoards, pieceCoords, idMap, new ArrayList<>(), dummyColorMap, myResources);
     stage.setScene(view.createScene());
     stage.show();
 
