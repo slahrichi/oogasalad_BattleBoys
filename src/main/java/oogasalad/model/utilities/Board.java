@@ -100,7 +100,7 @@ public class Board {
     for(ShipCell c: piece.getCellList()) {
       boardMap.put(c.getCoordinates(),c);
     }
-    piece.initializeHPList();
+    //piece.initializeHPList();
   }
 
   /**
