@@ -1,9 +1,7 @@
 package oogasalad.view.panes;
 
-import static oogasalad.view.GameView.CELL_STATE_RESOURCES;
-import static oogasalad.view.GameView.FILL_PREFIX;
-
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -26,8 +24,8 @@ public class LegendPane extends TitledPane {
   private ScrollPane myScroller;
   private GridPane myGrid;
 
-  private LinkedHashMap<String, Color> colorMap;
-
+  private LinkedHashMap<String, Color> map;
+  private Map<CellState, Color> myColorMap;
   private static final String LEGEND_PANE_ID = "legendPane";
   private static final String LEGEND_TEXT_RESOURCE = "LegendText";
   private static final int PANE_PADDING = 10;
@@ -40,7 +38,8 @@ public class LegendPane extends TitledPane {
   /**
    * Class constructor.
    */
-  public LegendPane(ResourceBundle resources) {
+  public LegendPane(Map<CellState, Color> colorMap, ResourceBundle resources) {
+    myColorMap = colorMap;
     makeColorMap();
     setUpGrid();
     setUpPane(resources);
@@ -48,10 +47,10 @@ public class LegendPane extends TitledPane {
 
   // makes the color map that this legend pane should display
   private void makeColorMap() {
-    colorMap = new LinkedHashMap<>();
+    map = new LinkedHashMap<>();
     for (CellState state : CellState.values()) {
-      colorMap.put(state.name(),
-          Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + state.name())));
+      map.put(state.name(),
+          myColorMap.get(state));
     }
   }
 
@@ -65,10 +64,10 @@ public class LegendPane extends TitledPane {
     myScroller = new ScrollPane();
     myScroller.setContent(myGrid);
 
-    String[] orderedKeys = colorMap.keySet().toArray(new String[0]);
+    String[] orderedKeys = map.keySet().toArray(new String[0]);
 
     for (int i = 0; i < orderedKeys.length; i++) {
-      myGrid.add(new LegendElement(orderedKeys[i], colorMap.get(orderedKeys[i])), 0, i);
+      myGrid.add(new LegendElement(orderedKeys[i], map.get(orderedKeys[i])), 0, i);
     }
   }
 

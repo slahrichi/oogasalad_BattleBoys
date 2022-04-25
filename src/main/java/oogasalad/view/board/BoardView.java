@@ -2,10 +2,12 @@ package oogasalad.view.board;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -28,7 +30,7 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
   private Pane myBoard;
   private Group myBase;
   protected int myID;
-  protected static String FILL_PREFIX = "FillColor_";
+  protected Map<CellState, Color> myColorMap;
 
   /**
    * Creates a BoardView with an ID
@@ -37,8 +39,9 @@ public abstract class BoardView extends PropertyObservable implements PropertyCh
    * @param arrayLayout the layout of the state of each cell in the board
    * @param id          the id of this board
    */
-  public BoardView(double size, CellState[][] arrayLayout, int id) {
+  public BoardView(double size, CellState[][] arrayLayout, Map<CellState, Color> colorMap, int id) {
     myID = id;
+    myColorMap = colorMap;
     setupBoard(arrayLayout, size);
   }
 

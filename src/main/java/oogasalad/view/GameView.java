@@ -60,7 +60,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String DAY_STYLESHEET = "stylesheets/viewStylesheet.css";
   private static final String NIGHT_STYLESHEET = "stylesheets/nightStylesheet.css";
-  private static final String CELL_STATE_RESOURCES_PATH = "/CellState";
   private static final String IMAGES_PATH = "images/";
   private static final String EXPLOSION_IMAGE_NAME = "explosion-icon.png"; // TODO: Get explosion image from resource bundle
   private static final String BOARD_CLICKED_LOG = "Board %d was clicked at row: %d, col: %d";
@@ -94,10 +93,6 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private static final String PIECES_LEFT_RESOURCE = "PiecesLeft";
   private static final String GOLD_LEFT_RESOURCE = "GoldLeft";
 
-  public static ResourceBundle CELL_STATE_RESOURCES = ResourceBundle.getBundle(
-      CELL_STATE_RESOURCES_PATH);
-  public static final String FILL_PREFIX = "FillColor_";
-
   private TitlePanel myTitle;
   private List<BoardView> myBoards;
   private List<Collection<Collection<Coordinate>>> myPiecesLeft;
@@ -128,12 +123,14 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   private Scene myScene;
   private int currentBoardIndex;
   private Map<Integer, String> playerIDToNames;
+  private Map<CellState, Color> myColorMap;
 
   public GameView(List<CellState[][]> firstPlayerBoards,
-      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, List<UsableRecord> firstPlayerUsables, ResourceBundle resourceBundle) {
+      Collection<Collection<Coordinate>> initialPiecesLeft, Map<Integer, String> idToNames, List<UsableRecord> firstPlayerUsables, Map<CellState, Color> colorMap, ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(VIEW_PANE_ID);
     nightMode = false;
+    myColorMap = colorMap;
     myBoards = new ArrayList<>();
     myPiecesLeft = new ArrayList<>();
     currentBoardIndex = 0;
@@ -197,11 +194,11 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void initializeBoards(List<CellState[][]> boards, List<Integer> idList) {
-    GameBoardView self = new SelfBoardView(BOARD_SIZE, boards.get(0), idList.get(0));
+    GameBoardView self = new SelfBoardView(BOARD_SIZE, boards.get(0), myColorMap, idList.get(0));
     myBoards.add(self);
     self.addObserver(this);
     for (int i = 1; i < boards.size(); i++) {
-      GameBoardView enemy = new EnemyBoardView(BOARD_SIZE, boards.get(i), idList.get(i));
+      GameBoardView enemy = new EnemyBoardView(BOARD_SIZE, boards.get(i), myColorMap, idList.get(i));
       myBoards.add(enemy);
       enemy.addObserver(this);
     }
@@ -216,7 +213,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
 
   private void createRightPane() {
     shopButton = ButtonMaker.makeTextButton("view-shop-button", e -> openShop(), myResources.getString(OPEN_SHOP_RESOURCE));
-    piecesRemainingPane = new SetPiecePane(20, myResources);
+    piecesRemainingPane = new SetPiecePane(20, myColorMap, myResources);
     piecesRemainingPane.setText(myResources.getString(SHIPS_REMAINING_RESOURCE));
 
     setupPieceLegendPane();
@@ -245,7 +242,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   }
 
   private void setupPieceLegendPane() {
-    pieceLegendPane = new LegendPane(myResources);
+    pieceLegendPane = new LegendPane(myColorMap, myResources);
   }
 
   private void createCenterPane() {
@@ -411,10 +408,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    */
 
   @Override
-  public void placePiece(Collection<Coordinate> coords, CellState type) { //TODO: Change type to some enum
+  public void placePiece(Collection<Coordinate> coords, CellState type) {
     for (Coordinate coord : coords) {
       myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
-          Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
+          myColorMap.get(type));
     }
   }
 
@@ -427,7 +424,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   public void removePiece(Collection<Coordinate> coords) {
     for (Coordinate coord : coords) {
       myBoards.get(currentBoardIndex).setColorAt(coord.getRow(), coord.getColumn(),
-          Color.valueOf(CELL_STATE_RESOURCES.getString(CellState.WATER.name())));
+          myColorMap.get(CellState.WATER));
     }
   }
 
@@ -520,7 +517,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
   @Override
   public void displayShotAt(int x, int y, CellState result) {
     myBoards.get(currentBoardIndex)
-        .setColorAt(x, y, Color.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + result.name())));
+        .setColorAt(x, y, myColorMap.get(result));
   }
 
   public void displayShotAnimation(int row, int col, Consumer<Integer> consumer, int id) {

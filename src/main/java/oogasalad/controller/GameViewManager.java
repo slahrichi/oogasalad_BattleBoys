@@ -52,7 +52,7 @@ public class GameViewManager {
   private void setupGameView(GameData data) {
     List<CellState[][]> boards = createFirstPlayerBoards(data);
     Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-    view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getMyInventory()), myResources);
+    view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getMyInventory()), data.cellStateColorMap(), myResources);
     view.setShopUsables(data.allUsables());
     view.updateLabels(data.shotsPerTurn(), playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
   }

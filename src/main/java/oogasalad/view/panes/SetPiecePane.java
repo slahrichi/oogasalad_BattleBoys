@@ -3,11 +3,13 @@ package oogasalad.view.panes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.board.ShipIndicatorBoardView;
@@ -31,12 +33,9 @@ public class SetPiecePane extends TitledPane {
   private static final String LABEL_TEXT_RESOURCE = "SetPieceText";
   private static final String LABEL_ID = "all-ships-placed-label";
 
-  // The visual representations of all ships to be shown in this pane
-  private List<ShipIndicatorBoardView> shipViews;
   // Holds all ShipIndicatorViews to be shown
   private VBox shipIndicatorsBox;
-  // Indicates whether this player has placed all of their ships
-  private boolean lastPiecePlaced = false;
+  private Map<CellState, Color> myColorMap;
   private double myShipSize;
 
   private static ResourceBundle myResources;
@@ -46,10 +45,10 @@ public class SetPiecePane extends TitledPane {
    *
    * @param size
    */
-  public SetPiecePane(double size, ResourceBundle resourceBundle) {
+  public SetPiecePane(double size, Map<CellState, Color> colorMap, ResourceBundle resourceBundle) {
     myResources = resourceBundle;
     myShipSize = size;
-    shipViews = new ArrayList<>();
+    myColorMap = colorMap;
     shipIndicatorsBox = BoxMaker.makeVBox(INDICATOR_ID, INDICATOR_SPACING, Pos.CENTER);
     setUpPane();
   }
@@ -73,7 +72,7 @@ public class SetPiecePane extends TitledPane {
     shipIndicatorsBox.getChildren().clear();
     for (Collection<Coordinate> coords : relativeCoords) {
       shipIndicatorsBox.getChildren()
-          .add(new ShipIndicatorBoardView(myShipSize, getArrayRepresentation(coords),
+          .add(new ShipIndicatorBoardView(myShipSize, getArrayRepresentation(coords), myColorMap,
               0).getBoardPane());
     }
     setContent(shipIndicatorsBox);

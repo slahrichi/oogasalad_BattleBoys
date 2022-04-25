@@ -48,11 +48,24 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
   private GameManager gm;
   private List<CellState[][]> list;
   private String info = "0 0 1";
+  private Map<CellState, Color> dummyColorMap;
 
   private final ResourceBundle myResources = ResourceBundle.getBundle("/languages/English");
 
   @BeforeEach
   void setup() {
+    dummyColorMap = new HashMap<>();
+    dummyColorMap.put(CellState.NOT_DEFINED, Color.TRANSPARENT);
+    dummyColorMap.put(CellState.WATER, Color.BLUE);
+    dummyColorMap.put(CellState.WATER_HIT, Color.WHITE);
+    dummyColorMap.put(CellState.SHIP_HEALTHY, Color.BLACK);
+    dummyColorMap.put(CellState.SHIP_DAMAGED, Color.ORANGE);
+    dummyColorMap.put(CellState.SHIP_SUNKEN, Color.RED);
+    dummyColorMap.put(CellState.SHIP_HOVER, Color.GRAY);
+    dummyColorMap.put(CellState.SCANNED, Color.PINK);
+    dummyColorMap.put(CellState.ISLAND_HEALTHY, Color.YELLOW);
+    dummyColorMap.put(CellState.ISLAND_DAMAGED, Color.GREEN);
+    dummyColorMap.put(CellState.ISLAND_SUNK, Color.PURPLE);
     cellBoard = new CellState[1][3];
     for (int i = 0; i < cellBoard.length; i++) {
       for (int j = 0; j < cellBoard[0].length; j++) {
@@ -128,18 +141,18 @@ public class EasyDecisionEngineTest extends DukeApplicationTest {
     });
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "endTurn", null, info)));
     Thread.sleep(1500);
     Coordinate c = findCoordinateStruck();
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "handleShot", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "handleShot", null, info)));
     javafxRun(() -> gm.propertyChange(new PropertyChangeEvent(new GameView(
         list, new ArrayList<Collection<Coordinate>>(),
-        new HashMap<>(), new ArrayList<>(), myResources), "endTurn", null, info)));
+        new HashMap<>(), new ArrayList<>(), dummyColorMap, myResources), "endTurn", null, info)));
     CellState[][] enemyBoard = playerList.get(0).getBoard().getCurrentBoardState();
     Thread.sleep(2000);
     assertEquals(CellState.SHIP_SUNKEN, enemyBoard[c.getRow()][c.getColumn()]);
