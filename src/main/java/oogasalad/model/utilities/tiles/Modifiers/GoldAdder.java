@@ -11,11 +11,10 @@ import oogasalad.model.utilities.tiles.enums.CellState;
 
 public class GoldAdder extends Modifiers{
 
-  private boolean hasBeenAppliedAlready = false;
-  private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
-      new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
   private int myGold;
+
   private int multiplier =1;
+
   public GoldAdder(int gold){
     myGold = gold;
   }

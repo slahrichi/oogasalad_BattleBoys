@@ -40,11 +40,10 @@ public class GameViewManager {
      * @param data         GameData object storing information pertinent to game rules
      * @param usablesIDMap map containing usables and their IDs
      * @param idMap        Map relating a player id to the Player themselves
-     * @param allowedShots the number of shots a player can make per turn
      * @param resourceBundle bundle containing specifications given the language
      */
-  public GameViewManager(GameData data, Map < String, Usable > usablesIDMap, Map < Integer, Player >
-        idMap, int allowedShots, ResourceBundle resourceBundle){
+  public GameViewManager(GameData data, Map <String, Usable> usablesIDMap, Map <Integer, Player>
+        idMap, ResourceBundle resourceBundle){
       this.idMap = idMap;
       this.playerList = data.players();
       this.myResources = resourceBundle;
@@ -52,16 +51,14 @@ public class GameViewManager {
       setupGameView(data);
     }
 
-    // Creates a GameView class to show the view of the game and initialize it with the starting elements
-    private void setupGameView (GameData data){
-      List<CellState[][]> boards = createFirstPlayerBoards(data);
-      Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
-      view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(
-          playerList.get(0).getMyInventory()), myResources);
-      view.setShopUsables(data.allUsables());
-      view.updateLabels(data.shotsPerTurn(), playerList.get(0).getNumPieces(),
-          playerList.get(0).getMyCurrency());
-    }
+  // Creates a GameView class to show the view of the game and initialize it with the starting elements
+  private void setupGameView(GameData data) {
+    List<CellState[][]> boards = createFirstPlayerBoards(data);
+    Collection<Collection<Coordinate>> coords = createInitialPieces(data.pieces());
+    view = new GameView(boards, coords, generateIDToNames(), convertMapToUsableRecord(playerList.get(0).getMyInventory()), data.cellStateColorMap(), myResources);
+    view.setShopUsables(data.allUsables());
+    view.updateLabels(data.shotsPerTurn(), playerList.get(0).getNumPieces(), playerList.get(0).getMyCurrency());
+  }
 
     // Create an ID map to get the name of a player given their ID
     private Map<Integer, String> generateIDToNames () {
@@ -77,15 +74,17 @@ public class GameViewManager {
      * @param inventoryMap map relating usable ID to the count of usable
      * @return List of Usable records containing info for said usables
      */
-    public List<UsableRecord> convertMapToUsableRecord (Map < String, Integer > inventoryMap){
+    public List<UsableRecord> convertMapToUsableRecord (Map<String, Double> inventoryMap){
+      System.out.println(inventoryMap);
+      System.out.println(usablesIDMap);
       List<UsableRecord> inventory = new ArrayList<>();
       inventory.add(new UsableRecord(BASIC_SHOT, BASIC_SHOT_CLASS, BASIC_SHOT_STOCK));
       for (String id : inventoryMap.keySet()) {
         if (!id.equals(BASIC_SHOT)) {
-          inventory.add(new UsableRecord(id, usablesIDMap.get(id).getClass().getSimpleName(),
-              inventoryMap.get(id)));
+          inventory.add(new UsableRecord(id, usablesIDMap.get(id).getClass().getSimpleName(), inventoryMap.get(id)));
         }
       }
+      System.out.println("convert before return");
       return inventory;
     }
 

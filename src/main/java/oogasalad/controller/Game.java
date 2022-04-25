@@ -98,6 +98,7 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
       m.invoke(this, evt.getNewValue());
     } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException |
         NullPointerException e) {
+      e.printStackTrace();
       throw new NullPointerException(INVALID_METHOD);
     }
   }
@@ -122,7 +123,6 @@ public class Game extends PropertyObservable implements PropertyChangeListener {
       setup.addObserver(this);
       myStage.setScene(setup.createScene());
     } catch (NullPointerException e) {
-      e.printStackTrace();
       return;
     } catch (ParserException e) {
       showError(e.getMessage());

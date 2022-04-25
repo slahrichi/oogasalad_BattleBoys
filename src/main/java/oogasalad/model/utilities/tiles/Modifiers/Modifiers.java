@@ -13,7 +13,7 @@ public abstract class Modifiers {
 
   boolean hasBeenAppliedAlready = false;
   Consumer myConsumer;
-  private HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
+  protected HashSet<CellState> allowableStates = new HashSet<>(Arrays.asList(
       new CellState[]{CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK}));
 
   public Boolean checkConditions(CellInterface cell){

@@ -1,8 +1,5 @@
 package oogasalad.view;
 
-import static oogasalad.view.GameView.CELL_STATE_RESOURCES;
-import static oogasalad.view.GameView.FILL_PREFIX;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.geometry.Pos;
@@ -21,7 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
 import oogasalad.PropertyObservable;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -54,13 +52,12 @@ import org.apache.logging.log4j.Logger;
  * <p>
  * Created in the GameSetup and handles its integration with the backend
  *
- * @author: Eric Xie, Minjun Kwak, Edison Ooi
+ * @author Eric Xie, Minjun Kwak, Edison Ooi
  */
 public class SetupView extends PropertyObservable implements PropertyChangeListener, ErrorDisplayer,
     BoardVisualizer {
 
   private ResourceBundle myResources;
-
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
   private static final String DAY_STYLESHEET = "stylesheets/setupStylesheet.css";
 
@@ -107,31 +104,28 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   private static final String PROMPT_PREFIX_RESOURCE = "PromptPrefix";
   private static final String PROMPT_SUFFIX_RESOURCE = "PromptSuffix";
   private static final String ENTER_NAME_RESOURCE = "EnterName";
-  private static final String LEGEND_KEY_RESOURCE = "LegendText";
   private static final String PROMPT_LABEL_RESOURCE = "PromptLabel";
 
-  private BorderPane myPane;
-  private VBox centerBox;
+  private final BorderPane myPane;
   private HBox bottomPanel;
-  private VBox removePiecePanel;
-  private VBox configBox;
   private Button confirmButton;
 
   private StackPane myCenterPane;
   private Collection<Coordinate> lastPlaced;
   private Collection<Coordinate> nextToPlace;
   private BoardView setupBoard;
-  private Scene myScene;
+  private final Scene myScene;
   private TitlePanel myTitle;
 
   private LegendPane legendPane;
   private SetPiecePane shipPane;
   private AbstractScreen passComputerMessageView;
-  private CellState[][] myCellBoard;
+  private final CellState[][] myCellBoard;
 
   private int currentPlayerNumber;
   private String currentPlayerName;
-  private String SCREEN_TITLE;
+  private final String title;
+  private Map<CellState, Color> myColorMap;
 
   /**
    * Purpose: The constructor for SetupView objects
@@ -145,18 +139,20 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
    * @param board,          a 2D array of CellState to be displayed to the user placing their ships
    * @param resourceBundle, the ResourceBundle to be used for program language
    */
-  public SetupView(CellState[][] board, ResourceBundle resourceBundle) {
+  public SetupView(CellState[][] board, Map<CellState, Color> colorMap,
+      ResourceBundle resourceBundle) {
     myPane = new BorderPane();
     myPane.setId(SETUP_PANE_ID);
     myCellBoard = board;
-    setupBoard = new SetupBoardView(BOARD_SIZE, myCellBoard, SETUP_BOARD_ID);
+    myColorMap = colorMap;
+    setupBoard = new SetupBoardView(BOARD_SIZE, myCellBoard, myColorMap, SETUP_BOARD_ID);
     lastPlaced = new ArrayList<>();
     myResources = resourceBundle;
     currentPlayerNumber = CURRENT_PLAYER_NUMBER;
     currentPlayerName = myResources.getString(PROMPT_PREFIX_RESOURCE);
     nextToPlace = new ArrayList<>();
+    title = myResources.getString(SETUP_TITLE_RESOURCE);
     myScene = new Scene(myPane, SCREEN_WIDTH, SCREEN_HEIGHT);
-    SCREEN_TITLE = myResources.getString(SETUP_TITLE_RESOURCE);
     createTitlePanel();
     createBottomPanel();
     createCenterPanel();
@@ -168,8 +164,6 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
    * Displays the intro screen for the SetupView
    * <p>
    * Assumed to be used by the GameSetup when necessary to display the intro screen.
-   *
-   * @return void
    */
   public void displayIntroScreen() {
     SetUpShipsScreen screen = new SetUpShipsScreen(myResources);
@@ -238,16 +232,17 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   // creates the configuration panel on the right side
   private void createConfigPanel() {
     setupLegendPane();
-    shipPane = new SetPiecePane(SET_PIECE_PANE_SIZE, myResources);
+    shipPane = new SetPiecePane(SET_PIECE_PANE_SIZE, myColorMap, myResources);
     shipPane.setText(myResources.getString(CURRENT_SHIP_RESOURCE));
-    configBox = BoxMaker.makeVBox(CONFIG_BOX_ID, NO_SPACING, Pos.TOP_CENTER, shipPane, legendPane);
+    VBox configBox = BoxMaker.makeVBox(CONFIG_BOX_ID, NO_SPACING, Pos.TOP_CENTER, shipPane,
+        legendPane);
     configBox.setMinWidth(CONFIG_BOX_WIDTH);
     myPane.setRight(configBox);
   }
 
   // creates the legend pane on the right side that displays the key to the colors of the board
   private void setupLegendPane() {
-    legendPane = new LegendPane(myResources);
+    legendPane = new LegendPane(myColorMap, myResources);
   }
 
   // creates the bottom panel of the setupview, showing the buttons that allow the user to unplace and confirm
@@ -260,7 +255,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
         e -> removePiece(lastPlaced), myResources.getString(REMOVE_LAST_RESOURCE));
     Button removeAll = ButtonMaker.makeTextButton(REMOVE_ALL_ID, e -> removeAllPieces(),
         myResources.getString(REMOVE_ALL_RESOURCE));
-    removePiecePanel = BoxMaker.makeVBox(REMOVE_PIECE_ID, SMALL_SPACING, Pos.CENTER,
+    VBox removePiecePanel = BoxMaker.makeVBox(REMOVE_PIECE_ID, SMALL_SPACING, Pos.CENTER,
         removeLastPiece, removeAll);
     bottomPanel = BoxMaker.makeHBox(BOTTOM_PANEL_ID, LARGE_SPACING, Pos.CENTER, removePiecePanel,
         confirmButton);
@@ -286,7 +281,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
     myCenterPane = new StackPane();
     myCenterPane.setId(BOARD_BOX_ID);
-    centerBox = BoxMaker.makeVBox(SETUP_CENTER_ID, LARGE_SPACING, Pos.CENTER, myCenterPane,
+    VBox centerBox = BoxMaker.makeVBox(SETUP_CENTER_ID, LARGE_SPACING, Pos.CENTER, myCenterPane,
         bottomPanel);
     myPane.setCenter(centerBox);
     myCenterPane.getChildren().add(setupBoard.getBoardPane());
@@ -295,7 +290,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   // creates the title panel for the setupview
   private void createTitlePanel() {
     myTitle = new TitlePanel(
-        myResources.getString(PROMPT_PREFIX_RESOURCE) + currentPlayerNumber + SCREEN_TITLE);
+        myResources.getString(PROMPT_PREFIX_RESOURCE) + currentPlayerNumber + title);
     myTitle.setId(SETUP_TITLE_ID);
     myPane.setTop(myTitle);
   }
@@ -331,8 +326,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     Collection<Coordinate> coordsToHighlight = initializeCoordsToColor(coordinate);
     for (Coordinate c : coordsToHighlight) {
       if (checkIfValid(c.getRow(), c.getColumn())) {
-        setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(
-            CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.SHIP_HOVER.name())));
+        setupBoard.setColorAt(c.getRow(), c.getColumn(), myColorMap.get(CellState.SHIP_HOVER));
       }
     }
   }
@@ -340,8 +334,8 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   // checks validity of the cell and returns a boolean if true or not
   private boolean checkIfValid(int row, int col) {
     return row >= 0 && row < myCellBoard.length && col >= 0 &&
-        col < myCellBoard[0].length && setupBoard.getColorAt(row, col) != Paint.valueOf(
-        CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.SHIP_HEALTHY.name()));
+        col < myCellBoard[0].length && setupBoard.getColorAt(row, col) != myColorMap.get(
+        CellState.SHIP_HEALTHY);
   }
 
   // checks if cell exited
@@ -349,13 +343,12 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
     Collection<Coordinate> coordsToReplace = initializeCoordsToColor(coordinate);
     for (Coordinate c : coordsToReplace) {
       if (checkIfValid(c.getRow(), c.getColumn())) {
-        setupBoard.setColorAt(c.getRow(), c.getColumn(), Paint.valueOf(
-            CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
+        setupBoard.setColorAt(c.getRow(), c.getColumn(), myColorMap.get(CellState.WATER));
       }
     }
   }
 
-  // initializes the Coordinates to a Color after being passed a Coordiante and returns a collection of them
+  // initializes the Coordinates to a Color after being passed a Coordinate and returns a collection of them
   private Collection<Coordinate> initializeCoordsToColor(Coordinate coordinate) {
     List<Coordinate> coords = new ArrayList<>();
     for (Coordinate c : nextToPlace) {
@@ -401,7 +394,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
 
   // updates the title of the screen
   private void updateTitle(String playerName) {
-    myTitle.changeTitle(playerName + SCREEN_TITLE);
+    myTitle.changeTitle(playerName + title);
   }
 
   /**
@@ -414,7 +407,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void placePiece(Collection<Coordinate> coords, CellState type) {
     for (Coordinate c : coords) {
       setupBoard.setColorAt(c.getRow(), c.getColumn(),
-          Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + type.name())));
+          myColorMap.get(type));
     }
     lastPlaced = coords;
   }
@@ -422,7 +415,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   /**
    * Takes a collection of coordinates and sets the lastPlaced variable to it
    *
-   * @param coords
+   * @param coords the coordinates of the last placed piece
    */
   public void setLastPlaced(Collection<Coordinate> coords) {
     lastPlaced = coords;
@@ -435,7 +428,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
   public void removePiece(Collection<Coordinate> coords) {
     for (Coordinate c : coords) {
       setupBoard.setColorAt(c.getRow(), c.getColumn(),
-          Paint.valueOf(CELL_STATE_RESOURCES.getString(FILL_PREFIX + CellState.WATER.name())));
+          myColorMap.get(CellState.WATER));
     }
     confirmButton.setDisable(true);
     notifyObserver(REMOVE_PIECE_OPERATION, null);
@@ -456,7 +449,7 @@ public class SetupView extends PropertyObservable implements PropertyChangeListe
    */
   public void clearBoard() {
     myCenterPane.getChildren().remove(setupBoard.getBoardPane());
-    setupBoard = new SetupBoardView(BOARD_SIZE, myCellBoard, SETUP_BOARD_ID);
+    setupBoard = new SetupBoardView(BOARD_SIZE, myCellBoard, myColorMap, SETUP_BOARD_ID);
     setupBoard.addObserver(this);
     myCenterPane.getChildren().add(setupBoard.getBoardPane());
   }

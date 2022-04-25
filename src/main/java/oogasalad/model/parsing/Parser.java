@@ -10,6 +10,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import oogasalad.model.parsing.parsers.ParseAllUsables;
+import oogasalad.model.parsing.parsers.ParsePowerUps;
+import oogasalad.model.parsing.parsers.ParseSpecialIslands;
+import oogasalad.model.parsing.parsers.ParseSpecialWeapons;
+import oogasalad.model.parsing.parsers.ParseWeapons;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,8 +61,10 @@ public class Parser {
 
   public void save(ParserData data, String pathToNewFile) throws ParserException  {
 
+    String pathToUse = "data/" + pathToNewFile + ".properties";
+
     LOG.info(String.format("Saving ParserData to %s", pathToNewFile));
-    File file = new File(pathToNewFile);
+    File file = new File(pathToUse);
     Properties props = new Properties();
 
     String nameOfNewFile = file.toString().replaceFirst(REGEX, EMPTY);

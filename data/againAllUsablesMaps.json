@@ -1,0 +1,14 @@
+[
+  {
+    "myID": "CustomUsable_blast",
+    "goldCost": 1,
+    "relativeCoordShots": {
+      "0 0": "1"
+    }
+  },
+  {
+    "myID": "CustomUsable_heal",
+    "goldCost": 1,
+    "relativeCoordShots": {}
+  }
+]

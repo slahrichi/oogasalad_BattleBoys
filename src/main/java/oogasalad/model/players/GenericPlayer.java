@@ -22,7 +22,7 @@ public abstract class GenericPlayer implements Player{
   private static final Logger LOG = LogManager.getLogger(GameManager.class);
   private int myPiecesLeft;
   private int myCurrency;
-  private Map<String, Integer> myInventory;
+  private Map<String, Double> myInventory;
   private Map<Integer, MarkerBoard> myEnemyMap;
   private Map<CellState, Integer> myHitsMap; //new instance variable
 
@@ -33,10 +33,10 @@ public abstract class GenericPlayer implements Player{
   private String myName;
   private int multiplier = 1;
 
-  public GenericPlayer(Board board, int id, Map<String, Integer> inventory, int startingGold, Map<Integer, MarkerBoard> enemyMap) {
+  public GenericPlayer(Board board, int id, Map<String, Double> inventory, int startingGold, Map<Integer, MarkerBoard> enemyMap) {
     myBoard = board;
     myInventory = new HashMap<>(inventory);
-    myInventory.put("Basic Shot", Integer.MAX_VALUE);
+    myInventory.put("Basic Shot", Double.MAX_VALUE);
     myCurrency = startingGold;
     myEnemyMap = enemyMap;
     myHitsMap = new HashMap<>();
@@ -50,14 +50,14 @@ public abstract class GenericPlayer implements Player{
     if (price <= myCurrency) {
       String genericItem = usableID.replace(STRIPE, "");
       LOG.info(String.format("Bought %s for %d gold. Remaining Gold: %d", genericItem, price, myCurrency));
-      myInventory.put(genericItem, myInventory.getOrDefault(genericItem, 0) + 1);
+      myInventory.put(genericItem, myInventory.getOrDefault(genericItem, 0.0) + 1);
       if (!usableID.startsWith(STRIPE)) {
         myCurrency -= price;
       }
     }
   }
 
-  public Map<String, Integer> getMyInventory() {
+  public Map<String, Double> getMyInventory() {
     return myInventory;
   }
 
@@ -162,7 +162,7 @@ public abstract class GenericPlayer implements Player{
     if(myInventory.containsKey(usable.getMyID()))
       myInventory.put(usable.getMyID(), myInventory.get(usable.getMyID()) + 1);
     else
-      myInventory.put(usable.getMyID(), 1);
+      myInventory.put(usable.getMyID(), 1.0);
   }
   public void addIDtoInventory(String ID){
     if(myInventory.containsKey(ID))

@@ -1,7 +1,9 @@
 package oogasalad.model.parsing;
 
+import com.google.gson.internal.LinkedTreeMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.paint.Color;
@@ -48,7 +50,7 @@ public record ParserData(List<String> players,
                          List<Weapon> weapons,
                          List<IslandCell> specialIslands,
                          List<Item> powerUps,
-                         Map<String,Integer> playerInventory,
+                         Map<String,Double> playerInventory,
                          List<Usable> allUsables,
                          Integer shotsPerTurn,
                          Integer shipMovementRate,
@@ -92,7 +94,7 @@ public record ParserData(List<String> players,
     if(!(elements.get(4).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 4));
     }
-    if(!(elements.get(5).getClass().equals(Map.class))) {
+    if(!(elements.get(5).getClass().equals(HashMap.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 5));
     }
     if(!(elements.get(6).getClass().equals(ArrayList.class))) {
@@ -104,10 +106,10 @@ public record ParserData(List<String> players,
     if(!(elements.get(8).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 8));
     }
-    if(!(elements.get(9).getClass().equals(Map.class))) {
+    if(!(elements.get(9).getClass().equals(LinkedTreeMap.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 9));
     }
-    if(!(elements.get(10).getClass().equals(List.class))) {
+    if(!(elements.get(10).getClass().equals(ArrayList.class))) {
       throw new ParserException(String.format("Element %d of elements is not of valid type", 10));
     }
 
@@ -131,7 +133,7 @@ public record ParserData(List<String> players,
         (List<Weapon>) elements.get(6),
         (List<IslandCell>) elements.get(7),
         (List<Item>) elements.get(8),
-        (Map<String, Integer>) elements.get(9),
+        (Map<String, Double>) elements.get(9),
         (List<Usable>) elements.get(10),
         (Integer) elements.get(11),
         (Integer) elements.get(12),

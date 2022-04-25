@@ -1,0 +1,14 @@
+[
+  {
+    "myID": "CustomUsable",
+    "goldCost": 1,
+    "relativeCoordShots": {
+      "0 0": "1"
+    }
+  },
+  {
+    "myID": "CustomUsable",
+    "goldCost": 1,
+    "relativeCoordShots": {}
+  }
+]

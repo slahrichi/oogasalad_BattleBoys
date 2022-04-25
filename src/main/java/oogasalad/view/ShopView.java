@@ -25,14 +25,20 @@ import oogasalad.model.utilities.usables.Usable;
  * backend through the use of observables and listeners. Depends on javaFX. Makes no assumptions.
  *
  *
- * @author Luka Mdivani
+ * @author Luka Mdivani, Minjun Kwak, Brandon Bae
  */
 public class ShopView extends PropertyObservable implements PropertyChangeListener {
 
   private static final double SCREEN_WIDTH = 1000;
   private static final double SCREEN_HEIGHT = 600;
   private static final String DEFAULT_RESOURCE_PACKAGE = "/";
-  private static final String STYLESHEET = "stylesheets/startStylesheet.css";
+  private static final String SHOP_PANE_ID = "shop-pane-id";
+  private static final String SHOP_SUFFIX = "ShopBuilder";
+  private static final String SHOP_CATEGORIES_RESOURCE = "shopCategories";
+  private static final String TITLE_TEXT = "Welcome to the Shop";
+  private static final String FONT = "Verdana";
+  private static final double FONT_SIZE = 20;
+  private static final double SHOP_PAGE_WIDTH = 200;
 
   private Scene myScene;
   private Map<String, ScrollPane> nameToPageMap = new HashMap<>();
@@ -42,18 +48,17 @@ public class ShopView extends PropertyObservable implements PropertyChangeListen
 
   public ShopView(List<Usable> shopInventory) {
     myPane = new BorderPane();
-    myPane.setId("startPane");
-    ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+"ShopBuilder");
+    myPane.setId(SHOP_PANE_ID);
+    ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE+SHOP_SUFFIX);
     stripeIntegration = new StripeIntegration();
     setUpTitle();
-    setUpTabPane(myResources.getString("shopCategories").split(","));
-    setUpButtons();
+    setUpTabPane(myResources.getString(SHOP_CATEGORIES_RESOURCE).split(","));
     makeShopItems(shopInventory);
   }
 
   private void setUpTitle() {
-    Text title = new Text("Welcome to the Shop");
-    title.setFont(Font.font("Verdana", 20));
+    Text title = new Text(TITLE_TEXT);
+    title.setFont(Font.font(FONT, FONT_SIZE));
     myPane.setTop(title);
   }
 
@@ -95,12 +100,9 @@ public class ShopView extends PropertyObservable implements PropertyChangeListen
     ScrollPane result = new ScrollPane();
     result.setFitToHeight(true);
     Group shopPage = new Group();
-    shopPage.maxWidth(200);
+    shopPage.maxWidth(SHOP_PAGE_WIDTH);
     result.setContent(shopPage);
     return result;
-  }
-
-  private void setUpButtons() {
   }
 
   private void makeShopItems(List<Usable> shopInventory) {
