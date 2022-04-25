@@ -21,7 +21,9 @@ import org.apache.logging.log4j.Logger;
  * - Board only has finite edge conditions
  *
  * Dependencies:
- * - CellInterface: Cells build up the
+ * - CellInterface: The board is built up by a Map of coordinates to cells, Is an abstraction of what occupies that part of that board and its state
+ * - Pieces: Player place pieces onto a board
+ * - Modifiers: Modifiers can have effects that change board parameters when a cell with a modifier is destroyed
  *
  * @author Brandon Bae, Prajwal Jagadish, Saad Lahrichi
  */
@@ -39,6 +41,15 @@ public class Board {
   private int myCols;
   private int myNumShipsSunk;
 
+  /**
+   * Constructor for board. Translates a 2d array of initial cellstates to the Map<Coordinate, CellInterface> that the board uses
+   * to represent its cell's locations.
+   *
+   * Assumptions:
+   * - boardSetup parameter will have only NOT_DEFINED or WATER cell states as when a board is created nothing is on the board
+   *
+   * @param boardSetup a 2d array of initial cellstates used to build the available cells on the board
+   */
   public Board(CellState[][] boardSetup) {
     myRows = boardSetup.length;
     myCols = boardSetup[0].length;
@@ -48,7 +59,7 @@ public class Board {
     logMessages = ResourceBundle.getBundle(RESOURCES_PACKAGE+BACKEND_MESSAGES);
   }
 
-
+  //helper method that helps translate the 2d array of cellstates to the Map representation the Board uses
   private void initialize(CellState[][] boardSetup) {
     boardMap = new HashMap<>();
     for (int i = 0; i < boardSetup.length; i++) {
@@ -60,18 +71,15 @@ public class Board {
     }
   }
 
-  /**
-   * @param c Coordinate to check
-   * @return whether any Cell can be placed at the given Coordinate
-   */
-
+  //helper method that helps determine if a cell can be placed at the given coordinate. Checks if the cell at the coordinate
+  //and if it can carry an object
   private boolean canPlaceAt(Coordinate c){
-    return boardMap.get(c)!=null && boardMap.get(c).getCellState()==CellState.WATER;
-    //return !checkCell(c).equals(null); // this is not correct yet
+    return boardMap.get(c)!=null && boardMap.get(c).canCarryObject();
   }
 
   /**
-   * places a ship on the grid given a topLeft position and coordinates of all Cells making the ship
+   * Checks and then places a ship on the grid given an absolute coordinate and relative coordinates of all Cells
+   * making the ship
    * @param topLeft the coordinate of the topLeft Cell of the ship
    * @param piece Piece to place at coordinate topLeft
    */
@@ -84,6 +92,7 @@ public class Board {
     return true;
   }
 
+  //helper method for placePiece public method that places the given pieces cell based off the given absolute coordinate
   private void addPieceCellsToBoard(Coordinate topLeft, Piece piece) {
     piece.placeCellsAt(topLeft);
     myPieces.put(piece.getID(), piece); //can make this observer listener in future
@@ -94,6 +103,12 @@ public class Board {
     piece.initializeHPList();
   }
 
+  /**
+   * Method that checks if a piece can be placed at the given absolute coordinate
+   * @param topLeft absolute coordinate representing the top left corner of the piece
+   * @param piece the piece to place
+   * @return boolean representing if the piece can be placed at the given coordinate
+   */
   public boolean hasValidPlacement(Coordinate topLeft, Piece piece) {
     for (Coordinate relative : piece.getRelativeCoords()) {
       if (!canPlaceAt(Coordinate.sum(topLeft, relative))) {
@@ -103,12 +118,29 @@ public class Board {
     return true;
   }
 
+  /**
+   * Method that returns all pieces on the board
+   * Safe getter method as we return a copy of myPieces.values as an ArrayList meaning that the myPieces map cannot
+   * be altered or changed by other classes that may use this method.
+   * @return List copy of all pieces in the pieces map
+   */
   public List<Piece> listPieces() {
     return new ArrayList<>(myPieces.values());
   }
 
+  /**
+   * Method that returns all valid coordinates on the board
+   * Safe getter method as we return a copy of boardMap.keySet() as an ArrayList meaning that the boardMap cannot
+   * be altered or changed by other classes that may use this method.
+   * @return List copy of all valid coordinates on the board
+   */
   public List<Coordinate> listCoordinates() { return new ArrayList<>(boardMap.keySet()); }
 
+  /**
+   * Translates and returns the boardMap to a 2d array of CellStates. This is used by the frontend where it is easier to
+   * convert an array to a visual representation of the board
+   * @return 2d array of cellstates representative of the current board.
+   */
   public CellState[][] getCurrentBoardState() {
     CellState[][] currStateArray = new CellState[myRows][myCols];
     for(Coordinate c : boardMap.keySet()) {
@@ -124,6 +156,16 @@ public class Board {
     return currStateArray;
   }
 
+  /**
+   * Method that hits the cell at the given coordinate
+   *
+   * Assumption:
+   * - given coordinate is a valid board coordinate
+   *
+   * @param c coordinate of the cell to hit
+   * @param dmg the amount of damage the hit should do
+   * @return resulting CellState of the cell after it is hit
+   */
   public CellState hit(Coordinate c, int dmg) {
     int numStartPieces = myPieces.keySet().size();
     CellState hitState = boardMap.get(c).hit(dmg);
@@ -142,28 +184,60 @@ public class Board {
     return hitState;
   }
 
+  /**
+   * Returns the piece with the given id
+   * @param id ID of piece to get
+   * @return Piece with the given ID
+   */
   public Piece getPiece(int id){
     Piece myPiece = myPieces.get(id);
     return myPiece;
   }
+
+  /**
+   * Returns the number of pieces sunk so far
+   * myNumShipsSunk is calculated in the hit method
+   * @return num pieces sunk so far
+   */
   public int getNumPiecesSunk() {
     return myNumShipsSunk;
   }
 
+  /**
+   * Method that checks if the given coordinate is a valid coordinate on the board
+   * @param coord coordinate to check
+   * @return boolean representing if the coordinate is valid on the board
+   */
   public boolean checkBoundedCoordinate(Coordinate coord){return boardMap.containsKey(coord);}
 
+  /**
+   * Method that checks if the cell at the coordinate has hp =
+   * @param c coordinate of cell to check
+   * @return boolean representing if the cell has HP or not
+   */
   public boolean canBeStruck(Coordinate c) {
     return boardMap.get(c).getHealth() != 0;
   }
 
+  /**
+   * gets the width and height of the board
+   * @return array of format: [row, col] of board
+   */
   public int[] getSize(){return new int[]{myRows, myCols};}
 
+  /**
+   * gets cell at given coordinate
+   * @param c coordinate of cell to get
+   * @return cell at given coordinate
+   */
   public CellInterface getCell(Coordinate c){
     return boardMap.get(c);
   }
 
-
-
+  /**
+   * Randomly Places islands on the board
+   * @param islands islands to place
+   */
   public void randomizeIslands(List<IslandCell> islands){
     islandsInPlay = islands;
     List<Coordinate> freeCells = new ArrayList<>();
@@ -181,7 +255,11 @@ public class Board {
     }
   }
 
-
+  /**
+   * sets the islands on the board
+   * @param islands islands to set the board to
+   * @return  boolean representing if islands are enabled for this board
+   */
   public boolean setIslandsInPlay(List<IslandCell> islands){
     if(islandsInPlay == null) {
       return false;
@@ -195,6 +273,12 @@ public class Board {
     }
   }
 
+  /**
+   * Checks and then places an island at a given coordinate
+   * @param c coordinate to place island at
+   * @param island island to place
+   * @return boolean representing if island was able to placed or not
+   */
   public boolean addIsland(Coordinate c, IslandCell island){
     if(boardMap.containsKey(c)&& boardMap.get(c).canCarryObject()){
       boardMap.replace(c, island);
@@ -205,6 +289,11 @@ public class Board {
     return false;
   }
 
+  /**
+   * Method that checks if any cells on the board have any modifiers to pass up the hierarchy. Any active modifiers
+   * are then applied to the board
+   * @return active modifiers to be applied higher up in the hierarchy (game manager).
+   */
   public List<Modifiers> update() {
     ArrayList<Modifiers> retModifers = new ArrayList<>();
     for(CellInterface cell: boardMap.values()){
@@ -217,12 +306,21 @@ public class Board {
     return retModifers;
   }
 
+  /**
+   * Remove a specified piece from the board
+   * Assumption:
+   * - piece is placed on the board: Used only in the setup stage after a ship has been placed
+   * @param ID ID of ship to remove from the board
+   */
   public void removePiece(String ID) {
     Piece pieceToRemove = myPieces.get(ID);
     myPieces.remove(ID);
     pieceToRemove.removeFromBoard(boardMap);
   }
 
+  /**
+   * Removes all placed pieces on the board
+   */
   public void removeAllPieces() {
     Iterator<String> itr = myPieces.keySet().iterator();
     while (itr.hasNext()) {
@@ -231,6 +329,9 @@ public class Board {
     }
   }
 
+  /**
+   * Makes all pieces move based off their predefined movement
+   */
   public void moveAllPieces() {
     for(String key: myPieces.keySet()) {
       myPieces.get(key).movePiece(boardMap);
