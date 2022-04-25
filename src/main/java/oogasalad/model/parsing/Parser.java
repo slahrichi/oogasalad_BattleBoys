@@ -95,13 +95,7 @@ public class Parser {
     List<Object> parsedElements = new ArrayList<>();
     try {
       for(ParsedElement p: parsers) {
-        if(
-            p.getClass().equals(ParseAllUsables.class)
-        ) {
-          parsedElements.add(p.parse(props));
-        } else {
-          parsedElements.add(p.parse(props));
-        }
+        parsedElements.add(p.parse(props));
       }
     } catch (JsonSyntaxException e) {
       String message = exceptionMessageProperties.getProperty(JSON_ERROR).formatted(pathToFile);

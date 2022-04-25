@@ -4,7 +4,9 @@
     "properties": {
       "myID": "Basic Shot",
       "goldCost": 0,
-      "relativeCoordShots": {}
+      "relativeCoordShots": {
+        "Coordinate{row\u003d0, column\u003d0}": 1
+      }
     }
   },
   {
@@ -14,7 +16,9 @@
       "turnsLasted": 5,
       "myID": "burn-shot",
       "goldCost": 2,
-      "relativeCoordShots": {}
+      "relativeCoordShots": {
+        "Coordinate{row\u003d0, column\u003d0}": 1
+      }
     }
   },
   {
