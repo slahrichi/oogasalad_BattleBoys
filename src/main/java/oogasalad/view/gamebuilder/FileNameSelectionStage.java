@@ -16,6 +16,7 @@ public class FileNameSelectionStage extends BuilderStage {
   private BorderPane myPane;
   private String DEFAULT_FILENAME = "Custom_Game";
   private TextArea fileNameText;
+  private static final String TITLE="Choose File Name";
 
   public FileNameSelectionStage(){
     myPane=new BorderPane();
@@ -38,6 +39,7 @@ public class FileNameSelectionStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return fileName;
   }

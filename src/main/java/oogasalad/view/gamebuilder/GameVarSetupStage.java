@@ -23,6 +23,7 @@ public class GameVarSetupStage extends BuilderStage {
   private VBox centerPane = new VBox();
   private Map<String, Integer> variableInputMap;
   private static final String DEFAULT_VALUE = "1";
+  private static final String TITLE = "SET GAME VARIABLES";
 
   public GameVarSetupStage() {
     gameSettingVariables = getMyBuilderResources().getString("gameVariables").split(",");
@@ -32,6 +33,7 @@ public class GameVarSetupStage extends BuilderStage {
   }
 
   protected void setUp() {
+    setTitle(TITLE);
     setUpVariableInput(gameSettingVariables);
   }
 

@@ -10,6 +10,7 @@ package oogasalad.view.gamebuilder;
 public class InventorySetupStage extends GameVarSetupStage {
 
   private String[] dataSource;
+  private String TITLE = "CHOOSE INVENTORY ITEM COUNT";
 
   public InventorySetupStage(String[] source) {
     dataSource = source;
@@ -18,6 +19,7 @@ public class InventorySetupStage extends GameVarSetupStage {
 
   @Override
   protected void setUp() {
+    setTitle(TITLE);
     setUpVariableInput(dataSource);
   }
 }

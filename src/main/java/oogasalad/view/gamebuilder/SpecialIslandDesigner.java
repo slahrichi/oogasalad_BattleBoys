@@ -28,6 +28,7 @@ import oogasalad.view.maker.LabelMaker;
  */
 public class SpecialIslandDesigner extends BuilderStage {
 
+  private static final String TITLE="Crate Special Islands";
   private BorderPane myPane;
   private String[] stringInputFilter;
   private String[] modifierTypes;
@@ -162,6 +163,7 @@ public class SpecialIslandDesigner extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return islandList;
   }

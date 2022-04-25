@@ -1,6 +1,8 @@
 package oogasalad.view.board;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Map;
+import javafx.scene.paint.Color;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -21,8 +23,8 @@ public class SelfBoardView extends GameBoardView {
    * @param arrayLayout the layout of the cell states of the board
    * @param id          the id of this BoardView
    */
-  public SelfBoardView(double size, CellState[][] arrayLayout, int id) {
-    super(size, arrayLayout, id);
+  public SelfBoardView(double size, CellState[][] arrayLayout, Map<CellState, Color> colorMap, int id) {
+    super(size, arrayLayout, colorMap, id);
   }
 
   /**

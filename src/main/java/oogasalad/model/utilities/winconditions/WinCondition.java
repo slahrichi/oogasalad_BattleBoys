@@ -26,7 +26,7 @@ import oogasalad.model.utilities.tiles.enums.CellState;
  */
 public abstract class WinCondition implements WinConditionInterface {
   public static final Set<CellState> DEFAULT_DESIRABLE_CELL_STATES = Collections.unmodifiableSet(new HashSet<>(
-      Arrays.asList(CellState.SHIP_HEALTHY, CellState.SHIP_DAMAGED)));
+      Arrays.asList(CellState.SHIP_HEALTHY, CellState.SHIP_DAMAGED, CellState.SHIP_SUNKEN)));
   public static final Set<CellState> DEFAULT_NONDESIRABLE_CELL_STATES = Collections.unmodifiableSet(new HashSet<>(
       Arrays.asList(CellState.SHIP_SUNKEN, CellState.ISLAND_SUNK, CellState.WATER, CellState.WATER_HIT)));
 

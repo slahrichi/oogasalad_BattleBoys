@@ -25,6 +25,7 @@ import oogasalad.view.maker.LabelMaker;
 public class WinConditionSetupStage extends BuilderStage {
 
   private BorderPane myPane = new BorderPane();
+  private static final String TITLE = "Add Win Conditions";
   private String[] possibleWinTypes;
   private String[] needsCellToHitSelection;
   private String[] needsWinConditionSelection;
@@ -176,6 +177,7 @@ public class WinConditionSetupStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return winConditions;
   }

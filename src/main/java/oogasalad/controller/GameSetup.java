@@ -13,6 +13,7 @@ import java.util.Map;
 import javafx.animation.Animation;
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import oogasalad.PropertyObservable;
 import oogasalad.model.players.DecisionEngine;
@@ -22,8 +23,7 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 /**
  * Auxiliary class for initializing game elements, particularly allowing players to place their
@@ -40,14 +40,17 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private List<Piece> pieceList;
   private Map<Player, DecisionEngine> engineMap;
   private int pieceIndex;
+  private Map<CellState, Color> colorMap;
   private Stack<Collection<Coordinate>> lastPlacedAbsoluteCoords;
   private ResourceBundle myResources;
 
   public static final int SCREEN_DURATION = 2000;
   private static final String COORD_ERROR = "Error placing piece at (%d, %d)";
-  private static final String INVALID_METHOD = "Invalid method name given";
   private static final String PROMPT_PREFIX_RESOURCE = "PromptPrefix";
-  private static final Logger LOG = LogManager.getLogger(GameSetup.class);
+  private static final String START_GAME = "startGame";
+  private static final String NO_SUCH_METHOD = "NoSuchMethod";
+  private static final String INVOCATION_TARGET = "InvocationTarget";
+  private static final String ILLEGAL_ACCESS = "IllegalAccess";
 
   /**
    *
@@ -59,6 +62,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     this.playerList = data.players();
     this.board = data.board();
     this.pieceList = data.pieces();
+    this.colorMap = data.cellStateColorMap();
     this.pieceIndex = 0;
     this.playerIndex = -1;
     this.lastPlacedAbsoluteCoords = new Stack<>();
@@ -76,7 +80,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void initializeSetupView() {
-    setupView = new SetupView(board, myResources);
+    setupView = new SetupView(board, colorMap, myResources);
 
     setupView.displayIntroScreen();
 
@@ -109,11 +113,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       Method m = this.getClass().getDeclaredMethod(evt.getPropertyName(), String.class);
       m.invoke(this, s);
     } catch (NoSuchMethodException ex) {
-      throw new NullPointerException("NoSuchMethod");
+      throw new NullPointerException(NO_SUCH_METHOD);
     } catch (InvocationTargetException ex) {
-      throw new NullPointerException("InvocationTarget");
+      throw new NullPointerException(INVOCATION_TARGET);
     } catch (IllegalAccessException ex) {
-      throw new NullPointerException("IllegalAccess");
+      throw new NullPointerException(ILLEGAL_ACCESS);
     }
   }
 
@@ -123,7 +127,6 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
       playerList.get(playerIndex).removePiece(pieceList.get(pieceIndex).getID());
       lastPlacedAbsoluteCoords.pop();
-      // if last placed should be empty
       if (pieceIndex == 0) {
         setupView.setLastPlaced(new ArrayList<>());
       } else {
@@ -155,9 +158,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
 
   private void moveToNextPlayer(String s) {
     playerIndex++;
-    setupView.displayPassComputerMessage(myResources.getString(PROMPT_PREFIX_RESOURCE) + (playerIndex + 1));
+    setupView.displayPassComputerMessage(myResources.getString(PROMPT_PREFIX_RESOURCE)
+        + (playerIndex + 1));
     if (playerIndex >= playerList.size()) {
-      notifyObserver("startGame", null);
+      notifyObserver(START_GAME, null);
       return;
     }
     resetElements();
@@ -173,14 +177,11 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
         String coord = c.getRow() + " " + c.getColumn();
         placePiece(coord);
       }
-      //have setupView show that AI has placed pieces
       setupView.displayAIShipsPlaced();
       setupView.handleConfirm();
     }
   }
 
-  // Assigns a new name to the current player being set up. This method is called through reflection from this class'
-  // property change listener
   private void assignCurrentPlayerName(String name) {
     playerList.get(playerIndex).setName(name);
   }
@@ -199,6 +200,10 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     lastPlacedAbsoluteCoords.push(coords);
     setupView.placePiece(coords, CellState.SHIP_HEALTHY);
     pieceIndex++;
+    moveToNextPiece();
+  }
+
+  private void moveToNextPiece() {
     if (pieceIndex != pieceList.size()) {
       setupView.setCurrentPiece(pieceList.get(pieceIndex).getRelativeCoords());
     } else {

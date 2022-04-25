@@ -26,6 +26,7 @@ public class PlayerSetupStage extends BuilderStage {
   private HBox playerSelectionBox;
   private List<String> playerList = new ArrayList<>();
   private List<String> engineList = new ArrayList<>();
+  private static  final  String TITLE="ADD PLAYERS";
 
   public PlayerSetupStage() {
     myPane = new BorderPane();
@@ -115,6 +116,7 @@ public class PlayerSetupStage extends BuilderStage {
 
   @Override
   protected Object launch() {
+    setTitle(TITLE);
     setUpStage(myPane);
     return playerList;
   }
