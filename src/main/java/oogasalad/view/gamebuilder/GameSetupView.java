@@ -1,35 +1,40 @@
 package oogasalad.view.gamebuilder;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import oogasalad.model.parsing.Parser;
 import oogasalad.model.parsing.ParserData;
+import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.usables.Usable;
 import oogasalad.model.utilities.usables.items.Item;
 import oogasalad.model.utilities.usables.weapons.Weapon;
 
 /**
  * The manager class which launches all design stages, takes in the result objects, creates a
- * parser-data record, which is then passed to a parser, so it can be written to a file.
- * Assumes that at least one instance of all objects has been created, due to conceptual limitations,
- * this is might not be 100% open closed.
+ * parser-data record, which is then passed to a parser, so it can be written to a file. Assumes
+ * that at least one instance of all objects has been created, due to conceptual limitations, this
+ * is might not be 100% open closed.
  *
  * @author Luka Mdivani
  */
 public class GameSetupView extends Application {
 
-  public GameSetupView() {
-
-  }
-
   private List<Object> objectList;
   private String fileName;
   private String CLASS_PATH = "oogasalad.model.parsing.ParserData";
+  private ResourceBundle dictionaryResources;
+
+  public GameSetupView() {
+    dictionaryResources = ResourceBundle.getBundle("BuilderDictionary");
+  }
+
 
   @Override
   public void start(Stage stage) throws Exception {
@@ -87,11 +92,26 @@ public class GameSetupView extends Application {
 
     Class<?>[] parameterTypes = new Class<?>[paramTypeList.size()];
     paramTypeList.toArray(parameterTypes);
-    ParserData userSelections = (ParserData) builderUtil.createInstance(CLASS_PATH, parameterTypes,
-        parameters);
+    writeDataToFile(builderUtil, parameters, parameterTypes);
 
-    Parser parser = new Parser();
-    parser.save(userSelections, fileName);
+  }
+
+  private void writeDataToFile(GameBuilderUtil builderUtil, Object[] parameters,
+      Class<?>[] parameterTypes) throws ParserException {
+    try {
+      ParserData userSelections = (ParserData) builderUtil.createInstance(CLASS_PATH,
+          parameterTypes,
+          parameters);
+
+      Parser parser = new Parser();
+      parser.save(userSelections, fileName);
+    } catch (IOException e) {
+      builderUtil.throwErrorWindow(dictionaryResources.getString("reflectionError"));
+    }
+    catch (NullPointerException e){
+      builderUtil.throwErrorWindow(dictionaryResources.getString("gameSetUpError"));
+    }
+
   }
 
   private List<Class<?>> getParamTypes(List<Object> objects) {
