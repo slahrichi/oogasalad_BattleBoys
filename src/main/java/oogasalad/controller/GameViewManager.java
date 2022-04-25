@@ -75,8 +75,6 @@ public class GameViewManager {
      * @return List of Usable records containing info for said usables
      */
     public List<UsableRecord> convertMapToUsableRecord (Map<String, Double> inventoryMap){
-      System.out.println(inventoryMap);
-      System.out.println(usablesIDMap);
       List<UsableRecord> inventory = new ArrayList<>();
       inventory.add(new UsableRecord(BASIC_SHOT, BASIC_SHOT_CLASS, BASIC_SHOT_STOCK));
       for (String id : inventoryMap.keySet()) {

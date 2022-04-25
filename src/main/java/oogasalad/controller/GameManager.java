@@ -141,11 +141,11 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     currentUsable = usablesIDMap.get(id);
     LOG.info(String.format(WEAPON_LOG, id));
     view.setCurrentUsable(id, usablesIDMap.get(id).getRelativeCoordShots().keySet());
-
   }
 
   private void addGold(String param) {
     playerQueue.peek().addGold(CHEAT_GOLD_AMOUNT);
+    view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(), playerQueue.peek().getMyCurrency());
   }
 
   private void addRandomUsable(String param) {
@@ -169,7 +169,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void addNumShotsAllowed(String param) {
-    numShots++;
+    allowedShots++;
     view.updateLabels(allowedShots - numShots, playerQueue.peek().getNumPieces(),
             playerQueue.peek().getMyCurrency());
   }
