@@ -84,7 +84,6 @@ public class GameViewManager {
           inventory.add(new UsableRecord(id, usablesIDMap.get(id).getClass().getSimpleName(), inventoryMap.get(id)));
         }
       }
-      System.out.println("convert before return");
       return inventory;
     }
 

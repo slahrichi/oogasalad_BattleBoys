@@ -25,6 +25,9 @@ import org.junit.jupiter.api.function.Executable;
 import util.DukeApplicationTest;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Minjun Kwak
+ */
 public class GameViewTest extends DukeApplicationTest {
 
   private ConfigPane config;
@@ -97,7 +100,7 @@ public class GameViewTest extends DukeApplicationTest {
     }
     Map<Integer, String> idMap = new HashMap<>();
     for (int i = 0; i < numPlayers; i++) {
-      idMap.put(i, "Player" + (i+1));
+      idMap.put(i, "Player " + (i+1));
     }
     view = new GameView(firstPlayerBoards, pieceCoords, idMap, new ArrayList<>(), dummyColorMap, myResources);
     myScene = view.createScene();

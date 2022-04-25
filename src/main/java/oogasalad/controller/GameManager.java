@@ -164,8 +164,8 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     GameView.handleClickInfo(clickInfo, LOG, BOARD_CLICKED);
   }
 
-  private void mainMenu(){
-     notifyObserver(MAIN_MENU_OPERATION, null);
+  private void mainMenu(String clickInfo){
+    notifyObserver(MAIN_MENU_OPERATION, null);
   }
 
   /**

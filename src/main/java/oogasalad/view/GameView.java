@@ -563,7 +563,7 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    * @param name Name of player who won
    */
   public void displayWinningScreen(String name) {
-    WinnerScreen winnerScreen = new WinnerScreen(myResources, name);
+    WinnerScreen winnerScreen = new WinnerScreen(myResources, name, e -> notifyObserver(MAIN_MENU_OPERATION, ""));
     myScene.setRoot(winnerScreen);
   }
 
