@@ -1,12 +1,9 @@
 package oogasalad.model.players;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import oogasalad.model.utilities.Board;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.MarkerBoard;
-import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.model.utilities.usables.weapons.BasicShot;
 import oogasalad.model.utilities.winconditions.WinCondition;

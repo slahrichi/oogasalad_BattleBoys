@@ -43,14 +43,14 @@ public class HardDecisionEngine extends DecisionEngine {
     }
   }
 
-
   public void adjustStrategy(CellState result) {
-    if (wasSuccess(result)) {
+    if (getWants().contains(result)) {
       getDeque().addFirst(getLastShot());
       prepareBFS();
     }
-    if (canBeRemoved(result)) {
+    if (getAvoids().contains(result) || canBeRemoved(result)) {
       getCoordinateMap().get(getCurrentPlayer()).remove(getLastShot());
+      getDeque().remove(getLastShot());
     }
   }
 
@@ -64,10 +64,6 @@ public class HardDecisionEngine extends DecisionEngine {
         getDeque().addLast(new EngineRecord(neighbor, getCurrentPlayer(), new BasicShot()));
       }
     }
-  }
-
-  private boolean wasSuccess(CellState result) {
-    return result == CellState.ISLAND_DAMAGED || result == CellState.SHIP_DAMAGED;
   }
 
   private Map<Coordinate, Integer> createSquare() {
