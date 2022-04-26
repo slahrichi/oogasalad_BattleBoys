@@ -2,13 +2,18 @@ package oogasalad.model.utilities;
 
 import java.util.Objects;
 
+/**
+ * Coordinates Class that keeps track of a cell's location. Also used for relative coordaintes as well
+ *
+ * @author Brandon Bae
+ */
 public class Coordinate {
 
     private int row;
     private int column;
 
     /**
-     *
+     * Constructor for Coordinate Class
      * @param row row index of coordinate
      * @param column column index of coordinate
      */

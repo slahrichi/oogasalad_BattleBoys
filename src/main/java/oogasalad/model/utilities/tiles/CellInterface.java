@@ -2,6 +2,7 @@ package oogasalad.model.utilities.tiles;
 
 import java.util.List;
 import oogasalad.model.utilities.Coordinate;
+import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.enums.CellState;
 
@@ -35,4 +36,6 @@ public interface  CellInterface {
    public List<Modifiers> getCellModifiers();
 
    void moveCell(Coordinate nextMovement);
+    List<GoldAdder> getGoldModifiers();
+    String getId();
 }

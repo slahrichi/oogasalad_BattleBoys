@@ -20,6 +20,7 @@ import oogasalad.model.players.DecisionEngine;
 import oogasalad.model.players.Player;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.model.utilities.Piece;
+import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
 import oogasalad.view.SetupView;
@@ -40,6 +41,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   private List<Piece> pieceList;
   private Map<Player, DecisionEngine> engineMap;
   private int pieceIndex;
+  private List<IslandCell> islandList;
   private Map<CellState, Color> colorMap;
   private Stack<Collection<Coordinate>> lastPlacedAbsoluteCoords;
   private ResourceBundle myResources;
@@ -62,6 +64,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     this.playerList = data.players();
     this.board = data.board();
     this.pieceList = data.pieces();
+    this.islandList = data.specialIslands();
     this.colorMap = data.cellStateColorMap();
     this.pieceIndex = 0;
     this.playerIndex = -1;
@@ -118,6 +121,7 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
     } catch (InvocationTargetException ex) {
       ex.printStackTrace();
       throw new NullPointerException(INVOCATION_TARGET);
+
     } catch (IllegalAccessException ex) {
       ex.printStackTrace();
       throw new NullPointerException(ILLEGAL_ACCESS);
@@ -160,6 +164,8 @@ public class GameSetup extends PropertyObservable implements PropertyChangeListe
   }
 
   private void moveToNextPlayer(String s) {
+    if(playerIndex>=0)
+        playerList.get(playerIndex).getBoard().randomizeIslands(islandList);
     playerIndex++;
     setupView.displayPassComputerMessage(myResources.getString(PROMPT_PREFIX_RESOURCE)
         + (playerIndex + 1));

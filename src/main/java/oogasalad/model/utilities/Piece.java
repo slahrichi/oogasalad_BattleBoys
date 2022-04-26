@@ -153,6 +153,11 @@ public abstract class Piece {
     }
   }
 
+  /**
+   *
+   * @param o
+   * @return if the two Objects are equal or not
+   */
   @Override
   public boolean equals(Object o) {
     if(o == null) return false;

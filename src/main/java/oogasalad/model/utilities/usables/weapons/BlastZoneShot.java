@@ -19,9 +19,6 @@ public class BlastZoneShot extends Weapon {
 
   }
 
-  public BlastZoneShot(String[] parameters){
-    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
-  }
 
   private void generateRelativeCoords(){
     int count = 0;

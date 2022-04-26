@@ -20,9 +20,6 @@ public class LineShot extends Weapon{
 
   }
 
-  public LineShot(String[] parameters){
-    this(parameters[0], Integer.parseInt(parameters[1]),Integer.parseInt(parameters[2]));
-  }
 
   @Override
   protected UsableFunction makeWeaponFunction() {
