@@ -34,7 +34,7 @@ public class MovingPiece extends Piece {
    */
   @Override
   public Piece copyOf() {
-    return new MovingPiece(List.copyOf(getCellList()), List.copyOf(getRelativeCoords()), List.copyOf(myPatrolPath), getID());
+    return new MovingPiece(List.copyOf(getCellList()), List.copyOf(myPatrolPath), List.copyOf(getRelativeCoords()), getID());
 
   }
 
