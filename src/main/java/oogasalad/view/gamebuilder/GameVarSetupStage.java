@@ -1,6 +1,6 @@
 package oogasalad.view.gamebuilder;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
@@ -19,7 +19,7 @@ public class GameVarSetupStage extends BuilderStage {
 
   private BorderPane myPane = new BorderPane();
   private String[] gameSettingVariables;
-  private Map<String, TextArea> varInputBoxes = new HashMap<>();
+  private Map<String, TextArea> varInputBoxes = new LinkedHashMap<>();
   private VBox centerPane = new VBox();
   private Map<String, Integer> variableInputMap;
   private static final String DEFAULT_VALUE = "1";
@@ -27,7 +27,7 @@ public class GameVarSetupStage extends BuilderStage {
 
   public GameVarSetupStage() {
     gameSettingVariables = getMyBuilderResources().getString("gameVariables").split(",");
-    variableInputMap = new HashMap<>();
+    variableInputMap = new LinkedHashMap<>();
     myPane.setCenter(centerPane);
 
   }
