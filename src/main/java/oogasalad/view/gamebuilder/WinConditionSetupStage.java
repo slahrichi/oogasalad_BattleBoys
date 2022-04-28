@@ -45,7 +45,7 @@ public class WinConditionSetupStage extends BuilderStage {
     myPane.setTop(makeConditionSelectionPrompt(possibleWinTypes));
     myPane.setRight(setUpObjectView());
     myPane.setBottom(makeContinueButton());
-
+    winConditions = new ArrayList<>();
   }
 
   private VBox makeConditionSelectionPrompt(String[] options) {
@@ -87,7 +87,6 @@ public class WinConditionSetupStage extends BuilderStage {
 
   private void saveWinCondition(String selection, Boolean needsCellToHit,
       Boolean needsWinCondition) {
-    winConditions = new ArrayList<>();
     String entryName = selection;
     List<Object> parameterList = new ArrayList<>();
     if (needsCellToHit) {
