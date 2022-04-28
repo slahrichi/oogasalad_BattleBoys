@@ -68,7 +68,7 @@ class PieceMoverTest {
     ship2Cells.add(new ShipCell(1, new Coordinate(0, 0), 1, "1"));
     ship2RelCoords.add(new Coordinate(0, 0));
 
-    return new MovingPiece(ship2Cells, ship2RelCoords,patrolPath, "1");
+    return new MovingPiece(ship2Cells, patrolPath, ship2RelCoords, "1");
   }
 
   @Test

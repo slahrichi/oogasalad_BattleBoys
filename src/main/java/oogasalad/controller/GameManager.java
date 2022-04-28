@@ -119,6 +119,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     for (Usable usable : usables) {
       usablesIDMap.put(usable.getMyID(), usable);
     }
+    usablesIDMap.put("Basic Shot", new BasicShot());
   }
 
   /**
