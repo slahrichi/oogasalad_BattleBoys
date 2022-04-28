@@ -1,0 +1,20 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.ClusterShot",
+    "properties": {
+      "myID": "bruh",
+      "goldCost": 5,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.items.CircleHeal",
+    "properties": {
+      "myRadius": 1,
+      "healingPower": 2,
+      "myID": "heakl",
+      "goldCost": 10,
+      "relativeCoordShots": {}
+    }
+  }
+]

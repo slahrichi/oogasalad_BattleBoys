@@ -18,9 +18,17 @@ public class IslandCell extends Cell implements CellInterface {
     super(coordinate, ISLAND_CELL_INITIAL_STATE, health);
   }
 
+  public IslandCell(Coordinate coordinate, int health, String id) {
+    super(coordinate, ISLAND_CELL_INITIAL_STATE, health, id);
+  }
+
 
   @Override
   public CellState hit(int dmg) {
+    addToHealthBar(-dmg);
+    if(getHealth()<=0) {
+      return CellState.ISLAND_SUNK;
+    }
     return CellState.ISLAND_HEALTHY;
   }
 

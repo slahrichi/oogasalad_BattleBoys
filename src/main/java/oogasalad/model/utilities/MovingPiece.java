@@ -22,7 +22,7 @@ public class MovingPiece extends Piece {
    * @param patrolPath List of Coordinates that represent the relative movements the piece should make each step of its patrol route
    * @param id String ID of the piece
    */
-  public MovingPiece(List<ShipCell> cellList, List<Coordinate> relativeCoords, List<Coordinate> patrolPath, String id) {
+  public MovingPiece(List<ShipCell> cellList, List<Coordinate> patrolPath, List<Coordinate> relativeCoords, String id) {
     super(cellList, relativeCoords, patrolPath,  id);
     myPatrolPath = patrolPath;
   }
@@ -34,7 +34,7 @@ public class MovingPiece extends Piece {
    */
   @Override
   public Piece copyOf() {
-    return new MovingPiece(List.copyOf(getCellList()), List.copyOf(getRelativeCoords()), List.copyOf(myPatrolPath), getID());
+    return new MovingPiece(List.copyOf(getCellList()), List.copyOf(myPatrolPath), List.copyOf(getRelativeCoords()), getID());
 
   }
 
