@@ -1,0 +1,49 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.ClusterShot",
+    "properties": {
+      "myID": "Cross",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.SonarShot",
+    "properties": {
+      "myRadius": 3,
+      "myID": "CustomUsable",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.RandomShot",
+    "properties": {
+      "numShots": 2,
+      "radius": 3,
+      "dmgPerShot": 2,
+      "myID": "Randomshot\t",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.EmpoweredShot",
+    "properties": {
+      "myDMG": 3,
+      "myID": "EmpoweredShot",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.items.CircleHeal",
+    "properties": {
+      "myRadius": 1,
+      "healingPower": 3,
+      "myID": "HealRadius 3",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  }
+]

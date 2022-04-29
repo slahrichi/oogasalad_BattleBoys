@@ -1,0 +1,40 @@
+[
+  {
+    "myID": "sonar",
+    "goldCost": 1,
+    "relativeCoordShots": {
+      "-1 -1": "0",
+      "0 0": "0",
+      "-1 0": "0",
+      "0 -1": "0"
+    }
+  },
+  {
+    "myID": "hit2",
+    "goldCost": 2,
+    "relativeCoordShots": {
+      "0 0": "2"
+    }
+  },
+  {
+    "myID": "Cluster",
+    "goldCost": 1,
+    "relativeCoordShots": {
+      "1 0": "1",
+      "0 1": "1",
+      "1 1": "1",
+      "2 1": "1",
+      "1 2": "1"
+    }
+  },
+  {
+    "myID": "circel",
+    "goldCost": 1,
+    "relativeCoordShots": {
+      "-1 -1": "0",
+      "0 0": "0",
+      "-1 0": "0",
+      "0 -1": "0"
+    }
+  }
+]
