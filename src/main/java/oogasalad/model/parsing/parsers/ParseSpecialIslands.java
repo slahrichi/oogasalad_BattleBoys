@@ -12,6 +12,7 @@ import oogasalad.model.parsing.ParsedElement;
 import oogasalad.model.parsing.ParserException;
 import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.IslandCell;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.winconditions.WinCondition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,21 +28,26 @@ public class ParseSpecialIslands extends ParsedElement {
   public void save(Properties props, String location, Object o) throws ParserException {
     location += SPECIAL_ISLANDS_JSON;
     LOG.info("saving Special Islands at {}", location);
-    List<Cell> specialIslands = (List<Cell>) o;
+    List<IslandCell> specialIslands = (List<IslandCell>) o;
     Gson gson = new GsonBuilder()
-        .registerTypeHierarchyAdapter(Cell.class, new GSONHelper())
+        .registerTypeHierarchyAdapter(Modifiers.class, new GSONHelper())
         .setPrettyPrinting().create();
     String json = gson.toJson(specialIslands);
     putJsonInProp(props, location, json, PROPERTIES_SPECIAL_ISLANDS_FILE);
   }
 
   @Override
-  public List<Cell> parse(Properties props) throws ParserException {
+  public List<IslandCell> parse(Properties props) throws ParserException {
     String specialIslandsFile = props.getProperty(PROPERTIES_SPECIAL_ISLANDS_FILE);
     LOG.info("parsing Special Islands at {}", specialIslandsFile);
-    Gson gson = new GsonBuilder().registerTypeAdapter(Cell.class, new GSONHelper()).create();
+    Gson gson = new GsonBuilder()
+        //.registerTypeAdapter(Cell.class, new GSONHelper())
+        .registerTypeAdapter(Modifiers.class, new GSONHelper())
+        .create();
+    //Gson gson = new GsonBuilder().create();
     Type listOfMyClassObject = new TypeToken<ArrayList<IslandCell>>() {}.getType();
-    return (List<Cell>) getParsedObject(specialIslandsFile, gson, listOfMyClassObject, SPECIAL_ISLANDS);
+    List<IslandCell> x = (List<IslandCell>) getParsedObject(specialIslandsFile, gson, listOfMyClassObject, SPECIAL_ISLANDS);
+    return (List<IslandCell>) getParsedObject(specialIslandsFile, gson, listOfMyClassObject, SPECIAL_ISLANDS);
 
   }
 

@@ -6,54 +6,15 @@
         {
           "myRelativeCoordinate": {
             "row": 0,
-            "column": 1
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "0",
-          "myHealthBar": 1
-        },
-        {
-          "myRelativeCoordinate": {
-            "row": 1,
             "column": 0
           },
-          "myGoldValue": 0,
+          "myGoldValue": 1,
           "originalHealth": 1,
           "myModifiers": [
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -67,7 +28,7 @@
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -78,7 +39,7 @@
             }
           ],
           "currentState": "SHIP_HEALTHY",
-          "id": "1",
+          "id": "boat1cell",
           "myHealthBar": 1
         },
         {
@@ -86,13 +47,13 @@
             "row": 1,
             "column": 1
           },
-          "myGoldValue": 0,
+          "myGoldValue": 1,
           "originalHealth": 1,
           "myModifiers": [
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -106,7 +67,7 @@
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -117,321 +78,21 @@
             }
           ],
           "currentState": "SHIP_HEALTHY",
-          "id": "2",
-          "myHealthBar": 1
-        }
-      ],
-      "allCells": [
-        {
-          "myRelativeCoordinate": {
-            "row": 0,
-            "column": 1
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "0",
+          "id": "boat1cell",
           "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
-            "row": 1,
-            "column": 0
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "1",
-          "myHealthBar": 1
-        },
-        {
-          "myRelativeCoordinate": {
-            "row": 1,
-            "column": 1
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "2",
-          "myHealthBar": 1
-        }
-      ],
-      "myMover": {
-        "route": []
-      },
-      "myRelativeCoords": [
-        {
-          "row": 0,
-          "column": 1
-        },
-        {
-          "row": 1,
-          "column": 0
-        },
-        {
-          "row": 1,
-          "column": 1
-        }
-      ],
-      "pieceId": "0"
-    }
-  },
-  {
-    "type": "oogasalad.model.utilities.StaticPiece",
-    "properties": {
-      "cellList": [
-        {
-          "myRelativeCoordinate": {
-            "row": 0,
-            "column": 0
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "0",
-          "myHealthBar": 1
-        },
-        {
-          "myRelativeCoordinate": {
-            "row": 1,
-            "column": 0
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "1",
-          "myHealthBar": 1
-        },
-        {
-          "myRelativeCoordinate": {
-            "row": 1,
-            "column": 1
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "2",
-          "myHealthBar": 1
-        },
-        {
-          "myRelativeCoordinate": {
-            "row": 0,
-            "column": 1
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "3",
-          "myHealthBar": 1
-        },
-        {
-          "myRelativeCoordinate": {
-            "row": 0,
+            "row": 2,
             "column": 2
           },
-          "myGoldValue": 0,
+          "myGoldValue": 1,
           "originalHealth": 1,
           "myModifiers": [
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -445,7 +106,7 @@
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -456,7 +117,85 @@
             }
           ],
           "currentState": "SHIP_HEALTHY",
-          "id": "4",
+          "id": "boat1cell",
+          "myHealthBar": 1
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 3,
+            "column": 3
+          },
+          "myGoldValue": 1,
+          "originalHealth": 1,
+          "myModifiers": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "multiplier": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "SHIP_SUNKEN",
+                  "ISLAND_SUNK"
+                ]
+              }
+            }
+          ],
+          "goldAdders": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "multiplier": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "SHIP_SUNKEN",
+                  "ISLAND_SUNK"
+                ]
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "id": "boat1cell",
+          "myHealthBar": 1
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 4,
+            "column": 4
+          },
+          "myGoldValue": 1,
+          "originalHealth": 1,
+          "myModifiers": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "multiplier": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "SHIP_SUNKEN",
+                  "ISLAND_SUNK"
+                ]
+              }
+            }
+          ],
+          "goldAdders": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "multiplier": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "SHIP_SUNKEN",
+                  "ISLAND_SUNK"
+                ]
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "id": "boat1cell",
           "myHealthBar": 1
         }
       ],
@@ -466,13 +205,13 @@
             "row": 0,
             "column": 0
           },
-          "myGoldValue": 0,
+          "myGoldValue": 1,
           "originalHealth": 1,
           "myModifiers": [
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -486,7 +225,7 @@
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -497,46 +236,7 @@
             }
           ],
           "currentState": "SHIP_HEALTHY",
-          "id": "0",
-          "myHealthBar": 1
-        },
-        {
-          "myRelativeCoordinate": {
-            "row": 1,
-            "column": 0
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "1",
+          "id": "boat1cell",
           "myHealthBar": 1
         },
         {
@@ -544,13 +244,13 @@
             "row": 1,
             "column": 1
           },
-          "myGoldValue": 0,
+          "myGoldValue": 1,
           "originalHealth": 1,
           "myModifiers": [
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -564,7 +264,7 @@
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -575,60 +275,21 @@
             }
           ],
           "currentState": "SHIP_HEALTHY",
-          "id": "2",
+          "id": "boat1cell",
           "myHealthBar": 1
         },
         {
           "myRelativeCoordinate": {
-            "row": 0,
-            "column": 1
-          },
-          "myGoldValue": 0,
-          "originalHealth": 1,
-          "myModifiers": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "goldAdders": [
-            {
-              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
-              "properties": {
-                "myGold": 0,
-                "multiplier": 1,
-                "hasBeenAppliedAlready": false,
-                "allowableStates": [
-                  "SHIP_SUNKEN",
-                  "ISLAND_SUNK"
-                ]
-              }
-            }
-          ],
-          "currentState": "SHIP_HEALTHY",
-          "id": "3",
-          "myHealthBar": 1
-        },
-        {
-          "myRelativeCoordinate": {
-            "row": 0,
+            "row": 2,
             "column": 2
           },
-          "myGoldValue": 0,
+          "myGoldValue": 1,
           "originalHealth": 1,
           "myModifiers": [
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -642,7 +303,7 @@
             {
               "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
               "properties": {
-                "myGold": 0,
+                "myGold": 1,
                 "multiplier": 1,
                 "hasBeenAppliedAlready": false,
                 "allowableStates": [
@@ -653,7 +314,85 @@
             }
           ],
           "currentState": "SHIP_HEALTHY",
-          "id": "4",
+          "id": "boat1cell",
+          "myHealthBar": 1
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 3,
+            "column": 3
+          },
+          "myGoldValue": 1,
+          "originalHealth": 1,
+          "myModifiers": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "multiplier": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "SHIP_SUNKEN",
+                  "ISLAND_SUNK"
+                ]
+              }
+            }
+          ],
+          "goldAdders": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "multiplier": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "SHIP_SUNKEN",
+                  "ISLAND_SUNK"
+                ]
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "id": "boat1cell",
+          "myHealthBar": 1
+        },
+        {
+          "myRelativeCoordinate": {
+            "row": 4,
+            "column": 4
+          },
+          "myGoldValue": 1,
+          "originalHealth": 1,
+          "myModifiers": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "multiplier": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "SHIP_SUNKEN",
+                  "ISLAND_SUNK"
+                ]
+              }
+            }
+          ],
+          "goldAdders": [
+            {
+              "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+              "properties": {
+                "myGold": 1,
+                "multiplier": 1,
+                "hasBeenAppliedAlready": false,
+                "allowableStates": [
+                  "SHIP_SUNKEN",
+                  "ISLAND_SUNK"
+                ]
+              }
+            }
+          ],
+          "currentState": "SHIP_HEALTHY",
+          "id": "boat1cell",
           "myHealthBar": 1
         }
       ],
@@ -667,22 +406,22 @@
         },
         {
           "row": 1,
-          "column": 0
-        },
-        {
-          "row": 1,
           "column": 1
         },
         {
-          "row": 0,
-          "column": 1
-        },
-        {
-          "row": 0,
+          "row": 2,
           "column": 2
+        },
+        {
+          "row": 3,
+          "column": 3
+        },
+        {
+          "row": 4,
+          "column": 4
         }
       ],
-      "pieceId": "0"
+      "pieceId": "boat1"
     }
   }
 ]

@@ -1,0 +1,8 @@
+[
+  {
+    "type": "oogasalad.model.utilities.winconditions.HaveXGoldWinCondition",
+    "properties": {
+      "myGoldToHave": 2
+    }
+  }
+]
