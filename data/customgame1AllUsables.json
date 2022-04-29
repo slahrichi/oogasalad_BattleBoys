@@ -1,0 +1,38 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.SonarShot",
+    "properties": {
+      "myRadius": 1,
+      "myID": "sonar",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.EmpoweredShot",
+    "properties": {
+      "myDMG": 2,
+      "myID": "hit2",
+      "goldCost": 2,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.ClusterShot",
+    "properties": {
+      "myID": "Cluster",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.usables.items.CircleHeal",
+    "properties": {
+      "myRadius": 1,
+      "healingPower": 3,
+      "myID": "circel",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  }
+]

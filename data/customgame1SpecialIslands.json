@@ -1,0 +1,38 @@
+[
+  {
+    "myCoordinate": {
+      "row": 0,
+      "column": 0
+    },
+    "myModifiers": [
+      {
+        "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+        "properties": {
+          "myGold": 100,
+          "multiplier": 1,
+          "hasBeenAppliedAlready": false,
+          "allowableStates": [
+            "ISLAND_SUNK",
+            "SHIP_SUNKEN"
+          ]
+        }
+      }
+    ],
+    "goldAdders": [
+      {
+        "type": "oogasalad.model.utilities.tiles.Modifiers.GoldAdder",
+        "properties": {
+          "myGold": 100,
+          "multiplier": 1,
+          "hasBeenAppliedAlready": false,
+          "allowableStates": [
+            "ISLAND_SUNK",
+            "SHIP_SUNKEN"
+          ]
+        }
+      }
+    ],
+    "currentState": "ISLAND_HEALTHY",
+    "myHealthBar": 1
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "type": "oogasalad.model.utilities.winconditions.LoseXShipsLossCondition",
+    "properties": {
+      "myNumToSink": 2
+    }
+  }
+]
