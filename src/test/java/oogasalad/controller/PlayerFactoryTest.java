@@ -36,13 +36,13 @@ public class PlayerFactoryTest {
     Parser parser = new Parser();
     ParserData gameData = null;
     try {
-      gameData = parser.parse("src/main/resources/ExampleDataFile.properties");
+      gameData = parser.parse(System.getProperty("user.dir") + "/data/again.properties");
     } catch (ParserException e) {
       e.printStackTrace();
     }
-    playerTypes = gameData.players();
+    playerTypes = new ArrayList<>(Arrays.asList("HumanPlayer", "AIPlayer"));
     board = gameData.board();
-    difficulties = new ArrayList<>(gameData.decisionEngines());
+    difficulties = new ArrayList<>(Arrays.asList("None", "Easy"));
   }
 
   @Test
@@ -51,7 +51,7 @@ public class PlayerFactoryTest {
         100, difficulties, new ArrayList<>(Arrays.asList
             (new LoseXShipsLossCondition(3))));
     List<Player> playerList = pfr.playerList();
-    assertEquals(playerList.size(), 3);
+    assertEquals(playerList.size(), 2);
     Map<Player, DecisionEngine> map = pfr.engineMap();
     assertEquals(map.size(), 1);
     List<DecisionEngine> list = new ArrayList<>(map.values());
@@ -61,7 +61,7 @@ public class PlayerFactoryTest {
 
   @Test
   void testInvalidPlayerType() {
-    playerTypes.add("Playyer");
+    playerTypes.set(1, "Playyer");
     assertThrows(NullPointerException.class, () ->
         PlayerFactory.initializePlayers(board, playerTypes, new HashMap<>(),
                 100, difficulties, new ArrayList<>(Arrays.asList
