@@ -26,6 +26,7 @@ public class IslandCell extends Cell implements CellInterface {
   @Override
   public CellState hit(int dmg) {
     addToHealthBar(-dmg);
+    setCellState(CellState.ISLAND_SUNK);
     if(getHealth()<=0) {
       return CellState.ISLAND_SUNK;
     }
