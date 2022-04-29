@@ -227,11 +227,11 @@ public class WeaponTest {
     Map<Coordinate, CellState> ret = weapon.getFunction().apply(new Coordinate(0,1), myBoard);
     assertEquals(4,myBoard.getCell(new Coordinate(0,1)).getHealth());
     myBoard.update();
+    assertEquals(3,myBoard.getCell(new Coordinate(0,1)).getHealth());
+    myBoard.update();
     assertEquals(2,myBoard.getCell(new Coordinate(0,1)).getHealth());
     myBoard.update();
     assertEquals(1,myBoard.getCell(new Coordinate(0,1)).getHealth());
-    myBoard.update();
-    assertEquals(0,myBoard.getCell(new Coordinate(0,1)).getHealth());
   }
 
 
