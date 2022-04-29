@@ -88,7 +88,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   public void makeFirstAIPlayersMove() {
-    while (engineMap.containsKey(playerQueue.peek())) {
+    if (engineMap.containsKey(playerQueue.peek())) {
       handleAI();
     }
   }
@@ -246,7 +246,9 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
     if (numShots == allowedShots) {
       if (engineMap.containsKey(playerQueue.peek())) {
         view.displayAIMove(playerQueue.peek().getID(), AIShots);
-        endTurn(DUMMY_INFO);
+        if (!conditionHandler.isGameOver()) {
+          endTurn(DUMMY_INFO);
+        }
       } else {
         view.allowEndTurn();
       }
@@ -254,17 +256,17 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
   }
 
   private void endTurn(String info) {
-    Player p = playerQueue.poll();
-    conditionHandler.updateTurns(p);
-    playerQueue.add(p);
-    checkIfMovePieces();
-    Player player = playerQueue.peek();
-    view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
-    numShots = 0;
-    gameViewManager.sendUpdatesToView(player);
-    view.moveToNextPlayer(player.getName());
-    currentUsable = new BasicShot();
-    handleAI();
+      Player p = playerQueue.poll();
+      conditionHandler.updateTurns(p);
+      playerQueue.add(p);
+      checkIfMovePieces();
+      Player player = playerQueue.peek();
+      view.updateLabels(allowedShots, player.getNumPieces(), player.getMyCurrency());
+      numShots = 0;
+      gameViewManager.sendUpdatesToView(player);
+      view.moveToNextPlayer(player.getName());
+      currentUsable = new BasicShot();
+      handleAI();
   }
 
   private void checkIfMovePieces() {
