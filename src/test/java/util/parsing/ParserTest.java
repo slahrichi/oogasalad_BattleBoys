@@ -25,6 +25,8 @@ import oogasalad.model.utilities.Piece;
 import oogasalad.model.utilities.StaticPiece;
 import oogasalad.model.utilities.tiles.Cell;
 import oogasalad.model.utilities.tiles.IslandCell;
+import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
+import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -93,12 +95,7 @@ public class ParserTest {
       System.out.println(e.getMessage());
     }
 
-    try {
-      ParserData generatedData = parser.parse("data/recentlyGeneratedData.properties");
-      assertEquals(exampleParserData, generatedData);
-    } catch (ParserException e) {
-      e.printStackTrace();
-    }
+
 
 
   }
@@ -125,8 +122,12 @@ public class ParserTest {
   }*/
 
   private List<IslandCell> makeIslandCells() {
+    IslandCell first = new IslandCell(new Coordinate(0,0), 5);
+    Modifiers firstMod = new GoldAdder(3);
+    first.addModifier(firstMod);
+
     List<IslandCell> arr = new ArrayList<>();
-    arr.add(new IslandCell(new Coordinate(0,0), 5));
+    arr.add(first);
     arr.add(new IslandCell(new Coordinate(1,1), 7));
     return arr;
   }
@@ -278,6 +279,25 @@ public class ParserTest {
     try {
       ParserData generatedData = parser.parse("data/recentlyGeneratedData.properties");
       assertEquals(exampleParserData.pieces(), generatedData.pieces());
+    } catch(Exception e) {
+      fail(String.format("Exception thrown: %s",e.getMessage()));
+    }
+  }
+
+  @Test
+  void loadSpecialIslands() {
+    try {
+      ParserData generatedData = parser.parse("data/recentlyGeneratedData.properties");
+      List<IslandCell> exampleIslandCells = exampleParserData.specialIslands();
+      List<IslandCell> generatedIslandCells = generatedData.specialIslands();
+      assertEquals(exampleIslandCells.size(), generatedIslandCells.size());
+      for (int i = 0; i < exampleIslandCells.size(); i++) {
+        IslandCell x = exampleIslandCells.get(i);
+        IslandCell y = generatedIslandCells.get(i);
+        assertEquals(x.getCellState(), y.getCellState());
+        assertEquals(x.getHealth(), y.getHealth());
+        assertEquals(x.getId(), y.getId());
+      }
     } catch(Exception e) {
       fail(String.format("Exception thrown: %s",e.getMessage()));
     }
