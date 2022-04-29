@@ -31,7 +31,7 @@ private File file;
 
   @BeforeEach
   void setup() {
-    file = new File(System.getProperty("user.dir") + "/data/ExampleDataFile.properties");
+    file = new File(System.getProperty("user.dir") + "/data/again.properties");
   }
 
   @Test
@@ -97,7 +97,7 @@ private File file;
           "startGame", null, null)));
     });
     Thread.sleep(1000);
-    assertNotEquals(null, lookup("#view-shop").query());
+    assertNotEquals(null, lookup("#view-shop-button").query());
   }
 
 }

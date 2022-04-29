@@ -1,0 +1,11 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.SonarShot",
+    "properties": {
+      "myRadius": 2,
+      "myID": "Sonar",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  }
+]

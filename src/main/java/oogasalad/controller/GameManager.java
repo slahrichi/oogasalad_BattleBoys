@@ -302,6 +302,7 @@ public class GameManager extends PropertyObservable implements PropertyChangeLis
         adjustStrategy(currentPlayer, hitResults.get(hitCoord));
         currentPlayer.updateEnemyBoard(hitCoord, id, hitResults.get(hitCoord));
         view.displayShotAt(hitCoord.getRow(), hitCoord.getColumn(), hitResults.get(hitCoord));
+        currentPlayer.updateShot(hitResults.get(hitCoord));
       }
       conditionHandler.applyModifiers(currentPlayer, enemy, this);
       numShots++;
