@@ -4,8 +4,11 @@
 
 ### Roles
 
-* Minjun Kwak - 
-* Brandon Bae - 
+* Minjun Kwak - helped with layout of view elements, designed core communication between view classes
+and the controller. Worked on frontend features/design such as ship hovering and BoardView structure,
+and also worked on controller logic with general game loop, sending correct information to view, and 
+managing weapons/items to make the game function properly.
+* Brandon Bae -
 * Edison Ooi - 
 * Matthew Knox -
 * Matthew Giglio -
