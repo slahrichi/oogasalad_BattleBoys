@@ -1,0 +1,18 @@
+[
+  {
+    "type": "oogasalad.model.utilities.winconditions.HitXCellsCondition",
+    "properties": {
+      "myCellToHit": "SHIP_SUNKEN",
+      "myNumToHit": 3,
+      "myConditionType": "LOSE"
+    }
+  },
+  {
+    "type": "oogasalad.model.utilities.winconditions.HitXCellsCondition",
+    "properties": {
+      "myCellToHit": "WATER_HIT",
+      "myNumToHit": 20,
+      "myConditionType": "WIN"
+    }
+  }
+]
