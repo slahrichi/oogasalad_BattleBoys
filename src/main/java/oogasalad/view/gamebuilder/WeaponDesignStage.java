@@ -213,6 +213,7 @@ public class WeaponDesignStage extends BuilderStage {
         parameterList.add(i);
       }
       if (needsGridDesignOption(selectedWeapon)) {
+        stateMap = cropToActiveGrid(stateMap);
         parameterList.add(translateGridToMap());
 
       }
@@ -248,11 +249,14 @@ public class WeaponDesignStage extends BuilderStage {
 
   private Map<Coordinate, Integer> translateGridToMap() {
     Map<Coordinate, Integer> relativeCoordinatesMap = new HashMap<>();
-    for (int i = 0; i < MAX_DIMENSION; i++) {
-      for (int j = 0; j < MAX_DIMENSION; j++) {
-        relativeCoordinatesMap.put(new Coordinate(i, j), stateMap[i][j]);
+    for (int i = 0; i < stateMap.length; i++) {
+      for (int j = 0; j < stateMap[0].length; j++) {
+        if(stateMap[i][j]!=0) {
+          relativeCoordinatesMap.put(new Coordinate(i, j), stateMap[i][j]);
+        }
       }
     }
+    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0); //new location
     return relativeCoordinatesMap;
   }
 
