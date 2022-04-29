@@ -213,6 +213,7 @@ public class WeaponDesignStage extends BuilderStage {
         parameterList.add(i);
       }
       if (needsGridDesignOption(selectedWeapon)) {
+        findReferencePoint(stateMap);
         stateMap = cropToActiveGrid(stateMap);
         parameterList.add(translateGridToMap());
 
