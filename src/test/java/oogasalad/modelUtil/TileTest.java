@@ -71,10 +71,10 @@ public class TileTest {
     cell.hit(1);
     mods = cell.update();
     for(Modifiers m: mods){
-      System.out.println(m.toString());
+      //System.out.println(m.toString());
       m.modifierFunction(players).accept(players);
     }
-    assertEquals(300, p1.getMyCurrency());
+    assertEquals(200, p1.getMyCurrency());
   }
 
 }
