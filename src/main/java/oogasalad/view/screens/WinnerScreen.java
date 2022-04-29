@@ -36,7 +36,7 @@ public class WinnerScreen extends AbstractScreen {
 
     setId(WINNER_SCREEN_ID);
 
-    mainLabel.setText(winnerName + myResources.getString(WIN_MESSAGE_RESOURCE));
+    mainLabel.setText(winnerName + " " + myResources.getString(WIN_MESSAGE_RESOURCE));
   }
 
   /**

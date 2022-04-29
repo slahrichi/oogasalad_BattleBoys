@@ -86,7 +86,7 @@ public abstract class GenericPlayer implements Player{
 
   @Override
   public int getNumPieces() {
-    return myPiecesLeft;
+    return myPiecesLeft - myBoard.getNumPiecesSunk();
   }
 
   public void determineHealth() {

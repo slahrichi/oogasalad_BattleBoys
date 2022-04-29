@@ -37,7 +37,7 @@ public class LoserScreen extends AbstractScreen {
     // Remove the button reference from children nodes
     getChildren().remove(getChildren().size() - 1);
     setId(LOSER_SCREEN_ID);
-    mainLabel.setText(loserName + LOSE_MESSAGE_RESOURCE);
+    mainLabel.setText(loserName + " " + resourceBundle.getString(LOSE_MESSAGE_RESOURCE));
   }
 
   /**
