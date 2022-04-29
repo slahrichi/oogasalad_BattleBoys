@@ -35,6 +35,7 @@ public class ConditionHandler {
   private GameViewManager manager;
   private int movePieces;
   private Map<Player, Integer> turnMap;
+  private boolean gameOver = false;
 
   private static final String PLAYER_WINSTATE = "Player %d's WinState %s";
   private static final String PLAYER_WON = "Player %d wins!";
@@ -95,7 +96,6 @@ public class ConditionHandler {
     for (WinCondition condition : winConditions) {
       checkCondition(condition);
     }
-
     if (playerQueue.size() == 1) {
       moveToWinGame(playerQueue.peek());
     }
@@ -114,6 +114,7 @@ public class ConditionHandler {
   private void checkWinState(Player player, WinState state, int id) {
     if (state.equals(WinState.WIN)) {
       moveToWinGame(player);
+      gameOver = true;
     } else if (state.equals(WinState.LOSE)) {
       removePlayer(player, id);
       view.displayLosingScreen(player.getName());
@@ -169,5 +170,9 @@ public class ConditionHandler {
   public void replaceWinCondition(WinCondition condition){
     winConditions = new ArrayList<>();
     winConditions.add(condition);
+  }
+
+  boolean isGameOver() {
+    return gameOver;
   }
 }
