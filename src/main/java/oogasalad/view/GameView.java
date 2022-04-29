@@ -701,8 +701,10 @@ public class GameView extends PropertyObservable implements PropertyChangeListen
    */
   @Override
   public void closeShop() {
-    shopStage.close();
-    shopButton.setDisable(false);
+    if (shopStage != null) {
+      shopStage.close();
+      shopButton.setDisable(false);
+    }
   }
 
   /**

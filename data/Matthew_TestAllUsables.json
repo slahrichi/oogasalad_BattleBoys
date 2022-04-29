@@ -1,0 +1,11 @@
+[
+  {
+    "type": "oogasalad.model.utilities.usables.weapons.BlastZoneShot",
+    "properties": {
+      "myStartingDmg": 1,
+      "myID": "CustomUsable_blast",
+      "goldCost": 1,
+      "relativeCoordShots": {}
+    }
+  }
+]

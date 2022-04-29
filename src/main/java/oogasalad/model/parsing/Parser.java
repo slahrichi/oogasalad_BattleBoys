@@ -61,7 +61,7 @@ public class Parser {
 
   public void save(ParserData data, String pathToNewFile) throws ParserException  {
 
-    String pathToUse = "data/" + pathToNewFile + ".properties";
+    String pathToUse = pathToNewFile.contains(".properties") ? pathToNewFile : "data/" + pathToNewFile + ".properties";
 
     LOG.info(String.format("Saving ParserData to %s", pathToNewFile));
     File file = new File(pathToUse);
