@@ -26,8 +26,11 @@ import oogasalad.model.utilities.tiles.IslandCell;
 import oogasalad.model.utilities.tiles.Modifiers.Burner;
 import oogasalad.model.utilities.tiles.Modifiers.FrontEndUpdater;
 import oogasalad.model.utilities.tiles.Modifiers.GoldAdder;
+import oogasalad.model.utilities.tiles.Modifiers.Mine;
 import oogasalad.model.utilities.tiles.Modifiers.Modifiers;
+import oogasalad.model.utilities.tiles.Modifiers.ReplaceWinCondition;
 import oogasalad.model.utilities.tiles.Modifiers.ShotAdder;
+import oogasalad.model.utilities.tiles.Modifiers.UsableAdder;
 import oogasalad.model.utilities.tiles.ShipCell;
 import oogasalad.model.utilities.tiles.WaterCell;
 import oogasalad.model.utilities.tiles.enums.CellState;
@@ -77,7 +80,11 @@ public class GSONHelper<T> implements
         src.getClass().equals(Burner.class) ||
             src.getClass().equals(FrontEndUpdater.class) ||
             src.getClass().equals(GoldAdder.class) ||
-            src.getClass().equals(ShotAdder.class)) {
+            src.getClass().equals(ShotAdder.class) || //mine, replace win condition, usableAdder
+            src.getClass().equals(Mine.class) ||
+            src.getClass().equals(ReplaceWinCondition.class) ||
+            src.getClass().equals(UsableAdder.class)
+    ) {
       LOG.info("we have found modifier");
       gson = new GsonBuilder().create();
     }
