@@ -10,15 +10,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import oogasalad.model.parsing.parsers.ParseAllUsables;
-import oogasalad.model.parsing.parsers.ParsePowerUps;
-import oogasalad.model.parsing.parsers.ParseSpecialIslands;
-import oogasalad.model.parsing.parsers.ParseSpecialWeapons;
-import oogasalad.model.parsing.parsers.ParseWeapons;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
+/**
+ * The Parser class defines an interface between the game design stage and the game player stage.
+ * We use a file storage interface.
+ * During the game design stage, files are created using the save method.
+ * During the game player stage, files are loaded using the parse method.
+ */
 public class Parser {
 
   private List<ParsedElement> parsers;
@@ -59,12 +59,16 @@ public class Parser {
   private Properties exceptionMessageProperties;
   private static final Logger LOG = LogManager.getLogger(Parser.class);
 
+  /**
+   *
+   * @param data: the ParserData to save
+   * @param pathToNewFile: the location to save the file at
+   * @throws ParserException: when there is an issue with ParserData
+   */
   public void save(ParserData data, String pathToNewFile) throws ParserException  {
 
-    String pathToUse = pathToNewFile.contains(".properties") ? pathToNewFile : "data/" + pathToNewFile + ".properties";
-
     LOG.info(String.format("Saving ParserData to %s", pathToNewFile));
-    File file = new File(pathToUse);
+    File file = new File(pathToNewFile);
     Properties props = new Properties();
 
     String nameOfNewFile = file.toString().replaceFirst(REGEX, EMPTY);
@@ -84,12 +88,11 @@ public class Parser {
     }
   }
 
-  // add method to check if saving works fine (e.g. the player's saved data is not null)
   /**
    *
-   * @param pathToFile properties file
-   * @return a parser Player Data
-   * @throws FileNotFoundException
+   * @param pathToFile: the path to a save file to parse
+   * @return: a ParserData corresponding to the save file
+   * @throws ParserException: when there is an issue with the save file
    */
   public ParserData parse(String pathToFile) throws ParserException {
     LOG.info(String.format("Parsing from %s", pathToFile));
@@ -107,6 +110,7 @@ public class Parser {
     return ParserData.make(parsedElements);
   }
 
+  //returns a Properties object given a path to a Properties file
   private Properties getProperties(String pathToFile) throws ParserException {
     File file = new File(pathToFile);
     Properties props = new Properties();
@@ -122,11 +126,12 @@ public class Parser {
       }
       e.printStackTrace();
     }
-    sanityCheck(pathToFile, props);
+    checkPropertyFile(pathToFile, props);
     return props;
   }
 
-  private void sanityCheck(String pathToFile, Properties props) throws ParserException {
+  //runs multiple checks on properties file
+  private void checkPropertyFile(String pathToFile, Properties props) throws ParserException {
     checkExtension(pathToFile, PROPERTIES_EXTENSION);
     checkProperties(props);
     for (String path:jsonPaths) {
@@ -134,12 +139,8 @@ public class Parser {
     }
   }
 
-  /**
-   * @param pathToFile
-   * @param expectedExtension
-   * @throws Exception
-   */
-  public void checkExtension(String pathToFile, String expectedExtension) throws ParserException {
+  //ensures a path has a certain extension, throws ParserException if not
+  private void checkExtension(String pathToFile, String expectedExtension) throws ParserException {
     String passedFileExtension = pathToFile.substring(pathToFile.lastIndexOf(DOT) + 1);
     if (!passedFileExtension.equals(expectedExtension)) {
       String message = exceptionMessageProperties.getProperty(expectedExtension).formatted(passedFileExtension);
@@ -148,6 +149,7 @@ public class Parser {
     }
   }
 
+  //checks that a properties file has all required components, throws ParserException if not
   private void checkProperties(Properties props) throws ParserException {
     for (String key: REQUIRED_ARGS){
       if(props.getProperty(key) == null) {
