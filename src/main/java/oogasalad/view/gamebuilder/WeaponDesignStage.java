@@ -19,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 import oogasalad.model.utilities.Coordinate;
 import oogasalad.view.maker.LabelMaker;
 
+
 /**
  * Creates a design environment for weapons, generates all required variable design options for
  * specific weapons, subclass of BuilderStage, depends on JavaFX. Uses reflection to create correct
@@ -38,8 +39,12 @@ public class WeaponDesignStage extends BuilderStage {
   private final Color DEFAULT_INACTIVE_COLOR = Color.GRAY;
   private final Color DEFAULT_ACTIVE_COLOR = Color.LIME;
   private final int DEFAULT_CELL_SIZE = 20;
+  private final int CELL_ACTIVE_VALUE = 1;
+  private final int CELL_INACTIVE_VALUE = 0;
+  private final String DEFAULT_STAT_VALUE = "1";
   private List<Color> colorList = new ArrayList<>();
   private String[] needAOEMapList;
+  private final String DAMAGE_PROMPT = "Damage";
   private int[][] damageMatrix;
   private final String DEFAULT_WEAPON_ID = "CustomUsable";
   private TextArea idInputBox;
@@ -51,14 +56,14 @@ public class WeaponDesignStage extends BuilderStage {
   private List<Object> weaponList = new ArrayList<>();
   private String classPath;
   private final String PATH = "oogasalad.model.utilities.usables.weapons.";
-  private final String TITLE="Create Weapons";
+  private final String TITLE = "Create Weapons";
 
   public WeaponDesignStage() {
     colorList.add(DEFAULT_INACTIVE_COLOR);
     colorList.add(DEFAULT_ACTIVE_COLOR);
     setUpClassPath();
     myPane = new BorderPane();
-    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
+    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, CELL_INACTIVE_VALUE);
     needAOEMapList = getMyBuilderResources().getString("needsAOEMapWeapon").split(",");
     setUpUsableData();
     myPane.setTop(makeWeaponSelectionPrompt(availableUsableTypes.split(",")));
@@ -111,8 +116,8 @@ public class WeaponDesignStage extends BuilderStage {
   private void makePopUpDialog(int i, int j) {
     TextInputDialog td = new TextInputDialog(
         String.valueOf(damageMatrix[i][j]));
-    td.setHeaderText("Set Damage");
-    td.setTitle("Damage");
+    td.setHeaderText(getDictionaryResources().getString("selectPrompt")+DAMAGE_PROMPT);
+    td.setTitle(DAMAGE_PROMPT);
     Optional<String> result = td.showAndWait();
     result.ifPresent(input -> {
       if (checkIntConversion(input)) {
@@ -174,7 +179,7 @@ public class WeaponDesignStage extends BuilderStage {
 
   private void makeStatEditor(String[] variables) {
     for (String var : variables) {
-      TextArea varInput = makeTextAreaWithDefaultValue("1");
+      TextArea varInput = makeTextAreaWithDefaultValue(DEFAULT_STAT_VALUE);
       varInputBoxes.put(var, varInput);
       centerPane.getChildren().add(new HBox(LabelMaker.makeLabel(var, var + "_label"), varInput));
     }
@@ -252,20 +257,20 @@ public class WeaponDesignStage extends BuilderStage {
     Map<Coordinate, Integer> relativeCoordinatesMap = new HashMap<>();
     for (int i = 0; i < stateMap.length; i++) {
       for (int j = 0; j < stateMap[0].length; j++) {
-        if(stateMap[i][j]!=0) {
+        if (stateMap[i][j] != CELL_INACTIVE_VALUE) {
           relativeCoordinatesMap.put(new Coordinate(i, j), stateMap[i][j]);
         }
       }
     }
-    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0); //new location
+    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, CELL_INACTIVE_VALUE);
     return relativeCoordinatesMap;
   }
 
   private void addGridDesignOption() {
     damageMatrix = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
-    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, 0);
+    stateMap = initializeMatrixWithValue(MAX_DIMENSION, MAX_DIMENSION, CELL_INACTIVE_VALUE);
     int centerCoord = 5;
-    stateMap[centerCoord][centerCoord] = 1;
+    stateMap[centerCoord][centerCoord] = CELL_ACTIVE_VALUE;
     centerPane.getChildren().add(new HBox(
         arrangeCells(MAX_DIMENSION, MAX_DIMENSION, DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE, stateMap),
         displayColorChoice(DEFAULT_STATE_OPTIONS, colorList)));
