@@ -22,7 +22,7 @@ Hours Spent:
     - Brandon: 55 Hours (Backend + Integration of backend to controller+frontend)
     - Prajwal: 40-45
     - Luka: 5-8 Hours
-    - Saad:
+    - Saad: 45 hours
     - Matt: 50 hours, mainly on parsing, some on controller
 
 - Front-End
@@ -58,6 +58,11 @@ Hours Spent:
         - Created the abstract classes and basic implementations for Piece as well as Weapon classes
         - Helped create the overall backend design in the planning stage.
     - Saad:
+        - Designed main parts of Board.java
+      - Worked on updating Cell.java to match changes to Board.java and added logic to place cells on board
+      - Worked on PlayerData.java to integrate parser’s returned data with the Board
+      - Implemented most Parsers and refactored the main parser into smaller classes
+  
     - Matt: Designed parsing heirarchy, including Parser, ParsingData, GSONHelper. Implemented a majority of the parsers as well.
 
 - Front-End
@@ -152,3 +157,6 @@ Prajwal
 
 Minjun
 - I enjoyed my role as someone who worked in between the view and the controller because I was able to not only work on making sure the frontend elements showed up properly, I was able to link it with the controller classes so that they showed up at the right time and with the right functionality. The project overall was extremely stressful because even if I got all of the stuff I was working on to work, linking it with the work that other people did took a long time to make sure there were no bugs in the code. It was difficult to get 9 people on the same track and making sure that no one did something that someone else was already working on, as well as making sure the way in which a feature should be implemented was consistent between all of the people working on it.
+
+Saad
+- This project was generally challenging but very rewarding. I learned a lot through working in a team of 9 people and also within subteams for specific parts. Pair programming and constant communication were helpful in dealing with the multiple issues that arose throughout the sprints. I enjoyed working on the backend part of the Board and spent most of the time on the Parser which was very challenging and offered many opportunities to reflect on functionality vs design. It was still worth it as we learned to work with the GSON library, used Logging everywhere, and testing to ensure that our parsers worked correctly. 
