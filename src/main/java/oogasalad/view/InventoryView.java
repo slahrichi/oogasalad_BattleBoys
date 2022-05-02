@@ -25,13 +25,26 @@ import oogasalad.view.maker.LabelMaker;
  *
  * @author Edison Ooi, Minjun Kwak
  */
+
+/**
+ * I think this class represents good design because the entire structure is hierarchical, with a
+ * container view and then subcomponents which are clearly defined. Setting up each subcomponent is
+ * separated into small, effective helper methods, and updating the contents of the inventory is
+ * also simple and utilizes a helper method. Because this class is observable, we can also propagate
+ * information about a clicked item to any listener without directly interfacing with those
+ * listener objects, protecting our open-closed design. Lastly, the nested InventoryElement class
+ * protects encapsulation while separating out a significant amount of logic that is not entirely
+ * relevant to the higher level InventoryView.
+ */
 public class InventoryView extends PropertyObservable implements PropertyChangeListener {
 
+  // Constants
   private static final String INVENTORY_BOX_ID = "inventory-box";
   private static final String INVENTORY_VIEW_ID = "inventory-view";
   private static final String EQUIP_USABLE_METHOD = "equipUsable";
   private static final String BASIC_SHOT_ID = "Basic Shot";
   private static final double INVENTORY_SPACING = 10;
+
   // JavaFX components
   private HBox elementsBox;
   private ScrollPane myPane;
