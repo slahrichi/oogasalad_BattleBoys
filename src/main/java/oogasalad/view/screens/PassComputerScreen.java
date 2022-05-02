@@ -13,6 +13,13 @@ import oogasalad.view.maker.LabelMaker;
  * This class represents a view that tells the user to pass the computer to the next player. Its
  * purpose is to hide any board information from other players when multiple players are playing on
  * the same computer.
+ *
+ * @author Edison Ooi
+ */
+
+/**
+ * As with the explanation for AbstractScreen, we see how easy it is to build an entirely new
+ * customizable screen just by overriding three methods.
  */
 public class PassComputerScreen extends AbstractScreen {
 
@@ -67,5 +74,4 @@ public class PassComputerScreen extends AbstractScreen {
   public void setLabelText(String text) {
     mainLabel.setText(myResources.getString(PASS_MESSAGE_RESOURCE) + text);
   }
-
 }
