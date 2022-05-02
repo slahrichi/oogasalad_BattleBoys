@@ -47,7 +47,7 @@ public class UsableAdder extends Modifiers {
 
   /**
    * Consumer is only passed back at the player level.
-   * @param players a generic player
+   * @param players a generic player array that way the consumer if fired at the right level
    * @return the consumer
    */
   @Override

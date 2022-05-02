@@ -26,10 +26,10 @@ public class Mine extends Modifiers{
     this.dmg = dmg;
   }
 
-  @Override
   /**
-   * Creates Consumer to hit a random shipcell
+   * Creates Consumer to hit a random shipcell if the consumer is applied onto players.
    */
+  @Override
   protected Consumer createConsumer() {
     Consumer ret = new PlayerConsumer() {
       @Override
