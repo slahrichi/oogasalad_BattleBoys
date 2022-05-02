@@ -18,13 +18,20 @@ import javafx.scene.layout.VBox;
  *
  * @author Edison Ooi, Eric Xie, Minjun Kwak
  */
+
+/**
+ * I think this class represents good design because it clearly defines the abstraction of a simple
+ * temporary screen with one Label and one Button, and abstracts away the logic of creating those
+ * two customizable components. One those methods are overridden, the abstract class takes care of
+ * building the screen itself.
+ */
 public abstract class AbstractScreen extends VBox {
 
   // File path constants
   protected static final String DEFAULT_RESOURCE_PACKAGE = "/";
   protected static final String STYLESHEET = "stylesheets/screenStylesheet.css";
 
-  protected static ResourceBundle myResources;
+  protected ResourceBundle myResources;
 
   // Default components
   protected Label mainLabel;
@@ -77,5 +84,4 @@ public abstract class AbstractScreen extends VBox {
   public void setLabelText(String text) {
     mainLabel.setText(text);
   }
-
 }
